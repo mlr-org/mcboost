@@ -108,7 +108,7 @@ MCBoost = R6::R6Class("MCBoost",
       self$alpha = assert_number(alpha)
       self$eta = assert_number(eta)
       self$num_buckets = assert_int(num_buckets)
-      self$bucket_strategy = assert_string(bucket_strategy, pattern = "simple", fixed = TRUE)
+      self$bucket_strategy = assert_string(bucket_strategy, fixed = "simple")
       self$rebucket = assert_flag(rebucket)
       self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)

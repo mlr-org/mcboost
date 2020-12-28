@@ -4,7 +4,7 @@ test_that("MCBoost class instantiation", {
   mc = MCBoost$new()
   expect_class(mc, "MCBoost")
   expect_class(mc$subpop_fitter, "ResidualFitter")
-  expect_function(mc$predictor, args = "x")
+  expect_function(mc$predictor, args = "data")
   expect_function(mc$multicalibrate, args = c("data", "labels"))
 })
 
