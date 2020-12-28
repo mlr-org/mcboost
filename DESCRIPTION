@@ -1,26 +1,37 @@
 Package: mcboost
 Type: Package
-Title: Implementes Multi-Accuracy Boosting (Kim et al., 2018).
+Title: Implements Multi-Accuracy Boosting (Kim et al., 2018).
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R:
+    c(person(given = "Florian",
+             family = "Pfisterer",
+             role = c("cre", "aut"),
+             email = "pfistererf@googlemail.com",
+             comment = c(ORCID = "")),
+      person(given = "Christoph",
+             family = "Kern",
+             role = "aut",
+             email = "c.kern@uni-mannheim.de",
+             comment = c(ORCID = "")))
+Maintainer: Florian Pfisterer <pfistererf@googlemail.com>
+Description: Implements Multi-Accuracy Boosting for R.
+    MCBoost iteratively updates predictions within sub-groups.
+    Details can be obtained from Kim et al. 2018.
+    Arxiv Link: https://arxiv.org/pdf/1805.12317.pdf.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
-    data.table,
-    mlr3,
+    R (>= 3.1.0)
 Imports:
-    R6 (>= 2.4.1),
     backports,
     checkmate (>= 2.0.0),
     data.table (>= 1.12.8),
+    mlr3,
     mlr3misc (>= 0.6.0),
-    digest,
-    data.table
+    R6 (>= 2.4.1)
 Suggests:
+    digest,
     mlr3learners,
     testthat
 Roxygen: list(markdown = TRUE, r6 = TRUE)

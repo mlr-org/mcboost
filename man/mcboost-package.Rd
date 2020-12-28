@@ -4,11 +4,22 @@
 \name{mcboost-package}
 \alias{mcboost}
 \alias{mcboost-package}
-\title{mcboost: Implementes Multi-Accuracy Boosting (Kim et al., 2018).}
+\title{mcboost: Implements Multi-Accuracy Boosting (Kim et al., 2018).}
 \description{
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Implements Multi-Accuracy Boosting for R.
+    MCBoost iteratively updates predictions within sub-groups.
+    Details can be obtained from Kim et al. 2018.
+    Arxiv Link: https://arxiv.org/pdf/1805.12317.pdf.
 }
 \references{
 https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2018)
+}
+\author{
+\strong{Maintainer}: Florian Pfisterer \email{pfistererf@googlemail.com}
+
+Authors:
+\itemize{
+  \item Christoph Kern \email{c.kern@uni-mannheim.de}
+}
+
 }
