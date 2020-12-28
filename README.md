@@ -4,11 +4,12 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of mcboost is to ...
+**mcboost** implements Multi-Accuracy Boosting (Kim et al., 2018) for R.
+See the [paper](https://arxiv.org/pdf/1805.12317.pdf) for more information.
 
 ## Installation
 
-You can install the released version of mcboost from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of mcboost from Github with:
 
 ``` r
 remotes::install_github("pfistfl/mcboost")
@@ -22,7 +23,6 @@ This is a basic example which shows you how to solve a common problem:
 library(mcboost)
 library(mlr3)
 ```
-
 
 First we set up an example dataset:
 
