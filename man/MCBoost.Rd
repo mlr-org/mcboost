@@ -114,7 +114,7 @@ Specifies the strategy for updating the weights (multiplicative weight vs additi
 
 \item{\code{subpop_fitter}}{\code{\link{ResidualFitter}} \cr
 Specifies the type of model used to fit the
-residual \link{'TreeResidualFitter'} or \link{'RidgeResidualFitter'} (default)).}
+residual \code{\link{TreeResidualFitter}} or \code{\link{RidgeResidualFitter}} (default)).}
 
 \item{\code{subpops}}{\code{\link{list}} \cr
 Specifies a collection of characteristic attributes

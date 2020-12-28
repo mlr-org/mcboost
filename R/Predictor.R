@@ -1,6 +1,34 @@
+#' Predictor
+#' @export
+Predictor = R6::R6Class("Predictor",
+  public = list(
+    #' @description
+    #' Instantiate a Predictor
+    initialize = function() {
+      invisible(self)
+    },
+    #' @description
+    #' Fit the predictor.
+    #' @template params_data_label
+    fit = function(data, labels) {
+      stop("Abstract base class")
+    },
+    #' @description
+    #' Predict a dataset with constant predictions.
+    #' @param data [`data.table`] \cr
+    #'   Prediction data.
+    predict = function(data) {
+      stop("Abstract base Class")
+    }
+  )
+)
+
+
+
 #' ConstantPredictor
 #' @export
 ConstantPredictor = R6::R6Class("ConstantPredictor",
+  inherit = Predictor,
   public = list(
     #' @field constant [`numeric`]\cr
     #' mlr3 Constant to predict with.
@@ -38,6 +66,7 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
 #' with mcboost.
 #' @export
 LearnerPredictor = R6::R6Class("LearnerPredictor",
+  inherit = Predictor,
   public = list(
     #' @field learner [`Learner`]\cr
     #' mlr3 Learner used for fitting residuals.

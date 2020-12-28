@@ -28,8 +28,8 @@ LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
     learner = NULL,
     #' @description
     #' Define a ResidualFitter from a Learner
-    #' Available instantiations: [TreeResidualFitter] (rpart) and
-    #' [RidgeResidualFiter] (glmnet).
+    #' Available instantiations: [`TreeResidualFitter`] (rpart) and
+    #' [`RidgeResidualFitter`] (glmnet).
     #'
     #' @param learner [`Learner`]\cr
     #' Regression Learner to use.

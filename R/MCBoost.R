@@ -80,7 +80,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
     #' @param subpop_fitter [`ResidualFitter`] \cr
     #'   Specifies the type of model used to fit the
-    #'   residual ['TreeResidualFitter'] or ['RidgeResidualFitter'] (default)).
+    #'   residual [`TreeResidualFitter`] or [`RidgeResidualFitter`] (default)).
     #' @param subpops [`list`] \cr
     #'   Specifies a collection of characteristic attributes
     #'   and the values they take defining the S in subpops

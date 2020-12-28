@@ -14,6 +14,9 @@ LearnerPredictor
 Wraps a mlr3 Learner into a \code{LearnerPredictor} object that can be used
 with mcboost.
 }
+\section{Super class}{
+\code{\link[mcboost:Predictor]{mcboost::Predictor}} -> \code{LearnerPredictor}
+}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -38,6 +41,12 @@ Whether the Learner is trained}
 \item \href{#method-predict}{\code{LearnerPredictor$predict()}}
 \item \href{#method-clone}{\code{LearnerPredictor$clone()}}
 }
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+}
+\out{</details>}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}

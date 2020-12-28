@@ -48,8 +48,8 @@ Learner used for fitting residuals.}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Define a ResidualFitter from a Learner
-Available instantiations: \link{TreeResidualFitter} (rpart) and
-\link{RidgeResidualFiter} (glmnet).
+Available instantiations: \code{\link{TreeResidualFitter}} (rpart) and
+\code{\link{RidgeResidualFitter}} (glmnet).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerResidualFitter$new(learner)}\if{html}{\out{</div>}}
 }

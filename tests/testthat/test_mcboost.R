@@ -1,11 +1,10 @@
 context("MCBoost Class")
 
 test_that("MCBoost class instantiation", {
-  mc = MCBoost$new()
+  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter")
   expect_class(mc, "MCBoost")
   expect_class(mc$subpop_fitter, "ResidualFitter")
   expect_function(mc$predictor, args = "data")
-  expect_function(mc$multicalibrate, args = c("data", "labels"))
 })
 
 test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
@@ -15,7 +14,7 @@ test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
   data = tsk$data(cols = tsk$feature_names)
   labels = tsk$data(cols = tsk$target_names)[[1]]
 
-  mc = MCBoost$new()
+  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter")
   mc$multicalibrate(data, labels)
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
@@ -23,7 +22,6 @@ test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
 
   prds = mc$predict_probs(data)
   expect_numeric(prds, lower = 0, upper = 1, len = nrow(data))
-
 })
 
 
@@ -45,7 +43,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor", {
     one_hot(p)[,1]
   }
 
-  mc = MCBoost$new(init_predictor = init_predictor)
+  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeResidualFitter")
   mc$multicalibrate(data, labels)
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
