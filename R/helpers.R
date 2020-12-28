@@ -1,4 +1,6 @@
 #' One-hot encode a factor variable
+#' @param labels [`factor`]\cr
+#'   Factor to encode.
 #' @export
 one_hot = function(labels) {
   con = contrasts(labels, contrasts = FALSE)

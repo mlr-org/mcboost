@@ -114,12 +114,12 @@ Specifies the strategy for updating the weights (multiplicative weight vs additi
 
 \item{\code{subpop_fitter}}{\code{\link{ResidualFitter}} \cr
 Specifies the type of model used to fit the
-residual fxn ('TreeResidualFitter' or 'RidgeResidualFitter' (default)).}
+residual \link{'TreeResidualFitter'} or \link{'RidgeResidualFitter'} (default)).}
 
 \item{\code{subpops}}{\code{\link{list}} \cr
 Specifies a collection of characteristic attributes
 and the values they take defining the S in subpops
-e.g. C = {'age': \link{'20-29','30-39','40+'}, 'nJobs': \link{0,1,2,'3+'},... etc.}.}
+e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 
 \item{\code{default_model_class}}{\code{\link{Predictor}} \cr
 The class of the model that should be used

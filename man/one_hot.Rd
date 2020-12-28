@@ -6,6 +6,10 @@
 \usage{
 one_hot(labels)
 }
+\arguments{
+\item{labels}{\code{\link{factor}}\cr
+Factor to encode.}
+}
 \description{
 One-hot encode a factor variable
 }

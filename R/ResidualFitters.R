@@ -75,7 +75,7 @@ RidgeResidualFitter = R6::R6Class("RidgeResidualFitter",
     #' @description
     #' Define a ResidualFitter from a glmnet learner
     initialize = function() {
-      mlr3misc::require_namespaces("mlr3learners")
+      mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
       super$initialize(learner = lrn("regr.glmnet", alpha = 0))
     }
   )

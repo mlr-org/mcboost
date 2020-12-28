@@ -17,6 +17,7 @@ test_that("LearnerResidualFitters work", {
 })
 
 test_that("TreeResidualFitters work", {
+  skip_if_not_installed("rpart")
   rf = TreeResidualFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
@@ -25,6 +26,8 @@ test_that("TreeResidualFitters work", {
 })
 
 test_that("RidgeResidualFitters work", {
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("glmnet")
   rf = RidgeResidualFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
