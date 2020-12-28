@@ -33,6 +33,7 @@ Imports:
     rpart
 Suggests:
     digest,
+    glmnet,
     mlr3learners,
     testthat
 Roxygen: list(markdown = TRUE, r6 = TRUE)

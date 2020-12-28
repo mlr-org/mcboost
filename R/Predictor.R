@@ -23,8 +23,6 @@ Predictor = R6::R6Class("Predictor",
   )
 )
 
-
-
 #' ConstantPredictor
 #' @export
 ConstantPredictor = R6::R6Class("ConstantPredictor",
@@ -60,7 +58,6 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
   )
 )
 
-
 #' LearnerPredictor
 #' Wraps a mlr3 Learner into a `LearnerPredictor` object that can be used
 #' with mcboost.
@@ -92,9 +89,18 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
     #'   Prediction data.
     predict = function(data) {
       if (inherits(self$learner, "LearnerRegr")) {
-        self$learner$predict_newdata(data)$response
+        return(self$learner$predict_newdata(data)$response)
       } else {
-        self$learner$predict_newdata(data)
+        prd = self$learner$predict_newdata(data)
+        if ("prob" %in% self$learner$predict_type) {
+          p = prd$prob
+        } else {
+          p = one_hot(prd$response)
+        }
+        if (ncol(p) == 2L) {
+          p = p[,1]
+        }
+        return(p)
       }
     }
   ),
