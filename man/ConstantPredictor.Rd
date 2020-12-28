@@ -8,6 +8,17 @@ ConstantPredictor
 
 ConstantPredictor
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{constant}}{\code{\link{numeric}}\cr
+mlr3 Constant to predict with.}
+
+\item{\code{is_fitted}}{\code{\link{logical}}\cr
+Whether the model is fitted.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -21,28 +32,59 @@ ConstantPredictor
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Instantiate a ConstantPredictor
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ConstantPredictor$new(constant = 0.5)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{constant}}{\code{\link{numeric}}\cr
+Constant to predict with.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fit"></a>}}
 \if{latex}{\out{\hypertarget{method-fit}{}}}
 \subsection{Method \code{fit()}}{
+Fit the constant predictor.
+Does nothing.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ConstantPredictor$fit(data, labels)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{\code{\link{data.table}}\cr
+Features.}
+
+\item{\code{labels}}{\code{\link{numeric}}\cr
+One-hot encoded labels (of same length as data).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-predict"></a>}}
 \if{latex}{\out{\hypertarget{method-predict}{}}}
 \subsection{Method \code{predict()}}{
+Predict a dataset with constant predictions.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ConstantPredictor$predict(data)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{\code{\link{data.table}} \cr
+Prediction data.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

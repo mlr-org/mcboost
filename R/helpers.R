@@ -1,9 +1,3 @@
-clip_prob = function(prob) {
-  prob[prob > 1] = 1
-  prob[prob < 0] = 0
-  return(prob)
-}
-
 #' One-hot encode a factor variable
 #' @export
 one_hot = function(labels) {
@@ -11,6 +5,12 @@ one_hot = function(labels) {
   mat = con[as.integer(labels),]
   rownames(mat) = NULL
   return(mat)
+}
+
+clip_prob = function(prob) {
+  prob[prob > 1] = 1
+  prob[prob < 0] = 0
+  return(prob)
 }
 
 xy_to_task = function(x, y) {

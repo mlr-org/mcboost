@@ -2,11 +2,17 @@
 % Please edit documentation in R/Predictor.R
 \name{LearnerPredictor}
 \alias{LearnerPredictor}
-\title{LearnerPredictor}
+\title{LearnerPredictor
+Wraps a mlr3 Learner into a \code{LearnerPredictor} object that can be used
+with mcboost.}
 \description{
 LearnerPredictor
+Wraps a mlr3 Learner into a \code{LearnerPredictor} object that can be used
+with mcboost.
 
 LearnerPredictor
+Wraps a mlr3 Learner into a \code{LearnerPredictor} object that can be used
+with mcboost.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -37,28 +43,58 @@ Whether the Learner is trained}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Instantiate a LearnerPredictor
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerPredictor$new(learner)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{learner}}{\code{\link{Learner}}\cr
+Learner used for train/predict.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fit"></a>}}
 \if{latex}{\out{\hypertarget{method-fit}{}}}
 \subsection{Method \code{fit()}}{
+Fit the learner.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerPredictor$fit(data, labels)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{\code{\link{data.table}}\cr
+Features.}
+
+\item{\code{labels}}{\code{\link{numeric}}\cr
+One-hot encoded labels (of same length as data).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-predict"></a>}}
 \if{latex}{\out{\hypertarget{method-predict}{}}}
 \subsection{Method \code{predict()}}{
+Predict a dataset with leaner predictions.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerPredictor$predict(data)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{\code{\link{data.table}} \cr
+Prediction data.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
