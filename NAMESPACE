@@ -3,6 +3,7 @@
 export(ConstantPredictor)
 export(LearnerPredictor)
 export(LearnerResidualFitter)
+export(MCBoost)
 export(ProbRange)
 export(ResidualFitter)
 export(RidgeResidualFitter)
