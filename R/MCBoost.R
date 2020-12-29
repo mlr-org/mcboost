@@ -142,6 +142,7 @@ MCBoost = R6::R6Class("MCBoost",
   #' Run multicalibration.
   #' @template params_data_label
   multicalibrate = function(data, labels) {
+    if (is.matrix(data) || is.data.frame(data)) setDT(as.data.frame(x))
     assert_data_table(data)
     # data.table to factor
     if (is.data.table(labels) && ncol(lables) == 1L) {
@@ -216,6 +217,9 @@ MCBoost = R6::R6Class("MCBoost",
       if (!length(self$iter_models)) {
         warning("multicalibrate was not run! Returning original predictions!")
       }
+      # convert to data.table
+      if (is.matrix(x) || is.data.frame(x)) setDT(as.data.frame(x))
+      assert_data_table(x)
       orig_preds = self$predictor(x)
       new_preds = orig_preds
       for (i in seq_along(self$iter_models)) {

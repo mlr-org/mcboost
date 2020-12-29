@@ -47,8 +47,8 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor", {
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
 
-  prds = mc$predict_probs(data)
-  expect_numeric(prds, lower = 0, upper = 1, len = nrow(data))
+  prds = mc$predict_probs(d)
+  expect_numeric(prds, lower = 0, upper = 1, len = nrow(d))
 
 
   labels_oh = one_hot(l)[,1]
