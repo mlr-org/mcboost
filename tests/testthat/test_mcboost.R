@@ -25,7 +25,6 @@ test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
 
 
 test_that("MCBoost multicalibrate and predict_probs - init_predictor function", {
-
   # Sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names)
@@ -61,7 +60,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
 test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredictor - response", {
   # Sonar task
   tsk = tsk("sonar")
-  data = tsk$data(cols = tsk$feature_names)
+  data = as.matrix(tsk$data(cols = tsk$feature_names))
   labels = tsk$data(cols = tsk$target_names)[[1]]
 
   lp = LearnerPredictor$new(lrn("classif.rpart"))
