@@ -117,6 +117,8 @@ MCBoost = R6::R6Class("MCBoost",
       } else {
         if (is.null(subpop_fitter)) {
           self$subpop_fitter = RidgeResidualFitter$new()
+        } else if (inherits(subpop_fitter, "ResidualFitter")) {
+          self$subpop_fitter = subpop_fitter
         } else if (subpop_fitter == "TreeResidualFitter") {
           self$subpop_fitter = TreeResidualFitter$new()
         } else {
@@ -150,14 +152,12 @@ MCBoost = R6::R6Class("MCBoost",
     }
     # factor to one-hot
     if (is.factor(labels)) {
-      ll = length(levels(labels))
       labels = one_hot(labels)
-      if (ll == 2L) labels = labels[,1]
     }
     assert_numeric(labels, lower = 0, upper = 1)
 
 
-    pred_probs = self$predictor(data)
+    pred_probs = assert_numeric(self$predictor(data), len = nrow(data))
     resid = pred_probs - labels
 
     buckets = list(ProbRange$new())

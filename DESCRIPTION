@@ -35,6 +35,9 @@ Suggests:
     digest,
     glmnet,
     mlr3learners,
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 RoxygenNote: 7.1.1
+VignetteBuilder: knitr

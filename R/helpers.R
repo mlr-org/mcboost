@@ -6,6 +6,7 @@ one_hot = function(labels) {
   con = contrasts(labels, contrasts = FALSE)
   mat = con[as.integer(labels),]
   rownames(mat) = NULL
+  if (ncol(mat) == 2L) mat = mat[,1L]
   return(mat)
 }
 
