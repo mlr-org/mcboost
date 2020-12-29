@@ -133,6 +133,10 @@ mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
 
 ## Example 2: Adjusting the SubPop Fitter
 
+The Subpop-fitter can be easily adjusted by constructing it from a `LearnerResidualFitter`.
+This allows for using any **mlr3** learner.
+See [here](https://mlr3extralearners.mlr-org.com/articles/learners/list_learners.html) for a list of available learners.
+
 ```{r}
 rf = LearnerResidualFitter$new(lrn("regr.rpart", minsplit = 10L))
 mc = MCBoost$new(subpop_fitter = rf, init_predictor = init_predictor)
