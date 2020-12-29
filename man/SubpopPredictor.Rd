@@ -8,6 +8,18 @@ SubpopPredictor
 
 SubpopPredictor
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{subpop}}{\code{\link{function}} \cr
+A \code{\link{function}} that evaluates to binary for each row in a dataset.
+Defines a sub-population.}
+
+\item{\code{value}}{\code{\link{numeric}} \cr
+A correlation value.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -23,19 +35,19 @@ SubpopPredictor
 \subsection{Method \code{new()}}{
 Instantiate a SubpopPredictor
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SubpopPredictor$new(subpops, value)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SubpopPredictor$new(subpop, value)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{subpops}}{\code{\link{list}} \cr
-Specifies a collection of characteristic attributes
-and the values they take defining the S in subpops
-e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
+\item{\code{subpop}}{\code{\link{character}}|\code{\link{function}} \cr
+Either a \code{\link{function}}, that yields a binary value for each
+row in a dataset, or a \code{\link{character}} string referring to a
+feature column, that defines a sub-population.}
 
 \item{\code{value}}{\code{\link{numeric}} \cr
-Any value.}
+Correlation value for the given subpop.}
 }
 \if{html}{\out{</div>}}
 }

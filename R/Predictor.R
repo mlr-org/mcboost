@@ -94,11 +94,9 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
         prd = self$learner$predict_newdata(data)
         if ("prob" %in% self$learner$predict_type) {
           p = prd$prob
+          if (ncol(p) == 2L) p = p[,1L]
         } else {
           p = one_hot(prd$response)
-        }
-        if (ncol(p) == 2L) {
-          p = p[,1L]
         }
         return(p)
       }
@@ -118,13 +116,30 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
 #' @export
 SubpopPredictor = R6::R6Class("SubpopPredictor",
   public = list(
+
+    #' @field subpop [`function`] \cr
+    #'   A [`function`] that evaluates to binary for each row in a dataset.
+    #'   Defines a sub-population.
+    subpop = NULL,
+    #' @field value [`numeric`] \cr
+    #'   A correlation value.
+    value = numeric(1),
+
     #' @description
     #' Instantiate a SubpopPredictor
-    #' @template params_subpops
+    #' @param subpop [`character`]|[`function`] \cr
+    #'   Either a [`function`], that yields a binary value for each
+    #'   row in a dataset, or a [`character`] string referring to a
+    #'   feature column, that defines a sub-population.
     #' @param value [`numeric`] \cr
-    #' Any value.
-    initialize = function(subpops, value) {
-      self$subpop = assert_list(subpops)
+    #'   Correlation value for the given subpop.
+    initialize = function(subpop, value) {
+      # Can be character (referring to a column) or a function.
+      if (is.character(subpop)) {
+        self$subpop = function(rw) {rw[[subpop]]}
+      } else {
+        self$subpop = assert_function(subpop)
+      }
       self$value = assert_number(value)
       invisible(self)
     },
@@ -137,10 +152,11 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
     #' @param data [`data.table`] \cr
     #'   Prediction data.
     predict = function(data) {
-      apply(data, 1, function(x) self$subpop(x) * self$value)
+      data[, self$subpop(.SD)] * self$value
     }
   )
 )
+
 
 #' SubgroupModel
 #' @export
@@ -164,7 +180,7 @@ SubgroupModel = R6::R6Class("SubgroupModel",
     #' Fit the predictor.
     #' @template params_data_label
     fit = function(data, labels) {
-      self$subgroup_preds = imap(self$subgroup_masks, function(x,i) {
+      self$subgroup_preds = map(self$subgroup_masks, function(mask) {
         mean(labels[mask])
       })
     },

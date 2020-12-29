@@ -113,7 +113,7 @@ MCBoost = R6::R6Class("MCBoost",
 
       # Subpopulations
       if (!is.null(subpops)) {
-        self$subpop_fitter = SubpopFitter(subpops)
+        self$subpop_fitter = SubpopFitter$new(subpops)
       } else {
         if (is.null(subpop_fitter)) {
           self$subpop_fitter = RidgeResidualFitter$new()
@@ -144,6 +144,7 @@ MCBoost = R6::R6Class("MCBoost",
   #' Run multicalibration.
   #' @template params_data_label
   multicalibrate = function(data, labels) {
+
     if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
     assert_data_table(data)
     # data.table to factor
@@ -155,7 +156,6 @@ MCBoost = R6::R6Class("MCBoost",
       labels = one_hot(labels)
     }
     assert_numeric(labels, lower = 0, upper = 1)
-
 
     pred_probs = assert_numeric(self$predictor(data), len = nrow(data))
     resid = pred_probs - labels
@@ -190,7 +190,7 @@ MCBoost = R6::R6Class("MCBoost",
         models = c(models, out[[2]])
       }
 
-      if (max(corrs) < self$alpha) {
+      if (abs(max(corrs)) < self$alpha) {
         break
       } else {
         max_key = buckets[[which.max(corrs)]]

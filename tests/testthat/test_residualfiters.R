@@ -35,9 +35,23 @@ test_that("RidgeResidualFitters work", {
   expect_true(out[[2]]$is_fitted)
 })
 
-# test_that("SubPopFitter work", {
-#   rf = SubPopFitter$new()
-# })
+test_that("SubPopFitter work", {
+  data = data.table(
+    "AGE_0_10" =  c(1, 1, 0, 0, 0),
+    "AGE_11_20" = c(0, 0, 1, 0, 0),
+    "AGE_21_31" = c(0, 0, 0, 1, 1),
+    "X1" = runif(5),
+    "X2" = runif(5)
+  )
+  label = c(1,0,0,1,1)
+
+  pops = list("AGE_0_10", "AGE_11_20", "AGE_21_31", function(x) {x[["X1" > 0.5]]})
+  rf = SubpopFitter$new(subpops = pops)
+  out = rf$fit(data, label - 0.5)
+  expect_list(out)
+  expect_number(out[[1]], lower = 0, upper = 0)
+  expect_class(out[[2]], "SubpopPredictor")
+})
 
 # test_that("SubgroupFitter work", {
 #   rf = SubgroupFitter$new()

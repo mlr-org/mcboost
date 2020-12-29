@@ -82,15 +82,29 @@ RidgeResidualFitter = R6::R6Class("RidgeResidualFitter",
 
 #' Static ResidualFitter based on Subpopulations
 #' @export
-SubPopFitter = R6::R6Class("SubPopFitter",
+SubpopFitter = R6::R6Class("SubpopFitter",
   inherit = ResidualFitter,
   public = list(
+    #' @field subgroup_masks [`list`] \cr
+    #'   List of subgroup masks.
+    subgroup_masks = NULL,
+    #' @field subpops [`list`] \cr
+    #'   List of subpopulation indicators.
+    subpops = NULL,
     #' @description
     #' Initialize SubPopFilter
     #'
     #' @template params_subpops
     initialize = function(subpops) {
-      self$subpops = assert_list(subpops, names = "named")
+      assert_list(subpops)
+      self$subpops = map(subpops, function(pop) {
+        # Can be character (referring to a column)
+        if (is.character(pop)) {
+          function(rw) {rw[[pop]]}
+        } else {
+          assert_function(pop)
+        }
+      })
     },
     #' @description
     #' Fit the learner and compute correlation
@@ -102,15 +116,13 @@ SubPopFitter = R6::R6Class("SubPopFitter",
     #' @return `list`
     fit = function(data, resid) {
       worstCorr = 0
-      worst_subpop = function(pt) {return(0)}
-
-      for (s in subpops) {
-        sub = apply(data, 1, s)
+      worst_subpop = function(pt) {return(rep(0L, nrow(pt)))}
+      for (sfn in self$subpops) {
+        sub = data[, sfn(.SD)]
         corr = mean(sub * resid)
-
-        if (abs(corr) > abs(worstCor)) {
+        if (abs(corr) > abs(worstCorr)) {
           worstCorr = corr
-          worst_subpop = S
+          worst_subpop = sfn
         }
         return(list(worstCorr, SubpopPredictor$new(worst_subpop, worstCorr)))
       }

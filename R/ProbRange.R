@@ -3,7 +3,6 @@
 #' Range of format [lower; upper).
 #' @export
 ProbRange = R6::R6Class("ProbRange",
-
   public = list(
     #' @field lower [`numeric`] \cr
     #'   Lower bound of the ProbRange.
