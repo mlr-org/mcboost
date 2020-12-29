@@ -81,10 +81,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param subpop_fitter [`ResidualFitter`] \cr
     #'   Specifies the type of model used to fit the
     #'   residual [`TreeResidualFitter`] or [`RidgeResidualFitter`] (default)).
-    #' @param subpops [`list`] \cr
-    #'   Specifies a collection of characteristic attributes
-    #'   and the values they take defining the S in subpops
-    #'   e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).
+    #' @template params_subpops
     #' @param default_model_class [`Predictor`] \cr
     #'   The class of the model that should be used
     #'   as the MCBoost's default predictor model.

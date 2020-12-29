@@ -34,3 +34,11 @@ test_that("RidgeResidualFitters work", {
   expect_class(out[[2]], "LearnerPredictor")
   expect_true(out[[2]]$is_fitted)
 })
+
+# test_that("SubPopFitter work", {
+#   rf = SubPopFitter$new()
+# })
+
+# test_that("SubgroupFitter work", {
+#   rf = SubgroupFitter$new()
+# })

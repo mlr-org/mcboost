@@ -17,7 +17,6 @@ ResidualFitter = R6::R6Class("ResidualFitter",
   )
 )
 
-
 #' ResidualFitter from a Learner
 #' @export
 LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
@@ -81,7 +80,6 @@ RidgeResidualFitter = R6::R6Class("RidgeResidualFitter",
   )
 )
 
-
 #' Static ResidualFitter based on Subpopulations
 #' @export
 SubPopFitter = R6::R6Class("SubPopFitter",
@@ -90,10 +88,9 @@ SubPopFitter = R6::R6Class("SubPopFitter",
     #' @description
     #' Initialize SubPopFilter
     #'
-    #' @param subpops [`list`]\cr
-    #'   List of subpops.
+    #' @template params_subpops
     initialize = function(subpops) {
-      self$subpops = subpops
+      self$subpops = assert_list(subpops, names = "named")
     },
     #' @description
     #' Fit the learner and compute correlation
@@ -115,11 +112,42 @@ SubPopFitter = R6::R6Class("SubPopFitter",
           worstCorr = corr
           worst_subpop = S
         }
-        return(list(worstCorr, SubpopPredictor(worst_subpop, worstCorr)))
+        return(list(worstCorr, SubpopPredictor$new(worst_subpop, worstCorr)))
       }
-
-
     }
+  )
+)
 
+#' Static ResidualFitter based on Subgroups
+#' @export
+SubgroupFitter = R6::R6Class("SubgroupFitter",
+  inherit = ResidualFitter,
+  public = list(
+    #' @field subgroup_masks [`list`] \cr
+    #'   List of subgroup masks.
+    subgroup_masks = NULL,
+    #' @description
+    #' Initialize SubgroupFitter
+    #'
+    #' @param subgroup_masks [`list`] \cr
+    #'   List of subgroup masks.
+    initialize = function(subgroup_masks) {
+      self$subgroup_masks = assert_list(subgroup_masks, names = "named")
+    },
+    #' @description
+    #' Fit the learner and compute correlation
+    #'
+    #' @param data [`data.frame`]\cr
+    #'   Features to use.
+    #' @param resid [`numeric`]\cr
+    #'   Target variable (residuals)
+    #' @return `list`
+    fit = function(data, resid) {
+      m = SubgroupModel$new(self$subgroup_masks)
+      m$fit(data, resid)
+      preds = m$predict(data)
+      corr = mean(preds*resid)
+      return(list(corr, m))
+    }
   )
 )

@@ -98,7 +98,7 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
           p = one_hot(prd$response)
         }
         if (ncol(p) == 2L) {
-          p = p[,1]
+          p = p[,1L]
         }
         return(p)
       }
@@ -109,6 +109,85 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
     #' Whether the Learner is trained
     is_fitted = function() {
       !is.null(self$learner$state)
+    }
+  )
+)
+
+
+#' SubpopPredictor
+#' @export
+SubpopPredictor = R6::R6Class("SubpopPredictor",
+  public = list(
+    #' @description
+    #' Instantiate a SubpopPredictor
+    #' @template params_subpops
+    #' @param value [`numeric`] \cr
+    #' Any value.
+    initialize = function(subpops, value) {
+      self$subpop = assert_list(subpops)
+      self$value = assert_number(value)
+      invisible(self)
+    },
+    #' @description
+    #' Fit the predictor.
+    #' @template params_data_label
+    fit = function(data, labels) {},
+    #' @description
+    #' Predict a dataset with sub-population predictions.
+    #' @param data [`data.table`] \cr
+    #'   Prediction data.
+    predict = function(data) {
+      apply(data, 1, function(x) self$subpop(x) * self$value)
+    }
+  )
+)
+
+#' SubgroupModel
+#' @export
+SubgroupModel = R6::R6Class("SubgroupModel",
+  public = list(
+    #' @field subgroup_masks [`list`] \cr
+    #'   List of subgroup masks.
+    subgroup_masks = NULL,
+    #' @field subgroup_preds [`list`] \cr
+    #'   List of subgroup predictions after fitting.
+    subgroup_preds = NULL,
+    #' @description
+    #' Instantiate a SubpopPredictor
+    #' @param subgroup_masks [`list`] \cr
+    #'   List of subgroup masks.
+    initialize = function(subgroup_masks) {
+      self$subgroup_masks = assert_list(subgroup_masks, names = "named", null.ok = TRUE)
+      invisible(self)
+    },
+    #' @description
+    #' Fit the predictor.
+    #' @template params_data_label
+    fit = function(data, labels) {
+      self$subgroup_preds = imap(self$subgroup_masks, function(x,i) {
+        mean(labels[mask])
+      })
+    },
+    #' @description
+    #' Predict a dataset with sub-population predictions.
+    #' @param data [`data.table`] \cr
+    #'   Prediction data.
+    #' @param subgroup_masks [`list`] \cr
+    #'   List of subgroup masks for the data.
+    predict = function(data, subgroup_masks = NULL) {
+      # Check that masks fit
+      if (is.null(subgroup_masks)) {
+        subgroup_masks = self$subgroup_masks
+      }
+      map(subgroup_masks, function(x) {
+          assert_equal(nrow(data), length(x))
+      })
+      # Predict
+      preds = numeric(nrow(data))
+      for (i in seq_along(self$subgroup_preds)) {
+        preds[subgroup_masks[[i]]] = self$subgroup_preds[[i]]
+      }
+      return(preds)
     }
   )
 )
