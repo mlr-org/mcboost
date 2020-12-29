@@ -115,6 +115,7 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
 #' SubpopPredictor
 #' @export
 SubpopPredictor = R6::R6Class("SubpopPredictor",
+  inherit = Predictor,
   public = list(
 
     #' @field subpop [`function`] \cr

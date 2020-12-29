@@ -132,7 +132,7 @@ MCBoost = R6::R6Class("MCBoost",
         if (inherits(default_model_class, "R6ClassGenerator")) {
           dm = default_model_class$new()
         } else {
-          dm = default_model_class
+          dm = assert_class(default_model_class, "Predictor")
         }
         init_predictor = function(data) {dm$predict(data)}
       }

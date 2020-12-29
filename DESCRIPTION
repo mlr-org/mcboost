@@ -32,11 +32,14 @@ Imports:
     R6 (>= 2.4.1),
     rpart
 Suggests:
+    curl,
     digest,
     glmnet,
     mlr3learners,
+    mlr3pipelines,
     testthat,
     knitr,
+    ranger,
     rmarkdown
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 RoxygenNote: 7.1.1

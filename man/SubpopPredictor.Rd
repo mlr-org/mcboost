@@ -8,6 +8,9 @@ SubpopPredictor
 
 SubpopPredictor
 }
+\section{Super class}{
+\code{\link[mcboost:Predictor]{mcboost::Predictor}} -> \code{SubpopPredictor}
+}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -28,6 +31,12 @@ A correlation value.}
 \item \href{#method-predict}{\code{SubpopPredictor$predict()}}
 \item \href{#method-clone}{\code{SubpopPredictor$clone()}}
 }
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+}
+\out{</details>}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
