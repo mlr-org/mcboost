@@ -47,7 +47,9 @@ Initialize SubgroupFitter
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{subgroup_masks}}{\code{\link{list}} \cr
-List of subgroup masks.}
+List of subgroup masks. Subgroup masks are list(s) of integer masks,
+each with the same length as data to be fitted on.
+They allow defining sub-groups of the data.}
 }
 \if{html}{\out{</div>}}
 }

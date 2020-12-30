@@ -88,7 +88,7 @@ One-hot encoded labels (of same length as data).}
 \subsection{Method \code{predict()}}{
 Predict a dataset with sub-population predictions.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SubpopPredictor$predict(data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SubpopPredictor$predict(data, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -96,6 +96,9 @@ Predict a dataset with sub-population predictions.
 \describe{
 \item{\code{data}}{\code{\link{data.table}} \cr
 Prediction data.}
+
+\item{\code{...}}{\code{\link{any}} \cr
+Not used, only for compatibility with other methods.}
 }
 \if{html}{\out{</div>}}
 }

@@ -6,6 +6,15 @@
 \description{
 For more details, please refer to https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2018).
 }
+\examples{
+  # See vignette for more examples.
+  # Instantiate the object
+  mc = MCBoost$new()
+  # Run multicalibration on training dataset.
+  mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
+  # Predict on test set
+  mc$predict_probs(iris[101:150,1:4])
+}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

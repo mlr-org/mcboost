@@ -40,7 +40,7 @@ mc$multicalibrate(d[1:200,], l[1:200])
 After the calibration, the model can now be used for prediction with new data.
 
 ```{r}
-  mc$predict_probs(d[201:208,])
+mc$predict_probs(d[201:208,])
 ```
 
 ## Example 1: Multi-Callibration Boosting on the Adult Dataset
@@ -67,7 +67,8 @@ Then we do basic preprocessing:
 library(mlr3pipelines)
 pipe = po("collapsefactors", no_collapse_above_prevalence = 0.0006) %>>%
   po("fixfactors") %>>%
-  po("encode") %>>% po("imputehist")
+  po("encode") %>>%
+  po("imputehist")
 prep_task = pipe$train(train_tsk)[[1]]
 ```
 
@@ -154,14 +155,25 @@ mean(prs[mask] == one_hot(test_labels)[mask])
 mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
 ```
 
+
+
+### Predicting using only the first 'n' iterations
+
+The `t` parameter can be use to predict using only the first `n` iterations.
+
+```{r}
+prs = mc$predict_probs(test_data, t = 3L)
+```
+
+
 ## Example 2: Adjusting the SubPop Fitter
 
 For this example, we will again use the *sonar* dataset:
 
 ```{r}
-  tsk = tsk("sonar")
-  d = tsk$data(cols = tsk$feature_names)
-  l = tsk$data(cols = tsk$target_names)[[1]]
+tsk = tsk("sonar")
+data = tsk$data(cols = tsk$feature_names)
+labels = tsk$data(cols = tsk$target_names)[[1]]
 ```
 
 ### 2.1 LearnerResidualFitter
@@ -173,7 +185,7 @@ See [here](https://mlr3extralearners.mlr-org.com/articles/learners/list_learners
 
 ```{r}
 rf = LearnerResidualFitter$new(lrn("regr.rpart", minsplit = 10L))
-mc = MCBoost$new(subpop_fitter = rf, init_predictor = init_predictor)
+mc = MCBoost$new(subpop_fitter = rf)
 mc$multicalibrate(data, labels)
 ```
 

@@ -15,11 +15,11 @@ Implements Multi-Accuracy Boosting for R.
 https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2018)
 }
 \author{
-\strong{Maintainer}: Florian Pfisterer \email{pfistererf@googlemail.com}
+\strong{Maintainer}: Florian Pfisterer \email{pfistererf@googlemail.com} (\href{https://orcid.org/0000-0001-8867-762X}{ORCID})
 
 Authors:
 \itemize{
-  \item Christoph Kern \email{c.kern@uni-mannheim.de}
+  \item Christoph Kern \email{c.kern@uni-mannheim.de} (\href{https://orcid.org/0000-0001-7363-4299}{ORCID})
 }
 
 }

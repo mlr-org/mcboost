@@ -17,14 +17,6 @@ upper bound of the ProbRange.}
 }
 \if{html}{\out{</div>}}
 }
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{hash}}{\code{\link{character}}
-Compute a hash for a ProbRange.}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

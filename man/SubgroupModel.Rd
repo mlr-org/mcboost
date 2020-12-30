@@ -73,7 +73,7 @@ One-hot encoded labels (of same length as data).}
 \subsection{Method \code{predict()}}{
 Predict a dataset with sub-population predictions.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SubgroupModel$predict(data, subgroup_masks = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SubgroupModel$predict(data, subgroup_masks = NULL, partition_mask = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -84,6 +84,9 @@ Prediction data.}
 
 \item{\code{subgroup_masks}}{\code{\link{list}} \cr
 List of subgroup masks for the data.}
+
+\item{\code{partition_mask}}{\code{\link{integer}} \cr
+Mask defined by partitions.}
 }
 \if{html}{\out{</div>}}
 }
