@@ -28,7 +28,6 @@ MCBoost = R6::R6Class("MCBoost",
     #' @field rebucket [`logical`] \cr
     #'   Should buckets be re-done at each iteration?
     rebucket = NULL,
-
     #' @field partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
     #'   (e.g., predictions less than
@@ -148,7 +147,7 @@ MCBoost = R6::R6Class("MCBoost",
     if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
     assert_data_table(data)
     # data.table to factor
-    if (is.data.table(labels) && ncol(lables) == 1L) {
+    if (is.data.table(labels) && ncol(labels) == 1L) {
       labels = labels[[1]]
     }
     # factor to one-hot
@@ -230,21 +229,16 @@ MCBoost = R6::R6Class("MCBoost",
             probs = orig_preds
           }
           mask = self$iter_partitions[[i]]$in_range_mask(probs)
-          new_preds = private$update_probs(new_preds, self$iter_models[[i]], x, mask=mask)
+          new_preds = private$update_probs(new_preds, self$iter_models[[i]], x, mask=mask, ...)
         }
       }
       return(new_preds)
     }
   ),
   private = list(
-    update_probs = function(orig_preds, model, x, mask=NULL, ...) {
-      deltas = integer(length(orig_preds))
-
-      if (!is.null(mask)) {
-        deltas[mask] = model$predict(x[mask])
-      } else {
-        deltas = model$predict(x)
-      }
+    update_probs = function(orig_preds, model, x, mask = NULL, ...) {
+      deltas = numeric(length(orig_preds))
+      deltas[mask] = model$predict(x, partition_mask = mask, ...)
 
       if (self$multiplicative) {
         update_weights = exp(- self$eta * deltas)

@@ -30,7 +30,7 @@ ProbRange = R6::R6Class("ProbRange",
     #' @return
     #' Logical, whether ProbRanges are equal.
     is_equal = function(other) {
-      if (check_class(other, "ProbRange"))
+      if (test_class(other, "ProbRange"))
         return((self$lower == other$lower) && (self$upper == other$upper))
       return(FALSE)
     },
@@ -42,7 +42,7 @@ ProbRange = R6::R6Class("ProbRange",
     #' @return
     #' Logical, whether ProbRanges are in-equal.
     is_not_equal = function(other) {
-      if (check_class(other, "ProbRange"))
+      if (test_class(other, "ProbRange"))
         return(!((self$lower == other$lower) && (self$upper == other$upper)))
       return(TRUE)
     },
@@ -60,14 +60,6 @@ ProbRange = R6::R6Class("ProbRange",
     #' Printer for ProbRange
     print = function() {
       cat(paste0("ProbRange: [", self$lower, ";", self$upper, ")\n"))
-    }
-  ),
-  active = list(
-    #' @field hash [`character`]
-    #' Compute a hash for a ProbRange.
-    hash = function() {
-      require_namespaces("digest")
-      digest::digest(list(self$upper, self$lower))
     }
   )
 )

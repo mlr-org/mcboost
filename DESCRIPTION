@@ -7,12 +7,12 @@ Authors@R:
              family = "Pfisterer",
              role = c("cre", "aut"),
              email = "pfistererf@googlemail.com",
-             comment = c(ORCID = "")),
+             comment = c(ORCID = "0000-0001-8867-762X")),
       person(given = "Christoph",
              family = "Kern",
              role = "aut",
              email = "c.kern@uni-mannheim.de",
-             comment = c(ORCID = "")))
+             comment = c(ORCID = "0000-0001-7363-4299")))
 Maintainer: Florian Pfisterer <pfistererf@googlemail.com>
 Description: Implements Multi-Accuracy Boosting for R.
     MCBoost iteratively updates predictions within sub-groups.
@@ -33,7 +33,6 @@ Imports:
     rpart
 Suggests:
     curl,
-    digest,
     glmnet,
     mlr3learners,
     mlr3pipelines,

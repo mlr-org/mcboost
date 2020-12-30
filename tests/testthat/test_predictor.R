@@ -3,6 +3,8 @@ context("Predictor")
 test_that("Predictor class instantiation", {
   prd = Predictor$new()
   expect_class(prd, "Predictor")
+  expect_error(prd$fit(), fixed = "Abstract base class")
+  expect_error(prd$predict(), fixed = "Abstract base class")
 })
 
 test_that("ConstantPredictor", {

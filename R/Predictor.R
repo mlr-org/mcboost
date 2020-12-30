@@ -17,7 +17,9 @@ Predictor = R6::R6Class("Predictor",
     #' Predict a dataset with constant predictions.
     #' @param data [`data.table`] \cr
     #'   Prediction data.
-    predict = function(data) {
+    #' @param ... [`any`] \cr
+    #'   Not used, only for compatibility with other methods.
+    predict = function(data, ...) {
       stop("Abstract base Class")
     }
   )
@@ -52,7 +54,9 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
     #' Predict a dataset with constant predictions.
     #' @param data [`data.table`] \cr
     #'   Prediction data.
-    predict = function(data) {
+    #' @param ... [`any`] \cr
+    #'   Not used, only for compatibility with other methods.
+    predict = function(data, ...) {
         rep(self$constant, nrow(data))
     }
   )
@@ -87,7 +91,9 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
     #' Predict a dataset with leaner predictions.
     #' @param data [`data.table`] \cr
     #'   Prediction data.
-    predict = function(data) {
+    #' @param ... [`any`] \cr
+    #'   Not used, only for compatibility with other methods.
+    predict = function(data, ...) {
       if (inherits(self$learner, "LearnerRegr")) {
         return(self$learner$predict_newdata(data)$response)
       } else {
@@ -137,7 +143,7 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
     initialize = function(subpop, value) {
       # Can be character (referring to a column) or a function.
       if (is.character(subpop)) {
-        self$subpop = function(rw) {rw[[subpop]]}
+        self$subpop = function(rw) {rw[[subpop]]} # nocov
       } else {
         self$subpop = assert_function(subpop)
       }
@@ -152,7 +158,9 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
     #' Predict a dataset with sub-population predictions.
     #' @param data [`data.table`] \cr
     #'   Prediction data.
-    predict = function(data) {
+    #' @param ... [`any`] \cr
+    #'   Not used, only for compatibility with other methods.
+    predict = function(data, ...) {
       data[, self$subpop(.SD)] * self$value
     }
   )
@@ -174,7 +182,7 @@ SubgroupModel = R6::R6Class("SubgroupModel",
     #' @param subgroup_masks [`list`] \cr
     #'   List of subgroup masks.
     initialize = function(subgroup_masks) {
-      self$subgroup_masks = assert_list(subgroup_masks, names = "named", null.ok = TRUE)
+      self$subgroup_masks = assert_list(subgroup_masks)
       invisible(self)
     },
     #' @description
@@ -191,18 +199,22 @@ SubgroupModel = R6::R6Class("SubgroupModel",
     #'   Prediction data.
     #' @param subgroup_masks [`list`] \cr
     #'   List of subgroup masks for the data.
-    predict = function(data, subgroup_masks = NULL) {
+    #' @param partition_mask [`integer`] \cr
+    #'   Mask defined by partitions.
+    predict = function(data, subgroup_masks = NULL, partition_mask = NULL) {
       # Check that masks fit
       if (is.null(subgroup_masks)) {
         subgroup_masks = self$subgroup_masks
       }
       map(subgroup_masks, function(x) {
-          assert_equal(nrow(data), length(x))
+          assert_true(nrow(data) == length(x))
       })
+      # If no paritition mask, use all datapoints
+      if (is.null(partition_mask)) partition_mask = rep(1L, nrow(data))
       # Predict
       preds = numeric(nrow(data))
       for (i in seq_along(self$subgroup_preds)) {
-        preds[subgroup_masks[[i]]] = self$subgroup_preds[[i]]
+        preds[subgroup_masks[[i]] & partition_mask] = self$subgroup_preds[[i]]
       }
       return(preds)
     }

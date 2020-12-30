@@ -116,7 +116,7 @@ SubpopFitter = R6::R6Class("SubpopFitter",
     #' @return `list`
     fit = function(data, resid) {
       worstCorr = 0
-      worst_subpop = function(pt) {return(rep(0L, nrow(pt)))}
+      worst_subpop = function(pt) {return(rep(0L, nrow(pt)))} # nocov
       for (sfn in self$subpops) {
         sub = data[, sfn(.SD)]
         corr = mean(sub * resid)
@@ -142,9 +142,11 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
     #' Initialize SubgroupFitter
     #'
     #' @param subgroup_masks [`list`] \cr
-    #'   List of subgroup masks.
+    #'   List of subgroup masks. Subgroup masks are list(s) of integer masks,
+    #'   each with the same length as data to be fitted on.
+    #'   They allow defining sub-groups of the data.
     initialize = function(subgroup_masks) {
-      self$subgroup_masks = assert_list(subgroup_masks, names = "named")
+      self$subgroup_masks = assert_list(map(subgroup_masks, as.integer), types = "integer")
     },
     #' @description
     #' Fit the learner and compute correlation

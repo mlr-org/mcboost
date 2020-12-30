@@ -25,4 +25,9 @@ test_that("ProbRange works", {
 
   prs = c(0.09, 0.1, 0.4, 0.55, 0.7)
   expect_equal(pr$in_range_mask(prs), c(FALSE, TRUE, TRUE, FALSE, FALSE))
+
+  expect_false(pr$is_equal(5))
+  expect_true(pr$is_not_equal(5))
+
+  expect_output(print(pr), "ProbRange")
 })

@@ -3,4 +3,4 @@
 ^LICENSE\.md$
 man-roxygen
 attic
-test/testthat/snaps
+test/testthat/_snaps
