@@ -247,7 +247,7 @@ MCBoost = R6::R6Class("MCBoost",
   private = list(
     update_probs = function(orig_preds, model, x, mask = NULL, ...) {
       deltas = numeric(length(orig_preds))
-      deltas[mask] = model$predict(x, partition_mask = mask, ...)
+      deltas[mask] = model$predict(x, ...)[mask]
 
       if (self$multiplicative) {
         update_weights = exp(- self$eta * deltas)
