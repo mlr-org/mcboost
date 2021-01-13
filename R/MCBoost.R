@@ -173,7 +173,8 @@ MCBoost = R6::R6Class("MCBoost",
       buckets = c(buckets, mlr3misc::map(seq_len(self$num_buckets), function(b) {
         ProbRange$new((b-1) * frac, b * frac)
       }))
-      buckets[[length(buckets)]]$upper = 1.0
+      buckets[[2]]$lower = -Inf
+      buckets[[length(buckets)]]$upper = Inf
     }
 
     new_probs = pred_probs
