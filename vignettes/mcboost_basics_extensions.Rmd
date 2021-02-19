@@ -260,3 +260,17 @@ predict_masks = list(
 ```{r}
 mc$predict_probs(data[1:104,], subgroup_masks = predict_masks)
 ```
+
+### 2.3 Multiaccuracy Boosting
+
+Multi-accuracy boosting as defined in Kim et al., 2020 involes using three probability sub-populations:
+The whole population X, the positively labeled observations X_1 and the negatively labeld population X_0.
+
+This can be easily achieved by setting `num_buckets = 2` (the default) and enabling `partition=True`
+
+
+```{r}
+rf = LearnerResidualFitter$new(lrn("regr.rpart", minsplit = 10L))
+mc = MCBoost$new(subpop_fitter = rf, partition=TRUE, num_buckets=2L)
+mc$multicalibrate(data, labels)
+```
