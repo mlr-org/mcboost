@@ -173,7 +173,8 @@ MCBoost = R6::R6Class("MCBoost",
       buckets = c(buckets, mlr3misc::map(seq_len(self$num_buckets), function(b) {
         ProbRange$new((b-1) * frac, b * frac)
       }))
-      buckets[[length(buckets)]]$upper = 1.0
+      buckets[[2]]$lower = -Inf
+      buckets[[length(buckets)]]$upper = Inf
     }
 
     new_probs = pred_probs
@@ -246,7 +247,7 @@ MCBoost = R6::R6Class("MCBoost",
   private = list(
     update_probs = function(orig_preds, model, x, mask = NULL, ...) {
       deltas = numeric(length(orig_preds))
-      deltas[mask] = model$predict(x, partition_mask = mask, ...)
+      deltas[mask] = model$predict(x, ...)[mask]
 
       if (self$multiplicative) {
         update_weights = exp(- self$eta * deltas)

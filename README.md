@@ -43,7 +43,7 @@ Then we fit an initial predictor, e.g. using **mlr3**.
     # Get response prediction from Learner
     p = l$predict_newdata(data)$response
     # One-hot encode and take first column
-    one_hot(p)[,1]
+    one_hot(p)
   }
 ```
 

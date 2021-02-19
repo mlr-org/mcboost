@@ -24,8 +24,7 @@ xy_to_task = function(x, y) {
   i = 0
   while(yname %in% names(x)) {
     i = i + 1
-    yname = "ytmp"
-    yname = paste0(yname, i)
+    yname = paste0("ytmp", i)
   }
 
   x[, (yname) := y]
