@@ -17,7 +17,9 @@ remotes::install_github("pfistfl/mcboost")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+In this simple example, our goal is to improve calibration
+for a `initial predictor`, e.g. an ML algorithm trained on
+an initial task.
 
 ``` r
 library(mcboost)
@@ -29,15 +31,17 @@ First we set up an example dataset:
 ```r
   #  Example Data: Sonar Task
   tsk = tsk("sonar")
-  data = tsk$data(cols = tsk$feature_names)
-  labels = tsk$data(cols = tsk$target_names)[[1]]
+  tid = sample(tsk$row_ids, 100) # 100 rows for training
+  train_data = tsk$data(cols = tsk$feature_names, rows = tid)
+  train_labels = tsk$data(cols = tsk$target_names, rows = tid)[[1]]
 ```
 
-Then we fit an initial predictor, e.g. using **mlr3**.
+To provide an example, we assume that we have a already trained learner `l` which we train below.
+We can now wrap this initial learner's predict function for use with `mcboost`, since `mcboost` expects the initial model to be specified as a `function` with `data` as input.
 
 ```r
   l = lrn("classif.rpart")
-  l$train(tsk)
+  l$train(tsk$clone()$filter(tid))
 
   init_predictor = function(data) {
     # Get response prediction from Learner
@@ -47,15 +51,26 @@ Then we fit an initial predictor, e.g. using **mlr3**.
   }
 ```
 
-Now we can run Multi-Accuracy boosting
+
+We can now run Multi-Accuracy boosting by instantiating the object and calling the `multicalibrate` method.
+Note, that typically, we would use multi-calibration on a smaller validation set!
 
 ```r
   mc = MCBoost$new(init_predictor = init_predictor)
-  mc$multicalibrate(data, labels)
+  mc$multicalibrate(train_data, train_labels)
 ```
 
-and **predict** on new data.
+and alternatively **predict** on new data.
 
 ```r
-mc$predict_probs(data)
+tstid = setdiff(tsk$row_ids, tid) # held-out data
+test_data = tsk$data(cols = tsk$feature_names, rows = tstid)
+mc$predict_probs(test_data)
 ```
+
+## Further Examples
+
+The `mcboost` **vignette** has a lot of interesting showcases for applying **mcboost** for several use-cases.
+
+
+## Contributing

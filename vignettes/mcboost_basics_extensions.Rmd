@@ -274,3 +274,31 @@ rf = LearnerResidualFitter$new(lrn("regr.rpart", minsplit = 10L))
 mc = MCBoost$new(subpop_fitter = rf, partition=TRUE, num_buckets=2L)
 mc$multicalibrate(data, labels)
 ```
+
+### 2.4 MCBoost with non-mlr3 models: GLM
+
+`mcboost` does not require your model to be a `mlr3` model.
+As an input, `mcboost` expects a function `init_predictor` that takes as input `data` and returns a prediction.
+
+
+```{r}
+tsk = tsk("sonar")
+data = tsk$data()[, Class := as.integer(Class) - 1L]
+mod = glm(data = data, formula = Class ~ .)
+```
+
+The `init_predictor` could then use the `glm` model:
+
+```{r}
+init_predictor = function(data) {
+  predict(mod, data)
+}
+```
+
+and we can calibrate this predictor.
+
+```{r}
+mc = MCBoost$new(init_predictor = init_predictor)
+mc$multicalibrate(d[1:200,], l[1:200])
+mc$predict_probs(d[201:208,])
+```

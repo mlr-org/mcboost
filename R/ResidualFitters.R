@@ -42,7 +42,9 @@ LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
     #'   Features to use.
     #' @param resid [`numeric`]\cr
     #'   Target variable (residuals)
-    #' @return `list`
+    #' @return `list` with items\cr
+    #'   - `corr`: pseudo-correlation between residuals and learner prediction.
+    #'   - `l`: the trained learner.
     fit = function(data, resid) {
       l = self$learner$clone()
       l$fit(data, resid)
@@ -113,7 +115,9 @@ SubpopFitter = R6::R6Class("SubpopFitter",
     #'   Features to use.
     #' @param resid [`numeric`]\cr
     #'   Target variable (residuals)
-    #' @return `list`
+        #' @return `list` with items\cr
+    #'   - `corr`: pseudo-correlation between residuals and learner prediction.
+    #'   - `l`: the trained learner.
     fit = function(data, resid) {
       worstCorr = 0
       worst_subpop = function(pt) {return(rep(0L, nrow(pt)))} # nocov
@@ -155,7 +159,9 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
     #'   Features to use.
     #' @param resid [`numeric`]\cr
     #'   Target variable (residuals)
-    #' @return `list`
+    #' @return `list` with items\cr
+    #'   - `corr`: pseudo-correlation between residuals and learner prediction.
+    #'   - `l`: the trained learner.
     fit = function(data, resid) {
       m = SubgroupModel$new(self$subgroup_masks)
       m$fit(data, resid)

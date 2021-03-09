@@ -78,7 +78,11 @@ Target variable (residuals)}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{list}
+\code{list} with items\cr
+\itemize{
+\item \code{corr}: pseudo-correlation between residuals and learner prediction.
+\item \code{l}: the trained learner.
+}
 }
 }
 \if{html}{\out{<hr>}}
