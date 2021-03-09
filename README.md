@@ -2,6 +2,7 @@
 # mcboost
 
 <!-- badges: start -->
+[![tic](https://github.com/pfistfl/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/pfistfl/mcboost/actions)
 <!-- badges: end -->
 
 **mcboost** implements Multi-Accuracy Boosting (Kim et al., 2018) for R.

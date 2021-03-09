@@ -4,3 +4,6 @@
 man-roxygen
 attic
 test/testthat/_snaps
+^\.ccache$
+^\.github$
+^tic\.R$
