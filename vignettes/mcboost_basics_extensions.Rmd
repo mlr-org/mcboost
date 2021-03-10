@@ -157,6 +157,7 @@ mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
 
 
 
+
 ### Predicting using only the first 'n' iterations
 
 The `t` parameter can be use to predict using only the first `n` iterations.
@@ -270,7 +271,7 @@ This can be easily achieved by setting `num_buckets = 2` (the default) and enabl
 
 
 ```{r}
-rf = LearnerResidualFitter$new(lrn("regr.rpart", minsplit = 10L))
+rf = LearnerResidualFitter$new(lrn("regr.rpart", minsplit = 5L))
 mc = MCBoost$new(subpop_fitter = rf, partition=TRUE, num_buckets=2L)
 mc$multicalibrate(data, labels)
 ```

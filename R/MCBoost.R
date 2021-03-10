@@ -191,6 +191,7 @@ MCBoost = R6::R6Class("MCBoost",
       # Fit on partitions
       for (j in seq_along(buckets)) {
         mask = buckets[[j]]$in_range_mask(probs)
+        if (sum(mask) < 1L) next # case no obs. are in the bucket
         data_m = data[mask,]
         resid_m = resid[mask]
         out = self$subpop_fitter$fit_to_resid(data_m, resid_m)
