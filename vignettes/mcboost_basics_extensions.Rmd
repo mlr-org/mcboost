@@ -299,6 +299,8 @@ init_predictor = function(data) {
 and we can calibrate this predictor.
 
 ```{r}
+d = data[, -1]
+l = data$Class
 mc = MCBoost$new(init_predictor = init_predictor)
 mc$multicalibrate(d[1:200,], l[1:200])
 mc$predict_probs(d[201:208,])
