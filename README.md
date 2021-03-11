@@ -1,4 +1,3 @@
-
 # mcboost
 
 <!-- badges: start -->
@@ -69,9 +68,64 @@ test_data = tsk$data(cols = tsk$feature_names, rows = tstid)
 mc$predict_probs(test_data)
 ```
 
+
 ## Further Examples
 
-The `mcboost` **vignette** has a lot of interesting showcases for applying **mcboost** for several use-cases.
+`mcboost` allows for multi-calibaration as described in [Hebert-Johnson et al., 2017](http://proceedings.mlr.press/v80/hebert-johnson18a) as well as multi-accuracy calibration as described in [Kim et al., 2018](https://arxiv.org/pdf/1805.12317.pdf)).
+
+The `mcboost` [**vignette**](https://pfistfl.github.io/mcboost/articles/mcboost_basics_extensions.html) has a lot of interesting showcases for applying **mcboost**.
 
 
 ## Contributing
+
+This R package is licensed under the LGPL-3.
+If you encounter problems using this software (lack of documentation, misleading or wrong documentation, unexpected behaviour, bugs, …) or just want to suggest features, please open an issue in the issue tracker.
+Pull requests are welcome and will be included at the discretion of the maintainers.
+
+As this project is developed with [mlr3's](https://github.com/mlr-org/mlr3/) style guide in mind, the following ressources can be helpful
+to individuals wishing to contribute: Please consult the [wiki](https://github.com/mlr-org/mlr3/wiki/) for a [style guide](https://github.com/mlr-org/mlr3/wiki/Style-Guide), a [roxygen guide](https://github.com/mlr-org/mlr3/wiki/Roxygen-Guide) and a [pull request guide](https://github.com/mlr-org/mlr3/wiki/PR-Guidelines).
+
+## Citing mcboost
+
+If you use mcboost, please cite our package as well as the relevant paper it is based on:
+
+```
+  @Manual{mcboost_software,
+    title = {mcboost: Implements Multi-Accuracy Boosting (Kim et al., 2018).},
+    author = {Florian Pfisterer and Christoph Kern},
+    year = {2021},
+    note = {R package version 0.1.0},
+  }
+  # Multi-calibration
+  @InProceedings{pmlr-v80-hebert-johnson18a,
+    title = {Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses},
+    author = {Hebert-Johnson, Ursula and Kim, Michael and Reingold, Omer and Rothblum, Guy},
+    booktitle = {Proceedings of the 35th International Conference on Machine Learning},
+    pages = {1939--1948},
+    year = {2018},
+    editor = {Jennifer Dy and Andreas Krause},
+    volume = {80},
+    series = {Proceedings of Machine Learning Research},
+    address = {Stockholmsmässan, Stockholm Sweden},
+    month = {10--15 Jul},
+    publisher = {PMLR}
+  }
+  # Multi-accuracy calibration
+  @inproceedings{10.1145/3306618.3314287,
+    author = {Kim, Michael P. and Ghorbani, Amirata and Zou, James},
+    title = {Multiaccuracy: Black-Box Post-Processing for Fairness in Classification},
+    year = {2019},
+    isbn = {9781450363242},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    url = {https://doi.org/10.1145/3306618.3314287},
+    doi = {10.1145/3306618.3314287},
+    booktitle = {Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society},
+    pages = {247–254},
+    numpages = {8},
+    keywords = {fairness, discrimination, post-processing, machine learning},
+    location = {Honolulu, HI, USA},
+    series = {AIES '19}
+  }
+
+```
