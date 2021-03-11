@@ -145,7 +145,7 @@ test_that("MCBoost multicalibrate with Subgroups", {
   expect_list(mc$iter_models, types = "SubgroupModel", len = mc$max_iter)
   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
 
-  assert_numeric(mc$predict_probs(data), lower = 0, upper = 1, len = nrow(data))
+  expect_numeric(mc$predict_probs(data), lower = 0, upper = 1, len = nrow(data))
 })
 
 test_that("MCBoost various settings", {
@@ -182,4 +182,50 @@ test_that("MCBoost various settings", {
   mc$multicalibrate(data, labels)
   expect_warning({prd = mc$predict_probs(data)}, fixed = "multicalibrate was not run")
   expect_numeric(prd, lower = 0, upper = 1, len = nrow(data))
+})
+
+
+test_that("MCBoost Edge Cases", {
+  # Sonar task
+  tsk = tsk("sonar")
+  d = tsk$data(cols = tsk$feature_names, rows = c(1:10, 200:208))
+  l = tsk$data(cols = tsk$target_names, rows = c(1:10, 200:208))[[1]]
+
+  check_predictor = function(init_predictor) {
+      mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeResidualFitter", max_iter = 2L)
+      mc$multicalibrate(d, l)
+
+      expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
+      expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
+
+      prds = mc$predict_probs(d)
+      expect_numeric(prds, lower = 0, upper = 1, len = nrow(d))
+      return(TRUE)
+  }
+
+  inits = list(
+    function(data) rep(1L, nrow(data)),
+    function(data) rep(0L, nrow(data)),
+    function(data) rep(0.5, nrow(data)),
+    function(data) runif(nrow(data)),
+    function(data) rep(-1, nrow(data))
+  )
+  expect_true(all(map_lgl(inits, check_predictor)))
+  expect_error(check_predictor(function(data) rep(Inf, nrow(data))))
+})
+
+test_that("MCBoost args for self-defined init predictor", {
+  # Sonar task
+  tsk = tsk("sonar")
+  data = tsk$data(cols = tsk$feature_names)
+  labels = tsk$data(cols = tsk$target_names)[[1]]
+
+  # Fit  initial model
+  init_predictor = function(data, prds) {
+    prds
+  }
+  mc = MCBoost$new(init_predictor = init_predictor)
+  mc$multicalibrate(data, labels, prds = runif(208))
+  expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
+  expect_numeric(mc$predict_probs(data, prds = runif(208)), lower = 0, upper = 1, len = nrow(data))
 })

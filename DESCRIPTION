@@ -36,6 +36,7 @@ Suggests:
     glmnet,
     mlr3learners,
     mlr3pipelines,
+    paradox,
     testthat,
     knitr,
     ranger,

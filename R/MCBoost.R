@@ -150,7 +150,9 @@ MCBoost = R6::R6Class("MCBoost",
   #' @description
   #' Run multicalibration.
   #' @template params_data_label
-  multicalibrate = function(data, labels) {
+  #' @param ... [`any`] \cr
+  #'  Params passed on to other methods such as `init_predictor`.
+  multicalibrate = function(data, labels, ...) {
 
     if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
     assert_data_table(data)
@@ -164,8 +166,8 @@ MCBoost = R6::R6Class("MCBoost",
     }
     assert_numeric(labels, lower = 0, upper = 1)
 
-    pred_probs = assert_numeric(self$predictor(data), len = nrow(data))
-    resid = pred_probs - labels
+    pred_probs = assert_numeric(self$predictor(data, ...), len = nrow(data))
+    resid = private$compute_residuals(pred_probs, labels)
 
     buckets = list(ProbRange$new())
     if (self$partition && self$num_buckets > 1L) {
@@ -207,7 +209,8 @@ MCBoost = R6::R6Class("MCBoost",
         self$iter_models = c(self$iter_models, models[[which.max(corrs)]])
         self$iter_partitions = c(self$iter_partitions, max_key)
         new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask)
-        resid = new_probs - labels
+        resid = private$compute_residuals(new_probs, labels)
+
       }
     }
       invisible(NULL)
@@ -219,7 +222,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param t [`integer`] \cr
     #'   Number of multi-calibration steps to predict. Default: `Inf` (all).
     #' @param ... [`any`] \cr
-    #'  Params passed on to other methods. Currently not used.
+    #'  Params passed on to other methods such as `init_predictor`.
     #' @return
     #'   Numeric vector of multi-calibrated predictions.
     predict_probs = function(x, t = Inf, ...) {
@@ -229,7 +232,7 @@ MCBoost = R6::R6Class("MCBoost",
       # convert to data.table
       if (is.matrix(x) || is.data.frame(x)) x = as.data.table(as.data.frame(x))
       assert_data_table(x)
-      orig_preds = self$predictor(x)
+      orig_preds = self$predictor(x, ...)
       new_preds = orig_preds
       for (i in seq_along(self$iter_models)) {
         if (i <= t) {
@@ -257,6 +260,9 @@ MCBoost = R6::R6Class("MCBoost",
         new_preds = orig_preds + deltas
       }
       return(clip_prob(new_preds))
+    },
+    compute_residuals = function(prediction, labels) {
+      prediction - labels
     }
   )
 )

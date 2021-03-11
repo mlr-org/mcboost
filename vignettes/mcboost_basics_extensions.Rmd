@@ -156,8 +156,6 @@ mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
 ```
 
 
-
-
 ### Predicting using only the first 'n' iterations
 
 The `t` parameter can be use to predict using only the first `n` iterations.

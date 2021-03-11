@@ -147,7 +147,7 @@ the user has a pretrained model).}
 \subsection{Method \code{multicalibrate()}}{
 Run multicalibration.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -158,6 +158,9 @@ Features.}
 
 \item{\code{labels}}{\code{\link{numeric}}\cr
 One-hot encoded labels (of same length as data).}
+
+\item{\code{...}}{\code{\link{any}} \cr
+Params passed on to other methods such as \code{init_predictor}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -181,7 +184,7 @@ Prediction data.}
 Number of multi-calibration steps to predict. Default: \code{Inf} (all).}
 
 \item{\code{...}}{\code{\link{any}} \cr
-Params passed on to other methods. Currently not used.}
+Params passed on to other methods such as \code{init_predictor}.}
 }
 \if{html}{\out{</div>}}
 }
