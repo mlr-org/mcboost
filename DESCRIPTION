@@ -8,16 +8,20 @@ Authors@R:
              role = c("cre", "aut"),
              email = "pfistererf@googlemail.com",
              comment = c(ORCID = "0000-0001-8867-762X")),
+      person(given = "Susanne",
+             family = "Dandl",
+             role = "ctb",
+             email = "susanne.dandl@stat.uni-muenchen.de",
+             comment = c(ORCID = "0000-0001-7363-4299")),
       person(given = "Christoph",
              family = "Kern",
-             role = "aut",
+             role = "ctb",
              email = "c.kern@uni-mannheim.de",
              comment = c(ORCID = "0000-0001-7363-4299")))
 Maintainer: Florian Pfisterer <pfistererf@googlemail.com>
 Description: Implements Multi-Accuracy Boosting for R.
     MCBoost iteratively updates predictions within sub-groups.
-    Details can be obtained from Kim et al. 2018.
-    Arxiv Link: https://arxiv.org/pdf/1805.12317.pdf.
+    Details can be obtained from Kim et al. Kim et al, 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

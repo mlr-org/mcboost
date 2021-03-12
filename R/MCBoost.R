@@ -1,7 +1,7 @@
 #' Multi-Accuracy Boosting for R
 #'
 #' @description
-#'   For more details, please refer to https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2018).
+#'   For more details, please refer to https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2019).
 #' @examples
 #'   # See vignette for more examples.
 #'   # Instantiate the object
@@ -150,9 +150,11 @@ MCBoost = R6::R6Class("MCBoost",
   #' @description
   #' Run multicalibration.
   #' @template params_data_label
+  #' @param predictor_args [`any`] \cr
+  #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
   #' @param ... [`any`] \cr
-  #'  Params passed on to other methods such as `init_predictor`.
-  multicalibrate = function(data, labels, ...) {
+  #'  Params passed on to other methods.
+  multicalibrate = function(data, labels, predictor_args = NULL, ...) {
 
     if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
     assert_data_table(data)
@@ -165,8 +167,7 @@ MCBoost = R6::R6Class("MCBoost",
       labels = one_hot(labels)
     }
     assert_numeric(labels, lower = 0, upper = 1)
-
-    pred_probs = assert_numeric(self$predictor(data, ...), len = nrow(data))
+    pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data))
     resid = private$compute_residuals(pred_probs, labels)
 
     buckets = list(ProbRange$new())
@@ -221,18 +222,20 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Prediction data.
     #' @param t [`integer`] \cr
     #'   Number of multi-calibration steps to predict. Default: `Inf` (all).
+    #' @param predictor_args [`any`] \cr
+    #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
     #' @param ... [`any`] \cr
-    #'  Params passed on to other methods such as `init_predictor`.
+    #'  Params passed on to the residual prediction model's predict method.
     #' @return
     #'   Numeric vector of multi-calibrated predictions.
-    predict_probs = function(x, t = Inf, ...) {
+    predict_probs = function(x, t = Inf, predictor_args = NULL, ...) {
       if (!length(self$iter_models)) {
         warning("multicalibrate was not run! Returning original predictions!")
       }
       # convert to data.table
       if (is.matrix(x) || is.data.frame(x)) x = as.data.table(as.data.frame(x))
       assert_data_table(x)
-      orig_preds = self$predictor(x, ...)
+      orig_preds = assert_numeric(do.call(self$predictor, discard(list(x, predictor_args), is.null)), len = nrow(x))
       new_preds = orig_preds
       for (i in seq_along(self$iter_models)) {
         if (i <= t) {

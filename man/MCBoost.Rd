@@ -4,7 +4,7 @@
 \alias{MCBoost}
 \title{Multi-Accuracy Boosting for R}
 \description{
-For more details, please refer to https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2018).
+For more details, please refer to https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2019).
 }
 \examples{
   # See vignette for more examples.
@@ -147,7 +147,7 @@ the user has a pretrained model).}
 \subsection{Method \code{multicalibrate()}}{
 Run multicalibration.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels, predictor_args = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -159,8 +159,11 @@ Features.}
 \item{\code{labels}}{\code{\link{numeric}}\cr
 One-hot encoded labels (of same length as data).}
 
+\item{\code{predictor_args}}{\code{\link{any}} \cr
+Arguments passed on to\code{init_predictor}. Defaults to \code{NULL}.}
+
 \item{\code{...}}{\code{\link{any}} \cr
-Params passed on to other methods such as \code{init_predictor}.}
+Params passed on to other methods.}
 }
 \if{html}{\out{</div>}}
 }
@@ -171,7 +174,7 @@ Params passed on to other methods such as \code{init_predictor}.}
 \subsection{Method \code{predict_probs()}}{
 Predict a dataset with multi-calibrated predictions
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MCBoost$predict_probs(x, t = Inf, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MCBoost$predict_probs(x, t = Inf, predictor_args = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -183,8 +186,11 @@ Prediction data.}
 \item{\code{t}}{\code{\link{integer}} \cr
 Number of multi-calibration steps to predict. Default: \code{Inf} (all).}
 
+\item{\code{predictor_args}}{\code{\link{any}} \cr
+Arguments passed on to\code{init_predictor}. Defaults to \code{NULL}.}
+
 \item{\code{...}}{\code{\link{any}} \cr
-Params passed on to other methods such as \code{init_predictor}.}
+Params passed on to the residual prediction model's predict method.}
 }
 \if{html}{\out{</div>}}
 }

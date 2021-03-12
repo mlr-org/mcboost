@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_mcboost
-#' @format [`R6Class`] inheriting from [`PipeOp`].
+#' @format [`R6Class`] inheriting from [`mlr3pipelines::PipeOp`].
 #'
 #' @description
 #' Post-process a learner prediction using multi-calibration.
@@ -24,17 +24,17 @@
 #' A [`PredictionClassif`][mlr3::PredictionClassif] is required as input and returned as output during prediction.
 #'
 #' @section State:
-#' The `$state` is a `MCBoost` Object as obained from [`MCBoost$new()`].
+#' The `$state` is a `MCBoost` Object as obained from `MCBoost$new()`.
 #'
 #' @section Parameters:
 #' * `max_iter` :: `integer`\cr
 #'   A integer specifying the number of multi-calibration rounds. Defaults to 5.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOp`].
+#' Only fields inherited from [`mlr3pipelines::PipeOp`].
 #'
 #' @section Methods:
-#' Only methods inherited from [`PipeOp`].
+#' Only methods inherited from [`mlr3pipelines::PipeOp`].
 #'
 #' @examples
 #' library(mlr3)
@@ -90,13 +90,13 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
       }
 
       mc = MCBoost$new(init_predictor = init_predictor)
-      mc$multicalibrate(d, l, prediction = inputs$prediction)
+      mc$multicalibrate(d, l, predictor_args = inputs$prediction)
       self$state = list("mc" = mc)
       list(NULL)
     },
     .predict = function(inputs) {
       d = inputs$data$data(cols = inputs$data$feature_names)
-      prob = self$state$mc$predict_probs(d, prediction = inputs$prediction)
+      prob = self$state$mc$predict_probs(d, predictor_args = inputs$prediction)
       prob = cbind(1 - prob, prob)
       lvls = c(inputs$prediction$negative, inputs$prediction$positive)
       colnames(prob) = lvls
@@ -120,5 +120,3 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
     }
   )
 )
-
-mlr_pipeops$add("mcboost", PipeOpMCBoost)

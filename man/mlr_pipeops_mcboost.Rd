@@ -5,7 +5,7 @@
 \alias{PipeOpMCBoost}
 \title{Multi-Calibrate a Learner's Prediction}
 \format{
-\code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+\code{\link{R6Class}} inheriting from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
 }
 \description{
 Post-process a learner prediction using multi-calibration.
@@ -32,7 +32,7 @@ A \code{\link[mlr3:PredictionClassif]{PredictionClassif}} is required as input a
 
 \section{State}{
 
-The \verb{$state} is a \code{MCBoost} Object as obained from \code{\link[=MCBoost$new]{MCBoost$new()}}.
+The \verb{$state} is a \code{MCBoost} Object as obained from \code{MCBoost$new()}.
 }
 
 \section{Parameters}{
@@ -45,18 +45,22 @@ A integer specifying the number of multi-calibration rounds. Defaults to 5.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOp}}.
+Only fields inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
 }
 
 \section{Methods}{
 
-Only methods inherited from \code{\link{PipeOp}}.
+Only methods inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
 }
 
 \examples{
 library(mlr3)
 library(mlr3pipelines)
-gr = gunion(list(po("nop"), po("learner_cv", lrn("classif.rpart")))) \%>>\%
+# Attention: gunion inputs have to be in the correct order for now.
+ gr = gunion(list(
+   "data" = po("nop"),
+   "prediction" = po("learner_cv", lrn("classif.rpart"))
+  )) \%>>\%
   PipeOpMCBoost$new()
 tsk = tsk("sonar")
 tid = sample(1:208, 108)

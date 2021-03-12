@@ -225,7 +225,7 @@ test_that("MCBoost args for self-defined init predictor", {
     prds
   }
   mc = MCBoost$new(init_predictor = init_predictor)
-  mc$multicalibrate(data, labels, prds = runif(208))
+  mc$multicalibrate(data, labels, predictor_args = runif(208))
   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
-  expect_numeric(mc$predict_probs(data, prds = runif(208)), lower = 0, upper = 1, len = nrow(data))
+  expect_numeric(mc$predict_probs(data, predictor_args = runif(208)), lower = 0, upper = 1, len = nrow(data))
 })

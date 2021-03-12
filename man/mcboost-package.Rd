@@ -8,18 +8,19 @@
 \description{
 Implements Multi-Accuracy Boosting for R.
     MCBoost iteratively updates predictions within sub-groups.
-    Details can be obtained from Kim et al. 2018.
-    Arxiv Link: https://arxiv.org/pdf/1805.12317.pdf.
+    Details can be obtained from Kim et al. Kim et al, 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
 }
 \references{
-https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2018)
+Kim et al, 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification
+Hebert-Johnson et al., 2017: Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses
 }
 \author{
 \strong{Maintainer}: Florian Pfisterer \email{pfistererf@googlemail.com} (\href{https://orcid.org/0000-0001-8867-762X}{ORCID})
 
-Authors:
+Other contributors:
 \itemize{
-  \item Christoph Kern \email{c.kern@uni-mannheim.de} (\href{https://orcid.org/0000-0001-7363-4299}{ORCID})
+  \item Susanne Dandl \email{susanne.dandl@stat.uni-muenchen.de} (\href{https://orcid.org/0000-0001-7363-4299}{ORCID}) [contributor]
+  \item Christoph Kern \email{c.kern@uni-mannheim.de} (\href{https://orcid.org/0000-0001-7363-4299}{ORCID}) [contributor]
 }
 
 }

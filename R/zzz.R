@@ -6,5 +6,30 @@
 #' @importFrom utils head
 #' @importFrom stats contrasts
 #' @references
-#'   https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2018)
+#'   Kim et al, 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification
+#'   Hebert-Johnson et al., 2017: Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses
 "_PACKAGE"
+
+
+register_pipeops = function() {
+  mlr3pipelines::mlr_pipeops$add("mcboost", PipeOpMCBoost)
+}
+
+.onLoad = function(libname, pkgname) {  # nocov start
+  if (requireNamespace("mlr3pipelines")) {
+    register_pipeops()
+    setHook(packageEvent("mlr3pipelines", "onLoad"), function(...) register_pipeops(), action = "append")
+  }
+  backports::import(pkgname)
+}  # nocov end
+
+.onUnload = function(libpath) { # nocov start
+  if (requireNamespace("mlr3pipelines")) {
+    event = packageEvent("mlr3pipelines", "onLoad")
+    hooks = getHook(event)
+    pkgname = vapply(hooks[-1], function(x) environment(x)$pkgname, NA_character_)
+    setHook(event, hooks[pkgname != "mcboost"], action = "replace")
+  }
+} # nocov end
+
+leanify_package()
