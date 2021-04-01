@@ -1,0 +1,111 @@
+---
+title: "MCBoost - Health Survey Example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MCBoost - Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tidyverse)
+library(PracTools)
+library(ranger)
+library(mcboost)
+```
+
+## Data
+
+```{r}
+data(nhis.large)
+```
+
+```{r}
+predictors <- c("sex", "age.grp", "hisp", "parents", "educ", "race", "inc.grp", "medicaid", "doing.lw", "limited")
+
+nhis <- nhis.large %>%
+  mutate_at(predictors, as_factor) %>%
+  mutate_at(predictors, fct_explicit_na) %>%
+  drop_na(notcov) %>%
+  select(all_of(predictors), notcov)
+
+nhis$notcov <- factor(ifelse(nhis$notcov == 1, "notcov", "cov"))
+
+nhis_enc <- data.frame(model.matrix(notcov ~ ., data = nhis)[,-1])
+nhis_enc$notcov <- nhis$notcov
+```
+
+```{r}
+splits <- sample(1:3, size = nrow(nhis_enc), 
+                 replace = TRUE,
+                 prob = c(0.6, 0.2, 0.2))
+
+train <- nhis_enc[splits == 1, ]
+post <- nhis_enc[splits == 2, ]
+test <- nhis_enc[splits == 3, ]
+```
+
+## Initial model
+
+```{r}
+rf <- ranger(notcov ~ ., 
+             probability = TRUE,
+             data = train)
+```
+
+## MCBoost
+
+```{r}
+init_predictor = function(data) {
+  predict(rf, data)$predictions[, 2]
+}
+```
+
+```{r}
+d <- select(post, -notcov)
+l <- post$notcov
+```
+
+```{r}
+mc = MCBoost$new(init_predictor = init_predictor, 
+                 multiplicative = TRUE,
+                 partition = TRUE,
+                 max_iter = 5,
+                 eta = 0.1)
+mc$multicalibrate(d, l)
+```
+
+## Evaluate
+
+```{r}
+test$naive <- predict(rf, data = test)$predictions[, 2]
+test$mcb <- mc$predict_probs(test)
+```
+
+```{r}
+test$c_naive <- round(test$naive)
+test$c_mcb <- round(test$mcb)
+test$label <- 1 - one_hot(test$notcov)
+
+mean(test$c_naive == test$label)
+mean(test$c_mcb == test$label)
+```
+
+```{r}
+test %>%
+  group_by(sex2, age.grp2, age.grp3, age.grp4, age.grp5, hisp2, hisp3, hisp4, race2, race3) %>%
+  summarise(accurcy_rf = mean(c_naive == label), 
+            accurcy_mcb = mean(c_mcb == label),
+            mean(naive),
+            mean(mcb),
+            mean(label),
+            size = n())
+```
+
