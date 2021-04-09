@@ -19,9 +19,10 @@ library(tidyverse)
 library(purrr)
 library(PracTools)
 library(randomForest)
+library(nnet)
+library(formattable)
 library(mlr3)
 library(mlr3learners)
-library(classifierplots)
 library(mcboost)
 ```
 
@@ -32,48 +33,48 @@ data(nhis.large)
 ```
 
 ```{r}
-predictors <- c("sex", "age.grp", "hisp", "parents", "educ", "race", "inc.grp", "doing.lw", "limited")
+predictors <- c("age.grp", "parents", "educ", "inc.grp", "doing.lw", "limited", "sex", "hisp", "race")
 
 nhis <- nhis.large %>%
   mutate_at(predictors, as_factor) %>%
   mutate_at(predictors, fct_explicit_na) %>%
   drop_na(notcov) %>%
-  select(all_of(predictors), notcov, stratum, svywt)
+  select(all_of(predictors), notcov, svywt, ID)
 
 nhis$notcov <- factor(ifelse(nhis$notcov == 1, "notcov", "cov"))
 
-nhis_enc <- data.frame(model.matrix(notcov ~ . -sex -hisp -race -stratum, data = nhis)[,-1])
+nhis_enc <- data.frame(model.matrix(notcov ~ ., data = nhis)[,-1])
 nhis_enc$notcov <- nhis$notcov
 nhis_enc$sex <- nhis$sex
 nhis_enc$hisp <- nhis$hisp
 nhis_enc$race <- nhis$race
-nhis_enc$stratum <- nhis$stratum
-nhis_enc$svywt <- nhis$svywt
+nhis_enc$inv_wt <- (1 / nhis$svywt)^2
 ```
 
 ```{r}
-nhis_enc_g <- nhis_enc %>% 
-  group_by(stratum) %>%
-  nest() %>%
-  mutate(mean_wgt = map(data, ~mean(.x$svywt))) %>%
-  ungroup()
+test <- nhis_enc %>% slice_sample(prop = 0.3, weight_by = inv_wt)
+
+nontest_g <- nhis_enc %>% anti_join(test, by = "ID")
+
+train_g <- nontest_g %>% slice_sample(prop = 0.6)
+
+post <- nontest_g %>% anti_join(train_g, by = "ID") %>% select(-ID, -svywt, -inv_wt, -c(sex:race))
+
+train <- train_g %>% select(-ID, -svywt, -inv_wt, -c(sex:race), -c(sex2:race3))
 ```
 
 ```{r}
-test_g <- nhis_enc_g %>% slice_sample(prop = 0.25, weight_by = mean_wgt)
-
-nontest_g <- nhis_enc_g %>% anti_join(test_g, by = "stratum")
-
-train_g <- nontest_g %>% slice_sample(prop = 0.7)
-
-post <- nontest_g %>% 
-  anti_join(train_g, by = "stratum") %>% 
-  unnest(data) %>% 
-  select(-mean_wgt, -svywt, -stratum, -sex, -race, -hisp)
-
-train <- train_g %>% unnest(data) %>% select (-mean_wgt, -svywt, -stratum, -sex, -race, -hisp)
-test <- test_g %>% unnest(data) %>% select (-mean_wgt)
+train_g %>% summarise_at(vars(sex2:race3), mean)
 ```
+
+```{r}
+post %>% summarise_at(vars(sex2:race3), mean)
+```
+
+```{r}
+test %>% summarise_at(vars(sex2:race3), mean)
+```
+
 
 ## Initial model
 
@@ -83,11 +84,21 @@ rf <- randomForest(notcov ~ .,
                    data = train)
 ```
 
+```{r}
+net <- nnet(notcov ~ ., 
+            size = 10, maxit = 50,
+            data = train)
+```
+
 ## MCBoost
 
 ```{r}
-init_predictor = function(data) {
+init_rf = function(data) {
   predict(rf, data, type = "prob")[, 2]
+}
+
+init_net = function(data) {
+  predict(net, data, type = "raw")[, 1]
 }
 ```
 
@@ -97,35 +108,68 @@ l <- 1 - one_hot(post$notcov)
 ```
 
 ```{r}
-ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
+ridge1 = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
+
+ridge2 = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
+
+pops = SubpopFitter$new(list("sex2", "hisp2", "hisp3", "hisp4", "race2", "race3"))
 ```
 
 ```{r}
-mc = MCBoost$new(init_predictor = init_predictor, 
-                 subpop_fitter = ridge,
+mc1 = MCBoost$new(init_predictor = init_rf, 
+                 subpop_fitter = ridge1,
                  multiplicative = TRUE,
                  partition = TRUE,
                  max_iter = 15)
-mc$multicalibrate(d, l)
+mc1$multicalibrate(d, l)
+
+mc2 = MCBoost$new(init_predictor = init_rf, 
+                 subpop_fitter = pops,
+                 partition = TRUE,
+                 max_iter = 15)
+mc2$multicalibrate(d, l)
+
+mc3 = MCBoost$new(init_predictor = init_net, 
+                 subpop_fitter = ridge2,
+                 multiplicative = TRUE,
+                 partition = TRUE,
+                 max_iter = 5)
+mc3$multicalibrate(d, l)
+
+mc4 = MCBoost$new(init_predictor = init_net, 
+                 subpop_fitter = pops,
+                 partition = TRUE,
+                 max_iter = 5)
+mc4$multicalibrate(d, l)
 ```
 
 ## Evaluate
 
 ```{r}
-test$naive <- predict(rf, newdata = test, type = "prob")[, 2]
-test$mcb <- mc$predict_probs(test)
+test$rf <- predict(rf, newdata = test, type = "prob")[, 2]
+test$net <- predict(net, newdata = test, type = "raw")[, 1]
+test$mc1 <- mc1$predict_probs(test)
+test$mc2 <- mc2$predict_probs(test)
+test$mc3 <- mc3$predict_probs(test)
+test$mc4 <- mc4$predict_probs(test)
 
-test$c_naive <- round(test$naive)
-test$c_mcb <- round(test$mcb)
+test$c_rf <- round(test$rf)
+test$c_net <- round(test$net)
+test$c_mc1 <- round(test$mc1)
+test$c_mc2 <- round(test$mc2)
+test$c_mc3 <- round(test$mc3)
+test$c_mc4 <- round(test$mc4)
 test$label <- 1 - one_hot(test$notcov)
 ```
 
 ```{r}
-mean(test$c_naive == test$label)
-mean(test$c_mcb == test$label)
+mean(test$c_rf == test$label)
+mean(test$c_mc1 == test$label)
+mean(test$c_mc2 == test$label)
 
-# classifierplots(test$label, test$naive)
-# classifierplots(test$label, test$mcb)
+mean(test$c_net == test$label)
+mean(test$c_mc3 == test$label)
+mean(test$c_mc4 == test$label)
 ```
 
 ```{r}
@@ -134,34 +178,40 @@ test <- test %>%
          sex_race = group_indices(., sex, race),
          hisp_race = group_indices(., hisp, race))
 
-grouping_vars <- c("sex", "hisp", "race", "sex_hisp", "sex_race", "hisp_race", "stratum")
+grouping_vars <- c("sex", "hisp", "race", "sex_hisp", "sex_race", "hisp_race")
 
 eval <- map(grouping_vars, group_by_at, .tbl = test) %>%
   map(summarise,
-      'accuracy_rf' = mean(c_naive == label),
-      'accuracy_mcb' = mean(c_mcb == label),
-      'bias_rf' = (mean(naive) - mean(label))*100,
-      'bias_mcb' = (mean(mcb) - mean(label))*100,
+      'accuracy_rf' = mean(c_rf == label),
+      'accuracy_mc1' = mean(c_mc1 == label),
+      'accuracy_mc2' = mean(c_mc2 == label),
+      'accuracy_net' = mean(c_net == label),
+      'accuracy_mc3' = mean(c_mc3 == label),
+      'accuracy_mc4' = mean(c_mc4 == label),
+      'bias_rf' = abs(mean(rf) - mean(label))*100,
+      'bias_mc1' = abs(mean(mc1) - mean(label))*100,
+      'bias_mc2' = abs(mean(mc2) - mean(label))*100,
+      'bias_net' = abs(mean(net) - mean(label))*100,
+      'bias_mc3' = abs(mean(mc3) - mean(label))*100,
+      'bias_mc4' = abs(mean(mc4) - mean(label))*100,
       'size' = n()) %>%
   bind_rows()
 ```
 
 ```{r}
-eval_long <- eval %>%
- pivot_longer(
-   cols = accuracy_rf:bias_mcb,
-   names_to = c("type", "model"),
-   names_sep = "_") %>%
-  arrange(desc(size))
-
-eval_long$id <- rep(1:(nrow(eval_long)/4), each = 4)
+eval %>%
+  arrange(desc(size)) %>%
+  select(size, accuracy_rf:accuracy_mc4) %>%
+  formattable(., lapply(1:nrow(eval), function(row) {
+  area(row, col = 2:7) ~ color_tile("transparent", "lightgreen")
+    }))
 ```
 
 ```{r}
-eval_long %>%
-  filter(type == "bias" & size >= 50) %>%
-  ggplot() +
-  geom_line(aes(id, value, color = model)) + 
-  geom_hline(yintercept = 0, linetype = "dashed")
+eval %>%
+  arrange(desc(size)) %>%
+  select(size, bias_rf:bias_mc4) %>%
+  formattable(., lapply(1:nrow(eval), function(row) {
+  area(row, col = 2:7) ~ color_tile("lightgreen", "transparent")
+    }))
 ```
-
