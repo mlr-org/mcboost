@@ -19,6 +19,7 @@ library(tidyverse)
 library(purrr)
 library(PracTools)
 library(randomForest)
+library(neuralnet)
 library(formattable)
 library(mlr3)
 library(mlr3learners)
@@ -47,7 +48,7 @@ nhis_enc$notcov <- nhis$notcov
 nhis_enc$sex <- nhis$sex
 nhis_enc$hisp <- nhis$hisp
 nhis_enc$race <- nhis$race
-nhis_enc$inv_wt <- (1 / nhis$svywt)
+nhis_enc$inv_wt <- (1 / nhis$svywt)^3
 ```
 
 ```{r}
@@ -83,9 +84,13 @@ rf <- randomForest(notcov ~ .,
 ```
 
 ```{r}
-logit <- glm(notcov ~ ., 
-             family = "binomial",
-             data = train)
+nnet <- neuralnet(notcov ~ ., 
+                  hidden = c(10, 2),
+                  linear.output = FALSE,
+                  err.fct = 'ce',
+                  threshold = 0.25,
+                  lifesign = 'full',
+                  data = train)
 ```
 
 ## MCBoost
@@ -95,8 +100,8 @@ init_rf = function(data) {
   predict(rf, data, type = "prob")[, 2]
 }
 
-init_logit = function(data) {
-  predict(logit, data, type = "response")
+init_nnet = function(data) {
+  predict(nnet, data)[, 2]
 }
 ```
 
@@ -109,7 +114,7 @@ l <- 1 - one_hot(post$notcov)
 ```{r}
 ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
 
-net = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0.5, lambda = 2 / nrow(post)))
+lasso = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 2 / nrow(post)))
 
 pops = SubpopFitter$new(list("sex2", "hisp2", "hisp3", "hisp4", "race2", "race3"))
 ```
@@ -119,26 +124,26 @@ mc1 = MCBoost$new(init_predictor = init_rf,
                  subpop_fitter = ridge,
                  multiplicative = TRUE,
                  partition = TRUE,
-                 max_iter = 15)
+                 max_iter = 10)
 mc1$multicalibrate(d2, l)
 
 mc2 = MCBoost$new(init_predictor = init_rf, 
                  subpop_fitter = pops,
                  partition = TRUE,
-                 max_iter = 15)
+                 max_iter = 10)
 mc2$multicalibrate(d1, l)
 
-mc3 = MCBoost$new(init_predictor = init_logit, 
-                 subpop_fitter = net,
+mc3 = MCBoost$new(init_predictor = init_nnet, 
+                 subpop_fitter = lasso,
                  multiplicative = TRUE,
                  partition = TRUE,
-                 max_iter = 15)
+                 max_iter = 10)
 mc3$multicalibrate(d2, l)
 
-mc4 = MCBoost$new(init_predictor = init_logit, 
+mc4 = MCBoost$new(init_predictor = init_nnet, 
                  subpop_fitter = pops,
                  partition = TRUE,
-                 max_iter = 15)
+                 max_iter = 10)
 mc4$multicalibrate(d1, l)
 ```
 
@@ -146,14 +151,14 @@ mc4$multicalibrate(d1, l)
 
 ```{r}
 test$rf <- predict(rf, newdata = test, type = "prob")[, 2]
-test$logit <- predict(logit, newdata = test, type = "response")
+test$nnet <- predict(nnet, newdata = test)[, 2]
 test$mc1 <- mc1$predict_probs(test)
 test$mc2 <- mc2$predict_probs(test)
 test$mc3 <- mc3$predict_probs(test)
 test$mc4 <- mc4$predict_probs(test)
 
 test$c_rf <- round(test$rf)
-test$c_logit <- round(test$logit)
+test$c_nnet <- round(test$nnet)
 test$c_mc1 <- round(test$mc1)
 test$c_mc2 <- round(test$mc2)
 test$c_mc3 <- round(test$mc3)
@@ -166,7 +171,7 @@ mean(test$c_rf == test$label)
 mean(test$c_mc1 == test$label)
 mean(test$c_mc2 == test$label)
 
-mean(test$c_logit == test$label)
+mean(test$c_nnet == test$label)
 mean(test$c_mc3 == test$label)
 mean(test$c_mc4 == test$label)
 ```
@@ -184,13 +189,13 @@ eval <- map(grouping_vars, group_by_at, .tbl = test) %>%
       'accuracy_rf' = mean(c_rf == label),
       'accuracy_mc1' = mean(c_mc1 == label),
       'accuracy_mc2' = mean(c_mc2 == label),
-      'accuracy_logit' = mean(c_logit == label),
+      'accuracy_nnet' = mean(c_nnet == label),
       'accuracy_mc3' = mean(c_mc3 == label),
       'accuracy_mc4' = mean(c_mc4 == label),
       'bias_rf' = abs(mean(rf) - mean(label))*100,
       'bias_mc1' = abs(mean(mc1) - mean(label))*100,
       'bias_mc2' = abs(mean(mc2) - mean(label))*100,
-      'bias_logit' = abs(mean(logit) - mean(label))*100,
+      'bias_nnet' = abs(mean(nnet) - mean(label))*100,
       'bias_mc3' = abs(mean(mc3) - mean(label))*100,
       'bias_mc4' = abs(mean(mc4) - mean(label))*100,
       'size' = n()) %>%
