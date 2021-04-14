@@ -26,20 +26,32 @@ library(mlr3learners)
 library(mcboost)
 ```
 
-## Data
+## Data and Setup
+
+This example presents a typical use-case of MCBoost with data from a health survey. The goal is to post-process two inital prediction models for multi-accuracy using different flavors of MCBoost, and to eventually compare the naive and post-processed predictors overall and for subpopulations. 
+
+We use data derived from the National Health Interview Survey (NHIS 2003), which includes demographic and health-related variables for 21,588 individuals. This data can directly be included from the `PracTools` package.
 
 ```{r}
 data(nhis.large)
+?nhis.large
 ```
 
+In the following, our outcome of interest is whether an individual is covered by any type of health insurance (`notcov`, 1 = not covered, 0 = covered). We additionally prepare two sets of variables:
+
+- predictor variables (age, parents in household, education, income, employment status, physical or other limitations)
+- subpopulation variables (sex, hispanic ethnicity, race)
+
+The second set of variables will not be used for training the initial prediction models, but will be our focus when it comes to evaluating prediction performance for subgroups.
+
 ```{r}
-predictors <- c("age.grp", "parents", "educ", "inc.grp", "doing.lw", "limited", "sex", "hisp", "race")
+categorical <- c("age.grp", "parents", "educ", "inc.grp", "doing.lw", "limited", "sex", "hisp", "race")
 
 nhis <- nhis.large %>%
-  mutate_at(predictors, as_factor) %>%
-  mutate_at(predictors, fct_explicit_na) %>%
+  mutate_at(categorical, as_factor) %>%
+  mutate_at(categorical, fct_explicit_na) %>%
   drop_na(notcov) %>%
-  select(all_of(predictors), notcov, svywt, ID)
+  select(all_of(categorical), notcov, svywt, ID)
 
 nhis$notcov <- factor(ifelse(nhis$notcov == 1, "notcov", "cov"))
 
@@ -50,6 +62,14 @@ nhis_enc$hisp <- nhis$hisp
 nhis_enc$race <- nhis$race
 nhis_enc$inv_wt <- (1 / nhis$svywt)^3
 ```
+
+The pre-processed NHIS data will be split into three datasets: 
+
+- A training set for training the initial prediction models
+- An auditing set for post-processing the initial models with MCBoost
+- A test set for model evaluation
+
+To increase the difficulty of the prediction task, we sample from the NHIS data such that the prevalence of demographic subgroups in the test data differs from their prevalence in the training and auditing data. This is achieved by employing weighted sampling from NHIS.
 
 ```{r}
 test <- nhis_enc %>% slice_sample(prop = 0.3, weight_by = inv_wt)
@@ -63,6 +83,8 @@ post <- nontest_g %>% anti_join(train_g, by = "ID") %>% select(-ID, -svywt, -inv
 train <- train_g %>% select(-ID, -svywt, -inv_wt, -c(sex:race), -c(sex2:race3))
 ```
 
+As a result, non-hispanic white individuals are overrepresented and hispanic individuals are underrepresented in both the training and auditing set, compared to their prevalence in the test set.
+
 ```{r}
 train_g %>% summarise_at(vars(sex2:race3), mean)
 ```
@@ -75,13 +97,17 @@ post %>% summarise_at(vars(sex2:race3), mean)
 test %>% summarise_at(vars(sex2:race3), mean)
 ```
 
-## Initial model
+## Initial Prediction Models
+
+We use two initial models for predicting healthcare coverage with the training set. First, we use a random forest with the default settings of the `randomForest` package. 
 
 ```{r}
 set.seed(23)
 rf <- randomForest(notcov ~ ., 
                    data = train)
 ```
+
+Second, we train a neural network with two hidden layers, again rather naively with little tweaking.
 
 ```{r}
 nnet <- neuralnet(notcov ~ ., 
@@ -93,7 +119,9 @@ nnet <- neuralnet(notcov ~ .,
                   data = train)
 ```
 
-## MCBoost
+## MCBoost Auditing
+
+We prepare two functions that allow us to pass the predictions of both models to MCBoost for post-processing.
 
 ```{r}
 init_rf = function(data) {
@@ -105,11 +133,15 @@ init_nnet = function(data) {
 }
 ```
 
+To showcase different use cases of MCBoost, we prepare two post-processing data sets based on the auditing set. The first set includes only the predictor variables that were used by the initial models, whereas the second set will allow post-processing based on our demographic subgroups of interest (sex, hispanic ethnicity, race).   
+
 ```{r}
 d1 <- select(post, -notcov)
 d2 <- select(d1, -c(sex2:race3))
 l <- 1 - one_hot(post$notcov)
 ```
+
+We initialize custom auditors for MCBoost. Ridge regression and lasso regression with small penalties on model complexity, and a subpop-fitter with a fixed set of subpopulations. 
 
 ```{r}
 ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
@@ -118,6 +150,13 @@ lasso = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 2 / nro
 
 pops = SubpopFitter$new(list("sex2", "hisp2", "hisp3", "hisp4", "race2", "race3"))
 ```
+
+The ridge and lasso regressions will only be given access to the initial predictor variables when post-processing the random forest and neural net predictions with the auditing data. In addition, we guide the subpop-fitters to audit the initial predictions explicitly on the outlined subpopulations (sex, hispanic ethnicity, race). In summary, we have:
+
+- `mc1`: Random forest, post-processed with ridge regression and the initial set of predictor variables 
+- `mc2`: Random forest, post-processed with a fixed set of subpopulations
+- `mc3`: Neural net, post-processed with lasso regression and the initial set of predictor variables 
+- `mc4`: Neural net, post-processed with a fixed set of subpopulations
 
 ```{r}
 mc1 = MCBoost$new(init_predictor = init_rf, 
@@ -147,7 +186,7 @@ mc4 = MCBoost$new(init_predictor = init_nnet,
 mc4$multicalibrate(d1, l)
 ```
 
-## Evaluate
+## Model Evaluation
 
 ```{r}
 test$rf <- predict(rf, newdata = test, type = "prob")[, 2]
