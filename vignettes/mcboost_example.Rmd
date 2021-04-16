@@ -28,7 +28,7 @@ library(mcboost)
 
 ## Data and Setup
 
-This example presents a typical use-case of MCBoost with data from a health survey. The goal is to post-process two inital prediction models for multi-accuracy using different flavors of MCBoost, and to eventually compare the naive and post-processed predictors overall and for subpopulations. 
+This example presents a typical use case of MCBoost with data from a health survey. The goal is to post-process two inital prediction models for multi-accuracy using different flavors of MCBoost, and to eventually compare the naive and post-processed predictors overall and for subpopulations. 
 
 We use data derived from the National Health Interview Survey (NHIS 2003), which includes demographic and health-related variables for 21,588 individuals. This data can directly be included from the `PracTools` package.
 
@@ -72,6 +72,8 @@ The pre-processed NHIS data will be split into three datasets:
 To increase the difficulty of the prediction task, we sample from the NHIS data such that the prevalence of demographic subgroups in the test data differs from their prevalence in the training and auditing data. This is achieved by employing weighted sampling from NHIS.
 
 ```{r}
+set.seed(2953)
+
 test <- nhis_enc %>% slice_sample(prop = 0.3, weight_by = inv_wt)
 
 nontest_g <- nhis_enc %>% anti_join(test, by = "ID")
@@ -102,7 +104,6 @@ test %>% summarise_at(vars(sex2:race3), mean)
 We use two initial models for predicting healthcare coverage with the training set. First, we use a random forest with the default settings of the `randomForest` package. 
 
 ```{r}
-set.seed(23)
 rf <- randomForest(notcov ~ ., 
                    data = train)
 ```
@@ -111,10 +112,10 @@ Second, we train a neural network with two hidden layers, again rather naively w
 
 ```{r}
 nnet <- neuralnet(notcov ~ ., 
-                  hidden = c(10, 2),
+                  hidden = c(5, 2),
                   linear.output = FALSE,
                   err.fct = 'ce',
-                  threshold = 0.25,
+                  threshold = 0.2,
                   lifesign = 'full',
                   data = train)
 ```
@@ -151,7 +152,7 @@ lasso = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 2 / nro
 pops = SubpopFitter$new(list("sex2", "hisp2", "hisp3", "hisp4", "race2", "race3"))
 ```
 
-The ridge and lasso regressions will only be given access to the initial predictor variables when post-processing the random forest and neural net predictions with the auditing data. In addition, we guide the subpop-fitters to audit the initial predictions explicitly on the outlined subpopulations (sex, hispanic ethnicity, race). In summary, we have:
+The ridge and lasso regressions will only be given access to the initial predictor variables when post-processing the random forest and neural net predictions with the auditing data. In contrast, we guide the subpop-fitters to audit the initial predictions explicitly on the outlined subpopulations (sex, hispanic ethnicity, race). In summary, we have:
 
 - `mc1`: Random forest, post-processed with ridge regression and the initial set of predictor variables 
 - `mc2`: Random forest, post-processed with a fixed set of subpopulations
@@ -188,6 +189,8 @@ mc4$multicalibrate(d1, l)
 
 ## Model Evaluation
 
+As the final step, we use the initial and post-processed models to predict the outcome in the test data. We compute predicted probabilities and class predictions.
+
 ```{r}
 test$rf <- predict(rf, newdata = test, type = "prob")[, 2]
 test$nnet <- predict(nnet, newdata = test)[, 2]
@@ -205,6 +208,8 @@ test$c_mc4 <- round(test$mc4)
 test$label <- 1 - one_hot(test$notcov)
 ```
 
+Here we compare the overall accuracy of the initial and post-processed models. Overall, we only observe small differences in performance.
+
 ```{r}
 mean(test$c_rf == test$label)
 mean(test$c_mc1 == test$label)
@@ -214,6 +219,8 @@ mean(test$c_nnet == test$label)
 mean(test$c_mc3 == test$label)
 mean(test$c_mc4 == test$label)
 ```
+
+However, we might be concerned with model performance for smaller subpopulations. In the following we focus on subgroups defined by 2-way conjunctions of sex, hispanic ethnicity, and race. 
 
 ```{r}
 test <- test %>% 
@@ -241,6 +248,8 @@ eval <- map(grouping_vars, group_by_at, .tbl = test) %>%
   bind_rows()
 ```
 
+We evaluate prediction accuracy on these subpopulations, and order the results  according to the size of the selected subgroups (`size`). Subgroup accuracy varies between methods, with MCBoost-Ridge (mc1) and MCBoost-Lasso (mc3) stabilizing subgroup performance when compared to the initial models, respectively.
+
 ```{r}
 eval %>%
   arrange(desc(size)) %>%
@@ -250,6 +259,8 @@ eval %>%
   area(row, col = 2:7) ~ color_tile("transparent", "lightgreen")
     }))
 ```
+
+Finally, we compare bias between models. This evaluation focuses on the difference between the average predicted risk of healthcare non-coverage and the observed proportion of non-coverage in the test data for subgroups. Especially for the random forest results, post-processing with MCBoost reduces bias for many subpopulations.
 
 ```{r}
 eval %>%
