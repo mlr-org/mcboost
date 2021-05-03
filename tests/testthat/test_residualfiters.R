@@ -50,7 +50,7 @@ test_that("SubPopFitter work", {
   rf = SubpopFitter$new(subpops = pops)
   out = rf$fit(data, label - 0.5)
   expect_list(out)
-  expect_number(out[[1]], lower = 0, upper = 0)
+  expect_number(out[[1]], lower = 0.2, upper = 0.2)
   expect_class(out[[2]], "SubpopPredictor")
 
   pops = list("AGE_NA")

@@ -220,3 +220,50 @@ SubgroupModel = R6::R6Class("SubgroupModel",
     }
   )
 )
+
+#' LearnerCVPredictor
+#' Wraps a mlr3 Learner into a `LearnerCVPredictor` object that can be used
+#' with mcboost. Internally cross-validates predictions.
+#' @export
+CVLearnerPredictor = R6::R6Class("LearnerPredictor",
+  inherit = Predictor,
+  public = list(
+    #' @field pipeop [`Learner`]\cr
+    #' mlr3pipelines PipeOp used for fitting residuals.
+    pipeop = NULL,
+    #' @description
+    #' Instantiate a LearnerPredictor
+    #'
+    #' @param learner [`Learner`]\cr
+    #'   Learner used for train/predict.
+    initialize = function(learner) {
+      self$pipeop = mlr3pipelines::po("learner_cv", learner)
+    },
+    #' @description
+    #' Fit the learner.
+    #' @template params_data_label
+    fit_transform = function(data, labels) {
+      task = xy_to_task(data, labels)
+      t = self$pipeop$train(list(task))$output
+      return(as.matrix(t$data(cols=t$feature_names)))
+    },
+    #' @description
+    #' Predict a dataset with leaner predictions.
+    #' @param data [`data.table`] \cr
+    #'   Prediction data.
+    #' @param ... [`any`] \cr
+    #'   Not used, only for compatibility with other methods.
+    predict = function(data, ...) {
+      task = xy_to_task(data, runif(NROW(data)))
+      t = self$pipeop$predict(list(task))$output
+      return(as.matrix(t$data(cols=t$feature_names)))
+    }
+  ),
+  active = list(
+    #' @field is_fitted [`logical`]\cr
+    #' Whether the Learner is trained
+    is_fitted = function() {
+      !is.null(self$pipeop$state)
+    }
+  )
+)

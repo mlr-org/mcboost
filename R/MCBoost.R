@@ -192,12 +192,14 @@ MCBoost = R6::R6Class("MCBoost",
       }))
       buckets[[2]]$lower = -Inf
       buckets[[length(buckets)]]$upper = Inf
+    } else {
+      if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
     }
 
     new_probs = pred_probs
     for (i in seq_len(self$max_iter)) {
       corrs = integer(length(buckets))
-      models = list()
+      models = vector(mode = "list", length = length(buckets))
 
       if (self$rebucket) {
         probs = new_probs
@@ -208,12 +210,12 @@ MCBoost = R6::R6Class("MCBoost",
       # Fit on partitions
       for (j in seq_along(buckets)) {
         mask = buckets[[j]]$in_range_mask(probs)
-        if (sum(mask) < 1L) next # case no obs. are in the bucket
+        if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
         data_m = data[mask,]
         resid_m = resid[mask]
         out = self$subpop_fitter$fit_to_resid(data_m, resid_m)
         corrs[j] = out[[1]]
-        models = c(models, out[[2]])
+        models[[j]] = out[[2]]
       }
 
       if (abs(max(corrs)) < self$alpha) {

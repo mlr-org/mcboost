@@ -171,3 +171,67 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
     }
   )
 )
+
+#' ResidualFitter from a Learner
+#' @export
+CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
+  inherit = ResidualFitter,
+  public = list(
+    #' @field learner [`LearnerPredictor`]\cr
+    #' Learner used for fitting residuals.
+    learner = NULL,
+    #' @description
+    #' Define a ResidualFitter from a Learner
+    #' Available instantiations: [`TreeResidualFitter`] (rpart) and
+    #' [`RidgeResidualFitter`] (glmnet).
+    #'
+    #' @param learner [`Learner`]\cr
+    #' Regression Learner to use.
+    initialize = function(learner) {
+      self$learner = CVLearnerPredictor$new(learner)
+    },
+    #' @description
+    #' Fit the cv-learner and compute correlation
+    #'
+    #' @param data [`data.frame`]\cr
+    #'   Features to use.
+    #' @param resid [`numeric`]\cr
+    #'   Target variable (residuals)
+    #' @return `list` with items\cr
+    #'   - `corr`: pseudo-correlation between residuals and learner prediction.
+    #'   - `l`: the trained learner.
+    fit = function(data, resid) {
+      l = self$learner$clone()
+      h = l$fit_transform(data, resid)
+      corr = mean(h*resid)
+      return(list(corr, l))
+    }
+  )
+)
+
+#' @describeIn LearnerResidualFitter Cross-Validated residualFitter based on rpart
+#' @export
+CVTreeResidualFitter = R6::R6Class("CVTreeResidualFitter",
+  inherit = CVLearnerResidualFitter,
+  public = list(
+    #' @description
+    #' Define a ResidualFitter from a rpart learner
+    initialize = function() {
+      super$initialize(learner = lrn("regr.rpart"))
+    }
+  )
+)
+
+#' @describeIn LearnerResidualFitter Cross-Validated ResidualFitter based on glmnet
+#' @export
+CVRidgeResidualFitter = R6::R6Class("CVRidgeResidualFitter",
+  inherit = CVLearnerResidualFitter,
+  public = list(
+    #' @description
+    #' Define a ResidualFitter from a glmnet learner
+    initialize = function() {
+      mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
+      super$initialize(learner = lrn("regr.glmnet", alpha = 0))
+    }
+  )
+)

@@ -4,6 +4,8 @@
 \alias{LearnerResidualFitter}
 \alias{TreeResidualFitter}
 \alias{RidgeResidualFitter}
+\alias{CVTreeResidualFitter}
+\alias{CVRidgeResidualFitter}
 \title{ResidualFitter from a Learner}
 \description{
 ResidualFitter from a Learner
@@ -15,6 +17,10 @@ ResidualFitter from a Learner
 \item \code{TreeResidualFitter}: ResidualFitter based on rpart
 
 \item \code{RidgeResidualFitter}: ResidualFitter based on glmnet
+
+\item \code{CVTreeResidualFitter}: Cross-Validated residualFitter based on rpart
+
+\item \code{CVRidgeResidualFitter}: Cross-Validated ResidualFitter based on glmnet
 }}
 
 \section{Super class}{
@@ -190,6 +196,98 @@ Define a ResidualFitter from a glmnet learner
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RidgeResidualFitter$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}
+\section{Super classes}{
+\code{\link[mcboost:ResidualFitter]{mcboost::ResidualFitter}} -> \code{\link[mcboost:CVLearnerResidualFitter]{mcboost::CVLearnerResidualFitter}} -> \code{CVTreeResidualFitter}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{CVTreeResidualFitter$new()}}
+\item \href{#method-clone}{\code{CVTreeResidualFitter$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="ResidualFitter" data-id="fit_to_resid">}\href{../../mcboost/html/ResidualFitter.html#method-fit_to_resid}{\code{mcboost::ResidualFitter$fit_to_resid()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerResidualFitter" data-id="fit">}\href{../../mcboost/html/CVLearnerResidualFitter.html#method-fit}{\code{mcboost::CVLearnerResidualFitter$fit()}}\out{</span>}
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Define a ResidualFitter from a rpart learner
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CVTreeResidualFitter$new()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CVTreeResidualFitter$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}
+\section{Super classes}{
+\code{\link[mcboost:ResidualFitter]{mcboost::ResidualFitter}} -> \code{\link[mcboost:CVLearnerResidualFitter]{mcboost::CVLearnerResidualFitter}} -> \code{CVRidgeResidualFitter}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{CVRidgeResidualFitter$new()}}
+\item \href{#method-clone}{\code{CVRidgeResidualFitter$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="ResidualFitter" data-id="fit_to_resid">}\href{../../mcboost/html/ResidualFitter.html#method-fit_to_resid}{\code{mcboost::ResidualFitter$fit_to_resid()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerResidualFitter" data-id="fit">}\href{../../mcboost/html/CVLearnerResidualFitter.html#method-fit}{\code{mcboost::CVLearnerResidualFitter$fit()}}\out{</span>}
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Define a ResidualFitter from a glmnet learner
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CVRidgeResidualFitter$new()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CVRidgeResidualFitter$clone(deep = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

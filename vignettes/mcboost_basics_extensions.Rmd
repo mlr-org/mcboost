@@ -294,12 +294,47 @@ init_predictor = function(data) {
 }
 ```
 
-and we can calibrate this predictor.
+... and we can calibrate this predictor.
 
 ```{r}
 d = data[, -1]
 l = data$Class
 mc = MCBoost$new(init_predictor = init_predictor)
+mc$multicalibrate(d[1:200,], l[1:200])
+mc$predict_probs(d[201:208,])
+```
+
+
+### 2.5 Avoiding Overfitting in MCBoost - CVLearner
+
+Very often `MCBoost`'s calibration is very agressive and tends to overfit.
+This section tries to introduce a method to regularize against this overfitting, namely using a
+`Cross-Validated` learner that predicts on held-out data during the training phase.
+Other, simpler methods include choosing a smaller `eta` or reducing the number of `iters`.
+
+```{r}
+tsk = tsk("sonar")
+data = tsk$data()[, Class := as.integer(Class) - 1L]
+mod = glm(data = data, formula = Class ~ .)
+```
+
+As an `init_predictor` we again use the `glm` model from above.
+
+```{r}
+init_predictor = function(data) {
+  predict(mod, data)
+}
+```
+
+... and we can calibrate this predictor.
+This time, we use a `CVTreeResidualFitter` instead of a `TreeResidualFitter`. This allows us to avoid
+overfitting similar to a technique coined `stacked generalization` first described by Wolpert in 1992.
+Note, that this can sometimes take a little longer since each learner is cross-validated using `3` folds.
+
+```{r}
+d = data[, -1]
+l = data$Class
+mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=CVTreeResidualFitter$new())
 mc$multicalibrate(d[1:200,], l[1:200])
 mc$predict_probs(d[201:208,])
 ```
