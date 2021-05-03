@@ -4,7 +4,19 @@
 \alias{MCBoost}
 \title{Multi-Accuracy Boosting for R}
 \description{
-For more details, please refer to https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2019).
+Implements "multi-calibration" (Hebert Johnson et al., 2018) and
+multi-accuracy boosting (Kim et al., 2019) for calibration of a
+machine learning model's prediction.
+Multi-calibration works best in scenarios where the underlying data & labels is un-biased
+but a bias is introduced within the algoritm's fitting procedure. This is often the case,
+e.g. when an algorithm fits a majority sub-population while ignoring or under-fitting minority
+populations.\cr
+The method defaults to \verb{multi-accuracy boosting} as described in Kim et al., 2019.
+In order to obtain behaviour as described in Hebert-Johnson et al., 2018 set \code{partition=TRUE}
+and \code{multiplicative=FALSE}.
+For additional details, please refer to the relevant publication:
+- http://proceedings.mlr.press/v80/hebert-johnson18a.html (Hebert-Johnson et al., 2018)
+- https://arxiv.org/pdf/1805.12317.pdf (Kim et al., 2019).
 }
 \examples{
   # See vignette for more examples.
@@ -28,22 +40,23 @@ Accuracy parameter that determines the stopping condition.}
 Parameter for multiplicative weight update (step size).}
 
 \item{\code{num_buckets}}{\code{\link{integer}} \cr
-The number of buckets to split into.}
+The number of buckets to split into. Default \code{2}.}
 
 \item{\code{bucket_strategy}}{\code{\link{character}} \cr
 Currently onle supports "simple", even split along probabilities.
 Only relevant for num_buckets > 1.}
 
 \item{\code{rebucket}}{\code{\link{logical}} \cr
-Should buckets be re-done at each iteration?}
+Should buckets be re-calculated at each iteration?}
 
 \item{\code{partition}}{\code{\link{logical}} \cr
 True/False flag for whether to split up predictions by their "partition"
-(e.g., predictions less than
-0.5 and predictions greater than 0.5)}
+(e.g., predictions less than 0.5 and predictions greater than 0.5).
+Defaults to \code{TRUE} (multi-accuracy boosting). Set to \code{FALSE} for multi-calibration.}
 
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
-Specifies the strategy for updating the weights (multiplicative weight vs additive).}
+Specifies the strategy for updating the weights (multiplicative weight vs additive).
+Defaults to \code{TRUE} (multi-accuracy boosting). Set to \code{FALSE} for multi-calibration.}
 
 \item{\code{subpop_fitter}}{\code{\link{ResidualFitter}} \cr
 Specifies the type of model used to fit the
@@ -79,11 +92,11 @@ Initialize a multi-calibration instance.
   max_iter = 5,
   alpha = 1e-04,
   eta = 1,
-  partition = FALSE,
+  partition = TRUE,
   num_buckets = 2,
   bucket_strategy = "simple",
   rebucket = FALSE,
-  multiplicative = FALSE,
+  multiplicative = TRUE,
   subpop_fitter = NULL,
   subpops = NULL,
   default_model_class = ConstantPredictor,
@@ -95,28 +108,28 @@ Initialize a multi-calibration instance.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{max_iter}}{\code{\link{integer}} \cr
-The maximum number of iterations of the multicalibration/multiaccuracy method.}
+The maximum number of iterations of the multicalibration/multiaccuracy method.
+Default `5L.}
 
 \item{\code{alpha}}{\code{\link{numeric}} \cr
-Accuracy parameter that determines the stopping condition.}
+Accuracy parameter that determines the stopping condition. Default \code{1e-4}.}
 
 \item{\code{eta}}{\code{\link{numeric}} \cr
-Parameter for multiplicative weight update (step size).}
+Parameter for multiplicative weight update (step size). Default \code{1.0}.}
 
 \item{\code{partition}}{\code{\link{logical}} \cr
 True/False flag for whether to split up predictions by their "partition"
-(e.g., predictions less than
-0.5 and predictions greater than 0.5)}
+(e.g., predictions less than 0.5 and predictions greater than 0.5)}
 
 \item{\code{num_buckets}}{\code{\link{integer}} \cr
-The number of buckets to split into.}
+The number of buckets to split into. Default \code{2L}.}
 
 \item{\code{bucket_strategy}}{\code{\link{character}} \cr
 Currently onle supports "simple", even split along probabilities.
-Only relevant for num_buckets > 1.}
+Only taken into account for num_buckets > 1.}
 
 \item{\code{rebucket}}{\code{\link{logical}} \cr
-Should buckets be re-done at each iteration?}
+Should buckets be re-done at each iteration? Default: \code{FALSE}.}
 
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive)}

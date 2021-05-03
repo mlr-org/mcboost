@@ -128,8 +128,8 @@ SubpopFitter = R6::R6Class("SubpopFitter",
           worstCorr = corr
           worst_subpop = sfn
         }
-        return(list(worstCorr, SubpopPredictor$new(worst_subpop, worstCorr)))
       }
+      return(list(worstCorr, SubpopPredictor$new(worst_subpop, worstCorr)))
     }
   )
 )

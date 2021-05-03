@@ -7,13 +7,14 @@ test_that("MCBoost class instantiation", {
     "data" = po("nop"),
     "prediction" = po("learner_cv", lrn("classif.rpart"))
     )) %>>%
-    PipeOpMCBoost$new()
+    PipeOpMCBoost$new(param_vals = list(multiplicative = FALSE))
   expect_is(gr, "Graph")
   tsk = tsk("sonar")
   tid = sample(1:208, 108)
   train_out = gr$train(tsk$clone()$filter(tid))
   expect_is(gr$state$mcboost$mc, "MCBoost")
   expect_list(gr$state$mcboost$mc$iter_models, types = "LearnerPredictor")
+  expect_true(!gr$state$mcboost$mc$multiplicative)
   pr = gr$predict(tsk$clone()$filter(setdiff(1:208, tid)))
   expect_is(pr[[1]], "Prediction")
 })

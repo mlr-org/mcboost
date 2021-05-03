@@ -20,7 +20,7 @@ The preceeding learner's predictions are used as an initial predictor for mcboos
 Identifier of the resulting  object, default \code{"threshold"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-Defaults to \code{numeric(0)}.
+See \code{MCBoost} for a comprehensive description of all hyperparameters.
 }
 }
 

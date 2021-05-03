@@ -1,7 +1,20 @@
 #' Multi-Accuracy Boosting for R
 #'
 #' @description
-#'   For more details, please refer to https://arxiv.org/pdf/1805.12317.pdf (Kim et al. 2019).
+#'   Implements "multi-calibration" (Hebert Johnson et al., 2018) and
+#'   multi-accuracy boosting (Kim et al., 2019) for calibration of a
+#'   machine learning model's prediction.
+#'   Multi-calibration works best in scenarios where the underlying data & labels is un-biased
+#'   but a bias is introduced within the algoritm's fitting procedure. This is often the case,
+#'   e.g. when an algorithm fits a majority sub-population while ignoring or under-fitting minority
+#'   populations.\cr
+#'   The method defaults to `multi-accuracy boosting` as described in Kim et al., 2019.
+#'   In order to obtain behaviour as described in Hebert-Johnson et al., 2018 set `partition=TRUE`
+#'   and `multiplicative=FALSE`.
+#'   For additional details, please refer to the relevant publication:
+#'     - http://proceedings.mlr.press/v80/hebert-johnson18a.html (Hebert-Johnson et al., 2018)
+#'     - https://arxiv.org/pdf/1805.12317.pdf (Kim et al., 2019).
+#'
 #' @examples
 #'   # See vignette for more examples.
 #'   # Instantiate the object
@@ -27,23 +40,24 @@ MCBoost = R6::R6Class("MCBoost",
     eta = NULL,
 
     #' @field num_buckets [`integer`] \cr
-    #' The number of buckets to split into.
+    #' The number of buckets to split into. Default `2`.
     num_buckets = NULL,
     #' @field bucket_strategy  [`character`] \cr
     #'   Currently onle supports "simple", even split along probabilities.
     #'   Only relevant for num_buckets > 1.
     bucket_strategy = NULL,
     #' @field rebucket [`logical`] \cr
-    #'   Should buckets be re-done at each iteration?
+    #'   Should buckets be re-calculated at each iteration?
     rebucket = NULL,
     #' @field partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
-    #'   (e.g., predictions less than
-    #'   0.5 and predictions greater than 0.5)
+    #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
+    #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
     partition = NULL,
 
     #' @field multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive).
+    #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
     multiplicative = NULL,
 
     #' @field subpop_fitter [`ResidualFitter`] \cr
@@ -68,21 +82,21 @@ MCBoost = R6::R6Class("MCBoost",
     #'
     #' @param max_iter [`integer`] \cr
     #'   The maximum number of iterations of the multicalibration/multiaccuracy method.
+    #'   Default `5L.
     #' @param alpha  [`numeric`] \cr
-    #'   Accuracy parameter that determines the stopping condition.
+    #'   Accuracy parameter that determines the stopping condition. Default `1e-4`.
     #' @param eta  [`numeric`] \cr
-    #'   Parameter for multiplicative weight update (step size).
+    #'   Parameter for multiplicative weight update (step size). Default `1.0`.
     #' @param partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
-    #'   (e.g., predictions less than
-    #'   0.5 and predictions greater than 0.5)
+    #'   (e.g., predictions less than 0.5 and predictions greater than 0.5)
     #' @param num_buckets [`integer`] \cr
-    #'   The number of buckets to split into.
+    #'   The number of buckets to split into. Default `2L`.
     #' @param bucket_strategy  [`character`] \cr
     #'   Currently onle supports "simple", even split along probabilities.
-    #'   Only relevant for num_buckets > 1.
+    #'   Only taken into account for num_buckets > 1.
     #' @param rebucket [`logical`] \cr
-    #'   Should buckets be re-done at each iteration?
+    #'   Should buckets be re-done at each iteration? Default: `FALSE`.
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
     #' @param subpop_fitter [`ResidualFitter`] \cr
@@ -99,11 +113,11 @@ MCBoost = R6::R6Class("MCBoost",
                  max_iter=5,
                  alpha=1e-4,
                  eta=1,
-                 partition=FALSE,
+                 partition=TRUE,
                  num_buckets=2,
                  bucket_strategy="simple",
                  rebucket=FALSE,
-                 multiplicative=FALSE,
+                 multiplicative=TRUE,
                  subpop_fitter=NULL,
                  subpops=NULL,
                  default_model_class=ConstantPredictor,
@@ -260,7 +274,7 @@ MCBoost = R6::R6Class("MCBoost",
         update_weights = exp(- self$eta * deltas)
         new_preds = update_weights * orig_preds
       } else {
-        new_preds = orig_preds + deltas
+        new_preds = orig_preds + (self$eta * deltas)
       }
       return(clip_prob(new_preds))
     },

@@ -17,7 +17,7 @@
 #'   Identifier of the resulting  object, default `"threshold"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-#'   Defaults to `numeric(0)`.
+#'   See `MCBoost` for a comprehensive description of all hyperparameters.
 #'
 #' @section Input and Output Channels:
 #' During training, the input and output are `"data"` and `"prediction"`, two [`TaskClassif`][mlr3::TaskClassif].
@@ -64,20 +64,29 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
     #' @param param_vals [`list`] \cr
     #'   List of hyperparameters for the `PipeOp`.
     initialize = function(id = "mcboost", param_vals = list()) {
-      param_set = paradox::ParamSet$new()
-      param_set$add(paradox::ParamInt$new("max_iter", lower = 0L, upper = Inf, tags = "train"))
+      param_set = paradox::ParamSet$new(list(
+        paradox::ParamInt$new("max_iter", lower = 0L, upper = Inf, default =5L, tags = "train"),
+        paradox::ParamDbl$new("alpha", lower = 0, upper = 1, default = 1e-4, tags = "train"),
+        paradox::ParamDbl$new("eta", lower = 0, upper = 1, default = 1, tags = "train"),
+        paradox::ParamLgl$new("partition", tags = "train", default = TRUE),
+        paradox::ParamInt$new("num_buckets", lower = 1, upper = Inf, default = 2L, tags = "train"),
+        paradox::ParamLgl$new("rebucket", default = FALSE, tags = "train"),
+        paradox::ParamLgl$new("multiplicative", default = TRUE, tags = "train"),
+        paradox::ParamUty$new("subpop_fitter", default = NULL, tags = "train"),
+        paradox::ParamUty$new("subpops", default = NULL, tags = "train"),
+        paradox::ParamUty$new("default_model_class", default = ConstantPredictor, tags = "train")
+      ))
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = c("data", "prediction"), train = c("TaskClassif", "TaskClassif"), predict = c("TaskClassif", "TaskClassif")),
         output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"),
         tags = "target transform")
     }
-
   ),
   private = list(
     .train = function(inputs) {
       d = inputs$data$data(cols = inputs$data$feature_names)
       l = inputs$data$data(cols = inputs$data$target_names)
-
+      # Construc an initial predictor from the input model.
       init_predictor = function(data, prediction) {
         # Prob or response prediction
         if (length(prediction$feature_names) > 1L) {
@@ -88,8 +97,9 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
           one_hot(prds)
         }
       }
-
-      mc = MCBoost$new(init_predictor = init_predictor)
+      args = self$param_set$get_values(tags = "train")
+      args$init_predictor = init_predictor
+      mc = invoke(MCBoost$new, .args = args)
       mc$multicalibrate(d, l, predictor_args = inputs$prediction)
       self$state = list("mc" = mc)
       list(NULL)

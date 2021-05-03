@@ -1,0 +1,68 @@
+---
+title: "MCBoost step by step"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MCBoost step by step}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mcboost)
+```
+
+```{r}
+library(data.table)
+n = 10000L
+x = rnorm(n, 5, 2.5)
+s = sample(1:2, n, replace = TRUE)
+itcpt = c(5.2, 1.1)
+betas = c(-.12, .7)
+y = x * betas[s] + itcpt[s] + rnorm(n, -3, .4) + 1
+dt = data.table(x = x, s = s, y = y)
+dt[, yprob := 1 / (1 + exp(-(y - mean(y)))) + rnorm(n, 0, abs(0.1*(s-2)))]
+dt[, train:=FALSE][1:(ceiling(n/2)), train := TRUE]
+dt[, y := as.integer(runif(n) > yprob)]
+```
+
+```{r}
+library(ggplot2)
+ggplot(dt) + geom_point(aes(x=x,y=yprob,color=factor(s)))
+dt[, mean(y), by = s]
+```
+
+```{r}
+mod = glm(y ~ x, data = dt[train == TRUE,], family = binomial())
+dt[, yh := predict(mod, dt, type = "response")]
+dt[, .(mean((yh > 0.5) == y), .N), by = .(s, train)]
+```
+
+```{r}
+ggplot(dt) + geom_point(aes(x=yprob,y=yh,color=factor(s)))
+dt[, mean(y), by = s]
+```
+
+
+```{r}
+init_predictor = function(data) {
+  predict(mod, data, type = "response")
+}
+mc = MCBoost$new(
+  subpop_fitter = "TreeResidualFitter",
+  init_predictor = init_predictor,
+  max_iter = 10L,
+  eta = .2,
+  multiplicative = TRUE
+)
+mc$multicalibrate(dt[, c("s", "x"), with = FALSE], dt$y)
+dt[, yh_mc := mc$predict_probs(dt)]
+ggplot(dt) + geom_point(aes(x=yprob,y=yh_mc,color=factor(s)))
+dt[, mean(y), by = s]
+```
