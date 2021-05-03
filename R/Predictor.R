@@ -206,7 +206,7 @@ SubgroupModel = R6::R6Class("SubgroupModel",
       if (is.null(subgroup_masks)) {
         subgroup_masks = self$subgroup_masks
       }
-      if !(all(map_lgl(subgroup_masks, function(x) {nrow(data) == length(x)}))) {
+      if (!all(map_lgl(subgroup_masks, function(x) {nrow(data) == length(x)}))) {
         stop("Length of subgroup masks must match length of data!\n
               Subgroups are currently not implemented for 'partition=TRUE'.")
       }
