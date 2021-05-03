@@ -3,7 +3,7 @@ test_that("TreeResidualFitters work", {
   rf = CVTreeResidualFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
-  expect_class(out[[2]], "LearnerPredictor")
+  expect_is(out[[2]], "CVLearnerPredictor")
   expect_true(out[[2]]$is_fitted)
   out = out[[2]]$predict(iris[,1:4])
   expect_numeric(out)

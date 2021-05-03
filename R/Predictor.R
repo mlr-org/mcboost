@@ -206,9 +206,10 @@ SubgroupModel = R6::R6Class("SubgroupModel",
       if (is.null(subgroup_masks)) {
         subgroup_masks = self$subgroup_masks
       }
-      map(subgroup_masks, function(x) {
-          assert_true(nrow(data) == length(x))
-      })
+      if !(all(map_lgl(subgroup_masks, function(x) {nrow(data) == length(x)}))) {
+        stop("Length of subgroup masks must match length of data!\n
+              Subgroups are currently not implemented for 'partition=TRUE'.")
+      }
       # If no paritition mask, use all datapoints
       if (is.null(partition_mask)) partition_mask = rep(1L, nrow(data))
       # Predict

@@ -140,7 +140,7 @@ test_that("MCBoost multicalibrate with Subgroups", {
   )
   sf = SubgroupFitter$new(masks)
 
-  mc = MCBoost$new(subpop_fitter = sf, default_model_class = lp, alpha = 0)
+  mc = MCBoost$new(subpop_fitter = sf, default_model_class = lp, alpha = 0, partition = FALSE)
   mc$multicalibrate(data, labels)
   expect_list(mc$iter_models, types = "SubgroupModel", len = mc$max_iter)
   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
