@@ -226,7 +226,7 @@ SubgroupModel = R6::R6Class("SubgroupModel",
 #' Wraps a mlr3 Learner into a `LearnerCVPredictor` object that can be used
 #' with mcboost. Internally cross-validates predictions.
 #' @export
-CVLearnerPredictor = R6::R6Class("LearnerPredictor",
+CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
   inherit = Predictor,
   public = list(
     #' @field pipeop [`Learner`]\cr

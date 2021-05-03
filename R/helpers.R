@@ -10,12 +10,16 @@ one_hot = function(labels) {
   return(mat)
 }
 
+# clip numbers (probabilities) to [0;1]
 clip_prob = function(prob) {
   prob[prob > 1] = 1
   prob[prob < 0] = 0
   return(prob)
 }
 
+
+# Convert a X,y pair to a task
+# Required for interacting with 'mlr3'
 xy_to_task = function(x, y) {
   x = data.table::data.table(x)
   yname = "ytmp"

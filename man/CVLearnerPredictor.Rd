@@ -15,7 +15,7 @@ Wraps a mlr3 Learner into a \code{LearnerCVPredictor} object that can be used
 with mcboost. Internally cross-validates predictions.
 }
 \section{Super class}{
-\code{\link[mcboost:Predictor]{mcboost::Predictor}} -> \code{LearnerPredictor}
+\code{\link[mcboost:Predictor]{mcboost::Predictor}} -> \code{CVLearnerPredictor}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
