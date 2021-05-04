@@ -108,7 +108,7 @@ nnet <- neuralnet(notcov ~ .,
   hidden = 5,
   linear.output = FALSE,
   err.fct = 'ce',
-  threshold = 0.2,
+  threshold = 0.5,
   lifesign = 'full',
   data = train
 )
