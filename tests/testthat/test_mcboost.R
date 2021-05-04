@@ -40,7 +40,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
     p = prd$predict(data)
   }
 
-  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeResidualFitter")
+  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeResidualFitter", eta = 0.1)
   mc$multicalibrate(d, l)
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
@@ -55,6 +55,9 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
   mean(init_predictor(d) == labels_oh)
   # MCboosted predictor accuracy
   mean(prds == labels_oh)
+
+  expect_numeric(mc$auditor_effect(d), lower = 0, upper = 1, len = nrow(d))
+
 })
 
 

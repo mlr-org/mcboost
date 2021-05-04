@@ -77,6 +77,9 @@ Cummulative list of fitted models.}
 
 \item{\code{iter_partitions}}{\code{\link{list}} \cr
 Cummulative list of data partitions for models.}
+
+\item{\code{auditor_effects}}{\code{\link{list}} \cr
+Auditor effect in each iteration.}
 }
 \if{html}{\out{</div>}}
 }
@@ -86,6 +89,7 @@ Cummulative list of data partitions for models.}
 \item \href{#method-new}{\code{MCBoost$new()}}
 \item \href{#method-multicalibrate}{\code{MCBoost$multicalibrate()}}
 \item \href{#method-predict_probs}{\code{MCBoost$predict_probs()}}
+\item \href{#method-auditor_effect}{\code{MCBoost$auditor_effect()}}
 \item \href{#method-clone}{\code{MCBoost$clone()}}
 }
 }
@@ -199,7 +203,7 @@ Params passed on to other methods.}
 \subsection{Method \code{predict_probs()}}{
 Predict a dataset with multi-calibrated predictions
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MCBoost$predict_probs(x, t = Inf, predictor_args = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MCBoost$predict_probs(x, t = Inf, predictor_args = NULL, audit = FALSE, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -207,6 +211,48 @@ Predict a dataset with multi-calibrated predictions
 \describe{
 \item{\code{x}}{\code{\link{data.table}} \cr
 Prediction data.}
+
+\item{\code{t}}{\code{\link{integer}} \cr
+Number of multi-calibration steps to predict. Default: \code{Inf} (all).}
+
+\item{\code{predictor_args}}{\code{\link{any}} \cr
+Arguments passed on to\code{init_predictor}. Defaults to \code{NULL}.}
+
+\item{\code{audit}}{\code{\link{logical}} \cr
+Should audit weights be stored? Default \code{FALSE}.}
+
+\item{\code{...}}{\code{\link{any}} \cr
+Params passed on to the residual prediction model's predict method.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Numeric vector of multi-calibrated predictions.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-auditor_effect"></a>}}
+\if{latex}{\out{\hypertarget{method-auditor_effect}{}}}
+\subsection{Method \code{auditor_effect()}}{
+Compute the auditor effect for each instance
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MCBoost$auditor_effect(
+  x,
+  aggregate = TRUE,
+  t = Inf,
+  predictor_args = NULL,
+  ...
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{\code{\link{data.table}} \cr
+Prediction data.}
+
+\item{\code{aggregate}}{\code{\link{logical}} \cr
+Should the auditor effect be aggregated across iterations?}
 
 \item{\code{t}}{\code{\link{integer}} \cr
 Number of multi-calibration steps to predict. Default: \code{Inf} (all).}

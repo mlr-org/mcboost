@@ -85,6 +85,10 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Cummulative list of data partitions for models.
     iter_partitions = list(),
 
+    #' @field auditor_effects [`list`] \cr
+    #'   Auditor effect in each iteration.
+    auditor_effects = list(),
+
     #' @description
     #'   Initialize a multi-calibration instance.
     #'
@@ -262,11 +266,13 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Number of multi-calibration steps to predict. Default: `Inf` (all).
     #' @param predictor_args [`any`] \cr
     #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
+    #' @param audit [`logical`] \cr
+    #'  Should audit weights be stored? Default `FALSE`.
     #' @param ... [`any`] \cr
     #'  Params passed on to the residual prediction model's predict method.
     #' @return
     #'   Numeric vector of multi-calibrated predictions.
-    predict_probs = function(x, t = Inf, predictor_args = NULL, ...) {
+    predict_probs = function(x, t = Inf, predictor_args = NULL, audit = FALSE, ...) {
       if (!length(self$iter_models)) {
         warning("multicalibrate was not run! Returning original predictions!")
       }
@@ -283,14 +289,37 @@ MCBoost = R6::R6Class("MCBoost",
             probs = orig_preds
           }
           mask = self$iter_partitions[[i]]$in_range_mask(probs)
-          new_preds = private$update_probs(new_preds, self$iter_models[[i]], x, mask=mask, ...)
+          new_preds = private$update_probs(new_preds, self$iter_models[[i]], x, mask=mask, audit=audit, ...)
         }
       }
       return(new_preds)
+    },
+    #' @description
+    #' Compute the auditor effect for each instance
+    #' @param x [`data.table`] \cr
+    #'   Prediction data.
+    #' @param aggregate [`logical`] \cr
+    #'   Should the auditor effect be aggregated across iterations?
+    #' @param t [`integer`] \cr
+    #'   Number of multi-calibration steps to predict. Default: `Inf` (all).
+    #' @param predictor_args [`any`] \cr
+    #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
+    #' @param ... [`any`] \cr
+    #'  Params passed on to the residual prediction model's predict method.
+    #' @return
+    #'   Numeric vector of multi-calibrated predictions.
+    auditor_effect = function(x, aggregate = TRUE, t = Inf, predictor_args = NULL, ...) {
+      assert_flag(aggregate)
+      self$predict_probs(x, t, predictor_args, audit = TRUE, ...)
+      if (aggregate) {
+        Reduce("+", self$auditor_effects) / length(self$auditor_effects)
+      } else {
+        self$auditor_effects
+      }
     }
   ),
   private = list(
-    update_probs = function(orig_preds, model, x, mask = NULL, ...) {
+    update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, ...) {
       deltas = numeric(length(orig_preds))
       deltas[mask] = model$predict(x, ...)[mask]
 
@@ -298,7 +327,11 @@ MCBoost = R6::R6Class("MCBoost",
         update_weights = exp(- self$eta * deltas)
         new_preds = update_weights * orig_preds
       } else {
-        new_preds = orig_preds + (self$eta * deltas)
+        update_weights = (self$eta * deltas)
+        new_preds = orig_preds + update_weights
+      }
+      if (audit) {
+        self$auditor_effects = c(self$auditor_effects, list(abs(deltas)))
       }
       return(clip_prob(new_preds))
     },
