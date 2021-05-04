@@ -2,7 +2,7 @@
 title: "MCBoost - Health Survey Example"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{MCBoost - Example}
+  %\VignetteIndexEntry{MCBoost - Health Survey Example}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{}
@@ -28,7 +28,7 @@ library(mcboost)
 
 ## Data and Setup
 
-This example presents a typical use case of MCBoost with data from a health survey. The goal is to post-process two inital prediction models for multi-accuracy using different flavors of MCBoost, and to eventually compare the naive and post-processed predictors overall and for subpopulations.
+This vignette presents two typical use cases of MCBoost with data from a health survey. The goal is to post-process two initial prediction models for multi-accuracy using different flavors of MCBoost, and to eventually compare the naive and post-processed predictors overall and for subpopulations. The first scenario will focus on subgroup accuracy, and the second scenario on subgroup calibration.
 
 We use data derived from the National Health Interview Survey (NHIS 2003), which includes demographic and health-related variables for 21,588 individuals. This data can directly be included from the `PracTools` package.
 
@@ -60,7 +60,7 @@ nhis_enc$notcov <- nhis$notcov
 nhis_enc$sex <- nhis$sex
 nhis_enc$hisp <- nhis$hisp
 nhis_enc$race <- nhis$race
-nhis_enc$inv_wt <- (1 / nhis$svywt)^3
+nhis_enc$inv_wt <- (1 / nhis$svywt)
 ```
 
 The pre-processed NHIS data will be split into three datasets:
@@ -74,11 +74,11 @@ To increase the difficulty of the prediction task, we sample from the NHIS data 
 ```{r}
 set.seed(2953)
 
-test <- nhis_enc %>% slice_sample(prop = 0.3, weight_by = inv_wt)
+test <- nhis_enc %>% slice_sample(prop = 0.25, weight_by = inv_wt)
 
 nontest_g <- nhis_enc %>% anti_join(test, by = "ID")
 
-train_g <- nontest_g %>% slice_sample(prop = 0.6)
+train_g <- nontest_g %>% slice_sample(prop = 0.75)
 
 post <- nontest_g %>% anti_join(train_g, by = "ID") %>% select(-ID, -svywt, -inv_wt, -c(sex:race))
 
@@ -99,37 +99,26 @@ post %>% summarise_at(vars(sex2:race3), mean)
 test %>% summarise_at(vars(sex2:race3), mean)
 ```
 
-## Initial Prediction Models
+## Scenario 1: Improve Subgroup Accuracy
 
-We use two initial models for predicting healthcare coverage with the training set. First, we use a random forest with the default settings of the `randomForest` package.
-
-```{r}
-rf <- randomForest(notcov ~ ., data = train)
-```
-
-Second, we train a neural network with two hidden layers, again rather naively with little tweaking.
+We train an initial model for predicting healthcare coverage with the training set. Here, we use a neural network with one hidden layer, rather naively with little tweaking.
 
 ```{r}
 nnet <- neuralnet(notcov ~ .,
-  hidden = c(5, 2),
+  hidden = 5,
   linear.output = FALSE,
   err.fct = 'ce',
   threshold = 0.2,
   lifesign = 'full',
-  stepmax=1e4,
   data = train
 )
 ```
 
-## MCBoost Auditing
+### MCBoost Auditing
 
-We prepare two functions that allow us to pass the predictions of both models to MCBoost for post-processing.
+We prepare a function that allows us to pass the predictions of the model to MCBoost for post-processing.
 
 ```{r}
-init_rf = function(data) {
-  predict(rf, data, type = "prob")[, 2]
-}
-
 init_nnet = function(data) {
   predict(nnet, data)[, 2]
 }
@@ -143,82 +132,56 @@ d2 <- select(d1, -c(sex2:race3))
 l <- 1 - one_hot(post$notcov)
 ```
 
-We initialize custom auditors for MCBoost. Ridge regression and lasso regression with small penalties on model complexity, and a subpop-fitter with a fixed set of subpopulations.
+We initialize custom auditors for MCBoost. Ridge regression with a small penalty on model complexity, and a subpop-fitter with a fixed set of subpopulations.
 
 ```{r}
 ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
 
-lasso = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 2 / nrow(post)))
-
 pops = SubpopFitter$new(list("sex2", "hisp2", "hisp3", "hisp4", "race2", "race3"))
 ```
 
-The ridge and lasso regressions will only be given access to the initial predictor variables when post-processing the random forest and neural net predictions with the auditing data. In contrast, we guide the subpop-fitters to audit the initial predictions explicitly on the outlined subpopulations (sex, hispanic ethnicity, race). In summary, we have:
+The ridge regression will only be given access to the initial predictor variables when post-processing the neural net predictions with the auditing data. In contrast, we guide the subpop-fitter to audit the initial predictions explicitly on the outlined subpopulations (sex, hispanic ethnicity, race). In summary, we have:
 
-- `mc1`: Random forest, post-processed with ridge regression and the initial set of predictor variables
-- `mc2`: Random forest, post-processed with a fixed set of subpopulations
-- `mc3`: Neural net, post-processed with lasso regression and the initial set of predictor variables
-- `mc4`: Neural net, post-processed with a fixed set of subpopulations
+- `nnet`: Initial neural net
+- `nnet_mc1`: Neural net, post-processed with ridge regression and the initial set of predictor variables
+- `nnet_mc2`: Neural net, post-processed with a fixed set of subpopulations
 
 ```{r}
-mc1 = MCBoost$new(init_predictor = init_rf,
-                 subpop_fitter = ridge,
-                 multiplicative = TRUE,
-                 partition = TRUE,
-                 max_iter = 10)
-mc1$multicalibrate(d2, l)
+nnet_mc1 = MCBoost$new(init_predictor = init_nnet, 
+                       subpop_fitter = ridge,
+                       multiplicative = TRUE,
+                       partition = TRUE,
+                       max_iter = 15)
+nnet_mc1$multicalibrate(d2, l)
 
-mc2 = MCBoost$new(init_predictor = init_rf,
-                 subpop_fitter = pops,
-                 partition = TRUE,
-                 max_iter = 10)
-mc2$multicalibrate(d1, l)
-
-mc3 = MCBoost$new(init_predictor = init_nnet,
-                 subpop_fitter = lasso,
-                 multiplicative = TRUE,
-                 partition = TRUE,
-                 max_iter = 10)
-mc3$multicalibrate(d2, l)
-
-mc4 = MCBoost$new(init_predictor = init_nnet,
-                 subpop_fitter = pops,
-                 partition = TRUE,
-                 max_iter = 10)
-mc4$multicalibrate(d1, l)
+nnet_mc2 = MCBoost$new(init_predictor = init_nnet, 
+                       subpop_fitter = pops,
+                       partition = TRUE,
+                       max_iter = 15)
+nnet_mc2$multicalibrate(d1, l)
 ```
 
-## Model Evaluation
+### Model Evaluation
 
-As the final step, we use the initial and post-processed models to predict the outcome in the test data. We compute predicted probabilities and class predictions.
+Next, we use the initial and post-processed models to predict the outcome in the test data. We compute predicted probabilities and class predictions.
 
 ```{r}
-test$rf <- predict(rf, newdata = test, type = "prob")[, 2]
 test$nnet <- predict(nnet, newdata = test)[, 2]
-test$mc1 <- mc1$predict_probs(test)
-test$mc2 <- mc2$predict_probs(test)
-test$mc3 <- mc3$predict_probs(test)
-test$mc4 <- mc4$predict_probs(test)
+test$nnet_mc1 <- nnet_mc1$predict_probs(test)
+test$nnet_mc2 <- nnet_mc2$predict_probs(test)
 
-test$c_rf <- round(test$rf)
 test$c_nnet <- round(test$nnet)
-test$c_mc1 <- round(test$mc1)
-test$c_mc2 <- round(test$mc2)
-test$c_mc3 <- round(test$mc3)
-test$c_mc4 <- round(test$mc4)
+test$c_nnet_mc1 <- round(test$nnet_mc1)
+test$c_nnet_mc2 <- round(test$nnet_mc2)
 test$label <- 1 - one_hot(test$notcov)
 ```
 
-Here we compare the overall accuracy of the initial and post-processed models. Overall, we only observe small differences in performance.
+Here we compare the overall accuracy of the initial and post-processed models. Overall, we observe little differences in performance.
 
 ```{r}
-mean(test$c_rf == test$label)
-mean(test$c_mc1 == test$label)
-mean(test$c_mc2 == test$label)
-
 mean(test$c_nnet == test$label)
-mean(test$c_mc3 == test$label)
-mean(test$c_mc4 == test$label)
+mean(test$c_nnet_mc1 == test$label)
+mean(test$c_nnet_mc2 == test$label)
 ```
 
 However, we might be concerned with model performance for smaller subpopulations. In the following we focus on subgroups defined by 2-way conjunctions of sex, hispanic ethnicity, and race.
@@ -233,42 +196,115 @@ grouping_vars <- c("sex", "hisp", "race", "sex_hisp", "sex_race", "hisp_race")
 
 eval <- map(grouping_vars, group_by_at, .tbl = test) %>%
   map(summarise,
-      'accuracy_rf' = mean(c_rf == label),
-      'accuracy_mc1' = mean(c_mc1 == label),
-      'accuracy_mc2' = mean(c_mc2 == label),
       'accuracy_nnet' = mean(c_nnet == label),
-      'accuracy_mc3' = mean(c_mc3 == label),
-      'accuracy_mc4' = mean(c_mc4 == label),
-      'bias_rf' = abs(mean(rf) - mean(label))*100,
-      'bias_mc1' = abs(mean(mc1) - mean(label))*100,
-      'bias_mc2' = abs(mean(mc2) - mean(label))*100,
-      'bias_nnet' = abs(mean(nnet) - mean(label))*100,
-      'bias_mc3' = abs(mean(mc3) - mean(label))*100,
-      'bias_mc4' = abs(mean(mc4) - mean(label))*100,
+      'accuracy_nnet_mc1' = mean(c_nnet_mc1 == label),
+      'accuracy_nnet_mc2' = mean(c_nnet_mc2 == label),
       'size' = n()) %>%
   bind_rows()
 ```
 
-We evaluate prediction accuracy on these subpopulations, and order the results  according to the size of the selected subgroups (`size`). Subgroup accuracy varies between methods, with MCBoost-Ridge (mc1) and MCBoost-Lasso (mc3) stabilizing subgroup performance when compared to the initial models, respectively.
+We evaluate classification accuracy on these subpopulations, and order the results according to the size of the selected subgroups (`size`). Subgroup accuracy varies between methods, with MCBoost-Ridge (`nnet_mc1`) and MCBoost-Subpop (`nnet_mc2`) stabilizing subgroup performance when compared to the initial model, respectively.
 
 ```{r}
 eval %>%
   arrange(desc(size)) %>%
-  select(size, accuracy_rf:accuracy_mc4) %>%
+  select(size, accuracy_nnet:accuracy_nnet_mc2) %>%
   round(., digits = 3) %>%
   formattable(., lapply(1:nrow(eval), function(row) {
-  area(row, col = 2:7) ~ color_tile("transparent", "lightgreen")
+  area(row, col = 2:4) ~ color_tile("transparent", "lightgreen")
     }))
 ```
 
-Finally, we compare bias between models. This evaluation focuses on the difference between the average predicted risk of healthcare non-coverage and the observed proportion of non-coverage in the test data for subgroups. Especially for the random forest results, post-processing with MCBoost reduces bias for many subpopulations.
+## Scenario 2: Improve Subgroup Calibration
+
+In this scenario, we use a random forest with the default settings of the randomForest package as the initial predictor.
+
+```{r}
+rf <- randomForest(notcov ~ ., data = train)
+```
+
+### MCBoost Auditing
+
+We again prepare a function to pass the predictions to MCBoost for post-processing.
+
+```{r}
+init_rf = function(data) {
+  predict(rf, data, type = "prob")[, 2]
+}
+```
+
+We use two custom auditors for MCBoost, i.e., ridge and lasso regression with small penalties on model complexity.
+
+```{r}
+ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
+
+lasso = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 2 / nrow(post)))
+```
+
+The ridge regression will only be given access to the initial predictor variables when post-processing the random forest predictions. In contrast, we allow the lasso regression to audit the initial predictions both with the initial predictors and the subpopulations (sex, hispanic ethnicity, race). In summary, we have:
+
+- `rf`: Initial random forest
+- `rf_mc1`: Random forest, post-processed with ridge regression and the initial set of predictor variables
+- `rf_mc2`: Random forest, post-processed with lasso regression and the extended set of predictors
+
+```{r}
+rf_mc1 = MCBoost$new(init_predictor = init_rf, 
+                     subpop_fitter = ridge,
+                     multiplicative = TRUE,
+                     partition = TRUE,
+                     max_iter = 15)
+rf_mc1$multicalibrate(d2, l)
+
+rf_mc2 = MCBoost$new(init_predictor = init_rf, 
+                     subpop_fitter = lasso,
+                     multiplicative = TRUE,
+                     partition = TRUE,
+                     max_iter = 15)
+rf_mc2$multicalibrate(d1, l)
+```
+
+### Model Evaluation
+
+We again compute predicted probabilities and class predictions using the initial and post-processed models.
+
+```{r}
+test$rf <- predict(rf, newdata = test, type = "prob")[, 2]
+test$rf_mc1 <- rf_mc1$predict_probs(test)
+test$rf_mc2 <- rf_mc2$predict_probs(test)
+
+test$c_rf <- round(test$rf)
+test$c_rf_mc1 <- round(test$rf_mc1)
+test$c_rf_mc2 <- round(test$rf_mc2)
+```
+
+Here we compare the overall accuracy of the initial and post-processed models. As before, we observe small differences in overall performance.
+
+```{r}
+mean(test$c_rf == test$label)
+mean(test$c_rf_mc1 == test$label)
+mean(test$c_rf_mc2 == test$label)
+```
+
+However, we might be concerned with calibration in subpopulations. In the following we focus on subgroups defined by 2-way conjunctions of sex, hispanic ethnicity, and race.
+
+```{r}
+eval <- map(grouping_vars, group_by_at, .tbl = test) %>%
+  map(summarise,
+      'bias_rf' = abs(mean(rf) - mean(label))*100,
+      'bias_rf_mc1' = abs(mean(rf_mc1) - mean(label))*100,
+      'bias_rf_mc2' = abs(mean(rf_mc2) - mean(label))*100,
+      'size' = n()) %>%
+  bind_rows()
+```
+
+This evaluation focuses on the difference between the average predicted risk of healthcare non-coverage and the observed proportion of non-coverage in the test data for subgroups. Especially considering the MCBoost-Ridge (`rf_mc1`) results, post-processing with MCBoost reduces bias for many subpopulations.
 
 ```{r}
 eval %>%
   arrange(desc(size)) %>%
-  select(size, bias_rf:bias_mc4) %>%
+  select(size, bias_rf:bias_rf_mc2) %>%
   round(., digits = 3) %>%
   formattable(., lapply(1:nrow(eval), function(row) {
-  area(row, col = 2:7) ~ color_tile("lightgreen", "transparent")
+  area(row, col = 2:4) ~ color_tile("lightgreen", "transparent")
     }))
 ```
