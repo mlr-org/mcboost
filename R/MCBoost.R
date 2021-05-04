@@ -310,6 +310,8 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Numeric vector of multi-calibrated predictions.
     auditor_effect = function(x, aggregate = TRUE, t = Inf, predictor_args = NULL, ...) {
       assert_flag(aggregate)
+      # Reset the auditor effects after returning
+      on.exit({self$auditor_effects = list()})
       self$predict_probs(x, t, predictor_args, audit = TRUE, ...)
       if (aggregate) {
         Reduce("+", self$auditor_effects) / length(self$auditor_effects)

@@ -81,6 +81,7 @@ l$train(prep_task)
 ```
 
 ### MCBoost
+
 A simple way to use the predictions from any `Model` in **mcboost** is to wrap the predict
 function and provide it as an initial predictor. This can be done from any model / any library.
 Note, that we have to make sure, that our `init_predictor` returns a numeric vector of predictions.
@@ -155,6 +156,14 @@ mean(prs[mask] == one_hot(test_labels)[mask])
 mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
 ```
 
+### The Auditor effect
+
+We can also obtain the auditor effect after multicalibration.
+This indicates "how much" each observation has been affected by multi-calibration (on average across iterations).
+
+```{r}
+mc$auditor_effect(d)
+```
 
 ### Predicting using only the first 'n' iterations
 
@@ -165,7 +174,108 @@ prs = mc$predict_probs(test_data, t = 3L)
 ```
 
 
-## Example 2: Adjusting the SubPop Fitter
+## Example 2: MCBoost with non-mlr3 models: GLM
+
+`mcboost` does not require your model to be a `mlr3` model.
+As an input, `mcboost` expects a function `init_predictor` that takes as input `data` and returns a prediction.
+
+
+```{r}
+tsk = tsk("sonar")
+data = tsk$data()[, Class := as.integer(Class) - 1L]
+mod = glm(data = data, formula = Class ~ .)
+```
+
+The `init_predictor` could then use the `glm` model:
+
+```{r}
+init_predictor = function(data) {
+  predict(mod, data)
+}
+```
+
+... and we can calibrate this predictor.
+
+```{r}
+d = data[, -1]
+l = data$Class
+mc = MCBoost$new(init_predictor = init_predictor)
+mc$multicalibrate(d[1:200,], l[1:200])
+mc$predict_probs(d[201:208,])
+```
+
+
+### Example 3: Avoiding Overfitting in MCBoost
+
+Very often `MCBoost`'s calibration is very agressive and tends to overfit.
+This section tries to introduce a method to regularize against this overfitting.
+
+### 3.1 CVLearner
+
+In this section we use a
+`Cross-Validated` learner that predicts on held-out data during the training phase. This idea is based on Wopert (1992)'s Stacked Generalization.
+Other, simpler methods include choosing a smaller `eta` or reducing the number of `iters`.
+
+```{r}
+tsk = tsk("sonar")
+data = tsk$data()[, Class := as.integer(Class) - 1L]
+mod = glm(data = data, formula = Class ~ .)
+```
+
+As an `init_predictor` we again use the `glm` model from above.
+
+```{r}
+init_predictor = function(data) {
+  predict(mod, data)
+}
+```
+
+... and we can calibrate this predictor.
+This time, we use a `CVTreeResidualFitter` instead of a `TreeResidualFitter`. This allows us to avoid
+overfitting similar to a technique coined `stacked generalization` first described by Wolpert in 1992.
+Note, that this can sometimes take a little longer since each learner is cross-validated using `3` folds.
+
+```{r}
+d = data[, -1]
+l = data$Class
+mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=CVTreeResidualFitter$new())
+mc$multicalibrate(d[1:200,], l[1:200])
+mc$predict_probs(d[201:208,])
+```
+
+
+### 3.2 Data Splitting
+
+We can also use a fresh chunk of the validation data in each iteration. `mcboost` implements two strategies, `"bootstrap"` and `"split"`. While `"split"` simply splits up the data,  `"bootstrap"` draws a new bootstrap sample of the data in each iteration.
+
+```{r}
+tsk = tsk("sonar")
+data = tsk$data()[, Class := as.integer(Class) - 1L]
+mod = glm(data = data, formula = Class ~ .)
+```
+
+As an `init_predictor` we again use the `glm` model from above.
+
+```{r}
+init_predictor = function(data) {
+  predict(mod, data)
+}
+```
+
+```{r}
+d = data[, -1]
+l = data$Class
+mc = MCBoost$new(
+  init_predictor = init_predictor,
+  subpop_fitter= TreeResidualFitter$new(),
+  iter_sampling = "bootstrap"
+)
+mc$multicalibrate(d[1:200,], l[1:200])
+mc$predict_probs(d[201:208,])
+```
+
+
+## Example 4: Adjusting the SubPop Fitter
 
 For this example, we will again use the *sonar* dataset:
 
@@ -258,118 +368,4 @@ predict_masks = list(
 
 ```{r}
 mc$predict_probs(data[1:104,], subgroup_masks = predict_masks)
-```
-
-### 2.3 Multiaccuracy Boosting
-
-Multi-accuracy boosting as defined in Kim et al., 2020 involes using three probability sub-populations:
-The whole population X, the positively labeled observations X_1 and the negatively labeld population X_0.
-
-This can be easily achieved by setting `num_buckets = 2` (the default) and enabling `partition=True`
-
-
-```{r}
-rf = LearnerResidualFitter$new(lrn("regr.rpart", minsplit = 5L))
-mc = MCBoost$new(subpop_fitter = rf, partition=TRUE, num_buckets=2L)
-mc$multicalibrate(data, labels)
-```
-
-### 2.4 MCBoost with non-mlr3 models: GLM
-
-`mcboost` does not require your model to be a `mlr3` model.
-As an input, `mcboost` expects a function `init_predictor` that takes as input `data` and returns a prediction.
-
-
-```{r}
-tsk = tsk("sonar")
-data = tsk$data()[, Class := as.integer(Class) - 1L]
-mod = glm(data = data, formula = Class ~ .)
-```
-
-The `init_predictor` could then use the `glm` model:
-
-```{r}
-init_predictor = function(data) {
-  predict(mod, data)
-}
-```
-
-... and we can calibrate this predictor.
-
-```{r}
-d = data[, -1]
-l = data$Class
-mc = MCBoost$new(init_predictor = init_predictor)
-mc$multicalibrate(d[1:200,], l[1:200])
-mc$predict_probs(d[201:208,])
-```
-
-
-### 2.5 Avoiding Overfitting in MCBoost
-
-Very often `MCBoost`'s calibration is very agressive and tends to overfit.
-This section tries to introduce a method to regularize against this overfitting.
-
-#### 2.5.1 CVLearner
-
-In this section we use a
-`Cross-Validated` learner that predicts on held-out data during the training phase. This idea is based on Wopert (1992)'s Stacked Generalization.
-Other, simpler methods include choosing a smaller `eta` or reducing the number of `iters`.
-
-```{r}
-tsk = tsk("sonar")
-data = tsk$data()[, Class := as.integer(Class) - 1L]
-mod = glm(data = data, formula = Class ~ .)
-```
-
-As an `init_predictor` we again use the `glm` model from above.
-
-```{r}
-init_predictor = function(data) {
-  predict(mod, data)
-}
-```
-
-... and we can calibrate this predictor.
-This time, we use a `CVTreeResidualFitter` instead of a `TreeResidualFitter`. This allows us to avoid
-overfitting similar to a technique coined `stacked generalization` first described by Wolpert in 1992.
-Note, that this can sometimes take a little longer since each learner is cross-validated using `3` folds.
-
-```{r}
-d = data[, -1]
-l = data$Class
-mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=CVTreeResidualFitter$new())
-mc$multicalibrate(d[1:200,], l[1:200])
-mc$predict_probs(d[201:208,])
-```
-
-
-#### 2.5.2 Data Splitting
-
-We can also use a fresh chunk of the validation data in each iteration. `mcboost` implements two strategies, `"bootstrap"` and `"split"`. While `"split"` simply splits up the data,  `"bootstrap"` draws a new bootstrap sample of the data in each iteration.
-
-```{r}
-tsk = tsk("sonar")
-data = tsk$data()[, Class := as.integer(Class) - 1L]
-mod = glm(data = data, formula = Class ~ .)
-```
-
-As an `init_predictor` we again use the `glm` model from above.
-
-```{r}
-init_predictor = function(data) {
-  predict(mod, data)
-}
-```
-
-```{r}
-d = data[, -1]
-l = data$Class
-mc = MCBoost$new(
-  init_predictor = init_predictor,
-  subpop_fitter= TreeResidualFitter$new(),
-  iter_sampling = "bootstrap"
-)
-mc$multicalibrate(d[1:200,], l[1:200])
-mc$predict_probs(d[201:208,])
 ```
