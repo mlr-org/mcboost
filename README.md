@@ -5,6 +5,7 @@
 <!-- badges: end -->
 
 **mcboost** implements "multi-calibration" (Hebert Johnson et al., 2018) and multi-accuracy boosting (Kim et al., 2019) for calibration of a machine learning model's prediction.  Multi-calibration works best in scenarios where the underlying data & labels is un-biased but a bias is introduced within the algoritm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority sub-population while ignoring or under-fitting minority populations.
+
 Literature:
   - [(Hebert-Johnson et al., 2018)](http://proceedings.mlr.press/v80/hebert-johnson18a.html)
   - [(Kim et al., 2019)](https://arxiv.org/pdf/1805.12317.pdf)

@@ -41,6 +41,9 @@ Imports:
     rpart
 Suggests:
     curl,
+    formattable,
+    tidyverse,
+    PracTools,
     glmnet,
     mlr3learners,
     mlr3pipelines,
