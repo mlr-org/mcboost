@@ -229,3 +229,31 @@ test_that("MCBoost args for self-defined init predictor", {
   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
   expect_numeric(mc$predict_probs(data, predictor_args = runif(208)), lower = 0, upper = 1, len = nrow(data))
 })
+
+test_that("MCBoost multicalibrate and predict_probs - init_predictor function", {
+  # Sonar task
+  tsk = tsk("sonar")
+  d = tsk$data(cols = tsk$feature_names)
+  l = tsk$data(cols = tsk$target_names)[[1]]
+  prd = LearnerPredictor$new(lrn("classif.rpart"))
+  prd$fit(d, l)
+  init_predictor = function(data) {
+    # Get response prediction from Learner
+    p = prd$predict(data)
+  }
+
+  for (iter_strat in c("bootstrap", "split")) {
+    mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeResidualFitter", iter_sampling = iter_strat, max_iter=2L)
+    mc$multicalibrate(d, l)
+    expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
+    expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
+    prds = mc$predict_probs(d)
+    expect_numeric(prds, lower = 0, upper = 1, len = nrow(d))
+    labels_oh = one_hot(l)
+    # Inir predictor accuracy:
+    mean(init_predictor(d) == labels_oh)
+    # MCboosted predictor accuracy
+    mean(prds == labels_oh)
+  }
+})
+

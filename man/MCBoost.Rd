@@ -58,6 +58,13 @@ Defaults to \code{TRUE} (multi-accuracy boosting). Set to \code{FALSE} for multi
 Specifies the strategy for updating the weights (multiplicative weight vs additive).
 Defaults to \code{TRUE} (multi-accuracy boosting). Set to \code{FALSE} for multi-calibration.}
 
+\item{\code{iter_sampling}}{\code{\link{character}} \cr
+How to sample the validation data for each iteration?
+Can be \code{bootstrap}, \code{split} or \code{none}.\cr
+"split" splits the data into \code{max_iter} parts and validates on each sample in each iteration.\cr
+"bootstrap" uses a new bootstrap sample in each iteration.\cr
+"none" uses the same dataset in each iteration.}
+
 \item{\code{subpop_fitter}}{\code{\link{ResidualFitter}} \cr
 Specifies the type of model used to fit the
 residual fxn ('TreeResidualFitter' or 'RidgeResidualFitter' (default)).}
@@ -100,7 +107,8 @@ Initialize a multi-calibration instance.
   subpop_fitter = NULL,
   subpops = NULL,
   default_model_class = ConstantPredictor,
-  init_predictor = NULL
+  init_predictor = NULL,
+  iter_sampling = "none"
 )}\if{html}{\out{</div>}}
 }
 
@@ -150,6 +158,10 @@ as the MCBoost's default predictor model.}
 \item{\code{init_predictor}}{\code{\link{function}} \cr
 The initial predictor function to use (i.e., if
 the user has a pretrained model).}
+
+\item{\code{iter_sampling}}{\code{\link{character}} \cr
+How to sample the validation data for each iteration?
+Can be \code{bootstrap}, \code{split} or \code{none}.\cr}
 }
 \if{html}{\out{</div>}}
 }

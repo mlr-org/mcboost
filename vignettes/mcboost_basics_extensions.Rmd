@@ -305,11 +305,15 @@ mc$predict_probs(d[201:208,])
 ```
 
 
-### 2.5 Avoiding Overfitting in MCBoost - CVLearner
+### 2.5 Avoiding Overfitting in MCBoost
 
 Very often `MCBoost`'s calibration is very agressive and tends to overfit.
-This section tries to introduce a method to regularize against this overfitting, namely using a
-`Cross-Validated` learner that predicts on held-out data during the training phase.
+This section tries to introduce a method to regularize against this overfitting.
+
+#### 2.5.1 CVLearner
+
+In this section we use a
+`Cross-Validated` learner that predicts on held-out data during the training phase. This idea is based on Wopert (1992)'s Stacked Generalization.
 Other, simpler methods include choosing a smaller `eta` or reducing the number of `iters`.
 
 ```{r}
@@ -335,6 +339,37 @@ Note, that this can sometimes take a little longer since each learner is cross-v
 d = data[, -1]
 l = data$Class
 mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=CVTreeResidualFitter$new())
+mc$multicalibrate(d[1:200,], l[1:200])
+mc$predict_probs(d[201:208,])
+```
+
+
+#### 2.5.2 Data Splitting
+
+We can also use a fresh chunk of the validation data in each iteration. `mcboost` implements two strategies, `"bootstrap"` and `"split"`. While `"split"` simply splits up the data,  `"bootstrap"` draws a new bootstrap sample of the data in each iteration.
+
+```{r}
+tsk = tsk("sonar")
+data = tsk$data()[, Class := as.integer(Class) - 1L]
+mod = glm(data = data, formula = Class ~ .)
+```
+
+As an `init_predictor` we again use the `glm` model from above.
+
+```{r}
+init_predictor = function(data) {
+  predict(mod, data)
+}
+```
+
+```{r}
+d = data[, -1]
+l = data$Class
+mc = MCBoost$new(
+  init_predictor = init_predictor,
+  subpop_fitter= TreeResidualFitter$new(),
+  iter_sampling = "bootstrap"
+)
 mc$multicalibrate(d[1:200,], l[1:200])
 mc$predict_probs(d[201:208,])
 ```

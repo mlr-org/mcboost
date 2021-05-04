@@ -60,6 +60,14 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
     multiplicative = NULL,
 
+    #' @field iter_sampling [`character`] \cr
+    #'   How to sample the validation data for each iteration?
+    #'   Can be `bootstrap`, `split` or `none`.\cr
+    #'   "split" splits the data into `max_iter` parts and validates on each sample in each iteration.\cr
+    #'   "bootstrap" uses a new bootstrap sample in each iteration.\cr
+    #'   "none" uses the same dataset in each iteration.
+    iter_sampling = NULL,
+
     #' @field subpop_fitter [`ResidualFitter`] \cr
     #'   Specifies the type of model used to fit the
     #'   residual fxn ('TreeResidualFitter' or 'RidgeResidualFitter' (default)).
@@ -109,6 +117,9 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param init_predictor [`function`] \cr
     #'   The initial predictor function to use (i.e., if
     #'   the user has a pretrained model).
+    #' @param iter_sampling [`character`] \cr
+    #'   How to sample the validation data for each iteration?
+    #'   Can be `bootstrap`, `split` or `none`.\cr
     initialize = function(
                  max_iter=5,
                  alpha=1e-4,
@@ -121,7 +132,8 @@ MCBoost = R6::R6Class("MCBoost",
                  subpop_fitter=NULL,
                  subpops=NULL,
                  default_model_class=ConstantPredictor,
-                 init_predictor=NULL) {
+                 init_predictor=NULL,
+                 iter_sampling="none") {
       self$max_iter = assert_int(max_iter)
       self$alpha = assert_number(alpha)
       self$eta = assert_number(eta)
@@ -130,6 +142,7 @@ MCBoost = R6::R6Class("MCBoost",
       self$rebucket = assert_flag(rebucket)
       self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)
+      self$iter_sampling = assert_choice(iter_sampling, choices = c("none", "bootstrap", "split"))
 
 
       # Subpopulations
@@ -181,9 +194,7 @@ MCBoost = R6::R6Class("MCBoost",
       labels = one_hot(labels)
     }
     assert_numeric(labels, lower = 0, upper = 1)
-    pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data))
-    resid = private$compute_residuals(pred_probs, labels)
-
+    # Instantiate buckets
     buckets = list(ProbRange$new())
     if (self$partition && self$num_buckets > 1L) {
       frac = 1 / self$num_buckets
@@ -196,10 +207,22 @@ MCBoost = R6::R6Class("MCBoost",
       if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
     }
 
+    pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data))
+    resid = private$compute_residuals(pred_probs, labels)
     new_probs = pred_probs
     for (i in seq_len(self$max_iter)) {
       corrs = integer(length(buckets))
       models = vector(mode = "list", length = length(buckets))
+
+      # Sampling strategies for the validation data in each iteration.
+      if (self$iter_sampling == "bootstrap") {
+        idx = sample(nrow(data), nrow(data), replace=TRUE)
+      } else if (self$iter_sampling == "split") {
+        idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data)/self$max_iter))[seq_len(nrow(data))])
+        idx = idxs[[i]]
+      } else {
+        idx = seq_len(nrow(data))
+      }
 
       if (self$rebucket) {
         probs = new_probs
@@ -209,10 +232,10 @@ MCBoost = R6::R6Class("MCBoost",
 
       # Fit on partitions
       for (j in seq_along(buckets)) {
-        mask = buckets[[j]]$in_range_mask(probs)
+        mask = buckets[[j]]$in_range_mask(probs[idx])
         if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
-        data_m = data[mask,]
-        resid_m = resid[mask]
+        data_m = data[idx,][mask,]
+        resid_m = resid[idx][mask]
         out = self$subpop_fitter$fit_to_resid(data_m, resid_m)
         corrs[j] = out[[1]]
         models[[j]] = out[[2]]
@@ -227,7 +250,6 @@ MCBoost = R6::R6Class("MCBoost",
         self$iter_partitions = c(self$iter_partitions, max_key)
         new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask)
         resid = private$compute_residuals(new_probs, labels)
-
       }
     }
       invisible(NULL)
