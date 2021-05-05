@@ -5,6 +5,7 @@ test_that("MCBoost class instantiation", {
   expect_class(mc, "MCBoost")
   expect_class(mc$subpop_fitter, "ResidualFitter")
   expect_function(mc$predictor, args = "data")
+
 })
 
 
@@ -149,6 +150,7 @@ test_that("MCBoost multicalibrate with Subgroups", {
   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
 
   expect_numeric(mc$predict_probs(data), lower = 0, upper = 1, len = nrow(data))
+
 })
 
 test_that("MCBoost various settings", {
@@ -164,7 +166,6 @@ test_that("MCBoost various settings", {
   # Check a list of settings
   mcs = list(
      MCBoost$new(subpop_fitter = NULL),
-     MCBoost$new(subpop_fitter = "Foo"),
      MCBoost$new(alpha = 0.05)
   )
   for (mc in mcs) {
@@ -258,5 +259,20 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
     # MCboosted predictor accuracy
     mean(prds == labels_oh)
   }
+})
+
+
+test_that("MCBoost throws error for multi level outcomes", {
+  tsk = tsk("iris")
+  d = tsk$data(cols = tsk$feature_names)
+  l = tsk$data(cols = tsk$target_names)
+
+  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter")
+  expect_error(mc$multicalibrate(d, l), "cannot handle multiclass classification")
+})
+
+test_that("MCBoost throws error if wrong subpop_fitter", {
+  expect_error(MCBoost$new(subpop_fitter = "Ts"), "'Ts' not found")
+  expect_error(MCBoost$new(subpop_fitter = 1234), "subpop_fitter must be of type 'ResidualFitter' or character")
 })
 

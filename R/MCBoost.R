@@ -40,10 +40,10 @@ MCBoost = R6::R6Class("MCBoost",
     eta = NULL,
 
     #' @field num_buckets [`integer`] \cr
-    #' The number of buckets to split into. Default `2`.
+    #' The number of buckets to split into in addition to using the whole sample. Default `2`.
     num_buckets = NULL,
     #' @field bucket_strategy  [`character`] \cr
-    #'   Currently onle supports "simple", even split along probabilities.
+    #'   Currently only supports "simple", even split along probabilities.
     #'   Only relevant for num_buckets > 1.
     bucket_strategy = NULL,
     #' @field rebucket [`logical`] \cr
@@ -103,7 +103,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   True/False flag for whether to split up predictions by their "partition"
     #'   (e.g., predictions less than 0.5 and predictions greater than 0.5)
     #' @param num_buckets [`integer`] \cr
-    #'   The number of buckets to split into. Default `2L`.
+    #'   The number of buckets to split into in addition to using the whole sample. Default `2L`.
     #' @param bucket_strategy  [`character`] \cr
     #'   Currently onle supports "simple", even split along probabilities.
     #'   Only taken into account for num_buckets > 1.
@@ -117,7 +117,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' @template params_subpops
     #' @param default_model_class [`Predictor`] \cr
     #'   The class of the model that should be used
-    #'   as the MCBoost's default predictor model.
+    #'   as the init predictor model.
     #' @param init_predictor [`function`] \cr
     #'   The initial predictor function to use (i.e., if
     #'   the user has a pretrained model).
@@ -138,16 +138,16 @@ MCBoost = R6::R6Class("MCBoost",
                  default_model_class=ConstantPredictor,
                  init_predictor=NULL,
                  iter_sampling="none") {
+
       self$max_iter = assert_int(max_iter)
       self$alpha = assert_number(alpha)
       self$eta = assert_number(eta)
       self$num_buckets = assert_int(num_buckets)
-      self$bucket_strategy = assert_string(bucket_strategy, fixed = "simple")
+      self$bucket_strategy = assert_choice(bucket_strategy, choices = c("simple"))
       self$rebucket = assert_flag(rebucket)
       self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)
       self$iter_sampling = assert_choice(iter_sampling, choices = c("none", "bootstrap", "split"))
-
 
       # Subpopulations
       if (!is.null(subpops)) {
@@ -159,8 +159,14 @@ MCBoost = R6::R6Class("MCBoost",
           self$subpop_fitter = subpop_fitter
         } else if (subpop_fitter == "TreeResidualFitter") {
           self$subpop_fitter = TreeResidualFitter$new()
-        } else {
+        } else if (subpop_fitter == "RidgeResidualFitter") {
           self$subpop_fitter = RidgeResidualFitter$new()
+        } else {
+          if (is.character(subpop_fitter)) {
+            stop(sprintf("subpop_fitter '%s' not found, must be 'TreeResidualFitter' or 'RidgeResidualFitter'", subpop_fitter))
+          } else {
+            stop(sprintf("subpop_fitter must be of type 'ResidualFitter' or character"))
+          }
         }
       }
 
@@ -196,6 +202,7 @@ MCBoost = R6::R6Class("MCBoost",
     # factor to one-hot
     if (is.factor(labels)) {
       labels = one_hot(labels)
+      if (is.matrix(labels)) stop("MCBoost cannot handle multiclass classification")
     }
     assert_numeric(labels, lower = 0, upper = 1)
     # Instantiate buckets
@@ -214,6 +221,9 @@ MCBoost = R6::R6Class("MCBoost",
     pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data))
     resid = private$compute_residuals(pred_probs, labels)
     new_probs = pred_probs
+    if (self$iter_sampling == "split")  {
+      idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data)/self$max_iter))[seq_len(nrow(data))])
+    }
     for (i in seq_len(self$max_iter)) {
       corrs = integer(length(buckets))
       models = vector(mode = "list", length = length(buckets))
@@ -222,7 +232,6 @@ MCBoost = R6::R6Class("MCBoost",
       if (self$iter_sampling == "bootstrap") {
         idx = sample(nrow(data), nrow(data), replace=TRUE)
       } else if (self$iter_sampling == "split") {
-        idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data)/self$max_iter))[seq_len(nrow(data))])
         idx = idxs[[i]]
       } else {
         idx = seq_len(nrow(data))
@@ -322,6 +331,7 @@ MCBoost = R6::R6Class("MCBoost",
   ),
   private = list(
     update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, ...) {
+
       deltas = numeric(length(orig_preds))
       deltas[mask] = model$predict(x, ...)[mask]
 
