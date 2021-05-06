@@ -150,7 +150,14 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
     #'   each with the same length as data to be fitted on.
     #'   They allow defining sub-groups of the data.
     initialize = function(subgroup_masks) {
-      self$subgroup_masks = assert_list(map(subgroup_masks, as.integer), types = "integer")
+      subgroup_masks = tryCatch({map(subgroup_masks, as.integer)},
+        warning = function(w) {
+          stop("subgroup_masks must be a list of integers.")
+        })
+      self$subgroup_masks = assert_list(subgroup_masks, types = "integer")
+      if (!all(map_lgl(self$subgroup_masks, function(x) {test_numeric(x, lower = 0, upper = 1)}))) {
+        stop("subgroup_masks must be binary vectors")
+      }
     },
     #' @description
     #' Fit the learner and compute correlation
@@ -163,6 +170,9 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
     #'   - `corr`: pseudo-correlation between residuals and learner prediction.
     #'   - `l`: the trained learner.
     fit = function(data, resid) {
+      if (!all(map_lgl(self$subgroup_masks, function(x) {nrow(data) == length(x)}))) {
+        stop("Length of subgroup masks must match length of data!")
+      }
       m = SubgroupModel$new(self$subgroup_masks)
       m$fit(data, resid)
       preds = m$predict(data)
