@@ -76,7 +76,7 @@ test_that("SubGroupFitter work", {
     "M2" = c(1L, 0L, 0L, 0L, 1L)
   )
   rf = SubgroupFitter$new(masks)
-  out = rf$fit(data, label - 0.5)
+  out = rf$fit(data, label - 0.5, rep(1, length(label)))
   expect_list(out)
   expect_number(out[[1]], lower = 0, upper = 1)
   expect_class(out[[2]], "SubgroupModel")
@@ -109,7 +109,6 @@ test_that("SubPopFitter iterates through all columns", {
 })
 
 test_that("SubPopFitter throws proper error if not binary or wrong length", {
-
   data = data.frame(X1 = rnorm(n = 10L), X2 = rnorm(n = 10L))
   rs = c(1, rep(0, 9))
 
@@ -119,7 +118,7 @@ test_that("SubPopFitter throws proper error if not binary or wrong length", {
   )
   sf = SubgroupFitter$new(masks)
 
-  mean1 = sf$fit(data = data, resid = rs)
+  mean1 = sf$fit(data = data, resid = rs,rep(1, length(rs)))
   sm =  SubgroupModel$new(masks)
   mean2 = sm$fit(data = data, labels = rs) # should not be 1!
 
@@ -130,15 +129,27 @@ test_that("SubPopFitter throws proper error if not binary or wrong length", {
   expect_error(SubgroupFitter$new(masks), "subgroup_masks must be a list of integers")
 
   # wrong length
- masks = list(
-   rep(c(1, 0), 10)
- )
- sf = SubgroupFitter$new(masks)
-  expect_error(sf$fit(data = data, resid = rs), "Length of subgroup masks must match length of data")
+  masks = list(
+    rep(c(1, 0), 10)
+  )
+  sf = SubgroupFitter$new(masks)
+  expect_error(sf$fit(data = data, resid = rs, mask = rep(1, 20)), "Length of subgroup masks must match length of data")
 
   # not binary
   masks = list(
     rep(c(1, 3, 0, 4))
   )
   expect_error(SubgroupFitter$new(masks), "subgroup_masks must be binary vectors")
+})
+
+test_that("Bug in SubgroupFitter #16", {
+  data = data.frame(X1 = rnorm(n = 10L), X2 = rnorm(n = 10L))
+  masks =  list(
+      rep(c(1, 0), 5)
+   )
+  sf = SubgroupFitter$new(masks)
+  resid = c(1, rep(0, 9))
+  sm =  SubgroupModel$new(masks)
+  mn = sm$fit(data = data, labels = resid)
+  expect_equal(mn[[1]],  mean(masks[[1]] * resid) / mean(masks[[1]]))
 })

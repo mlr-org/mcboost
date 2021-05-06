@@ -5,14 +5,14 @@ ResidualFitter = R6::R6Class("ResidualFitter",
     #' @description
     #' Fit to residuals
     #' @template params_data_resid
-    fit_to_resid = function(data, resid) {
-      self$fit(data, resid)
+    #' @template params_mask
+    fit_to_resid = function(data, resid, mask) {
+      self$fit(data, resid, mask)
     },
     #' @description
     #' Fit to residuals
     #' @template params_data_resid
-    #' @param mask [`integer`]\cr
-    #'   Mask applied to the data.
+    #' @template params_mask
     fit = function(data, resid, mask) {
       stop("Not implemented")
     }
@@ -40,12 +40,8 @@ LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
     #' @description
     #' Fit the learner and compute correlation
     #'
-    #' @param data [`data.frame`]\cr
-    #'   Features to use.
-    #' @param resid [`numeric`]\cr
-    #'   Target variable (residuals).
-    #' @param mask [`integer`]\cr
-    #'   Mask applied to the data.
+    #' @template params_data_resid
+    #' @template params_mask
     #' @return `list` with items\cr
     #'   - `corr`: pseudo-correlation between residuals and learner prediction.
     #'   - `l`: the trained learner.
@@ -115,12 +111,8 @@ SubpopFitter = R6::R6Class("SubpopFitter",
     #' @description
     #' Fit the learner and compute correlation
     #'
-    #' @param data [`data.frame`]\cr
-    #'   Features to use.
-    #' @param resid [`numeric`]\cr
-    #'   Target variable (residuals).
-    #' @param mask [`integer`]\cr
-    #'   Mask applied to the data.
+    #' @template params_data_resid
+    #' @template params_mask
     #' @return `list` with items\cr
     #'   - `corr`: pseudo-correlation between residuals and learner prediction.
     #'   - `l`: the trained learner.
@@ -129,7 +121,7 @@ SubpopFitter = R6::R6Class("SubpopFitter",
       worst_subpop = function(pt) {return(rep(0L, nrow(pt)))} # nocov
       for (sfn in self$subpops) {
         sub = data[, sfn(.SD)]
-        corr = mean(sub[mask] * resid[mask])
+        corr = mean(sub * resid)
         if (abs(corr) > abs(worstCorr)) {
           worstCorr = corr
           worst_subpop = sfn
@@ -168,12 +160,8 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
     #' @description
     #' Fit the learner and compute correlation
     #'
-    #' @param data [`data.frame`]\cr
-    #'   Features to use.
-    #' @param resid [`numeric`]\cr
-    #'   Target variable (residuals).
-    #' @param mask [`integer`]\cr
-    #'   Mask applied to the data.
+    #' @template params_data_resid
+    #' @template params_mask
     #' @return `list` with items\cr
     #'   - `corr`: pseudo-correlation between residuals and learner prediction.
     #'   - `l`: the trained learner.
@@ -212,12 +200,8 @@ CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
     #' @description
     #' Fit the cv-learner and compute correlation
     #'
-    #' @param data [`data.frame`]\cr
-    #'   Features to use.
-    #' @param resid [`numeric`]\cr
-    #'   Target variable (residuals).
-    #' @param mask [`integer`]\cr
-    #'   Mask applied to the data.
+    #' @template params_data_resid
+    #' @template params_mask
     #' @return `list` with items\cr
     #'   - `corr`: pseudo-correlation between residuals and learner prediction.
     #'   - `l`: the trained learner.

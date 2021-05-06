@@ -190,7 +190,7 @@ SubgroupModel = R6::R6Class("SubgroupModel",
     #' @template params_data_label
     fit = function(data, labels) {
       self$subgroup_preds = map(self$subgroup_masks, function(mask) {
-        mean(labels[mask])
+        mean(labels[as.logical(mask)])
       })
     },
     #' @description

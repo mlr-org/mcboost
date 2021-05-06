@@ -156,8 +156,7 @@ and the values they take defining the S in subpops
 e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 
 \item{\code{default_model_class}}{\code{\link{Predictor}} \cr
-The class of the model that should be used
-as the init predictor model.}
+The class of the model that should be used as the init predictor model.}
 
 \item{\code{init_predictor}}{\code{\link{function}} \cr
 The initial predictor function to use (i.e., if

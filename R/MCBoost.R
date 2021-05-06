@@ -116,8 +116,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   residual [`TreeResidualFitter`] or [`RidgeResidualFitter`] (default)).
     #' @template params_subpops
     #' @param default_model_class [`Predictor`] \cr
-    #'   The class of the model that should be used
-    #'   as the init predictor model.
+    #'   The class of the model that should be used as the init predictor model.
     #' @param init_predictor [`function`] \cr
     #'   The initial predictor function to use (i.e., if
     #'   the user has a pretrained model).

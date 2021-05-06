@@ -69,14 +69,14 @@ Fit the learner and compute correlation
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{\code{\link{data.frame}}\cr
-Features to use.}
+\item{\code{data}}{\code{\link{data.table}}\cr
+Features.}
 
 \item{\code{resid}}{\code{\link{numeric}}\cr
-Target variable (residuals).}
+Residuals (of same length as data).}
 
 \item{\code{mask}}{\code{\link{integer}}\cr
-Mask applied to the data.}
+Mask applied to the data. Only used for \code{SubgroupFitter}.}
 }
 \if{html}{\out{</div>}}
 }

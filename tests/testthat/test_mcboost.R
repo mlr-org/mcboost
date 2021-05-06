@@ -118,8 +118,7 @@ test_that("MCBoost multicalibrate with subpops", {
   lp = LearnerPredictor$new(lrn("classif.rpart"))
   lp$fit(data, labels)
 
-  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter", default_model_class = lp,
-    subpops = subpops, alpha = 0)
+  mc = MCBoost$new(default_model_class = lp, subpops = subpops, alpha = 0)
   mc$multicalibrate(data, labels)
   expect_list(mc$iter_models, types = "SubpopPredictor", len = mc$max_iter)
   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)

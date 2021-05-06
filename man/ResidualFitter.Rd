@@ -22,7 +22,7 @@ ResidualFitter Abstract Base Class
 \subsection{Method \code{fit_to_resid()}}{
 Fit to residuals
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ResidualFitter$fit_to_resid(data, resid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ResidualFitter$fit_to_resid(data, resid, mask)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -39,6 +39,12 @@ Residuals (of same length as data).}
 
 \item{\code{resid}}{\code{\link{numeric}}\cr
 Residuals (of same length as data).}
+
+\item{\code{mask}}{\code{\link{integer}}\cr
+Mask applied to the data. Only used for \code{SubgroupFitter}.}
+
+\item{\code{mask}}{\code{\link{integer}}\cr
+Mask applied to the data. Only used for \code{SubgroupFitter}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -68,7 +74,10 @@ Residuals (of same length as data).}
 Residuals (of same length as data).}
 
 \item{\code{mask}}{\code{\link{integer}}\cr
-Mask applied to the data.}
+Mask applied to the data. Only used for \code{SubgroupFitter}.}
+
+\item{\code{mask}}{\code{\link{integer}}\cr
+Mask applied to the data. Only used for \code{SubgroupFitter}.}
 }
 \if{html}{\out{</div>}}
 }
