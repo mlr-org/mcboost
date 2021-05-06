@@ -268,7 +268,7 @@ rf_mc2$multicalibrate(d1, l)
 We again compute predicted probabilities and class predictions using the initial and post-processed models.
 
 ```{r}
-test$rf <- predict(rf, newdata = test, type = "prob")[, 2]
+test$rf <- predict(rf, newdata = test)$response[, 2]
 test$rf_mc1 <- rf_mc1$predict_probs(test)
 test$rf_mc2 <- rf_mc2$predict_probs(test)
 
