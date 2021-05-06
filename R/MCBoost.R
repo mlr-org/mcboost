@@ -249,7 +249,7 @@ MCBoost = R6::R6Class("MCBoost",
         if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
         data_m = data[idx,][mask,]
         resid_m = resid[idx][mask]
-        out = self$subpop_fitter$fit_to_resid(data_m, resid_m)
+        out = self$subpop_fitter$fit_to_resid(data_m, resid_m, idx[mask])
         corrs[j] = out[[1]]
         models[[j]] = out[[2]]
       }

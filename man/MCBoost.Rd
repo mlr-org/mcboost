@@ -40,10 +40,10 @@ Accuracy parameter that determines the stopping condition.}
 Parameter for multiplicative weight update (step size).}
 
 \item{\code{num_buckets}}{\code{\link{integer}} \cr
-The number of buckets to split into. Default \code{2}.}
+The number of buckets to split into in addition to using the whole sample. Default \code{2}.}
 
 \item{\code{bucket_strategy}}{\code{\link{character}} \cr
-Currently onle supports "simple", even split along probabilities.
+Currently only supports "simple", even split along probabilities.
 Only relevant for num_buckets > 1.}
 
 \item{\code{rebucket}}{\code{\link{logical}} \cr
@@ -134,7 +134,7 @@ True/False flag for whether to split up predictions by their "partition"
 (e.g., predictions less than 0.5 and predictions greater than 0.5)}
 
 \item{\code{num_buckets}}{\code{\link{integer}} \cr
-The number of buckets to split into. Default \code{2L}.}
+The number of buckets to split into in addition to using the whole sample. Default \code{2L}.}
 
 \item{\code{bucket_strategy}}{\code{\link{character}} \cr
 Currently onle supports "simple", even split along probabilities.
@@ -157,7 +157,7 @@ e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 
 \item{\code{default_model_class}}{\code{\link{Predictor}} \cr
 The class of the model that should be used
-as the MCBoost's default predictor model.}
+as the init predictor model.}
 
 \item{\code{init_predictor}}{\code{\link{function}} \cr
 The initial predictor function to use (i.e., if

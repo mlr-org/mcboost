@@ -60,7 +60,7 @@ They allow defining sub-groups of the data.}
 \subsection{Method \code{fit()}}{
 Fit the learner and compute correlation
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SubgroupFitter$fit(data, resid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SubgroupFitter$fit(data, resid, mask)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -70,7 +70,10 @@ Fit the learner and compute correlation
 Features to use.}
 
 \item{\code{resid}}{\code{\link{numeric}}\cr
-Target variable (residuals)}
+Target variable (residuals).}
+
+\item{\code{mask}}{\code{\link{integer}}\cr
+Mask applied to the data.}
 }
 \if{html}{\out{</div>}}
 }

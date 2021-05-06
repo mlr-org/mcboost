@@ -49,7 +49,7 @@ Residuals (of same length as data).}
 \subsection{Method \code{fit()}}{
 Fit to residuals
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ResidualFitter$fit(data, resid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ResidualFitter$fit(data, resid, mask)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -66,6 +66,9 @@ Residuals (of same length as data).}
 
 \item{\code{resid}}{\code{\link{numeric}}\cr
 Residuals (of same length as data).}
+
+\item{\code{mask}}{\code{\link{integer}}\cr
+Mask applied to the data.}
 }
 \if{html}{\out{</div>}}
 }

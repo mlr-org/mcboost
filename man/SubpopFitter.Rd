@@ -63,7 +63,7 @@ e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 \subsection{Method \code{fit()}}{
 Fit the learner and compute correlation
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SubpopFitter$fit(data, resid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SubpopFitter$fit(data, resid, mask)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -73,7 +73,10 @@ Fit the learner and compute correlation
 Features to use.}
 
 \item{\code{resid}}{\code{\link{numeric}}\cr
-Target variable (residuals)}
+Target variable (residuals).}
+
+\item{\code{mask}}{\code{\link{integer}}\cr
+Mask applied to the data.}
 }
 \if{html}{\out{</div>}}
 }
