@@ -241,16 +241,16 @@ Other, simpler methods include choosing a smaller `eta` or reducing the number o
 
 ```{r}
 tsk = tsk("sonar")
-data = tsk$data()[, Class := as.integer(Class) - 1L]
-mod = glm(data = data, formula = Class ~ .)
+
 ```
 
-As an `init_predictor` we again use the `glm` model from above.
+As an `init_predictor` we again use `ranger` model from mlr3 and
+construct an init predictor using the convenience function provided by `mcboost`.
 
 ```{r}
-init_predictor = function(data) {
-  predict(mod, data)
-}
+learner = lrn("classif.ranger", predict_type = "prob")
+learner$train(tsk)
+init_predictor = mlr3_init_predictor(learner)
 ```
 
 ... and we can calibrate this predictor.
@@ -273,17 +273,17 @@ We can also use a fresh chunk of the validation data in each iteration. `mcboost
 
 ```{r}
 tsk = tsk("sonar")
-data = tsk$data()[, Class := as.integer(Class) - 1L]
-mod = glm(data = data, formula = Class ~ .)
 ```
 
-As an `init_predictor` we again use the `glm` model from above.
+again using the initial predictor from above:
 
 ```{r}
-init_predictor = function(data) {
-  predict(mod, data)
-}
+learner = lrn("classif.ranger")
+learner$train(tsk)
+init_predictor = mlr3_init_predictor(learner)
 ```
+
+and we can now calibrate:s
 
 ```{r}
 d = data[, -1]

@@ -39,3 +39,22 @@ xy_to_task = function(x, y) {
   }
   ti$new(id = "tmptsk", backend = x, target = yname)
 }
+
+
+#' Create an initial predictor from a mlr3 learner
+#'
+#' @param learner [`mlr3::Learner`]
+#'   A trained learner used for initialization.
+#' @export
+mlr3_init_predictor = function(learner) {
+  if (is.null(learner$state)) stop("Learner needs to be trained first!")
+  if (learner$predict_type == "response") {
+    function(data) {
+      one_hot(learner$predict_newdata(data)$response)
+    }
+  } else {
+    function(data) {
+      learner$predict_newdata(data)$prob[,1L]
+    }
+  }
+}
