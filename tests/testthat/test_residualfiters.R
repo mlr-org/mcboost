@@ -72,8 +72,8 @@ test_that("SubGroupFitter work", {
   label = c(1,0,0,1,1)
 
   masks = list(
-    "M1" = c(1L, 0L, 1, 1, 0),
-    "M2" = c(1L, 0L, 0L, 0L,1L)
+    "M1" = c(1L, 0L, 1L, 1L, 0L),
+    "M2" = c(1L, 0L, 0L, 0L, 1L)
   )
   rf = SubgroupFitter$new(masks)
   out = rf$fit(data, label - 0.5)
@@ -106,4 +106,39 @@ test_that("SubPopFitter iterates through all columns", {
   expect_list(out)
   expect_number(out[[1]], lower = 0.2, upper = 0.2)
   expect_class(out[[2]], "SubpopPredictor")
+})
+
+test_that("SubPopFitter throws proper error if not binary or wrong length", {
+
+  data = data.frame(X1 = rnorm(n = 10L), X2 = rnorm(n = 10L))
+  rs = c(1, rep(0, 9))
+
+  # 0/1 chracters are fine
+  masks =  list(
+    rep(c("1", "0"), 5)
+  )
+  sf = SubgroupFitter$new(masks)
+
+  mean1 = sf$fit(data = data, resid = rs)
+  sm =  SubgroupModel$new(masks)
+  mean2 = sm$fit(data = data, labels = rs) # should not be 1!
+
+  # wrong type
+  masks =  list(
+    c("ab", "cc")
+  )
+  expect_error(SubgroupFitter$new(masks), "subgroup_masks must be a list of integers")
+
+  # wrong length
+ masks = list(
+   rep(c(1, 0), 10)
+ )
+ sf = SubgroupFitter$new(masks)
+  expect_error(sf$fit(data = data, resid = rs), "Length of subgroup masks must match length of data")
+
+  # not binary
+  masks = list(
+    rep(c(1, 3, 0, 4))
+  )
+  expect_error(SubgroupFitter$new(masks), "subgroup_masks must be binary vectors")
 })
