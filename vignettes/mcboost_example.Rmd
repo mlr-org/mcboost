@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(tidyverse)
 library(PracTools)
-library(randomForest)
+library(ranger)
 library(neuralnet)
 library(formattable)
 library(mlr3)
@@ -147,14 +147,14 @@ The ridge regression will only be given access to the initial predictor variable
 - `nnet_mc2`: Neural net, post-processed with a fixed set of subpopulations
 
 ```{r}
-nnet_mc1 = MCBoost$new(init_predictor = init_nnet, 
+nnet_mc1 = MCBoost$new(init_predictor = init_nnet,
                        subpop_fitter = ridge,
                        multiplicative = TRUE,
                        partition = TRUE,
                        max_iter = 15)
 nnet_mc1$multicalibrate(d2, l)
 
-nnet_mc2 = MCBoost$new(init_predictor = init_nnet, 
+nnet_mc2 = MCBoost$new(init_predictor = init_nnet,
                        subpop_fitter = pops,
                        partition = TRUE,
                        max_iter = 15)
@@ -217,10 +217,10 @@ eval %>%
 
 ## Scenario 2: Improve Subgroup Calibration
 
-In this scenario, we use a random forest with the default settings of the randomForest package as the initial predictor.
+In this scenario, we use a random forest with the default settings of the ranger package as the initial predictor.
 
 ```{r}
-rf <- randomForest(notcov ~ ., data = train)
+rf <- ranger(notcov ~ ., data = train, probability=TRUE)
 ```
 
 ### MCBoost Auditing
@@ -229,7 +229,7 @@ We again prepare a function to pass the predictions to MCBoost for post-processi
 
 ```{r}
 init_rf = function(data) {
-  predict(rf, data, type = "prob")[, 2]
+  predict(rf, data)$prediction[, 2]
 }
 ```
 
@@ -248,14 +248,14 @@ The ridge regression will only be given access to the initial predictor variable
 - `rf_mc2`: Random forest, post-processed with lasso regression and the extended set of predictors
 
 ```{r}
-rf_mc1 = MCBoost$new(init_predictor = init_rf, 
+rf_mc1 = MCBoost$new(init_predictor = init_rf,
                      subpop_fitter = ridge,
                      multiplicative = TRUE,
                      partition = TRUE,
                      max_iter = 15)
 rf_mc1$multicalibrate(d2, l)
 
-rf_mc2 = MCBoost$new(init_predictor = init_rf, 
+rf_mc2 = MCBoost$new(init_predictor = init_rf,
                      subpop_fitter = lasso,
                      multiplicative = TRUE,
                      partition = TRUE,
