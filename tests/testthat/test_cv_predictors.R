@@ -18,7 +18,7 @@ test_that("MCBoost multicalibrate and predict_probs - CV Predictor", {
   mc = MCBoost$new(subpop_fitter = "CVTreeResidualFitter")
   mc$multicalibrate(data, labels)
 
-  expect_list(mc$iter_models, types = "LearnerPredictor")
+  expect_list(mc$iter_models, types = "CVLearnerPredictor")
   expect_list(mc$iter_partitions, types = "ProbRange")
 
   prds = mc$predict_probs(data)

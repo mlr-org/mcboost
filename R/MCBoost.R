@@ -161,6 +161,10 @@ MCBoost = R6::R6Class("MCBoost",
           self$subpop_fitter = TreeResidualFitter$new()
         } else if (subpop_fitter == "RidgeResidualFitter") {
           self$subpop_fitter = RidgeResidualFitter$new()
+        }  else if (subpop_fitter == "CVTreeResidualFitter") {
+          self$subpop_fitter = CVTreeResidualFitter$new()
+        } else if (subpop_fitter == "CVRidgeResidualFitter") {
+          self$subpop_fitter = CVRidgeResidualFitter$new()
         } else {
           if (is.character(subpop_fitter)) {
             stop(sprintf("subpop_fitter '%s' not found, must be 'TreeResidualFitter' or 'RidgeResidualFitter'", subpop_fitter))
