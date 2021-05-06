@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message = FALSE}
 library(tidyverse)
 library(PracTools)
 library(ranger)
@@ -103,7 +103,7 @@ test %>% summarise_at(vars(sex2:race3), mean)
 
 We train an initial model for predicting healthcare coverage with the training set. Here, we use a neural network with one hidden layer, rather naively with little tweaking.
 
-```{r}
+```{r, message = FALSE}
 nnet <- neuralnet(notcov ~ .,
   hidden = 5,
   linear.output = FALSE,
