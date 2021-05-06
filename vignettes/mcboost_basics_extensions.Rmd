@@ -162,7 +162,30 @@ We can also obtain the auditor effect after multicalibration.
 This indicates "how much" each observation has been affected by multi-calibration (on average across iterations).
 
 ```{r}
-mc$auditor_effect(d)
+ae = mc$auditor_effect(test_data)
+hist(ae)
+```
+
+We can see that  there is a pronounced effect for a few instances, while for most, there is no actual effect.
+Let's investigate those instances!
+
+
+In order to get some insights, we compute quantiles of the
+effected and un-effected population and analyse differences.
+
+```{r}
+effect = apply(test_data[ae >= median(ae[ae>0]),], 2, quantile)
+no_effect  = apply(test_data[ae <= 0.01,], 2, quantile)
+difference = apply((effect-no_effect), 2, mean)
+difference[difference > 0]
+```
+
+There seems to be a difference in some variables like `Age` and `Sex.Male`. We can thus assume, that our auditing affected mostly males, that are on average older, married and have a higher education.
+
+We can further analyze the individuals:
+
+```{r}
+test_data[ae >= median(ae[ae>0]), names(which(difference > 0)), with = FALSE]
 ```
 
 ### Predicting using only the first 'n' iterations
@@ -238,7 +261,7 @@ Note, that this can sometimes take a little longer since each learner is cross-v
 ```{r}
 d = data[, -1]
 l = data$Class
-mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=CVTreeResidualFitter$new())
+mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=CVTreeResidualFitter$new(), max_iter = 2L)
 mc$multicalibrate(d[1:200,], l[1:200])
 mc$predict_probs(d[201:208,])
 ```

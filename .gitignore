@@ -6,3 +6,5 @@ inst/doc
 test/testthat/snaps
 docs/
 docs
+/doc/
+/Meta/

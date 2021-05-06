@@ -185,89 +185,92 @@ MCBoost = R6::R6Class("MCBoost",
       }
       self$predictor = assert_function(init_predictor, args = "data")
       invisible(self)
-  },
+    },
 
-  #' @description
-  #' Run multicalibration.
-  #' @template params_data_label
-  #' @param predictor_args [`any`] \cr
-  #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
-  #' @param ... [`any`] \cr
-  #'  Params passed on to other methods.
-  multicalibrate = function(data, labels, predictor_args = NULL, ...) {
+    #' @description
+    #' Run multicalibration.
+    #' @template params_data_label
+    #' @param predictor_args [`any`] \cr
+    #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
+    #' @param ... [`any`] \cr
+    #'  Params passed on to other methods.
+    multicalibrate = function(data, labels, predictor_args = NULL, ...) {
 
-    if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
-    assert_data_table(data)
-    # data.table to factor
-    if (is.data.table(labels) && ncol(labels) == 1L) {
-      labels = labels[[1]]
-    }
-    # factor to one-hot
-    if (is.factor(labels)) {
-      labels = one_hot(labels)
-      if (is.matrix(labels)) stop("MCBoost cannot handle multiclass classification")
-    }
-    assert_numeric(labels, lower = 0, upper = 1)
-    # Instantiate buckets
-    buckets = list(ProbRange$new())
-    if (self$partition && self$num_buckets > 1L) {
-      frac = 1 / self$num_buckets
-      buckets = c(buckets, mlr3misc::map(seq_len(self$num_buckets), function(b) {
-        ProbRange$new((b-1) * frac, b * frac)
-      }))
-      buckets[[2]]$lower = -Inf
-      buckets[[length(buckets)]]$upper = Inf
-    } else {
-      if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
-    }
-
-    pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data))
-    resid = private$compute_residuals(pred_probs, labels)
-    new_probs = pred_probs
-    if (self$iter_sampling == "split")  {
-      idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data)/self$max_iter))[seq_len(nrow(data))])
-    }
-    for (i in seq_len(self$max_iter)) {
-      corrs = integer(length(buckets))
-      models = vector(mode = "list", length = length(buckets))
-
-      # Sampling strategies for the validation data in each iteration.
-      if (self$iter_sampling == "bootstrap") {
-        idx = sample(nrow(data), nrow(data), replace=TRUE)
-      } else if (self$iter_sampling == "split") {
-        idx = idxs[[i]]
+      if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
+      assert_data_table(data)
+      # data.table to factor
+      if (is.data.table(labels) && ncol(labels) == 1L) {
+        labels = labels[[1]]
+      }
+      # factor to one-hot
+      if (is.factor(labels)) {
+        labels = one_hot(labels)
+        if (is.matrix(labels)) stop("MCBoost cannot handle multiclass classification")
+      }
+      assert_numeric(labels, lower = 0, upper = 1)
+      # Instantiate buckets
+      buckets = list(ProbRange$new())
+      if (self$partition && self$num_buckets > 1L) {
+        frac = 1 / self$num_buckets
+        buckets = c(buckets, mlr3misc::map(seq_len(self$num_buckets), function(b) {
+          ProbRange$new((b-1) * frac, b * frac)
+        }))
+        buckets[[2]]$lower = -Inf
+        buckets[[length(buckets)]]$upper = Inf
       } else {
-        idx = seq_len(nrow(data))
+        if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
       }
 
-      if (self$rebucket) {
-        probs = new_probs
-      } else {
-        probs = pred_probs
+      pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data))
+      resid = private$compute_residuals(pred_probs, labels)
+      new_probs = pred_probs
+      if (self$iter_sampling == "split")  {
+        idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data)/self$max_iter))[seq_len(nrow(data))])
       }
+      for (i in seq_len(self$max_iter)) {
+        corrs = integer(length(buckets))
+        models = vector(mode = "list", length = length(buckets))
 
-      # Fit on partitions
-      for (j in seq_along(buckets)) {
-        mask = buckets[[j]]$in_range_mask(probs[idx])
-        if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
-        data_m = data[idx,][mask,]
-        resid_m = resid[idx][mask]
-        out = self$subpop_fitter$fit_to_resid(data_m, resid_m, idx[mask])
-        corrs[j] = out[[1]]
-        models[[j]] = out[[2]]
-      }
+        # Sampling strategies for the validation data in each iteration.
+        if (self$iter_sampling == "bootstrap") {
+          idx = sample(nrow(data), nrow(data), replace=TRUE)
+        } else if (self$iter_sampling == "split") {
+          idx = idxs[[i]]
+        } else {
+          idx = seq_len(nrow(data))
+        }
 
-      if (abs(max(corrs)) < self$alpha) {
-        break
-      } else {
-        max_key = buckets[[which.max(corrs)]]
-        prob_mask = max_key$in_range_mask(probs)
-        self$iter_models = c(self$iter_models, models[[which.max(corrs)]])
-        self$iter_partitions = c(self$iter_partitions, max_key)
-        new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask)
-        resid = private$compute_residuals(new_probs, labels)
+        if (self$rebucket) {
+          probs = new_probs
+        } else {
+          probs = pred_probs
+        }
+
+        # Fit on partitions
+        for (j in seq_along(buckets)) {
+          mask = buckets[[j]]$in_range_mask(probs[idx])
+          if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
+          data_m = data[idx,][mask,]
+          resid_m = resid[idx][mask]
+          out = self$subpop_fitter$fit_to_resid(data_m, resid_m, idx[mask])
+          corrs[j] = out[[1]]
+          models[[j]] = out[[2]]
+        }
+
+        if (abs(max(corrs)) < self$alpha) {
+          break
+        } else {
+          max_key = buckets[[which.max(corrs)]]
+          prob_mask = max_key$in_range_mask(probs)
+          self$iter_models = c(self$iter_models, models[[which.max(corrs)]])
+          self$iter_partitions = c(self$iter_partitions, max_key)
+          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask)
+          resid = private$compute_residuals(new_probs, labels)
+        }
       }
-    }
+      if (!length(self$iter_models)) {
+        warning("The model is already calibrated wrt. the provided residual fitter and alpha!")
+      }
       invisible(NULL)
     },
     #' @description

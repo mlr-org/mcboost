@@ -10,3 +10,5 @@ test/testthat/_snaps
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^doc$
+^Meta$
