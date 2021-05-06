@@ -120,6 +120,9 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param init_predictor [`function`] \cr
     #'   The initial predictor function to use (i.e., if
     #'   the user has a pretrained model).
+    #'   Two convenience helpers exist: To use a `fitted` mlr3 model, it can be wrapped using `mlr3_init_predictor`.
+    #'   Any untrained mlr3 model can be wrapped in a `LearnerPredictor` and fitted before beeing passed on to
+    #'   MCBoost.
     #' @param iter_sampling [`character`] \cr
     #'   How to sample the validation data for each iteration?
     #'   Can be `bootstrap`, `split` or `none`.\cr

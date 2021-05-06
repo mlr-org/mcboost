@@ -160,7 +160,10 @@ The class of the model that should be used as the init predictor model.}
 
 \item{\code{init_predictor}}{\code{\link{function}} \cr
 The initial predictor function to use (i.e., if
-the user has a pretrained model).}
+the user has a pretrained model).
+Two convenience helpers exist: To use a \code{fitted} mlr3 model, it can be wrapped using \code{mlr3_init_predictor}.
+Any untrained mlr3 model can be wrapped in a \code{LearnerPredictor} and fitted before beeing passed on to
+MCBoost.}
 
 \item{\code{iter_sampling}}{\code{\link{character}} \cr
 How to sample the validation data for each iteration?
