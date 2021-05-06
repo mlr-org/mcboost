@@ -220,7 +220,7 @@ eval %>%
 In this scenario, we use a random forest with the default settings of the ranger package as the initial predictor.
 
 ```{r}
-rf <- ranger(notcov ~ ., data = train, probability=TRUE)
+rf <- ranger(notcov ~ ., data = train, probability = TRUE)
 ```
 
 ### MCBoost Auditing
@@ -233,12 +233,12 @@ init_rf = function(data) {
 }
 ```
 
-We use two custom auditors for MCBoost, i.e., ridge and lasso regression with small penalties on model complexity.
+We use two custom auditors for MCBoost, i.e., ridge and lasso regression with different penalties on model complexity.
 
 ```{r}
 ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
 
-lasso = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 2 / nrow(post)))
+lasso = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 40 / nrow(post)))
 ```
 
 The ridge regression will only be given access to the initial predictor variables when post-processing the random forest predictions. In contrast, we allow the lasso regression to audit the initial predictions both with the initial predictors and the subpopulations (sex, hispanic ethnicity, race). In summary, we have:
