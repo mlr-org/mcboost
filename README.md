@@ -4,7 +4,7 @@
 [![tic](https://github.com/pfistfl/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/pfistfl/mcboost/actions)
 <!-- badges: end -->
 
-**mcboost** implements "multi-calibration" (Hebert Johnson et al., 2018) and multi-accuracy boosting (Kim et al., 2019) for calibration of a machine learning model's prediction.  Multi-calibration works best in scenarios where the underlying data & labels is un-biased but a bias is introduced within the algoritm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority sub-population while ignoring or under-fitting minority populations.
+**mcboost** implements Multi-Calibration (Hebert Johnson et al., 2018) and Multi-Accuracy Boosting (Kim et al., 2019) for calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels is un-biased but a bias is introduced within the algoritm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 
 Literature:
   - [(Hebert-Johnson et al., 2018)](http://proceedings.mlr.press/v80/hebert-johnson18a.html)
@@ -21,7 +21,7 @@ remotes::install_github("pfistfl/mcboost")
 ## Example
 
 In this simple example, our goal is to improve calibration
-for a `initial predictor`, e.g. an ML algorithm trained on
+for an `initial predictor`, e.g. a ML algorithm trained on
 an initial task.
 
 ``` r
@@ -39,7 +39,7 @@ First we set up an example dataset:
   train_labels = tsk$data(cols = tsk$target_names, rows = tid)[[1]]
 ```
 
-To provide an example, we assume that we have a already trained learner `l` which we train below.
+To provide an example, we assume that we have already a learner `l` which we train below.
 We can now wrap this initial learner's predict function for use with `mcboost`, since `mcboost` expects the initial model to be specified as a `function` with `data` as input.
 
 ```r
@@ -54,9 +54,8 @@ We can now wrap this initial learner's predict function for use with `mcboost`, 
   }
 ```
 
-
-We can now run Multi-Accuracy boosting by instantiating the object and calling the `multicalibrate` method.
-Note, that typically, we would use multi-calibration on a smaller validation set!
+We can now run Multi-Accuracy Boosting by instantiating the object and calling the `multicalibrate` method.
+Note, that typically, we would use Multi-Calibration on a smaller validation set!
 
 ```r
   mc = MCBoost$new(init_predictor = init_predictor)
@@ -74,9 +73,9 @@ mc$predict_probs(test_data)
 
 ## Further Examples
 
-`mcboost` allows for multi-calibaration as described in [Hebert-Johnson et al., 2017](http://proceedings.mlr.press/v80/hebert-johnson18a) as well as multi-accuracy calibration as described in [Kim et al., 2018](https://arxiv.org/pdf/1805.12317.pdf)).
+`mcboost` allows for Multi-Calibration as described in [Hebert-Johnson et al., 2017](http://proceedings.mlr.press/v80/hebert-johnson18a) as well as Multi-Accuracy calibration as described in [Kim et al., 2018](https://arxiv.org/pdf/1805.12317.pdf)).
 
-The `mcboost` [**vignette**](https://pfistfl.github.io/mcboost/articles/mcboost_basics_extensions.html) has a lot of interesting showcases for applying **mcboost**.
+The `mcboost` vignettes [**Basics and Extensions**](https://pfistfl.github.io/mcboost/articles/mcboost_basics_extensions.html) and [**Health Survey Example**](https://pfistfl.github.io/mcboost/articles/mcboost_example.html) demonstrate a lot of interesting showcases for applying **mcboost**.
 
 
 ## Contributing
@@ -90,7 +89,7 @@ to individuals wishing to contribute: Please consult the [wiki](https://github.c
 
 ## Citing mcboost
 
-If you use mcboost, please cite our package as well as the relevant paper it is based on:
+If you use `mcboost`, please cite our package as well as the relevant paper it is based on:
 
 ```
   @Manual{mcboost_software,
