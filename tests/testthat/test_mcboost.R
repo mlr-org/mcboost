@@ -276,6 +276,7 @@ test_that("MCBoost throws error if wrong subpop_fitter", {
 })
 
 test_that("init predictor wrapper works", {
+
   # sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names, rows = c(1:10, 200:208))
@@ -287,8 +288,6 @@ test_that("init predictor wrapper works", {
   expect_error(mlr3_init_predictor(learner), "Learner needs to be trained first!")
   learner$train(tsk)
   init_predictor = mlr3_init_predictor(learner)
-
-  expect_class(init_predictor, "function")
 
   mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=TreeResidualFitter$new())
   mc$multicalibrate(d, l)
@@ -308,6 +307,6 @@ test_that("init predictor wrapper works", {
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = 0)
 
-  expect_warning(mc$predict_probs(data),  "multicalibrate was not run!")
+  expect_warning(mc$predict_probs(d),  "multicalibrate was not run!")
 
 })
