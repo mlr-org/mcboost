@@ -4,11 +4,11 @@
 [![tic](https://github.com/pfistfl/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/pfistfl/mcboost/actions)
 <!-- badges: end -->
 
-**mcboost** implements Multi-Calibration (Hebert Johnson et al., 2018) and Multi-Accuracy Boosting (Kim et al., 2019) for calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels is un-biased but a bias is introduced within the algoritm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
+**mcboost** implements Multi-Calibration (Hebert Johnson et al., 2018) and Multi-Accuracy Boosting (Kim et al., 2019) for calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are un-biased but a bias is introduced within the algoritm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 
 Literature:
-  - [(Hebert-Johnson et al., 2018)](http://proceedings.mlr.press/v80/hebert-johnson18a.html)
-  - [(Kim et al., 2019)](https://arxiv.org/pdf/1805.12317.pdf)
+  - [Hebert-Johnson et al., 2018](http://proceedings.mlr.press/v80/hebert-johnson18a.html)
+  - [Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)
 
 ## Installation
 
@@ -73,7 +73,7 @@ mc$predict_probs(test_data)
 
 ## Further Examples
 
-`mcboost` allows for Multi-Calibration as described in [Hebert-Johnson et al., 2017](http://proceedings.mlr.press/v80/hebert-johnson18a) as well as Multi-Accuracy calibration as described in [Kim et al., 2018](https://arxiv.org/pdf/1805.12317.pdf)).
+`mcboost` allows for Multi-Calibration as described in [Hebert-Johnson et al., 2017](http://proceedings.mlr.press/v80/hebert-johnson18a) as well as Multi-Accuracy calibration as described in [Kim et al., 2018](https://arxiv.org/pdf/1805.12317.pdf).
 
 The `mcboost` vignettes [**Basics and Extensions**](https://pfistfl.github.io/mcboost/articles/mcboost_basics_extensions.html) and [**Health Survey Example**](https://pfistfl.github.io/mcboost/articles/mcboost_example.html) demonstrate a lot of interesting showcases for applying **mcboost**.
 
