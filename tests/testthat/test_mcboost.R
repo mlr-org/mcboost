@@ -275,3 +275,39 @@ test_that("MCBoost throws error if wrong subpop_fitter", {
   expect_error(MCBoost$new(subpop_fitter = 1234), "subpop_fitter must be of type 'ResidualFitter' or character")
 })
 
+test_that("init predictor wrapper works", {
+  # sonar task
+  tsk = tsk("sonar")
+  d = tsk$data(cols = tsk$feature_names, rows = c(1:10, 200:208))
+  l = tsk$data(cols = tsk$target_names, rows = c(1:10, 200:208))[[1]]
+
+  # wrap ranger (probabilities)
+  learner = lrn("classif.ranger", predict_type = "prob")
+
+  expect_error(mlr3_init_predictor(learner), "Learner needs to be trained first!")
+  learner$train(tsk)
+  init_predictor = mlr3_init_predictor(learner)
+
+  expect_class(init_predictor, "function")
+
+  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=TreeResidualFitter$new())
+  mc$multicalibrate(d, l)
+
+  expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
+  expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
+
+  # wrap ranger (response)
+  learner = lrn("classif.ranger")
+  learner$train(tsk)
+  init_predictor = mlr3_init_predictor(learner)
+
+  expect_class(init_predictor, "function")
+
+  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=TreeResidualFitter$new())
+  expect_warning(mc$multicalibrate(d, l), "already calibrated")
+
+  expect_list(mc$iter_models, types = "LearnerPredictor", len = 0)
+
+  expect_warning(mc$predict_probs(data),  "multicalibrate was not run!")
+
+})
