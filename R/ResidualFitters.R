@@ -179,23 +179,29 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
   )
 )
 
-#' ResidualFitter from a Learner
+#' Cross-validated ResidualFitter from a Learner
+#' @description CVLearnerResidualFitter returns the cross-validated predictions
+#' instead of the in-sample predictions.
+#'
+#' Available data is cut into complementary subsets (folds).
+#' For each subset out-of-sample predictions are received by training a model
+#' on all other subset and predicting afterwards on the left-out subset.
 #' @export
 CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
   inherit = ResidualFitter,
   public = list(
-    #' @field learner [`LearnerPredictor`]\cr
+    #' @field learner [`CVLearnerPredictor`]\cr
     #' Learner used for fitting residuals.
     learner = NULL,
     #' @description
-    #' Define a ResidualFitter from a Learner
-    #' Available instantiations: [`TreeResidualFitter`] (rpart) and
-    #' [`RidgeResidualFitter`] (glmnet).
+    #' Define a CVResidualFitter from a Learner.
+    #' Available instantiations: [`CVTreeResidualFitter`] (rpart) and
+    #' [`CVRidgeResidualFitter`] (glmnet).
     #'
     #' @param learner [`Learner`]\cr
     #' Regression Learner to use.
-    initialize = function(learner) {
-      self$learner = CVLearnerPredictor$new(learner)
+    initialize = function(learner, folds = 3L) {
+      self$learner = CVLearnerPredictor$new(learner, folds)
     },
     #' @description
     #' Fit the cv-learner and compute correlation
@@ -214,7 +220,7 @@ CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
   )
 )
 
-#' @describeIn LearnerResidualFitter Cross-Validated residualFitter based on rpart
+#' @describeIn CVLearnerResidualFitter Cross-Validated ResidualFitter based on rpart
 #' @export
 CVTreeResidualFitter = R6::R6Class("CVTreeResidualFitter",
   inherit = CVLearnerResidualFitter,
@@ -227,7 +233,7 @@ CVTreeResidualFitter = R6::R6Class("CVTreeResidualFitter",
   )
 )
 
-#' @describeIn LearnerResidualFitter Cross-Validated ResidualFitter based on glmnet
+#' @describeIn CVLearnerResidualFitter Cross-Validated ResidualFitter based on glmnet
 #' @export
 CVRidgeResidualFitter = R6::R6Class("CVRidgeResidualFitter",
   inherit = CVLearnerResidualFitter,

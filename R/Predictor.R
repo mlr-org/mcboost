@@ -222,8 +222,8 @@ SubgroupModel = R6::R6Class("SubgroupModel",
   )
 )
 
-#' LearnerCVPredictor
-#' Wraps a mlr3 Learner into a `LearnerCVPredictor` object that can be used
+#' CVLearnerPredictor
+#' @description Wraps a mlr3 Learner into a `CVLearnerPredictor` object that can be used
 #' with mcboost. Internally cross-validates predictions.
 #' @export
 CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
@@ -237,8 +237,8 @@ CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
     #'
     #' @param learner [`Learner`]\cr
     #'   Learner used for train/predict.
-    initialize = function(learner) {
-      self$pipeop = mlr3pipelines::po("learner_cv", learner)
+    initialize = function(learner, folds) {
+      self$pipeop = mlr3pipelines::po("learner_cv", learner, resampling.folds = folds)
     },
     #' @description
     #' Fit the learner.

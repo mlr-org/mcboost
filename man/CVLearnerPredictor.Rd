@@ -2,16 +2,9 @@
 % Please edit documentation in R/Predictor.R
 \name{CVLearnerPredictor}
 \alias{CVLearnerPredictor}
-\title{LearnerCVPredictor
-Wraps a mlr3 Learner into a \code{LearnerCVPredictor} object that can be used
-with mcboost. Internally cross-validates predictions.}
+\title{CVLearnerPredictor}
 \description{
-LearnerCVPredictor
-Wraps a mlr3 Learner into a \code{LearnerCVPredictor} object that can be used
-with mcboost. Internally cross-validates predictions.
-
-LearnerCVPredictor
-Wraps a mlr3 Learner into a \code{LearnerCVPredictor} object that can be used
+Wraps a mlr3 Learner into a \code{CVLearnerPredictor} object that can be used
 with mcboost. Internally cross-validates predictions.
 }
 \section{Super class}{

@@ -24,3 +24,22 @@ test_that("MCBoost multicalibrate and predict_probs - CV Predictor", {
   prds = mc$predict_probs(data)
   expect_numeric(prds, lower = 0, upper = 1, len = nrow(data))
 })
+
+test_that("Creating own CV Predictor works with different folds", {
+  # Sonar task
+  tsk = tsk("sonar")
+  data = tsk$data(cols = tsk$feature_names)
+  labels = tsk$data(cols = tsk$target_names)[[1]]
+  ln = lrn("regr.rpart")
+  cvfit = CVLearnerResidualFitter$new(ln, folds = 2L)
+  set.seed(123L)
+  mc = MCBoost$new(subpop_fitter = cvfit)
+  mc$multicalibrate(data, labels)
+
+  expect_equal(cvfit$learner$pipeop$param_set$values$resampling.folds, 2L)
+  expect_list(mc$iter_models, types = "CVLearnerPredictor")
+  expect_list(mc$iter_partitions, types = "ProbRange")
+
+  prds = mc$predict_probs(data)
+  expect_numeric(prds, lower = 0, upper = 1, len = nrow(data))
+})
