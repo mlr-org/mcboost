@@ -44,8 +44,17 @@ In the following, our outcome of interest is whether an individual is covered by
 
 The second set of variables will not be used for training the initial prediction models, but will be our focus when it comes to evaluating prediction performance for subgroups.
 
+Before we training an initial model, we preprocess the data: 
+
+ * We encode categorical features as `factor`. 
+ * We explicitly assign `NA`s in categorical features to a dedicated factor level 
+ * We drop `NA`s in the outcome variable `notcov`
+ * We encode `notcov` as a factor variable instead of a dummy variable (1 = `notcov`, 0 = `cov`)
+ * We create a new feature `inv_wt` as the inverse of survey weights `svwyt`
+
 ```{r}
-categorical <- c("age.grp", "parents", "educ", "inc.grp", "doing.lw", "limited", "sex", "hisp", "race")
+categorical <- c("age.grp", "parents", "educ", "inc.grp", "doing.lw", 
+  "limited", "sex", "hisp", "race")
 
 nhis <- nhis.large %>%
   mutate_at(categorical, as.factor) %>%
@@ -65,11 +74,11 @@ nhis_enc$inv_wt <- (1 / nhis$svywt)
 
 The pre-processed NHIS data will be split into three datasets:
 
-- A training set for training the initial prediction models
-- An auditing set for post-processing the initial models with MCBoost
-- A test set for model evaluation
+- A training set `train` for training the initial prediction models (75 \% of data)
+- An auditing set `post` for post-processing the initial models with MCBoost
+- A test set `test`for model evaluation
 
-To increase the difficulty of the prediction task, we sample from the NHIS data such that the prevalence of demographic subgroups in the test data differs from their prevalence in the training and auditing data. This is achieved by employing weighted sampling from NHIS.
+To increase the difficulty of the prediction task, we sample from the NHIS data such that the prevalence of demographic subgroups in the test data differs from their prevalence in the training and auditing data. This is achieved by employing weighted sampling from NHIS (variable `inv_wt` from above).
 
 ```{r}
 set.seed(2953)
@@ -85,18 +94,24 @@ post <- nontest_g %>% anti_join(train_g, by = "ID") %>% select(-ID, -svywt, -inv
 train <- train_g %>% select(-ID, -svywt, -inv_wt, -c(sex:race), -c(sex2:race3))
 ```
 
-As a result, non-hispanic white individuals are overrepresented and hispanic individuals are underrepresented in both the training and auditing set, compared to their prevalence in the test set.
+As a result, non-hispanic white individuals (`hisp2`) are overrepresented and hispanic individuals are underrepresented in both the training and auditing set, compared to their prevalence in the test set.
 
 ```{r}
 train_g %>% summarise_at(vars(sex2:race3), mean)
+# hispanic individuals
+1 - sum(train_g %>% summarise_at(vars(hisp2:hisp4), mean))
 ```
 
 ```{r}
 post %>% summarise_at(vars(sex2:race3), mean)
+# hispanic individuals
+1 - sum(post %>% summarise_at(vars(hisp2:hisp4), mean))
 ```
 
 ```{r}
 test %>% summarise_at(vars(sex2:race3), mean)
+# hispanic individuals
+1 - sum(test %>% summarise_at(vars(hisp2:hisp4), mean))
 ```
 
 ## Scenario 1: Improve Subgroup Accuracy
@@ -127,12 +142,12 @@ init_nnet = function(data) {
 To showcase different use cases of MCBoost, we prepare two post-processing data sets based on the auditing set. The first set includes only the predictor variables that were used by the initial models, whereas the second set will allow post-processing based on our demographic subgroups of interest (sex, hispanic ethnicity, race).
 
 ```{r}
-d1 <- select(post, -notcov)
-d2 <- select(d1, -c(sex2:race3))
+d1 <- select(post, -c(notcov, sex2:race3))
+d2 <- select(post, -notcov)
 l <- 1 - one_hot(post$notcov)
 ```
 
-We initialize custom auditors for MCBoost. Ridge regression with a small penalty on model complexity, and a subpop-fitter with a fixed set of subpopulations.
+We initialize two custom auditors for MCBoost: Ridge regression with a small penalty on model complexity, and a `SubpopFitter` with a fixed set of subpopulations.
 
 ```{r}
 ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
@@ -152,13 +167,13 @@ nnet_mc1 = MCBoost$new(init_predictor = init_nnet,
                        multiplicative = TRUE,
                        partition = TRUE,
                        max_iter = 15)
-nnet_mc1$multicalibrate(d2, l)
+nnet_mc1$multicalibrate(d1, l)
 
 nnet_mc2 = MCBoost$new(init_predictor = init_nnet,
                        subpop_fitter = pops,
                        partition = TRUE,
                        max_iter = 15)
-nnet_mc2$multicalibrate(d1, l)
+nnet_mc2$multicalibrate(d2, l)
 ```
 
 ### Model Evaluation
@@ -184,7 +199,7 @@ mean(test$c_nnet_mc1 == test$label)
 mean(test$c_nnet_mc2 == test$label)
 ```
 
-However, we might be concerned with model performance for smaller subpopulations. In the following we focus on subgroups defined by 2-way conjunctions of sex, hispanic ethnicity, and race.
+However, we might be concerned with model performance for smaller subpopulations. In the following, we focus on subgroups defined by 2-way conjunctions of sex, hispanic ethnicity, and race.
 
 ```{r}
 test <- test %>%
@@ -253,14 +268,14 @@ rf_mc1 = MCBoost$new(init_predictor = init_rf,
                      multiplicative = TRUE,
                      partition = TRUE,
                      max_iter = 15)
-rf_mc1$multicalibrate(d2, l)
+rf_mc1$multicalibrate(d1, l)
 
 rf_mc2 = MCBoost$new(init_predictor = init_rf,
                      subpop_fitter = lasso,
                      multiplicative = TRUE,
                      partition = TRUE,
                      max_iter = 15)
-rf_mc2$multicalibrate(d1, l)
+rf_mc2$multicalibrate(d2, l)
 ```
 
 ### Model Evaluation
