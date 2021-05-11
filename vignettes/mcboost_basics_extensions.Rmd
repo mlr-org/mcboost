@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(mcboost)
 library(mlr3)
+set.seed(83007)
 ```
 
 
@@ -24,10 +25,13 @@ library(mlr3)
 
 As a brief introduction we show how to use **mcboost** in only 6 lines of code.
 For our example, we use the data from the *sonar* binary classification task.
-We instantiate a `MCBoost` instance, specifying a `subpop_fitter`.
-This `subpop_fitter` defines the splits into groups in each boosting iteration.
-In this example, we choose a `Tree` based model.
-Afterwards, we run the `$multicalibrate()` method on our  data to start multi-calibration.
+We instantiate a `MCBoost` instance by specifying a `subpop_fitter`.
+This `subpop_fitter` defines the splits into groups in each boosting iteration
+based on the obtained residuals. 
+In this example, we choose a `Tree` based model. 
+Afterwards, we run the `$multicalibrate()` method on our data to start multi-calibration.
+We only use the first 200 samples of the *sonar* data set to train our multi-calibrated 
+model.
 
 ```{r}
 tsk = tsk("sonar")
@@ -37,7 +41,7 @@ mc = MCBoost$new(subpop_fitter = "TreeResidualFitter")
 mc$multicalibrate(d[1:200,], l[1:200])
 ```
 
-After the calibration, the model can now be used for prediction with new data.
+After the calibration, we use the model to predict on the left-out data (8 observations).
 
 ```{r}
 mc$predict_probs(d[201:208,])
@@ -45,7 +49,7 @@ mc$predict_probs(d[201:208,])
 
 ## Example 1: Multi-Callibration Boosting on the Adult Dataset
 
-First we download the data:
+First we download the data and create an `mlr3` classification task:
 
 ```{r}
 library(data.table)
@@ -53,15 +57,19 @@ adult_train = fread(
   "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv",
   stringsAsFactors = TRUE
 )
+# adult_train = adult_train[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain", 
+#   "Hours_per_week", "Country", "Target")]
 train_tsk = TaskClassif$new("adult_train", adult_train, target = "Target")
 ```
 
 ### Preprocessing
 
-Then we do basic preprocessing:
-- Drop missing factor levels
-- Impute NA's using a histogram approach
-- One-hot encode categorical variables
+Then we do basic preprocessing: 
+
+  * Collapse rarest factors according to their prevalence 
+  * Drop missing factor levels
+  * One-hot encode categorical variables
+  * Impute NA's using a histogram approach
 
 ```{r}
 library(mlr3pipelines)
@@ -76,7 +84,7 @@ Now we fit our first `Learner`: A `random forest`.
 
 ```{r}
 library(mlr3learners)
-l = lrn("classif.ranger", num.trees = 50L)
+l = lrn("classif.ranger", num.trees = 10L, predict_type = "prob")
 l$train(prep_task)
 ```
 
@@ -88,11 +96,11 @@ Note, that we have to make sure, that our `init_predictor` returns a numeric vec
 
 ```{r}
 init_predictor = function(data) {
-  one_hot(l$predict_newdata(data)$response)
+  l$predict_newdata(data)$prob[, 1]
 }
 ```
 
-As **mcboost** requires the data to be provided in `X, y` format (a data.table of features and a
+As **mcboost** requires the data to be provided in `X, y` format (a `data.table` or `data.frame` of features and a
 vector of labels), we create those two objects.
 
 ```{r}
@@ -118,6 +126,8 @@ adult_test = adult_test[Target != "",]
 # Note, that we have to convert columns from numeric to integer here:
 sdc = train_tsk$feature_types[type == "integer", id]
 adult_test[, (sdc) := lapply(.SD, as.integer), .SDcols = sdc]
+# adult_test = adult_test[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain", 
+#   "Hours_per_week", "Country", "Target")]
 
 test_tsk = TaskClassif$new("adult_test", adult_test, target = "Target")
 prep_test = pipe$predict(test_tsk)[[1]]
@@ -133,28 +143,38 @@ and **predict**.
 
 ```{r}
 prs = mc$predict_probs(test_data)
-prs = round(prs)
 ```
 
 Now we can compute the accuracy of the multi-calibrated model
 
 ```{r}
-mean(prs == one_hot(test_labels))
+mean(round(prs) == one_hot(test_labels)[, 2])
 ```
 
 and compare to the non-calibrated version:
 
 ```{r}
-mean(init_predictor(test_data) == one_hot(test_labels))
+mean(round(init_predictor(test_data)) == one_hot(test_labels)[, 2])
 ```
 
-but looking at sub-populations:
+but looking at sub-populations we can see that the predictions got 
+more calibrated. Since we cannot show all subpopulations we only show the accuracy 
+for to the feature  `Education`. 
+We can see that 
 
 ```{r}
-mask = test_data$Race.Black
-mean(prs[mask] == one_hot(test_labels)[mask])
-mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
+# Get accuracy per subgroup for multi-calibrated predictor
+adult_test$accmc = (prs - one_hot(test_labels)[, 2])
+adult_test[, .(abs(mean(accmc)), .N), by = .(Race)]
+# Get accuracy per subgroup for initial predictor
+adult_test$accinit = (init_predictor(test_data) - one_hot(test_labels)[, 2])
+adult_test[, .(abs(mean(accinit)), .N), by = .(Race)]
+
+# mask = as.logical(test_data$Race.Black)
+# mean(prs[mask] == one_hot(test_labels)[mask])
+# mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
 ```
+
 
 ### The Auditor effect
 
@@ -190,7 +210,7 @@ test_data[ae >= median(ae[ae>0]), names(which(difference > 0)), with = FALSE]
 
 ### Predicting using only the first 'n' iterations
 
-The `t` parameter can be use to predict using only the first `n` iterations.
+The `t` parameter can be use to predict using only the first `t` iterations.
 
 ```{r}
 prs = mc$predict_probs(test_data, t = 3L)
@@ -230,21 +250,21 @@ mc$predict_probs(d[201:208,])
 
 ### Example 3: Avoiding Overfitting in MCBoost
 
-Very often `MCBoost`'s calibration is very agressive and tends to overfit.
+Very often `MCBoost`'s calibration is very aggressive and tends to overfit.
 This section tries to introduce a method to regularize against this overfitting.
 
 ### 3.1 CVLearner
 
 In this section we use a
 `Cross-Validated` learner that predicts on held-out data during the training phase. This idea is based on Wopert (1992)'s Stacked Generalization.
-Other, simpler methods include choosing a smaller `eta` or reducing the number of `iters`.
+Other, simpler methods include choosing a smaller step size `eta` or reducing the number of `iters`.
 
 ```{r}
 tsk = tsk("sonar")
 
 ```
 
-As an `init_predictor` we again use `ranger` model from mlr3 and
+As an `init_predictor` we again use a `ranger` model from mlr3 and
 construct an init predictor using the convenience function provided by `mcboost`.
 
 ```{r}
@@ -256,7 +276,7 @@ init_predictor = mlr3_init_predictor(learner)
 ... and we can calibrate this predictor.
 This time, we use a `CVTreeResidualFitter` instead of a `TreeResidualFitter`. This allows us to avoid
 overfitting similar to a technique coined `stacked generalization` first described by Wolpert in 1992.
-Note, that this can sometimes take a little longer since each learner is cross-validated using `3` folds.
+Note, that this can sometimes take a little longer since each learner is cross-validated using `3` folds (default).
 
 ```{r}
 d = data[, -1]
@@ -275,15 +295,15 @@ We can also use a fresh chunk of the validation data in each iteration. `mcboost
 tsk = tsk("sonar")
 ```
 
-again using the initial predictor from above:
+Again, we use a ranger mlr3 model as our initial predictor:
 
 ```{r}
-learner = lrn("classif.ranger")
+learner = lrn("classif.ranger", predict_type = "prob")
 learner$train(tsk)
 init_predictor = mlr3_init_predictor(learner)
 ```
 
-and we can now calibrate:s
+and we can now calibrate: 
 
 ```{r}
 d = data[, -1]
@@ -300,7 +320,7 @@ mc$predict_probs(d[201:208,])
 
 ## Example 4: Adjusting the SubPop Fitter
 
-For this example, we will again use the *sonar* dataset:
+For this example, we use the *sonar* dataset once again:
 
 ```{r}
 tsk = tsk("sonar")
@@ -321,7 +341,7 @@ mc = MCBoost$new(subpop_fitter = rf)
 mc$multicalibrate(data, labels)
 ```
 
-The `TreeResidualFitter` and `RidgeResidualFitter` are two instantiations of this Fitter with pre-defined learners. By providing either as a character string, the fitter is automatically constructed.
+The `TreeResidualFitter` and `RidgeResidualFitter` are two instantiations of this Fitter with pre-defined learners. By providing their character strings the fitter could be automatically constructed.
 
 
 ### 2.2 SubpopResidualFitter & SubgroupResidualFitter
@@ -332,15 +352,14 @@ Those can either be defined from the data itself or provided from the outside.
 **Splitting via the dataset**
 
 In order to split the data into groups according to a set of columns, we use a `SubpopFitter`
-together with a list of `subpops`; Those define the group splits to multi-calibrate on.
+together with a list of `subpops`. Those define the group splits to multi-calibrate on.
 These splits can be either a `character` string, referencing a binary variable in the data
 or a `function` that, when evaluated on the data, returns a binary vector.
-
 
 In order to showcase both options, we add a binary variable to our `data`:
 
 ```{r}
-data[, Bin := sample(c(1,0), nrow(data), replace = TRUE)]
+data[, Bin := sample(c(1, 0), nrow(data), replace = TRUE)]
 ```
 
 ```{r}
@@ -356,7 +375,7 @@ mc = MCBoost$new(subpop_fitter = rf)
 mc$multicalibrate(data, labels)
 ```
 
-And we can now, again use it to predict on new data:
+And we can again apply it to predict on new data:
 
 ```{r}
 mc$predict_probs(data)
@@ -364,14 +383,14 @@ mc$predict_probs(data)
 
 **Manually defined masks**
 
-If we do not want to add the splitting from the outside, by supplying binary masks for the
-rows of the data.
+If we want to add the splitting from the outside, by supplying binary masks for the
+rows of the data, we can provide manually defined masks. 
 Note, that the masks have to correspond with the number of rows in the dataset.
 
 ```{r}
 rf = SubgroupFitter$new(list(
-  rep(c(0,1), 104),
-  rep(c(1,1,1,0), 52)
+  rep(c(0, 1), 104),
+  rep(c(1, 1, 1, 0), 52)
 ))
 ```
 
@@ -384,8 +403,8 @@ During prediction, we now have to supply a set of masks for the prediction data.
 
 ```{r}
 predict_masks = list(
-  rep(c(0,1), 52),
-  rep(c(1,1,1,0), 26)
+  rep(c(0, 1), 52),
+  rep(c(1, 1, 1, 0), 26)
 )
 ```
 
