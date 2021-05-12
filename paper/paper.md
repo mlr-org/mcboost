@@ -14,7 +14,7 @@ authors:
     orcid: 0000-0001-7363-4299
     affiliation: 2
   - name: Susanne Dandl
-    orcid:
+    orcid: 0000-0003-4324-4163
     affiliation: 1
 affiliations:
  - name: Ludwig Maximilian University of Munich
