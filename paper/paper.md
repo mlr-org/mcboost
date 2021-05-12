@@ -49,7 +49,8 @@ Previous to the development of `mcboost`, Multi-Accuracy Boosting has not been r
 The results in @kim2019 highlight that MCBoost can improve classification accuracy for subpopulations in various settings, including gender detection with image data, income classification with survey data and disease prediction using biomedical data. 
 @Barda2020bias show that post-processing for Multi-Calibration can greatly improve calibration metrics of two medical risk assessment models when evaluated in subpopulations defined by intersections of age, sex, ethnicity, socioeconomic status and immigration history.
 @Barda2020covid demonstrate that Multi-Calibration can also be used to adjust an initial classifier for a new task. They re-calibrate a baseline model for predicting the risk of severe respiratory infection with data on COVID-19 fatality rates in subpopulations, resulting in an accurate and calibrated COVID-19 mortality prediction model.
-We hope that with `mcboost`, Multi-Accuracy Boosting can be utilized by a wide community of developers and data scientists to audit and post-process prediction models.
+
+We hope that with `mcboost`, Multi-Accuracy Boosting can be utilized by a wide community of developers and data scientists to audit and post-process prediction models and helps to promote fairness in machine learning applications.
 
 # Acknowledgements
 
