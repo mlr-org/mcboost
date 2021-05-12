@@ -28,7 +28,7 @@ library(mcboost)
 
 ## Data and Setup
 
-This vignette presents two typical use cases of MCBoost with data from a health survey. The goal is to post-process two initial prediction models for multi-accuracy using different flavors of MCBoost, and to eventually compare the naive and post-processed predictors overall and for subpopulations. The first scenario will focus on subgroup accuracy, and the second scenario on subgroup calibration.
+This vignette presents two typical use cases of MCBoost with data from a health survey. The goal is to post-process two initial prediction models for multi-accuracy using different flavors of MCBoost, and to eventually compare the naive and post-processed predictors overall and for subpopulations. The first scenario starts with a neural net and, as an example, evaluates the initial and post-processed predictors with a focus on subgroup accuracy after running MCBoost. The second scenario uses a random forest and evaluates the initial and post-processed predictors with respect to subgroup calibration.
 
 We use data derived from the National Health Interview Survey (NHIS 2003), which includes demographic and health-related variables for 21,588 individuals. This data can directly be included from the `PracTools` package.
 
@@ -39,8 +39,8 @@ data(nhis.large)
 
 In the following, our outcome of interest is whether an individual is covered by any type of health insurance (`notcov`, 1 = not covered, 0 = covered). We additionally prepare two sets of variables:
 
-- predictor variables (age, parents in household, education, income, employment status, physical or other limitations)
-- subpopulation variables (sex, hispanic ethnicity, race)
+- Predictor variables (age, parents in household, education, income, employment status, physical or other limitations)
+- Subpopulation variables (sex, hispanic ethnicity, race)
 
 The second set of variables will not be used for training the initial prediction models, but will be our focus when it comes to evaluating prediction performance for subgroups.
 
