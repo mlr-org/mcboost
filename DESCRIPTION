@@ -12,7 +12,7 @@ Authors@R:
              family = "Dandl",
              role = "ctb",
              email = "susanne.dandl@stat.uni-muenchen.de",
-             comment = c(ORCID = "0000-0001-7363-4299")),
+             comment = c(ORCID = "0000-0003-4324-4163")),
       person(given = "Christoph",
              family = "Kern",
              role = "ctb",
