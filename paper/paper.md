@@ -36,7 +36,7 @@ A simpler variant of Multi-Calibration, referred to as Multi-Accuracy, requires 
 @kim2019 demonstrated how to turn this algorithm into a post-processing strategy to achieve multi-accuracy, demonstrating empirical effectiveness across various domains.
 This package provides a stable implementation of the multi-calibration algorithm, called MCBoost.
 In contrast to other Fair ML approaches, MCBoost does not harm the overall utility of a prediction model, but rather aims at improving calibration and accuracy for large sets of subpopulations post-training.
-MCBoost comes with strong theoretical guarantees, which have been explored formally in @hebert-johnson2018, @kim2019, @dwork-rankings, @dwork-oi, @jung2020, @kimkern2021.
+MCBoost comes with strong theoretical guarantees, which have been explored formally in (@hebert-johnson2018, @kim2019, @dwork-rankings, @dwork-oi, @kimkern2021).
 
 `mcboost` implements Multi-Calibration Boosting for R.
 `mcboost` is model agnostic and allows the user to post-process any supervised machine learning model.
