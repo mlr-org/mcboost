@@ -27,10 +27,10 @@ As a brief introduction we show how to use **mcboost** in only 6 lines of code.
 For our example, we use the data from the *sonar* binary classification task.
 We instantiate a `MCBoost` instance by specifying a `subpop_fitter`.
 This `subpop_fitter` defines the splits into groups in each boosting iteration
-based on the obtained residuals. 
-In this example, we choose a `Tree` based model. 
+based on the obtained residuals.
+In this example, we choose a `Tree` based model.
 Afterwards, we run the `$multicalibrate()` method on our data to start multi-calibration.
-We only use the first 200 samples of the *sonar* data set to train our multi-calibrated 
+We only use the first 200 samples of the *sonar* data set to train our multi-calibrated
 model.
 
 ```{r}
@@ -57,16 +57,16 @@ adult_train = fread(
   "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv",
   stringsAsFactors = TRUE
 )
-# adult_train = adult_train[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain", 
+# adult_train = adult_train[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain",
 #   "Hours_per_week", "Country", "Target")]
 train_tsk = TaskClassif$new("adult_train", adult_train, target = "Target")
 ```
 
 ### Preprocessing
 
-Then we do basic preprocessing: 
+Then we do basic preprocessing:
 
-  * Collapse rarest factors according to their prevalence 
+  * Collapse rarest factors according to their prevalence
   * Drop missing factor levels
   * One-hot encode categorical variables
   * Impute NA's using a histogram approach
@@ -126,7 +126,7 @@ adult_test = adult_test[Target != "",]
 # Note, that we have to convert columns from numeric to integer here:
 sdc = train_tsk$feature_types[type == "integer", id]
 adult_test[, (sdc) := lapply(.SD, as.integer), .SDcols = sdc]
-# adult_test = adult_test[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain", 
+# adult_test = adult_test[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain",
 #   "Hours_per_week", "Country", "Target")]
 
 test_tsk = TaskClassif$new("adult_test", adult_test, target = "Target")
@@ -157,10 +157,10 @@ and compare to the non-calibrated version:
 mean(round(init_predictor(test_data)) == one_hot(test_labels)[, 2])
 ```
 
-but looking at sub-populations we can see that the predictions got 
-more calibrated. Since we cannot show all subpopulations we only show the accuracy 
-for to the feature  `Education`. 
-We can see that 
+but looking at sub-populations we can see that the predictions got
+more calibrated. Since we cannot show all subpopulations we only show the accuracy
+for to the feature  `Education`.
+We can see that
 
 ```{r}
 # Get accuracy per subgroup for multi-calibrated predictor
@@ -303,7 +303,7 @@ learner$train(tsk)
 init_predictor = mlr3_init_predictor(learner)
 ```
 
-and we can now calibrate: 
+and we can now calibrate:
 
 ```{r}
 d = data[, -1]
@@ -328,7 +328,7 @@ data = tsk$data(cols = tsk$feature_names)
 labels = tsk$data(cols = tsk$target_names)[[1]]
 ```
 
-### 2.1 LearnerResidualFitter
+### 4.1 LearnerResidualFitter
 
 The Subpop-fitter can be easily adjusted by constructing it from a `LearnerResidualFitter`.
 This allows for using any **mlr3** learner.
@@ -344,7 +344,7 @@ mc$multicalibrate(data, labels)
 The `TreeResidualFitter` and `RidgeResidualFitter` are two instantiations of this Fitter with pre-defined learners. By providing their character strings the fitter could be automatically constructed.
 
 
-### 2.2 SubpopResidualFitter & SubgroupResidualFitter
+### 4.2 SubpopResidualFitter & SubgroupResidualFitter
 
 In some occasions, instead of using a `Learner`, we might want to use a fixed set of subgroups.
 Those can either be defined from the data itself or provided from the outside.
@@ -384,7 +384,7 @@ mc$predict_probs(data)
 **Manually defined masks**
 
 If we want to add the splitting from the outside, by supplying binary masks for the
-rows of the data, we can provide manually defined masks. 
+rows of the data, we can provide manually defined masks.
 Note, that the masks have to correspond with the number of rows in the dataset.
 
 ```{r}
@@ -411,3 +411,144 @@ predict_masks = list(
 ```{r}
 mc$predict_probs(data[1:104,], subgroup_masks = predict_masks)
 ```
+
+## Example 5: Multi-Callibration Regression
+
+We abuse the `Adult` dataset in order to showcase how `mcboost`
+can be used in a regression setting.
+First we download the data and create an `mlr3` regression task:
+
+```{r}
+library(data.table)
+adult_train = fread(
+  "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv",
+  stringsAsFactors = TRUE
+)
+adult_train$Target = ifelse(adult_train$Target == ">50K", runif(1, 50, 100), runif(1, 0, 50))
+# In order to work with mcboost, we have to scale our target
+# to be between 0 and 1.
+adult_train$Target  = adult_train$Target  / 100
+
+train_tsk = TaskRegr$new("adult_train", adult_train, target = "Target")
+```
+
+### Preprocessing
+
+Then we do basic preprocessing:
+
+  * Collapse rarest factors according to their prevalence
+  * Drop missing factor levels
+  * One-hot encode categorical variables
+  * Impute NA's using a histogram approach
+
+```{r}
+library(mlr3pipelines)
+pipe = po("collapsefactors", no_collapse_above_prevalence = 0.0006) %>>%
+  po("fixfactors") %>>%
+  po("encode") %>>%
+  po("imputehist")
+prep_task = pipe$train(train_tsk)[[1]]
+```
+
+Now we fit our first `Learner`: A `random forest`.
+
+```{r}
+library(mlr3learners)
+l = lrn("regr.ranger", num.trees = 10L)
+l$train(prep_task)
+```
+
+### MCBoost
+
+A simple way to use the predictions from any `Model` in **mcboost** is to wrap the predict
+function and provide it as an initial predictor. This can be done from any model / any library.
+Note, that we have to make sure, that our `init_predictor` returns a numeric vector of predictions.
+
+```{r}
+init_predictor = function(data) {
+  l$predict_newdata(data)$response
+}
+```
+
+As **mcboost** requires the data to be provided in `X, y` format (a `data.table` or `data.frame` of features and a
+vector of labels), we create those two objects.
+
+```{r}
+data = prep_task$data(cols = prep_task$feature_names)
+labels = prep_task$data(cols = prep_task$target_names)[[1]]
+```
+
+```{r}
+mc = MCBoost$new(subpop_fitter = "TreeResidualFitter", init_predictor = init_predictor)
+mc$multicalibrate(data, labels)
+```
+
+### Evaluation on Test Data
+
+```{r}
+adult_test = fread(
+  "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv",
+  stringsAsFactors = TRUE
+)
+# The first row seems to have an error
+adult_test = adult_test[Target != "",]
+
+adult_test$Target = ifelse(adult_test$Target == ">50K", runif(1, 50, 100), runif(1, 0, 50))
+# In order to work with mcboost, we have to scale our target
+# to be between 0 and 1.
+adult_test$Target  = adult_test$Target  / 100
+
+
+# Note, that we have to convert columns from numeric to integer here:
+sdc = train_tsk$feature_types[type == "integer", id]
+adult_test[, (sdc) := lapply(.SD, as.integer), .SDcols = sdc]
+# adult_test = adult_test[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain",
+#   "Hours_per_week", "Country", "Target")]
+
+test_tsk = TaskRegr$new("adult_test", adult_test, target = "Target")
+prep_test = pipe$predict(test_tsk)[[1]]
+```
+
+Now, we can again extract `X,y`.
+
+```{r}
+test_data = prep_test$data(cols = prep_test$feature_names)
+test_labels = prep_test$data(cols = prep_test$target_names)[[1]]
+```
+and **predict**.
+
+```{r}
+prs = mc$predict_probs(test_data)
+```
+
+Now we can compute the accuracy of the multi-calibrated model
+
+```{r}
+mean((round(prs) - one_hot(test_labels)[, 2])^2)
+```
+
+and compare to the non-calibrated version:
+
+```{r}
+mean(round(init_predictor(test_data)) == one_hot(test_labels)[, 2])
+```
+
+but looking at sub-populations we can see that the predictions got
+more calibrated. Since we cannot show all subpopulations we only show the accuracy
+for to the feature  `Education`.
+We can see that
+
+```{r}
+# Get accuracy per subgroup for multi-calibrated predictor
+adult_test$accmc = (prs - one_hot(test_labels)[, 2])
+adult_test[, .(abs(mean(accmc)), .N), by = .(Race)]
+# Get accuracy per subgroup for initial predictor
+adult_test$accinit = (init_predictor(test_data) - one_hot(test_labels)[, 2])
+adult_test[, .(abs(mean(accinit)), .N), by = .(Race)]
+
+# mask = as.logical(test_data$Race.Black)
+# mean(prs[mask] == one_hot(test_labels)[mask])
+# mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
+```
+
+

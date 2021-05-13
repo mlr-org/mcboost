@@ -346,7 +346,7 @@ MCBoost = R6::R6Class("MCBoost",
 
       if (self$multiplicative) {
         update_weights = exp(- self$eta * deltas)
-        new_preds = update_weights * orig_preds
+        new_preds = (update_weights + rnorm(1, 0, 1e-6)) * orig_preds
       } else {
         update_weights = (self$eta * deltas)
         new_preds = orig_preds + update_weights
