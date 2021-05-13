@@ -248,7 +248,7 @@ mc$predict_probs(d[201:208,])
 ```
 
 
-### Example 3: Avoiding Overfitting in MCBoost
+## Example 3: Avoiding Overfitting in MCBoost
 
 Very often `MCBoost`'s calibration is very aggressive and tends to overfit.
 This section tries to introduce a method to regularize against this overfitting.
@@ -327,7 +327,7 @@ data = tsk$data(cols = tsk$feature_names)
 labels = tsk$data(cols = tsk$target_names)[[1]]
 ```
 
-### 2.1 LearnerResidualFitter
+### 4.1 LearnerResidualFitter
 
 The Subpop-fitter can be easily adjusted by constructing it from a `LearnerResidualFitter`.
 This allows for using any **mlr3** learner.
@@ -343,7 +343,7 @@ mc$multicalibrate(data, labels)
 The `TreeResidualFitter` and `RidgeResidualFitter` are two instantiations of this Fitter with pre-defined learners. By providing their character strings the fitter could be automatically constructed.
 
 
-### 2.2 SubpopResidualFitter & SubgroupResidualFitter
+### 4.2 SubpopResidualFitter & SubgroupResidualFitter
 
 In some occasions, instead of using a `Learner`, we might want to use a fixed set of subgroups.
 Those can either be defined from the data itself or provided from the outside.
