@@ -21,7 +21,7 @@ set.seed(83007)
 ```
 
 
-## Example 0: Multi-Callibration in 6 Lines of code
+## Example 0: Multi-Calibration in 6 Lines of code
 
 As a brief introduction we show how to use **mcboost** in only 6 lines of code.
 For our example, we use the data from the *sonar* binary classification task.
@@ -30,8 +30,7 @@ This `subpop_fitter` defines the splits into groups in each boosting iteration
 based on the obtained residuals. 
 In this example, we choose a `Tree` based model. 
 Afterwards, we run the `$multicalibrate()` method on our data to start multi-calibration.
-We only use the first 200 samples of the *sonar* data set to train our multi-calibrated 
-model.
+We only use the first 200 samples of the *sonar* data set to train our multi-calibrated model.
 
 ```{r}
 tsk = tsk("sonar")
@@ -47,7 +46,7 @@ After the calibration, we use the model to predict on the left-out data (8 obser
 mc$predict_probs(d[201:208,])
 ```
 
-## Example 1: Multi-Callibration Boosting on the Adult Dataset
+## Example 1: Multi-Calibration Boosting on the Adult Dataset
 
 First we download the data and create an `mlr3` classification task:
 
@@ -139,6 +138,7 @@ Now, we can again extract `X,y`.
 test_data = prep_test$data(cols = prep_test$feature_names)
 test_labels = prep_test$data(cols = prep_test$target_names)[[1]]
 ```
+
 and **predict**.
 
 ```{r}
@@ -186,7 +186,7 @@ ae = mc$auditor_effect(test_data)
 hist(ae)
 ```
 
-We can see that  there is a pronounced effect for a few instances, while for most, there is no actual effect.
+We can see that there is a pronounced effect for a few instances, while for most, there is no actual effect.
 Let's investigate those instances!
 
 
@@ -261,7 +261,6 @@ Other, simpler methods include choosing a smaller step size `eta` or reducing th
 
 ```{r}
 tsk = tsk("sonar")
-
 ```
 
 As an `init_predictor` we again use a `ranger` model from mlr3 and
@@ -295,7 +294,7 @@ We can also use a fresh chunk of the validation data in each iteration. `mcboost
 tsk = tsk("sonar")
 ```
 
-Again, we use a ranger mlr3 model as our initial predictor:
+Again, we use a `ranger` mlr3 model as our initial predictor:
 
 ```{r}
 learner = lrn("classif.ranger", predict_type = "prob")
