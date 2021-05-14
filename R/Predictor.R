@@ -232,11 +232,15 @@ CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
     #' @field pipeop [`Learner`]\cr
     #' mlr3pipelines PipeOp used for fitting residuals.
     pipeop = NULL,
+
     #' @description
-    #' Instantiate a LearnerPredictor
+    #' Instantiate a LearnerPredictor with internal cross-validation.
+    #' See (mlr3pipelines)[`PipeOpLearnerCV`] for more information.
     #'
     #' @param learner [`Learner`]\cr
     #'   Learner used for train/predict.
+    #' @param folds [`integer`]\cr
+    #'   Number of folds to use for PipeOpLearnerCV.
     initialize = function(learner, folds) {
       self$pipeop = mlr3pipelines::po("learner_cv", learner, resampling.folds = folds)
     },

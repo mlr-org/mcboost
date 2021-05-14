@@ -44,16 +44,16 @@ In the following, our outcome of interest is whether an individual is covered by
 
 The second set of variables will not be used for training the initial prediction models, but will be our focus when it comes to evaluating prediction performance for subgroups.
 
-Before we training an initial model, we preprocess the data: 
+Before we training an initial model, we preprocess the data:
 
- * We encode categorical features as `factor`. 
- * We explicitly assign `NA`s in categorical features to a dedicated factor level 
+ * We encode categorical features as `factor`.
+ * We explicitly assign `NA`s in categorical features to a dedicated factor level
  * We drop `NA`s in the outcome variable `notcov`
  * We encode `notcov` as a factor variable instead of a dummy variable (1 = `notcov`, 0 = `cov`)
  * We create a new feature `inv_wt` as the inverse of survey weights `svwyt`
 
 ```{r}
-categorical <- c("age.grp", "parents", "educ", "inc.grp", "doing.lw", 
+categorical <- c("age.grp", "parents", "educ", "inc.grp", "doing.lw",
   "limited", "sex", "hisp", "race")
 
 nhis <- nhis.large %>%
@@ -203,9 +203,13 @@ However, we might be concerned with model performance for smaller subpopulations
 
 ```{r, warning = FALSE}
 test <- test %>%
-  mutate(sex_hisp = group_indices(., sex, hisp),
-         sex_race = group_indices(., sex, race),
-         hisp_race = group_indices(., hisp, race))
+  group_by(sex, hisp) %>%
+  mutate(sex_hisp = cur_group_id()) %>%
+  group_by(sex, race) %>%
+  mutate(sex_race = cur_group_id()) %>%
+  group_by(hisp, race) %>%
+  mutate(hisp_race = cur_group_id()) %>%
+  ungroup()
 
 grouping_vars <- c("sex", "hisp", "race", "sex_hisp", "sex_race", "hisp_race")
 

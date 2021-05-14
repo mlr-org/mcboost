@@ -46,9 +46,10 @@ Whether the Learner is trained}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Instantiate a LearnerPredictor
+Instantiate a LearnerPredictor with internal cross-validation.
+See (mlr3pipelines)\code{\link{PipeOpLearnerCV}} for more information.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CVLearnerPredictor$new(learner)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CVLearnerPredictor$new(learner, folds)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -56,6 +57,9 @@ Instantiate a LearnerPredictor
 \describe{
 \item{\code{learner}}{\code{\link{Learner}}\cr
 Learner used for train/predict.}
+
+\item{\code{folds}}{\code{\link{integer}}\cr
+Number of folds to use for PipeOpLearnerCV.}
 }
 \if{html}{\out{</div>}}
 }

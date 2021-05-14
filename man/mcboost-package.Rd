@@ -23,7 +23,7 @@ Hebert-Johnson et al., 2017: Multicalibration: Calibration for the ({C}omputatio
 
 Other contributors:
 \itemize{
-  \item Susanne Dandl \email{susanne.dandl@stat.uni-muenchen.de} (\href{https://orcid.org/0000-0001-7363-4299}{ORCID}) [contributor]
+  \item Susanne Dandl \email{susanne.dandl@stat.uni-muenchen.de} (\href{https://orcid.org/0000-0003-4324-4163}{ORCID}) [contributor]
   \item Christoph Kern \email{c.kern@uni-mannheim.de} (\href{https://orcid.org/0000-0001-7363-4299}{ORCID}) [contributor]
 }
 

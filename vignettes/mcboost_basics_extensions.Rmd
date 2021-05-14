@@ -414,40 +414,45 @@ mc$predict_probs(data[1:104,], subgroup_masks = predict_masks)
 
 ## Example 5: Multi-Callibration Regression
 
-We abuse the `Adult` dataset in order to showcase how `mcboost`
-can be used in a regression setting.
+We abuse the `Communities & Crime` dataset in order to showcase how `mcboost` can be used in a regression setting.
+
 First we download the data and create an `mlr3` regression task:
 
 ```{r}
 library(data.table)
-adult_train = fread(
-  "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv",
-  stringsAsFactors = TRUE
-)
-adult_train$Target = ifelse(adult_train$Target == ">50K", runif(1, 50, 100), runif(1, 0, 50))
-# In order to work with mcboost, we have to scale our target
-# to be between 0 and 1.
-adult_train$Target  = adult_train$Target  / 100
+library(mlr3oml)
+oml = OMLData$new(42730)
+data = oml$data
 
-train_tsk = TaskRegr$new("adult_train", adult_train, target = "Target")
+# We drop the comm
+tsk = TaskRegr$new("communities_crime", data, target = "ViolentCrimesPerPop")
 ```
+
+Currently, **mcboost** only allows to work with targets between 0 and 1.
+Luckily, our target variable's values are already in that range, but
+if they were not, we could simply scale them to [0;1] before our analysis.
+
+```{r}
+summary(data$ViolentCrimesPerPop)
+```
+
+We again split our task into **train** and **test**.
+We do this in `mlr3` by simply setting some (here 500) row roles to `"validation"`.
+
+```{r}
+tsk$set_row_roles(sample(tsk$row_roles$use, 500), "validation")
+```
+
 
 ### Preprocessing
 
-Then we do basic preprocessing:
-
-  * Collapse rarest factors according to their prevalence
-  * Drop missing factor levels
-  * One-hot encode categorical variables
-  * Impute NA's using a histogram approach
+Then we do basic preprocessing, since we do not have any categorical
+variables, we only impute NA's using a histogram approach.
 
 ```{r}
 library(mlr3pipelines)
-pipe = po("collapsefactors", no_collapse_above_prevalence = 0.0006) %>>%
-  po("fixfactors") %>>%
-  po("encode") %>>%
-  po("imputehist")
-prep_task = pipe$train(train_tsk)[[1]]
+pipe =  po("imputehist")
+prep_task = pipe$train(list(tsk))[[1]]
 ```
 
 Now we fit our first `Learner`: A `random forest`.
@@ -485,35 +490,17 @@ mc$multicalibrate(data, labels)
 
 ### Evaluation on Test Data
 
-```{r}
-adult_test = fread(
-  "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv",
-  stringsAsFactors = TRUE
-)
-# The first row seems to have an error
-adult_test = adult_test[Target != "",]
-
-adult_test$Target = ifelse(adult_test$Target == ">50K", runif(1, 50, 100), runif(1, 0, 50))
-# In order to work with mcboost, we have to scale our target
-# to be between 0 and 1.
-adult_test$Target  = adult_test$Target  / 100
-
-
-# Note, that we have to convert columns from numeric to integer here:
-sdc = train_tsk$feature_types[type == "integer", id]
-adult_test[, (sdc) := lapply(.SD, as.integer), .SDcols = sdc]
-# adult_test = adult_test[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain",
-#   "Hours_per_week", "Country", "Target")]
-
-test_tsk = TaskRegr$new("adult_test", adult_test, target = "Target")
-prep_test = pipe$predict(test_tsk)[[1]]
-```
-
-Now, we can again extract `X,y`.
+We first create the test task by setting the `validation` rows to `use`, and then
+use our preprocessing `pipe's`  predict function to also impute missing values
+for the validation data. Then we again extract features `X` and target `y`.
 
 ```{r}
-test_data = prep_test$data(cols = prep_test$feature_names)
-test_labels = prep_test$data(cols = prep_test$target_names)[[1]]
+test_task = tsk$clone()
+test_task$row_roles$use = test_task$row_roles$validation
+test_task = pipe$predict(list(test_task))[[1]]
+test_data = test_task$data(cols = tsk$feature_names)
+test_labels = test_task$data(cols = tsk$target_names)[[1]]
+
 ```
 and **predict**.
 
@@ -524,31 +511,27 @@ prs = mc$predict_probs(test_data)
 Now we can compute the accuracy of the multi-calibrated model
 
 ```{r}
-mean((round(prs) - one_hot(test_labels)[, 2])^2)
+mean((prs - test_labels)^2)
 ```
 
 and compare to the non-calibrated version:
 
 ```{r}
-mean(round(init_predictor(test_data)) == one_hot(test_labels)[, 2])
+mean((init_predictor(test_data) - test_labels)^2)
 ```
 
-but looking at sub-populations we can see that the predictions got
+We slightly improved"
+
+But looking at sub-populations we can see that the predictions got
 more calibrated. Since we cannot show all subpopulations we only show the accuracy
 for to the feature  `Education`.
 We can see that
 
 ```{r}
-# Get accuracy per subgroup for multi-calibrated predictor
-adult_test$accmc = (prs - one_hot(test_labels)[, 2])
-adult_test[, .(abs(mean(accmc)), .N), by = .(Race)]
-# Get accuracy per subgroup for initial predictor
-adult_test$accinit = (init_predictor(test_data) - one_hot(test_labels)[, 2])
-adult_test[, .(abs(mean(accinit)), .N), by = .(Race)]
+test_data$se_mcboost = (prs - test_labels)^2
+test_data$se_init = (init_predictor(test_data) - test_labels)^2
 
-# mask = as.logical(test_data$Race.Black)
-# mean(prs[mask] == one_hot(test_labels)[mask])
-# mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
+test_data[, .(mcboost = mean(se_mcboost), initial = mean(se_init), .N), by = .(HispPerCap > 0.5)]
 ```
 
-
+So we also improved across the subgroups.

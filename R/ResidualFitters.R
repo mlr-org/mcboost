@@ -197,9 +197,13 @@ CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
     #' Define a CVResidualFitter from a Learner.
     #' Available instantiations: [`CVTreeResidualFitter`] (rpart) and
     #' [`CVRidgeResidualFitter`] (glmnet).
+    #' See (mlr3pipelines)[`PipeOpLearnerCV`] for more information on
+    #' cross-validated learners.
     #'
     #' @param learner [`Learner`]\cr
     #' Regression Learner to use.
+    #' @param folds [`integer`]\cr
+    #'   Number of folds to use for PipeOpLearnerCV. Default: 3.
     initialize = function(learner, folds = 3L) {
       self$learner = CVLearnerPredictor$new(learner, folds)
     },

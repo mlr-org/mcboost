@@ -53,8 +53,10 @@ Learner used for fitting residuals.}
 Define a CVResidualFitter from a Learner.
 Available instantiations: \code{\link{CVTreeResidualFitter}} (rpart) and
 \code{\link{CVRidgeResidualFitter}} (glmnet).
+See (mlr3pipelines)\code{\link{PipeOpLearnerCV}} for more information on
+cross-validated learners.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CVLearnerResidualFitter$new(learner)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CVLearnerResidualFitter$new(learner, folds = 3L)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -62,6 +64,9 @@ Available instantiations: \code{\link{CVTreeResidualFitter}} (rpart) and
 \describe{
 \item{\code{learner}}{\code{\link{Learner}}\cr
 Regression Learner to use.}
+
+\item{\code{folds}}{\code{\link{integer}}\cr
+Number of folds to use for PipeOpLearnerCV. Default: 3.}
 }
 \if{html}{\out{</div>}}
 }

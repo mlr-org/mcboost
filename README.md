@@ -2,7 +2,6 @@
 
 <!-- badges: start -->
 [![tic](https://github.com/pfistfl/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/pfistfl/mcboost/actions)
-[![R-CMD-check](https://github.com/pfistfl/mcboost/workflows/R-CMD-check/badge.svg)](https://github.com/pfistfl/mcboost/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Codecov test coverage](https://codecov.io/gh/pfistfl/mcboost/branch/main/graph/badge.svg)](https://codecov.io/gh/pfistfl/mcboost?branch=main)
