@@ -53,7 +53,7 @@ Learner used for fitting residuals.}
 Define a CVResidualFitter from a Learner.
 Available instantiations: \code{\link{CVTreeResidualFitter}} (rpart) and
 \code{\link{CVRidgeResidualFitter}} (glmnet).
-See (mlr3pipelines)\code{\link{PipeOpLearnerCV}} for more information on
+See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information on
 cross-validated learners.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CVLearnerResidualFitter$new(learner, folds = 3L)}\if{html}{\out{</div>}}
@@ -142,7 +142,9 @@ The objects of this class are cloneable with this method.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Define a ResidualFitter from a rpart learner
+Define a cross-validated ResidualFitter from a rpart learner
+See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information on
+cross-validated learners.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CVTreeResidualFitter$new()}\if{html}{\out{</div>}}
 }
@@ -188,7 +190,9 @@ The objects of this class are cloneable with this method.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Define a ResidualFitter from a glmnet learner
+Define a cross-validated ResidualFitter from a glmnet learner
+See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information on
+cross-validated learners.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CVRidgeResidualFitter$new()}\if{html}{\out{</div>}}
 }

@@ -235,7 +235,7 @@ CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
 
     #' @description
     #' Instantiate a LearnerPredictor with internal cross-validation.
-    #' See (mlr3pipelines)[`PipeOpLearnerCV`] for more information.
+    #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information.
     #'
     #' @param learner [`Learner`]\cr
     #'   Learner used for train/predict.

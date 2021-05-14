@@ -47,7 +47,7 @@ Whether the Learner is trained}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Instantiate a LearnerPredictor with internal cross-validation.
-See (mlr3pipelines)\code{\link{PipeOpLearnerCV}} for more information.
+See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CVLearnerPredictor$new(learner, folds)}\if{html}{\out{</div>}}
 }

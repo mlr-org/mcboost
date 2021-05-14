@@ -197,7 +197,7 @@ CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
     #' Define a CVResidualFitter from a Learner.
     #' Available instantiations: [`CVTreeResidualFitter`] (rpart) and
     #' [`CVRidgeResidualFitter`] (glmnet).
-    #' See (mlr3pipelines)[`PipeOpLearnerCV`] for more information on
+    #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
     #'
     #' @param learner [`Learner`]\cr
@@ -230,7 +230,9 @@ CVTreeResidualFitter = R6::R6Class("CVTreeResidualFitter",
   inherit = CVLearnerResidualFitter,
   public = list(
     #' @description
-    #' Define a ResidualFitter from a rpart learner
+    #' Define a cross-validated ResidualFitter from a rpart learner
+    #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
+    #' cross-validated learners.
     initialize = function() {
       super$initialize(learner = lrn("regr.rpart"))
     }
@@ -243,7 +245,9 @@ CVRidgeResidualFitter = R6::R6Class("CVRidgeResidualFitter",
   inherit = CVLearnerResidualFitter,
   public = list(
     #' @description
-    #' Define a ResidualFitter from a glmnet learner
+    #' Define a cross-validated ResidualFitter from a glmnet learner
+    #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
+    #' cross-validated learners.
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
       super$initialize(learner = lrn("regr.glmnet", alpha = 0))

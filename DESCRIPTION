@@ -48,6 +48,7 @@ Suggests:
     glmnet,
     mlr3learners,
     mlr3pipelines,
+    mlr3oml,
     neuralnet,
     paradox,
     testthat,
