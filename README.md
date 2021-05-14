@@ -4,7 +4,7 @@
 [![tic](https://github.com/pfistfl/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/pfistfl/mcboost/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Codecov test coverage](https://codecov.io/gh/pfistfl/mcboost/branch/main/graph/badge.svg)](https://codecov.io/gh/pfistfl/mcboost?branch=main)
+[![Mattermost](https://img.shields.io/badge/chat-mattermost-orange.svg)](https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/)
 <!-- badges: end -->
 
 **mcboost** implements Multi-Calibration Boosting (Hebert Johnson et al., 2018; Kim et al., 2019) for calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are un-biased but a bias is introduced within the algorithm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
@@ -12,6 +12,8 @@
 Literature:
   - [Hebert-Johnson et al., 2018](http://proceedings.mlr.press/v80/hebert-johnson18a.html)
   - [Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)
+
+For more information and example, see the package's [website](https://pfistfl.github.io/mcboost/).
 
 ## Installation
 

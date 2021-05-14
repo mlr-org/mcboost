@@ -30,7 +30,7 @@ bibliography: paper.bib
 
 Given the increasing usage of automated prediction systems in the context of high-stakes decisions, a growing body of research focuses on methods for detecting and mitigating biases in algorithmic decision-making.
 One important framework to audit for and mitigate biases in predictions is that of Multi-Calibration, introduced by @hebert-johnson2018.
-The underlying fairness notion, Multi-Calibration, promotes the idea of multi-group fairness and requires calibrated predictions not only for marginal populations, but also for subpopulations that may be defined by complex intersections of many attributes. 
+The underlying fairness notion, Multi-Calibration, promotes the idea of multi-group fairness and requires calibrated predictions not only for marginal populations, but also for subpopulations that may be defined by complex intersections of many attributes.
 A simpler variant of Multi-Calibration, referred to as Multi-Accuracy, requires unbiased predictions for large collections of subpopulations.
 @hebert-johnson2018 proposed a boosting-style algorithm for learning multi-calibrated predictors.
 @kim2019 demonstrated how to turn this algorithm into a post-processing strategy to achieve multi-accuracy, demonstrating empirical effectiveness across various domains.
@@ -43,15 +43,15 @@ MCBoost comes with strong theoretical guarantees, which have been explored forma
 For convenience and ease of use, `mcboost` tightly integrates with the **mlr3** [@mlr3] machine learning eco-system in R.
 Post-processing with `mcboost` would typically be run on a labeled auditing dataset after training an initial prediction model.
 `mcboost` includes two pre-defined learners for post-processing (ridge regression and decision trees), and allows to easily adjust the learner that is used for Multi-Calibration Boosting.
-Users may also specify a fixed set of subgroups, instead of a learner, on which predictions should be audited. 
+Users may also specify a fixed set of subgroups, instead of a learner, on which predictions should be audited.
 Furthermore, `mcboost` includes utilities to guard against overfitting to the auditing set during post-processing.
 
 # Statement of need
 
-Given the ubiquitous use of machine learning models in crucial areas and growing concerns of biased predictions for minority subpopulations, Multi-Calibration Boosting should be widely accessible in form of a free and open-source software package. 
+Given the ubiquitous use of machine learning models in crucial areas and growing concerns of biased predictions for minority subpopulations, Multi-Calibration Boosting should be widely accessible in form of a free and open-source software package.
 Prior to the development of `mcboost`, Multi-Calibration Boosting has not been released as a software package for R.
 
-The results in @kim2019 highlight that MCBoost can improve classification accuracy for subpopulations in various settings, including gender detection with image data, income classification with survey data and disease prediction using biomedical data. 
+The results in @kim2019 highlight that MCBoost can improve classification accuracy for subpopulations in various settings, including gender detection with image data, income classification with survey data and disease prediction using biomedical data.
 @Barda2020bias show that post-processing for Multi-Calibration can greatly improve calibration metrics of two medical risk assessment models when evaluated in subpopulations defined by intersections of age, sex, ethnicity, socioeconomic status and immigration history.
 @Barda2020covid demonstrate that Multi-Calibration can also be used to adjust an initial classifier for a new task. They re-calibrate a baseline model for predicting the risk of severe respiratory infection with data on COVID-19 fatality rates in subpopulations, resulting in an accurate and calibrated COVID-19 mortality prediction model.
 
@@ -61,5 +61,6 @@ We hope that with `mcboost`, Multi-Calibration Boosting can be utilized by a wid
 # Acknowledgements
 
 We thank Matthew Sun for developing an initial Python implementation of MCBoost.
+This work has been partially supported by the German Federal Ministry of Education and Research (BMBF) under Grant No. 01IS18036A. The authors of this work take full responsibilities for its content.
 
 # References
