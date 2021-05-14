@@ -34,6 +34,7 @@ Depends:
 Imports:
     backports,
     checkmate (>= 2.0.0),
+    lifecycle,
     data.table (>= 1.12.8),
     mlr3,
     mlr3misc (>= 0.6.0),
@@ -52,7 +53,8 @@ Suggests:
     testthat,
     knitr,
     ranger,
-    rmarkdown
+    rmarkdown,
+    covr
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr

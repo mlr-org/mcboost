@@ -12,3 +12,5 @@ test/testthat/_snaps
 ^pkgdown$
 ^doc$
 ^Meta$
+^codecov\.yml$
+^CODE_OF_CONDUCT\.md$

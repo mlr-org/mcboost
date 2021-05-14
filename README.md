@@ -2,6 +2,10 @@
 
 <!-- badges: start -->
 [![tic](https://github.com/pfistfl/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/pfistfl/mcboost/actions)
+[![R-CMD-check](https://github.com/pfistfl/mcboost/workflows/R-CMD-check/badge.svg)](https://github.com/pfistfl/mcboost/actions)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Codecov test coverage](https://codecov.io/gh/pfistfl/mcboost/branch/main/graph/badge.svg)](https://codecov.io/gh/pfistfl/mcboost?branch=main)
 <!-- badges: end -->
 
 **mcboost** implements Multi-Calibration (Hebert Johnson et al., 2018) and Multi-Accuracy Boosting (Kim et al., 2019) for calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are un-biased but a bias is introduced within the algoritm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
@@ -86,6 +90,10 @@ Pull requests are welcome and will be included at the discretion of the maintain
 
 As this project is developed with [mlr3's](https://github.com/mlr-org/mlr3/) style guide in mind, the following ressources can be helpful
 to individuals wishing to contribute: Please consult the [wiki](https://github.com/mlr-org/mlr3/wiki/) for a [style guide](https://github.com/mlr-org/mlr3/wiki/Style-Guide), a [roxygen guide](https://github.com/mlr-org/mlr3/wiki/Roxygen-Guide) and a [pull request guide](https://github.com/mlr-org/mlr3/wiki/PR-Guidelines).
+
+### Code of Conduct
+
+Please note that the mcboost project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
 ## Citing mcboost
 
