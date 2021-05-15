@@ -160,10 +160,8 @@ and compare to the non-calibrated version:
 mean(round(init_predictor(test_data)) == test_labels)
 ```
 
-but looking at sub-populations we can see that the predictions got
-more calibrated. Since we cannot show all subpopulations we only show the accuracy
-for to the feature  `Education`.
-We can see that
+But looking at sub-populations we can see that the predictions got more calibrated. 
+Since we cannot show all subpopulations we only show the accuracy for the feature `Race`.
 
 ```{r}
 # Get accuracy per subgroup for multi-calibrated predictor
@@ -172,10 +170,6 @@ adult_test[, .(mean(accmc), .N), by = .(Race)]
 # Get accuracy per subgroup for initial predictor
 adult_test$accinit = (round(init_predictor(test_data)) == test_labels)
 adult_test[, .(mean(accinit), .N), by = .(Race)]
-
-# mask = as.logical(test_data$Race.Black)
-# mean(round(prs[mask]) == test_labels[mask])
-# mean(round(init_predictor(test_data)[mask]) == test_labels[mask])
 ```
 
 
@@ -414,6 +408,7 @@ predict_masks = list(
 mc$predict_probs(data[1:104,], subgroup_masks = predict_masks)
 ```
 
+
 ## Example 5: Multi-Calibration Regression
 
 We abuse the `Communities & Crime` dataset in order to showcase how `mcboost` can be used in a regression setting.
@@ -426,7 +421,6 @@ library(mlr3oml)
 oml = OMLData$new(42730)
 data = oml$data
 
-# We drop the comm
 tsk = TaskRegr$new("communities_crime", data, target = "ViolentCrimesPerPop")
 ```
 
@@ -455,6 +449,8 @@ variables, we only impute NA's using a histogram approach.
 library(mlr3pipelines)
 pipe =  po("imputehist")
 prep_task = pipe$train(list(tsk))[[1]]
+
+prep_task$set_col_roles(c("racepctblack", "racePctWhite", "racePctAsian", "racePctHisp", "community"), remove_from = "feature")
 ```
 
 Now we fit our first `Learner`: A `random forest`.
@@ -486,7 +482,7 @@ labels = prep_task$data(cols = prep_task$target_names)[[1]]
 ```
 
 ```{r}
-mc = MCBoost$new(subpop_fitter = "TreeResidualFitter", init_predictor = init_predictor)
+mc = MCBoost$new(subpop_fitter = "RidgeResidualFitter", init_predictor = init_predictor, eta = 0.1)
 mc$multicalibrate(data, labels)
 ```
 
@@ -502,15 +498,15 @@ test_task$row_roles$use = test_task$row_roles$validation
 test_task = pipe$predict(list(test_task))[[1]]
 test_data = test_task$data(cols = tsk$feature_names)
 test_labels = test_task$data(cols = tsk$target_names)[[1]]
-
 ```
+
 and **predict**.
 
 ```{r}
 prs = mc$predict_probs(test_data)
 ```
 
-Now we can compute the accuracy of the multi-calibrated model
+Now we can compute the MSE of the multi-calibrated model
 
 ```{r}
 mean((prs - test_labels)^2)
@@ -522,18 +518,13 @@ and compare to the non-calibrated version:
 mean((init_predictor(test_data) - test_labels)^2)
 ```
 
-We slightly improved"
-
 But looking at sub-populations we can see that the predictions got
-more calibrated. Since we cannot show all subpopulations we only show the accuracy
-for to the feature  `Education`.
-We can see that
+more calibrated. 
+Since we cannot show all subpopulations we only show the MSE for the feature `racepctblack`.
 
 ```{r}
 test_data$se_mcboost = (prs - test_labels)^2
 test_data$se_init = (init_predictor(test_data) - test_labels)^2
 
-test_data[, .(mcboost = mean(se_mcboost), initial = mean(se_init), .N), by = .(HispPerCap > 0.5)]
+test_data[, .(mcboost = mean(se_mcboost), initial = mean(se_init), .N), by = .(racepctblack > 0.5)]
 ```
-
-So we also improved across the subgroups.
