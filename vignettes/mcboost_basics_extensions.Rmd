@@ -57,8 +57,7 @@ adult_train = fread(
   "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv",
   stringsAsFactors = TRUE
 )
-# adult_train = adult_train[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain",
-#   "Hours_per_week", "Country", "Target")]
+adult_train$Country = NULL
 train_tsk = TaskClassif$new("adult_train", adult_train, target = "Target")
 ```
 
@@ -78,6 +77,8 @@ pipe = po("collapsefactors", no_collapse_above_prevalence = 0.0006) %>>%
   po("encode") %>>%
   po("imputehist")
 prep_task = pipe$train(train_tsk)[[1]]
+
+prep_task$set_col_roles(c("Race.Amer.Indian.Eskimo", "Race.Asian.Pac.Islander", "Race.Black", "Race.Other", "Race.White", "fnlwgt"), remove_from = "feature")
 ```
 
 Now we fit our first `Learner`: A `random forest`.
@@ -96,7 +97,7 @@ Note, that we have to make sure, that our `init_predictor` returns a numeric vec
 
 ```{r}
 init_predictor = function(data) {
-  l$predict_newdata(data)$prob[, 1]
+  l$predict_newdata(data)$prob[, 2]
 }
 ```
 
@@ -105,7 +106,7 @@ vector of labels), we create those two objects.
 
 ```{r}
 data = prep_task$data(cols = prep_task$feature_names)
-labels = prep_task$data(cols = prep_task$target_names)[[1]]
+labels = 1 - one_hot(prep_task$data(cols = prep_task$target_names)[[1]])
 ```
 
 ```{r}
@@ -120,14 +121,15 @@ adult_test = fread(
   "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv",
   stringsAsFactors = TRUE
 )
+adult_test$Country = NULL
+
 # The first row seems to have an error
 adult_test = adult_test[Target != "",]
+adult_test$Target = droplevels(adult_test$Target)
 
 # Note, that we have to convert columns from numeric to integer here:
 sdc = train_tsk$feature_types[type == "integer", id]
 adult_test[, (sdc) := lapply(.SD, as.integer), .SDcols = sdc]
-# adult_test = adult_test[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain",
-#   "Hours_per_week", "Country", "Target")]
 
 test_tsk = TaskClassif$new("adult_test", adult_test, target = "Target")
 prep_test = pipe$predict(test_tsk)[[1]]
@@ -137,7 +139,7 @@ Now, we can again extract `X,y`.
 
 ```{r}
 test_data = prep_test$data(cols = prep_test$feature_names)
-test_labels = prep_test$data(cols = prep_test$target_names)[[1]]
+test_labels = 1 - one_hot(prep_test$data(cols = prep_test$target_names)[[1]])
 ```
 
 and **predict**.
@@ -149,13 +151,13 @@ prs = mc$predict_probs(test_data)
 Now we can compute the accuracy of the multi-calibrated model
 
 ```{r}
-mean(round(prs) == one_hot(test_labels)[, 2])
+mean(round(prs) == test_labels)
 ```
 
 and compare to the non-calibrated version:
 
 ```{r}
-mean(round(init_predictor(test_data)) == one_hot(test_labels)[, 2])
+mean(round(init_predictor(test_data)) == test_labels)
 ```
 
 but looking at sub-populations we can see that the predictions got
@@ -165,15 +167,15 @@ We can see that
 
 ```{r}
 # Get accuracy per subgroup for multi-calibrated predictor
-adult_test$accmc = (prs - one_hot(test_labels)[, 2])
-adult_test[, .(abs(mean(accmc)), .N), by = .(Race)]
+adult_test$accmc = (round(prs) == test_labels)
+adult_test[, .(mean(accmc), .N), by = .(Race)]
 # Get accuracy per subgroup for initial predictor
-adult_test$accinit = (init_predictor(test_data) - one_hot(test_labels)[, 2])
-adult_test[, .(abs(mean(accinit)), .N), by = .(Race)]
+adult_test$accinit = (round(init_predictor(test_data)) == test_labels)
+adult_test[, .(mean(accinit), .N), by = .(Race)]
 
 # mask = as.logical(test_data$Race.Black)
-# mean(prs[mask] == one_hot(test_labels)[mask])
-# mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
+# mean(round(prs[mask]) == test_labels[mask])
+# mean(round(init_predictor(test_data)[mask]) == test_labels[mask])
 ```
 
 
@@ -412,7 +414,7 @@ predict_masks = list(
 mc$predict_probs(data[1:104,], subgroup_masks = predict_masks)
 ```
 
-## Example 5: Multi-Callibration Regression
+## Example 5: Multi-Calibration Regression
 
 We abuse the `Communities & Crime` dataset in order to showcase how `mcboost` can be used in a regression setting.
 
