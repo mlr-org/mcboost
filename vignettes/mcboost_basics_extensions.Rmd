@@ -192,17 +192,17 @@ effected and un-effected population and analyse differences.
 
 ```{r}
 effect = apply(test_data[ae >= median(ae[ae>0]),], 2, quantile)
-no_effect  = apply(test_data[ae <= 0.01,], 2, quantile)
+no_effect  = apply(test_data[ae < median(ae[ae>0]),], 2, quantile)
 difference = apply((effect-no_effect), 2, mean)
-difference[difference > 0]
+difference[difference > 0.1]
 ```
 
-There seems to be a difference in some variables like `Age` and `Sex.Male`. We can thus assume, that our auditing affected mostly males, that are on average older, married and have a higher education.
+There seems to be a difference in some variables like `Education` and `Marital_Status`. 
 
 We can further analyze the individuals:
 
 ```{r}
-test_data[ae >= median(ae[ae>0]), names(which(difference > 0)), with = FALSE]
+test_data[ae >= median(ae[ae>0]), names(which(difference > 0.1)), with = FALSE]
 ```
 
 ### Predicting using only the first 'n' iterations
