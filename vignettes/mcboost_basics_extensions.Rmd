@@ -57,10 +57,13 @@ adult_train = fread(
   "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv",
   stringsAsFactors = TRUE
 )
-# adult_train = adult_train[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain",
-#   "Hours_per_week", "Country", "Target")]
+adult_train$Country = NULL
+adult_train$fnlwgt = NULL
 train_tsk = TaskClassif$new("adult_train", adult_train, target = "Target")
 ```
+We removed the features `Country` and `fnlwgt` since we expect them to have no predictive power.
+`fnlwgt` means final weight and aims to allocate similar weights to people with similar demographic characteristics,
+while `Country` has 42 distinct levels but 89 \% of the observations are from the United States.
 
 ### Preprocessing
 
@@ -80,7 +83,14 @@ pipe = po("collapsefactors", no_collapse_above_prevalence = 0.0006) %>>%
 prep_task = pipe$train(train_tsk)[[1]]
 ```
 
-Now we fit our first `Learner`: A `random forest`.
+In order to simulate settings where a sensitive feature is not available,
+we remove the (dummy encoded) feature `Race` from the training task.
+
+```{r}
+prep_task$set_col_roles(c("Race.Amer.Indian.Eskimo", "Race.Asian.Pac.Islander", "Race.Black", "Race.Other", "Race.White"), remove_from = "feature")
+```
+
+Now we fit a `random forest`.
 
 ```{r}
 library(mlr3learners)
@@ -96,7 +106,7 @@ Note, that we have to make sure, that our `init_predictor` returns a numeric vec
 
 ```{r}
 init_predictor = function(data) {
-  l$predict_newdata(data)$prob[, 1]
+  l$predict_newdata(data)$prob[, 2]
 }
 ```
 
@@ -105,11 +115,12 @@ vector of labels), we create those two objects.
 
 ```{r}
 data = prep_task$data(cols = prep_task$feature_names)
-labels = prep_task$data(cols = prep_task$target_names)[[1]]
+labels = 1 - one_hot(prep_task$data(cols = prep_task$target_names)[[1]])
 ```
 
+We use a Ridge regularized linear regression model as the auditor.
 ```{r}
-mc = MCBoost$new(subpop_fitter = "TreeResidualFitter", init_predictor = init_predictor)
+mc = MCBoost$new(subpop_fitter = "RidgeResidualFitter", init_predictor = init_predictor)
 mc$multicalibrate(data, labels)
 ```
 
@@ -120,24 +131,26 @@ adult_test = fread(
   "https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv",
   stringsAsFactors = TRUE
 )
+adult_test$Country = NULL
+adult_test$fnlwgt = NULL
+
 # The first row seems to have an error
 adult_test = adult_test[Target != "",]
+adult_test$Target = droplevels(adult_test$Target)
 
 # Note, that we have to convert columns from numeric to integer here:
 sdc = train_tsk$feature_types[type == "integer", id]
 adult_test[, (sdc) := lapply(.SD, as.integer), .SDcols = sdc]
-# adult_test = adult_test[, c("Age", "Workclass", "Education", "Martial_Status", "Occupation", "Relationship", "Race", "Capital_Gain",
-#   "Hours_per_week", "Country", "Target")]
 
 test_tsk = TaskClassif$new("adult_test", adult_test, target = "Target")
 prep_test = pipe$predict(test_tsk)[[1]]
 ```
 
-Now, we can again extract `X,y`.
+Now, we can again extract `X, y`.
 
 ```{r}
 test_data = prep_test$data(cols = prep_test$feature_names)
-test_labels = prep_test$data(cols = prep_test$target_names)[[1]]
+test_labels = 1 - one_hot(prep_test$data(cols = prep_test$target_names)[[1]])
 ```
 
 and **predict**.
@@ -146,34 +159,30 @@ and **predict**.
 prs = mc$predict_probs(test_data)
 ```
 
-Now we can compute the accuracy of the multi-calibrated model
+The accuracy of the multi-calibrated model
 
 ```{r}
-mean(round(prs) == one_hot(test_labels)[, 2])
+mean(round(prs) == test_labels)
 ```
 
-and compare to the non-calibrated version:
+is similar to the non-calibrated model.
 
 ```{r}
-mean(round(init_predictor(test_data)) == one_hot(test_labels)[, 2])
+mean(round(init_predictor(test_data)) == test_labels)
 ```
 
-but looking at sub-populations we can see that the predictions got
-more calibrated. Since we cannot show all subpopulations we only show the accuracy
-for to the feature  `Education`.
-We can see that
+But if we have a look at the bias for the different subpopulations of feature `Race`,
+we can see that the predictions got more calibrated.
+Note that we did not explicitly give neither the initial model
+nor the auditor access to the feature `Race`.
 
 ```{r}
-# Get accuracy per subgroup for multi-calibrated predictor
-adult_test$accmc = (prs - one_hot(test_labels)[, 2])
-adult_test[, .(abs(mean(accmc)), .N), by = .(Race)]
-# Get accuracy per subgroup for initial predictor
-adult_test$accinit = (init_predictor(test_data) - one_hot(test_labels)[, 2])
-adult_test[, .(abs(mean(accinit)), .N), by = .(Race)]
-
-# mask = as.logical(test_data$Race.Black)
-# mean(prs[mask] == one_hot(test_labels)[mask])
-# mean(init_predictor(test_data)[mask] == one_hot(test_labels)[mask])
+# Get bias per subgroup for multi-calibrated predictor
+adult_test$biasmc = (prs - test_labels)
+adult_test[, .(abs(mean(biasmc)), .N), by = .(Race)]
+# Get bias per subgroup for initial predictor
+adult_test$biasinit = (init_predictor(test_data) - test_labels)
+adult_test[, .(abs(mean(biasinit)), .N), by = .(Race)]
 ```
 
 
@@ -187,26 +196,24 @@ ae = mc$auditor_effect(test_data)
 hist(ae)
 ```
 
-We can see that there is a pronounced effect for a few instances, while for most, there is no actual effect.
-Let's investigate those instances!
+We can see that there are a few instances with more pronounced effects, while most have actually only a low effect.
 
-
-In order to get some insights, we compute quantiles of the
-effected and un-effected population and analyse differences.
+In order to get more insights, we compute quantiles of the
+less and more effected population (median as cut-point) and analyse differences.
 
 ```{r}
 effect = apply(test_data[ae >= median(ae[ae>0]),], 2, quantile)
-no_effect  = apply(test_data[ae <= 0.01,], 2, quantile)
+no_effect  = apply(test_data[ae < median(ae[ae>0]),], 2, quantile)
 difference = apply((effect-no_effect), 2, mean)
-difference[difference > 0]
+difference[difference > 0.1]
 ```
 
-There seems to be a difference in some variables like `Age` and `Sex.Male`. We can thus assume, that our auditing affected mostly males, that are on average older, married and have a higher education.
+There seems to be a difference in some variables like `Education` and `Marital_Status`. 
 
 We can further analyze the individuals:
 
 ```{r}
-test_data[ae >= median(ae[ae>0]), names(which(difference > 0)), with = FALSE]
+test_data[ae >= median(ae[ae>0]), names(which(difference > 0.1)), with = FALSE]
 ```
 
 ### Predicting using only the first 'n' iterations
@@ -412,7 +419,8 @@ predict_masks = list(
 mc$predict_probs(data[1:104,], subgroup_masks = predict_masks)
 ```
 
-## Example 5: Multi-Callibration Regression
+
+## Example 5: Multi-Calibration Regression
 
 We abuse the `Communities & Crime` dataset in order to showcase how `mcboost` can be used in a regression setting.
 
@@ -424,7 +432,6 @@ library(mlr3oml)
 oml = OMLData$new(42730)
 data = oml$data
 
-# We drop the comm
 tsk = TaskRegr$new("communities_crime", data, target = "ViolentCrimesPerPop")
 ```
 
@@ -453,6 +460,8 @@ variables, we only impute NA's using a histogram approach.
 library(mlr3pipelines)
 pipe =  po("imputehist")
 prep_task = pipe$train(list(tsk))[[1]]
+
+prep_task$set_col_roles(c("racepctblack", "racePctWhite", "racePctAsian", "racePctHisp", "community"), remove_from = "feature")
 ```
 
 Now we fit our first `Learner`: A `random forest`.
@@ -484,7 +493,7 @@ labels = prep_task$data(cols = prep_task$target_names)[[1]]
 ```
 
 ```{r}
-mc = MCBoost$new(subpop_fitter = "TreeResidualFitter", init_predictor = init_predictor)
+mc = MCBoost$new(subpop_fitter = "RidgeResidualFitter", init_predictor = init_predictor, eta = 0.1)
 mc$multicalibrate(data, labels)
 ```
 
@@ -500,15 +509,15 @@ test_task$row_roles$use = test_task$row_roles$validation
 test_task = pipe$predict(list(test_task))[[1]]
 test_data = test_task$data(cols = tsk$feature_names)
 test_labels = test_task$data(cols = tsk$target_names)[[1]]
-
 ```
+
 and **predict**.
 
 ```{r}
 prs = mc$predict_probs(test_data)
 ```
 
-Now we can compute the accuracy of the multi-calibrated model
+Now we can compute the MSE of the multi-calibrated model
 
 ```{r}
 mean((prs - test_labels)^2)
@@ -520,18 +529,13 @@ and compare to the non-calibrated version:
 mean((init_predictor(test_data) - test_labels)^2)
 ```
 
-We slightly improved"
-
 But looking at sub-populations we can see that the predictions got
-more calibrated. Since we cannot show all subpopulations we only show the accuracy
-for to the feature  `Education`.
-We can see that
+more calibrated. 
+Since we cannot show all subpopulations we only show the MSE for the feature `racepctblack`.
 
 ```{r}
 test_data$se_mcboost = (prs - test_labels)^2
 test_data$se_init = (init_predictor(test_data) - test_labels)^2
 
-test_data[, .(mcboost = mean(se_mcboost), initial = mean(se_init), .N), by = .(HispPerCap > 0.5)]
+test_data[, .(mcboost = mean(se_mcboost), initial = mean(se_init), .N), by = .(racepctblack > 0.5)]
 ```
-
-So we also improved across the subgroups.
