@@ -10,4 +10,4 @@ a unpublished python code-base written in large parts by Mathew. Florian further
 
 ### Christoph Kern
 
-...
+Christoph Kern prepared and contributed to the vignettes and co-authored the summary paper. Christoph contributed (very) moderately to the python code underlying this package and helped conceptionally in transitioning from the python code to the R implementation. 
