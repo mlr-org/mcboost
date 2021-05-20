@@ -46,6 +46,12 @@ Post-processing with `mcboost` would typically be run on a labeled auditing data
 Users may also specify a fixed set of subgroups, instead of a learner, on which predictions should be audited.
 Furthermore, `mcboost` includes utilities to guard against overfitting to the auditing set during post-processing.
 
+
+<p align="center">
+  <img src="MCBoost.png" />
+</p>
+
+
 # Statement of need
 
 Given the ubiquitous use of machine learning models in crucial areas and growing concerns of biased predictions for minority subpopulations, Multi-Calibration Boosting should be widely accessible in form of a free and open-source software package.
