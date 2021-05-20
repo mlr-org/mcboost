@@ -41,7 +41,7 @@ MCBoost comes with strong theoretical guarantees, which have been explored forma
 `mcboost` implements Multi-Calibration Boosting for R.
 `mcboost` is model agnostic and allows the user to post-process any supervised machine learning model.
 For convenience and ease of use, `mcboost` tightly integrates with the **mlr3** [@mlr3] machine learning eco-system in R.
-Post-processing with `mcboost` would typically be run on a labeled auditing dataset after training an initial prediction model.
+Post-processing with `mcboost` would start with an initial prediction model that is passed on to an auditing algorithm that runs Multi-Calibration-Boosting on a labeled auditing dataset (Fig. 1).
 `mcboost` includes two pre-defined learners for post-processing (ridge regression and decision trees), and allows to easily adjust the learner that is used for Multi-Calibration Boosting.
 Users may also specify a fixed set of subgroups, instead of a learner, on which predictions should be audited.
 Furthermore, `mcboost` includes utilities to guard against overfitting to the auditing set during post-processing.
@@ -50,6 +50,7 @@ Furthermore, `mcboost` includes utilities to guard against overfitting to the au
 <p align="center">
   <img src="MCBoost.png" />
 </p>
+<div align="center"> Fig 1. Conceptual illustration of Multi-Calibration Boosting with `mcboost`.</div>
 
 
 # Statement of need
