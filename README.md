@@ -7,11 +7,7 @@
 [![Mattermost](https://img.shields.io/badge/chat-mattermost-orange.svg)](https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/)
 <!-- badges: end -->
 
-**mcboost** implements Multi-Calibration Boosting (Hebert Johnson et al., 2018; Kim et al., 2019) for calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are un-biased but a bias is introduced within the algorithm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
-
-Literature:
-  - [Hebert-Johnson et al., 2018](http://proceedings.mlr.press/v80/hebert-johnson18a.html)
-  - [Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)
+**mcboost** implements Multi-Calibration Boosting ([Hebert-Johnson et al., 2018](http://proceedings.mlr.press/v80/hebert-johnson18a.html); [Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)) for calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are un-biased but a bias is introduced within the algorithm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 
 For more information and example, see the package's [website](https://pfistfl.github.io/mcboost/).
 
@@ -22,6 +18,14 @@ You can install the released version of mcboost from **Github** with:
 ``` r
 remotes::install_github("pfistfl/mcboost")
 ```
+
+## Usage
+
+Post-processing with `mcboost` needs three components. We start with an initial prediction model (1) and an auditing algorithm (2) that may be customized by the user. The auditing algorithm then runs Multi-Calibration-Boosting on a labeled auditing dataset (3). The resulting model can be used for obtaining multi-calibrated predictions.
+
+<p align="center">
+  <img src="paper/MCBoost.png" />
+</p>
 
 ## Example
 
@@ -34,7 +38,7 @@ library(mcboost)
 library(mlr3)
 ```
 
-First we set up an example dataset:
+First we set up an example dataset.
 
 ```r
   #  Example Data: Sonar Task
@@ -60,14 +64,14 @@ We can now wrap this initial learner's predict function for use with `mcboost`, 
 ```
 
 We can now run Multi-Calibration Boosting by instantiating the object and calling the `multicalibrate` method.
-Note, that typically, we would use Multi-Calibration on a smaller validation set!
+Note, that typically, we would use Multi-Calibration on a separate validation set!
 
 ```r
   mc = MCBoost$new(init_predictor = init_predictor)
   mc$multicalibrate(train_data, train_labels)
 ```
 
-and alternatively **predict** on new data.
+Lastly, we predict on new data.
 
 ```r
 tstid = setdiff(tsk$row_ids, tid) # held-out data
@@ -78,7 +82,7 @@ mc$predict_probs(test_data)
 
 ## Further Examples
 
-The `mcboost` vignettes [**Basics and Extensions**](https://pfistfl.github.io/mcboost/articles/mcboost_basics_extensions.html) and [**Health Survey Example**](https://pfistfl.github.io/mcboost/articles/mcboost_example.html) demonstrate a lot of interesting showcases for applying **mcboost**.
+The `mcboost` vignettes [**Basics and Extensions**](https://pfistfl.github.io/mcboost/articles/mcboost_basics_extensions.html) and [**Health Survey Example**](https://pfistfl.github.io/mcboost/articles/mcboost_example.html) demonstrate a lot of interesting showcases for applying `mcboost`.
 
 
 ## Contributing
@@ -105,8 +109,8 @@ If you use `mcboost`, please cite our package as well as the two papers it is ba
     year = {2021},
     note = {R package version 0.1.0},
   }
-  # Multi-calibration
-  @InProceedings{pmlr-v80-hebert-johnson18a,
+  # Multi-Calibration
+  @InProceedings{hebert-johnson2018,
     title = {Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses},
     author = {Hebert-Johnson, Ursula and Kim, Michael and Reingold, Omer and Rothblum, Guy},
     booktitle = {Proceedings of the 35th International Conference on Machine Learning},
@@ -116,11 +120,10 @@ If you use `mcboost`, please cite our package as well as the two papers it is ba
     volume = {80},
     series = {Proceedings of Machine Learning Research},
     address = {Stockholmsmässan, Stockholm Sweden},
-    month = {10--15 Jul},
     publisher = {PMLR}
   }
-  # Multi-accuracy calibration
-  @inproceedings{10.1145/3306618.3314287,
+  # Multi-Accuracy
+  @inproceedings{kim2019,
     author = {Kim, Michael P. and Ghorbani, Amirata and Zou, James},
     title = {Multiaccuracy: Black-Box Post-Processing for Fairness in Classification},
     year = {2019},
@@ -130,11 +133,8 @@ If you use `mcboost`, please cite our package as well as the two papers it is ba
     url = {https://doi.org/10.1145/3306618.3314287},
     doi = {10.1145/3306618.3314287},
     booktitle = {Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society},
-    pages = {247–254},
-    numpages = {8},
-    keywords = {fairness, discrimination, post-processing, machine learning},
+    pages = {247--254},
     location = {Honolulu, HI, USA},
     series = {AIES '19}
   }
-
 ```
