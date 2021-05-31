@@ -7,7 +7,10 @@ a unpublished python code-base written in large parts by Matthew. Florian furthe
 
 ### Susanne Dandl
 
+Susanne Dandl reviewed the R package, she provided advice on extensions and improved the vignettes. 
+
 ### Matthew Sun
+
 Matthew Sun wrote the initial Python implementation of MCBoost, with feedback and oversight provided by Michael. 
 
 ### Christoph Kern
