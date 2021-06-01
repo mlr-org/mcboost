@@ -17,12 +17,23 @@ authors:
   - name: Susanne Dandl
     orcid: 0000-0003-4324-4163
     affiliation: 1
+  - name: Michael P. Kim
+    affiliation: 3
+  - name: Matthew Sun
+    affiliation: 4
+  - name: Bernd Bischl
+    orcid: 0000-0001-6002-6980
+    affiliation: 1
 affiliations:
  - name: Ludwig Maximilian University of Munich
    index: 1
  - name: University of Mannheim
    index: 2
-date: 13 May 2021
+ - name: UC Berkeley
+   index: 3
+ - name: Princeton University
+   index: 4
+date: 01 June 2021
 bibliography: paper.bib
 ---
 
