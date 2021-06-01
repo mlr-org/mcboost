@@ -17,12 +17,23 @@ authors:
   - name: Susanne Dandl
     orcid: 0000-0003-4324-4163
     affiliation: 1
+  - name: Michael P. Kim
+    affiliation: 3
+  - name: Matthew Sun
+    affiliation: 4
+  - name: Bernd Bischl
+    orcid: 0000-0001-6002-6980
+    affiliation: 1
 affiliations:
  - name: Ludwig Maximilian University of Munich
    index: 1
  - name: University of Mannheim
    index: 2
-date: 13 May 2021
+ - name: UC Berkeley
+   index: 3
+ - name: Princeton University
+   index: 4
+date: 01 June 2021
 bibliography: paper.bib
 ---
 
@@ -39,8 +50,9 @@ In contrast to other Fair ML approaches, MCBoost does not harm the overall utili
 MCBoost comes with strong theoretical guarantees, which have been explored formally in @hebert-johnson2018, @kim2019, @dwork-rankings, @dwork-oi and @kimkern2021.
 
 `mcboost` implements Multi-Calibration Boosting for R.
-`mcboost` is model agnostic and allows the user to post-process any supervised machine learning model.
-For convenience and ease of use, `mcboost` tightly integrates with the **mlr3** [@mlr3] machine learning eco-system in R.
+`mcboost` is model agnostic and allows the user to post-process any supervised classification or regression model.
+For convenience and ease of use, `mcboost` tightly integrates with the **mlr3** [@mlr3] machine learning eco-system in R,
+but allows multi-calibration of prediction models of any R library.
 Post-processing with `mcboost` starts with an initial prediction model that is passed on to an auditing algorithm that runs Multi-Calibration-Boosting on a labeled auditing dataset (Fig. 1). The resulting model can be used for obtaining multi-calibrated predictions.
 `mcboost` includes two pre-defined learners for auditing (ridge regression and decision trees), and allows to easily adjust the learner and its parameters for Multi-Calibration Boosting.
 Users may also specify a fixed set of subgroups, instead of a learner, on which predictions should be audited.
