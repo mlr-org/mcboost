@@ -78,6 +78,9 @@ Cummulative list of fitted models.}
 \item{\code{iter_partitions}}{\code{\link{list}} \cr
 Cummulative list of data partitions for models.}
 
+\item{\code{iter_corr}}{\code{\link{list}} \cr
+Auditor correlation in each iteration.}
+
 \item{\code{auditor_effects}}{\code{\link{list}} \cr
 Auditor effect in each iteration.}
 }
@@ -90,6 +93,7 @@ Auditor effect in each iteration.}
 \item \href{#method-multicalibrate}{\code{MCBoost$multicalibrate()}}
 \item \href{#method-predict_probs}{\code{MCBoost$predict_probs()}}
 \item \href{#method-auditor_effect}{\code{MCBoost$auditor_effect()}}
+\item \href{#method-print}{\code{MCBoost$print()}}
 \item \href{#method-clone}{\code{MCBoost$clone()}}
 }
 }
@@ -158,12 +162,9 @@ e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 \item{\code{default_model_class}}{\code{\link{Predictor}} \cr
 The class of the model that should be used as the init predictor model.}
 
-\item{\code{init_predictor}}{\code{\link{function}} \cr
-The initial predictor function to use (i.e., if
-the user has a pretrained model).
-Two convenience helpers exist: To use a \code{fitted} mlr3 model, it can be wrapped using \code{mlr3_init_predictor}.
-Any untrained mlr3 model can be wrapped in a \code{LearnerPredictor} and fitted before beeing passed on to
-MCBoost.}
+\item{\code{init_predictor}}{\code{\link{function}}|\code{\link{Learner}} \cr
+The initial predictor function to use (i.e., if the user has a pretrained model).
+If a \verb{mlr3``Learner} is passed, it will be autoconverted using \code{mlr3_init_predictor}.}
 
 \item{\code{iter_sampling}}{\code{\link{character}} \cr
 How to sample the validation data for each iteration?
@@ -269,6 +270,24 @@ Params passed on to the residual prediction model's predict method.}
 }
 \subsection{Returns}{
 Numeric vector of multi-calibrated predictions.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+Prints information about multicalibaration.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MCBoost$print(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{\code{any}\cr
+Not used.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

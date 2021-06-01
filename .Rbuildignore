@@ -15,3 +15,4 @@ test/testthat/_snaps
 ^codecov\.yml$
 ^CODE_OF_CONDUCT\.md$
 ^paper$
+^contributions.md$

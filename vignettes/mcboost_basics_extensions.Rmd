@@ -124,6 +124,12 @@ mc = MCBoost$new(subpop_fitter = "RidgeResidualFitter", init_predictor = init_pr
 mc$multicalibrate(data, labels)
 ```
 
+The `print` method additionally lists the average auditor values in the different buckets in each iteration:
+
+```{r}
+mc
+```
+
 ### Evaluation on Test Data
 
 ```{r}
@@ -208,7 +214,7 @@ difference = apply((effect-no_effect), 2, mean)
 difference[difference > 0.1]
 ```
 
-There seems to be a difference in some variables like `Education` and `Marital_Status`. 
+There seems to be a difference in some variables like `Education` and `Marital_Status`.
 
 We can further analyze the individuals:
 
@@ -530,7 +536,7 @@ mean((init_predictor(test_data) - test_labels)^2)
 ```
 
 But looking at sub-populations we can see that the predictions got
-more calibrated. 
+more calibrated.
 Since we cannot show all subpopulations we only show the MSE for the feature `racepctblack`.
 
 ```{r}

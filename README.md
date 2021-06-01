@@ -79,6 +79,21 @@ test_data = tsk$data(cols = tsk$feature_names, rows = tstid)
 mc$predict_probs(test_data)
 ```
 
+## MCBoost as a PipeOp
+
+`mcboost` can also be used within a `mlr3pipeline` in order to use at the full end-to-end pipeline (in the form of a `GraphLearner`).
+
+```r
+  library(mlr3)
+  library(mlr3pipelines)
+  gr = ppl_mcboost(lrn("classif.rpart"))
+  tsk = tsk("sonar")
+  tid = sample(1:208, 108)
+  gr$train(tsk$clone()$filter(tid))
+  gr$predict(tsk$clone()$filter(setdiff(1:208, tid)))
+```
+
+
 
 ## Further Examples
 

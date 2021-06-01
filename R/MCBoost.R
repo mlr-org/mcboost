@@ -85,6 +85,10 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Cummulative list of data partitions for models.
     iter_partitions = list(),
 
+    #' @field iter_corr [`list`] \cr
+    #'   Auditor correlation in each iteration.
+    iter_corr = list(),
+
     #' @field auditor_effects [`list`] \cr
     #'   Auditor effect in each iteration.
     auditor_effects = list(),
@@ -117,12 +121,9 @@ MCBoost = R6::R6Class("MCBoost",
     #' @template params_subpops
     #' @param default_model_class [`Predictor`] \cr
     #'   The class of the model that should be used as the init predictor model.
-    #' @param init_predictor [`function`] \cr
-    #'   The initial predictor function to use (i.e., if
-    #'   the user has a pretrained model).
-    #'   Two convenience helpers exist: To use a `fitted` mlr3 model, it can be wrapped using `mlr3_init_predictor`.
-    #'   Any untrained mlr3 model can be wrapped in a `LearnerPredictor` and fitted before beeing passed on to
-    #'   MCBoost.
+    #' @param init_predictor [`function`]|[`Learner`] \cr
+    #'   The initial predictor function to use (i.e., if the user has a pretrained model).
+    #'   If a `mlr3``Learner` is passed, it will be autoconverted using `mlr3_init_predictor`.
     #' @param iter_sampling [`character`] \cr
     #'   How to sample the validation data for each iteration?
     #'   Can be `bootstrap`, `split` or `none`.\cr
@@ -178,6 +179,16 @@ MCBoost = R6::R6Class("MCBoost",
 
       # Initial Predictor
       if (is.null(init_predictor)) {
+        # Can be a learner:
+        if (inherits(init_predictor, "Learner")) {
+          if (is.null(init_predictor$state)) {
+              # Fited learner
+              init_predictor = mlr3_init_predictor(init_predictor)
+            } else {
+              # Not fitted
+              init_predictor = LearnerPredictor$new(init_predictor)
+            }
+        }
         # Can be a class-generator -> Instantiate
         if (inherits(default_model_class, "R6ClassGenerator")) {
           dm = default_model_class$new()
@@ -260,6 +271,7 @@ MCBoost = R6::R6Class("MCBoost",
           models[[j]] = out[[2]]
         }
 
+        self$iter_corr = c(self$iter_corr, list(corrs))
         if (abs(max(corrs)) < self$alpha) {
           break
         } else {
@@ -335,6 +347,21 @@ MCBoost = R6::R6Class("MCBoost",
         Reduce("+", self$auditor_effects) / length(self$auditor_effects)
       } else {
         self$auditor_effects
+      }
+    },
+    #' @description
+    #' Prints information about multicalibaration.
+    #' @param ... `any`\cr
+    #' Not used.
+    print = function(...) {
+      cat(format(self, ...), sep = "\n")
+      if (length(self$iter_models)) {
+        catf("Fitted Multi-calibration model (%s iters)", length(self$iter_models))
+        browser()
+        dt = rbindlist(map(self$iter_corr, function(x) setNames(as.data.frame(as.list(x)), paste0("bucket_", seq_along(x)))), fill = TRUE)
+        dt = cbind("iter" = seq_len(nrow(dt)), dt)
+        catf("Correlations per iteration:")
+        print(dt)
       }
     }
   ),

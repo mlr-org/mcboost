@@ -10,7 +10,7 @@ a unpublished python code-base written in large parts by Mathew. Florian further
 
 ### Christoph Kern
 
-Christoph Kern prepared and contributed to the vignettes and co-authored the summary paper. Christoph contributed (very) moderately to the python code underlying this package and helped conceptionally in transitioning from the python code to the R implementation. 
+Christoph Kern prepared and contributed to the vignettes and co-authored the summary paper. Christoph contributed (very) moderately to the python code underlying this package and helped conceptionally in transitioning from the python code to the R implementation.
 
 
 ### Michael P. Kim
@@ -18,3 +18,4 @@ Christoph Kern prepared and contributed to the vignettes and co-authored the sum
 Michael P. Kim is a coauthor of the research papers that introduced Multi-Calibration.
 Michael oversaw the development of the initial python implementation of MCBoost
 and provided additional advice in the development of this R package.
+
