@@ -145,12 +145,11 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 ppl_mcboost = function(lrn = lrn("classif.rpart")) {
   assert_learner(lrn)
   po_lrn = mlr3pipelines::po("learner_cv", lrn, resampling.method = "insample")
-
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
-    "data" = po("nop"),
+    "data" = mlr3pipelines::po("nop"),
     "prediction" = po_lrn
     )),
-    mlr3pipelines::PipeOpMCBoost$new()
+    PipeOpMCBoost$new()
   )
 }
