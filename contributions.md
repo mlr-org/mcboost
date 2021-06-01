@@ -14,16 +14,15 @@ and worked towards thorough unit testing of the different methods.
 
 Christoph Kern prepared and contributed to the vignettes and co-authored the summary paper. Christoph contributed (very) moderately to the python code underlying this package and helped conceptionally in transitioning from the python code to the R implementation.
 
+### Matthew Sun
+
+Matthew Sun wrote the initial Python implementation of MCBoost, with feedback and oversight provided by Michael.
+
 ### Michael P. Kim
 
 Michael P. Kim is a coauthor of the research papers that introduced Multi-Calibration.
 Michael oversaw the development of the initial python implementation of MCBoost
 and provided additional advice in the development of this R package.
-
-### Matthew Sun
-
-Matthew Sun wrote the initial Python implementation of MCBoost, with feedback and oversight provided by Michael.
-
 
 ### Bernd Bischl
 
