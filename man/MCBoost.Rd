@@ -14,9 +14,16 @@ populations.\cr
 The method defaults to \verb{multi-accuracy boosting} as described in Kim et al., 2019.
 In order to obtain behaviour as described in Hebert-Johnson et al., 2018 set \code{partition=TRUE}
 and \code{multiplicative=FALSE}.
+\itemize{
 For additional details, please refer to the relevant publication:
-- http://proceedings.mlr.press/v80/hebert-johnson18a.html (Hebert-Johnson et al., 2018)
-- https://arxiv.org/pdf/1805.12317.pdf (Kim et al., 2019).
+\item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
+Guy Rothblum Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
+http://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
+\item{Michael P. Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
+In Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
+Association for Computing Machinery, New York, NY, USA, 247–254.
+https://dl.acm.org/doi/10.1145/3306618.3314287}{}
+}
 }
 \examples{
   # See vignette for more examples.
@@ -237,7 +244,9 @@ Numeric vector of multi-calibrated predictions.
 \if{html}{\out{<a id="method-auditor_effect"></a>}}
 \if{latex}{\out{\hypertarget{method-auditor_effect}{}}}
 \subsection{Method \code{auditor_effect()}}{
-Compute the auditor effect for each instance
+Compute the auditor effect for each instance which are the cumulative
+absolute predictions of the auditor. It indicates "how much"
+each observation was affected by multi-calibration on average across iterations.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MCBoost$auditor_effect(
   x,

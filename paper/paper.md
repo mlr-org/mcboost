@@ -17,9 +17,9 @@ authors:
   - name: Susanne Dandl
     orcid: 0000-0003-4324-4163
     affiliation: 1
-  - name: Michael P. Kim
-    affiliation: 3
   - name: Matthew Sun
+    affiliation: 3
+  - name: Michael P. Kim
     affiliation: 4
   - name: Bernd Bischl
     orcid: 0000-0001-6002-6980
@@ -29,9 +29,9 @@ affiliations:
    index: 1
  - name: University of Mannheim
    index: 2
- - name: UC Berkeley
-   index: 3
  - name: Princeton University
+   index: 3
+ - name: UC Berkeley
    index: 4
 date: 01 June 2021
 bibliography: paper.bib
