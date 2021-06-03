@@ -157,9 +157,10 @@ Should buckets be re-done at each iteration? Default: \code{FALSE}.}
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive)}
 
-\item{\code{subpop_fitter}}{\code{\link{ResidualFitter}} \cr
+\item{\code{subpop_fitter}}{\link[=`ResidualFitter`|`character`|`Learner`]{\code{ResidualFitter}|\code{character}|\code{Learner}} \cr
 Specifies the type of model used to fit the
-residual \code{\link{TreeResidualFitter}} or \code{\link{RidgeResidualFitter}} (default)).}
+residuals. The default is \code{\link{RidgeResidualFitter}}).
+Can be a \code{character}, the name of a \code{\link{ResidualFitter}}\verb{, a (mlr3)[}Learner\verb{] that is then auto-converted into a [}LearnerResidualFitter\verb{] or a custom [}ResidualFitter`].}
 
 \item{\code{subpops}}{\code{\link{list}} \cr
 Specifies a collection of characteristic attributes
@@ -171,7 +172,8 @@ The class of the model that should be used as the init predictor model.}
 
 \item{\code{init_predictor}}{\code{\link{function}}|\code{\link{Learner}} \cr
 The initial predictor function to use (i.e., if the user has a pretrained model).
-If a \verb{mlr3``Learner} is passed, it will be autoconverted using \code{mlr3_init_predictor}.}
+If a \code{mlr3} \code{Learner} is passed, it will be autoconverted using \code{mlr3_init_predictor}.
+This requires the \code{\link{Learner}} to be trained.}
 
 \item{\code{iter_sampling}}{\code{\link{character}} \cr
 How to sample the validation data for each iteration?

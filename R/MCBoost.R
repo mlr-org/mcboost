@@ -122,15 +122,18 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Should buckets be re-done at each iteration? Default: `FALSE`.
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
-    #' @param subpop_fitter [`ResidualFitter`] \cr
+    #' @param subpop_fitter [`ResidualFitter`|`character`|`Learner`] \cr
     #'   Specifies the type of model used to fit the
-    #'   residual [`TreeResidualFitter`] or [`RidgeResidualFitter`] (default)).
+    #'   residuals. The default is [`RidgeResidualFitter`]).
+    #'   Can be a `character`, the name of a [`ResidualFitter`]`, a (mlr3)[`Learner`] that is then
+    #'   auto-converted into a [`LearnerResidualFitter`] or a custom [`ResidualFitter`].
     #' @template params_subpops
     #' @param default_model_class [`Predictor`] \cr
     #'   The class of the model that should be used as the init predictor model.
     #' @param init_predictor [`function`]|[`Learner`] \cr
     #'   The initial predictor function to use (i.e., if the user has a pretrained model).
-    #'   If a `mlr3``Learner` is passed, it will be autoconverted using `mlr3_init_predictor`.
+    #'   If a `mlr3` `Learner` is passed, it will be autoconverted using `mlr3_init_predictor`.
+    #'   This requires the [`Learner`] to be trained.
     #' @param iter_sampling [`character`] \cr
     #'   How to sample the validation data for each iteration?
     #'   Can be `bootstrap`, `split` or `none`.\cr
@@ -159,43 +162,31 @@ MCBoost = R6::R6Class("MCBoost",
       self$multiplicative = assert_flag(multiplicative)
       self$iter_sampling = assert_choice(iter_sampling, choices = c("none", "bootstrap", "split"))
 
-      # Subpopulations
+      # Subpopulation fitters.
       if (!is.null(subpops)) {
         self$subpop_fitter = SubpopFitter$new(subpops)
       } else {
         if (is.null(subpop_fitter)) {
           self$subpop_fitter = RidgeResidualFitter$new()
+        } else if (inherits(subpop_fitter, "Learner")) {
+          self$subpop_fitter = LearnerResidualFitter$new(subpop_fitter)
         } else if (inherits(subpop_fitter, "ResidualFitter")) {
           self$subpop_fitter = subpop_fitter
-        } else if (subpop_fitter == "TreeResidualFitter") {
-          self$subpop_fitter = TreeResidualFitter$new()
-        } else if (subpop_fitter == "RidgeResidualFitter") {
-          self$subpop_fitter = RidgeResidualFitter$new()
-        }  else if (subpop_fitter == "CVTreeResidualFitter") {
-          self$subpop_fitter = CVTreeResidualFitter$new()
-        } else if (subpop_fitter == "CVRidgeResidualFitter") {
-          self$subpop_fitter = CVRidgeResidualFitter$new()
+        } else if (inherits(subpop_fitter, "character")) {
+          switch(subpop_fitter,
+            "TreeResidualFitter" = TreeResidualFitter$new(),
+            "RidgeResidualFitter" = RidgeResidualFitter$new(),
+            "CVTreeResidualFitter" = CVTreeResidualFitter$new(),
+            "CVRidgeResidualFitter" = CVRidgeResidualFitter$new(),
+             stop(sprintf("subpop_fitter '%s' not found, must be '[CV]TreeResidualFitter' or '[CV]RidgeResidualFitter'", subpop_fitter))
+          )
         } else {
-          if (is.character(subpop_fitter)) {
-            stop(sprintf("subpop_fitter '%s' not found, must be 'TreeResidualFitter' or 'RidgeResidualFitter'", subpop_fitter))
-          } else {
-            stop(sprintf("subpop_fitter must be of type 'ResidualFitter' or character"))
-          }
+          stop(sprintf("subpop_fitter must be of type 'ResidualFitter' or character"))
         }
       }
 
       # Initial Predictor
       if (is.null(init_predictor)) {
-        # Can be a learner:
-        if (inherits(init_predictor, "Learner")) {
-          if (is.null(init_predictor$state)) {
-              # Fited learner
-              init_predictor = mlr3_init_predictor(init_predictor)
-            } else {
-              # Not fitted
-              init_predictor = LearnerPredictor$new(init_predictor)
-            }
-        }
         # Can be a class-generator -> Instantiate
         if (inherits(default_model_class, "R6ClassGenerator")) {
           dm = default_model_class$new()
@@ -203,6 +194,14 @@ MCBoost = R6::R6Class("MCBoost",
           dm = assert_class(default_model_class, "Predictor")
         }
         init_predictor = function(data) {dm$predict(data)}
+      } else if (inherits(init_predictor, "Learner")) {
+        if (!is.null(init_predictor$state)) {
+          # Fited learner
+          init_predictor = mlr3_init_predictor(init_predictor)
+        } else {
+          # Not fitted
+          init_predictor = LearnerPredictor$new(init_predictor)
+        }
       }
       self$predictor = assert_function(init_predictor, args = "data")
       invisible(self)
@@ -229,6 +228,7 @@ MCBoost = R6::R6Class("MCBoost",
         if (is.matrix(labels)) stop("MCBoost cannot handle multiclass classification")
       }
       assert_numeric(labels, lower = 0, upper = 1)
+
       # Instantiate buckets
       buckets = list(ProbRange$new())
       if (self$partition && self$num_buckets > 1L) {
@@ -366,8 +366,7 @@ MCBoost = R6::R6Class("MCBoost",
       cat(format(self, ...), sep = "\n")
       if (length(self$iter_models)) {
         catf("Fitted Multi-calibration model (%s iters)", length(self$iter_models))
-        browser()
-        dt = rbindlist(map(self$iter_corr, function(x) setNames(as.data.frame(as.list(x)), paste0("bucket_", seq_along(x)))), fill = TRUE)
+        dt = rbindlist(map(self$iter_corr, function(x) setNames(as.data.frame(as.list(x)), paste0("Bucket_", seq_along(x)))), fill = TRUE)
         dt = cbind("iter" = seq_len(nrow(dt)), dt)
         catf("Correlations per iteration:")
         print(dt)
@@ -382,7 +381,8 @@ MCBoost = R6::R6Class("MCBoost",
 
       if (self$multiplicative) {
         update_weights = exp(- self$eta * deltas)
-        new_preds = (update_weights + rnorm(1, 0, 1e-6)) * orig_preds
+        # Add a small term to enable moving away from 0.
+        new_preds = update_weights * pmax(orig_preds, 1e-4)
       } else {
         update_weights = (self$eta * deltas)
         new_preds = orig_preds + update_weights

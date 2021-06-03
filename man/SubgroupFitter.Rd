@@ -8,6 +8,14 @@ Static ResidualFitter based on Subgroups
 
 Static ResidualFitter based on Subgroups
 }
+\seealso{
+Other SubPopFitters: 
+\code{\link{CVLearnerResidualFitter}},
+\code{\link{LearnerResidualFitter}},
+\code{\link{ResidualFitter}},
+\code{\link{SubpopFitter}}
+}
+\concept{SubPopFitters}
 \section{Super class}{
 \code{\link[mcboost:ResidualFitter]{mcboost::ResidualFitter}} -> \code{SubgroupFitter}
 }

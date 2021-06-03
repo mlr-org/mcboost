@@ -17,6 +17,26 @@ ResidualFitter from a Learner
 \item \code{RidgeResidualFitter}: ResidualFitter based on glmnet
 }}
 
+\seealso{
+Other SubPopFitters: 
+\code{\link{CVLearnerResidualFitter}},
+\code{\link{ResidualFitter}},
+\code{\link{SubgroupFitter}},
+\code{\link{SubpopFitter}}
+
+Other SubPopFitters: 
+\code{\link{CVLearnerResidualFitter}},
+\code{\link{ResidualFitter}},
+\code{\link{SubgroupFitter}},
+\code{\link{SubpopFitter}}
+
+Other SubPopFitters: 
+\code{\link{CVLearnerResidualFitter}},
+\code{\link{ResidualFitter}},
+\code{\link{SubgroupFitter}},
+\code{\link{SubpopFitter}}
+}
+\concept{SubPopFitters}
 \section{Super class}{
 \code{\link[mcboost:ResidualFitter]{mcboost::ResidualFitter}} -> \code{LearnerResidualFitter}
 }

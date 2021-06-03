@@ -86,7 +86,7 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
     .train = function(inputs) {
       d = inputs$data$data(cols = inputs$data$feature_names)
       l = inputs$data$data(cols = inputs$data$target_names)
-      # Construc an initial predictor from the input model.
+      # Construct an initial predictor from the input model.
       init_predictor = function(data, prediction) {
         # Prob or response prediction
         if (length(prediction$feature_names) > 1L) {

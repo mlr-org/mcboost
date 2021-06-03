@@ -40,6 +40,15 @@ xy_to_task = function(x, y) {
   ti$new(id = "tmptsk", backend = x, target = yname)
 }
 
+# Convert a task to a X,y pair
+#
+# Required for interacting with 'mlr3'
+mlr3_task_to_xy = function(task) {
+  X = task$data(task$feature_names)
+  y = task$data(task$target_names)
+  if (ncol(y) == 1L) y = y[[1]] # vector
+  list(X, y)
+}
 
 #' Create an initial predictor from a mlr3 learner
 #'

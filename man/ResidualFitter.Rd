@@ -8,6 +8,14 @@ ResidualFitter Abstract Base Class
 
 ResidualFitter Abstract Base Class
 }
+\seealso{
+Other SubPopFitters: 
+\code{\link{CVLearnerResidualFitter}},
+\code{\link{LearnerResidualFitter}},
+\code{\link{SubgroupFitter}},
+\code{\link{SubpopFitter}}
+}
+\concept{SubPopFitters}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

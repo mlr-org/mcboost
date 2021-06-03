@@ -20,6 +20,26 @@ on all other subset and predicting afterwards on the left-out subset.
 \item \code{CVRidgeResidualFitter}: Cross-Validated ResidualFitter based on glmnet
 }}
 
+\seealso{
+Other SubPopFitters: 
+\code{\link{LearnerResidualFitter}},
+\code{\link{ResidualFitter}},
+\code{\link{SubgroupFitter}},
+\code{\link{SubpopFitter}}
+
+Other SubPopFitters: 
+\code{\link{LearnerResidualFitter}},
+\code{\link{ResidualFitter}},
+\code{\link{SubgroupFitter}},
+\code{\link{SubpopFitter}}
+
+Other SubPopFitters: 
+\code{\link{LearnerResidualFitter}},
+\code{\link{ResidualFitter}},
+\code{\link{SubgroupFitter}},
+\code{\link{SubpopFitter}}
+}
+\concept{SubPopFitters}
 \section{Super class}{
 \code{\link[mcboost:ResidualFitter]{mcboost::ResidualFitter}} -> \code{CVLearnerResidualFitter}
 }

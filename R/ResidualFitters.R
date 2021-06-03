@@ -1,4 +1,5 @@
 #' ResidualFitter Abstract Base Class
+#' @family SubPopFitters
 #' @export
 ResidualFitter = R6::R6Class("ResidualFitter",
   public = list(
@@ -7,6 +8,10 @@ ResidualFitter = R6::R6Class("ResidualFitter",
     #' @template params_data_resid
     #' @template params_mask
     fit_to_resid = function(data, resid, mask) {
+      # Learners fail on constant residuals.
+      if (all(unique(resid) == resid[1])) {
+        return(list(0, ConstantPredictor$new(0)))
+      }
       self$fit(data, resid, mask)
     },
     #' @description
@@ -20,6 +25,7 @@ ResidualFitter = R6::R6Class("ResidualFitter",
 )
 
 #' ResidualFitter from a Learner
+#' @family SubPopFitters
 #' @export
 LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
   inherit = ResidualFitter,
@@ -56,6 +62,7 @@ LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
 )
 
 #' @describeIn LearnerResidualFitter ResidualFitter based on rpart
+#' @family SubPopFitters
 #' @export
 TreeResidualFitter = R6::R6Class("TreeResidualFitter",
   inherit = LearnerResidualFitter,
@@ -63,12 +70,14 @@ TreeResidualFitter = R6::R6Class("TreeResidualFitter",
     #' @description
     #' Define a ResidualFitter from a rpart learner
     initialize = function() {
+      mlr3misc::require_namespaces(c("mlr3learners", "rpart"))
       super$initialize(learner = lrn("regr.rpart"))
     }
   )
 )
 
 #' @describeIn LearnerResidualFitter ResidualFitter based on glmnet
+#' @family SubPopFitters
 #' @export
 RidgeResidualFitter = R6::R6Class("RidgeResidualFitter",
   inherit = LearnerResidualFitter,
@@ -83,6 +92,7 @@ RidgeResidualFitter = R6::R6Class("RidgeResidualFitter",
 )
 
 #' Static ResidualFitter based on Subpopulations
+#' @family SubPopFitters
 #' @export
 SubpopFitter = R6::R6Class("SubpopFitter",
   inherit = ResidualFitter,
@@ -133,6 +143,7 @@ SubpopFitter = R6::R6Class("SubpopFitter",
 )
 
 #' Static ResidualFitter based on Subgroups
+#' @family SubPopFitters
 #' @export
 SubgroupFitter = R6::R6Class("SubgroupFitter",
   inherit = ResidualFitter,
@@ -186,6 +197,7 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
 #' Available data is cut into complementary subsets (folds).
 #' For each subset out-of-sample predictions are received by training a model
 #' on all other subset and predicting afterwards on the left-out subset.
+#' @family SubPopFitters
 #' @export
 CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
   inherit = ResidualFitter,
@@ -225,6 +237,7 @@ CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
 )
 
 #' @describeIn CVLearnerResidualFitter Cross-Validated ResidualFitter based on rpart
+#' @family SubPopFitters
 #' @export
 CVTreeResidualFitter = R6::R6Class("CVTreeResidualFitter",
   inherit = CVLearnerResidualFitter,
@@ -234,12 +247,14 @@ CVTreeResidualFitter = R6::R6Class("CVTreeResidualFitter",
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
     initialize = function() {
+      mlr3misc::require_namespaces(c("mlr3learners", "rpart"))
       super$initialize(learner = lrn("regr.rpart"))
     }
   )
 )
 
 #' @describeIn CVLearnerResidualFitter Cross-Validated ResidualFitter based on glmnet
+#' @family SubPopFitters
 #' @export
 CVRidgeResidualFitter = R6::R6Class("CVRidgeResidualFitter",
   inherit = CVLearnerResidualFitter,

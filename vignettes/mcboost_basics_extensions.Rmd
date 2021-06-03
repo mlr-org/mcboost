@@ -425,6 +425,48 @@ predict_masks = list(
 mc$predict_probs(data[1:104,], subgroup_masks = predict_masks)
 ```
 
+### Multi-Calibrating data with missing values using a pipeline
+
+When data has missing values or other non-standard columns, we often have to pre-process data in order
+to be able to fit models.
+Those preprocessing steps can be embedded into the `SubPopFitter` by using a **mlr3pipelines** Pipeline.
+The following code shows a brief example:
+
+```{r}
+tsk = tsk("penguins")
+# first we convert to a binary task
+row_ids = tsk$data(cols = c("species", "..row_id"))[species %in% c("Adelie", "Gentoo")][["..row_id"]]
+tsk$filter(row_ids)$droplevels()
+tsk
+```
+
+```{r}
+library("mlr3pipelines")
+library("mlr3learners")
+
+# Convert task to X,y
+X = tsk$data(cols = tsk$feature_names)
+y = tsk$data(cols = tsk$target_names)
+
+# Our inital model is a pipeline that imputes missings and encodes categoricals
+init_model = as_learner(po("encode") %>>% po("imputehist") %>>%
+  lrn("classif.glmnet", predict_type = "prob"))
+# And we fit it on a subset of the data in order to simulate a poorly performing model.
+init_model$train(tsk$clone()$filter(row_ids[c(1:9, 160:170)]))
+init_model$predict(tsk)$score()
+
+# We define a pipeline that imputes missings and encodes categoricals
+auditor = as_learner(po("encode") %>>% po("imputehist") %>>% lrn("regr.rpart"))
+
+mc = MCBoost$new(subpop_fitter = auditor, init_predictor = init_model)
+mc$multicalibrate(X, y)
+```
+
+and we can observe where it improved:
+
+```{r}
+mc
+```
 
 ## Example 5: Multi-Calibration Regression
 
