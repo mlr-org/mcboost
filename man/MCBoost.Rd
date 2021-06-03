@@ -157,7 +157,7 @@ Should buckets be re-done at each iteration? Default: \code{FALSE}.}
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive)}
 
-\item{\code{subpop_fitter}}{\link[=`ResidualFitter`|`character`|`Learner`]{\code{ResidualFitter}|\code{character}|\code{Learner}} \cr
+\item{\code{subpop_fitter}}{\code{\link{ResidualFitter}}|\code{\link{character}}|(mlr3)qq\code{\link{Learner}} \cr
 Specifies the type of model used to fit the
 residuals. The default is \code{\link{RidgeResidualFitter}}).
 Can be a \code{character}, the name of a \code{\link{ResidualFitter}}\verb{, a (mlr3)[}Learner\verb{] that is then auto-converted into a [}LearnerResidualFitter\verb{] or a custom [}ResidualFitter`].}

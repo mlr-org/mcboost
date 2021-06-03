@@ -4,15 +4,15 @@
 \name{mcboost-package}
 \alias{mcboost}
 \alias{mcboost-package}
-\title{mcboost: Implements Multi-Accuracy Boosting (Kim et al., 2018).}
+\title{mcboost: Multi-Calibration Boosting for R}
 \description{
-Implements "multi-calibration" (Hebert Johnson et al., 2018) and
-    multi-accuracy boosting (Kim et al., 2019) for calibration of a machine learning model's prediction.
-    MCBoost is a technique, that iteratively updates predictions for  sub-groups in order to mitigate biases
+Implements Multi-Calibration Boosting (Hebert Johnson et al., 2018; Kim et al., 2019) 
+    for calibration of a machine learning model's prediction.
+    MCBoost is a technique, that iteratively updates predictions for sub-groups in order to mitigate biases
     like poor calibration or large accuracy differences across subgroups.
-    Multi-calibration works best in scenarios where the underlying data & labels is un-biased
+    Multi-calibration works best in scenarios where the underlying data & labels are un-biased
     but a bias is introduced within the algoritm's fitting procedure. This is often the case,
-    e.g. when an algorithm fits a majority sub-population while ignoring or under-fitting minority populations.
+    e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 }
 \references{
 Kim et al, 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification

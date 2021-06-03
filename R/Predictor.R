@@ -95,7 +95,17 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
     #'   Not used, only for compatibility with other methods.
     predict = function(data, ...) {
       prd = self$learner$predict_newdata(data)
-      return(prd$response)
+      if (inherits(prd, "PredictionRegr")) {
+        return(prd$response)
+      } else if (inherits(prd, "PredictionClassif")) {
+        if ("prob" %in% self$learner$predict_type) {
+          p = prd$prob
+          if (ncol(p) == 2L) p = p[, 1L]
+        } else {
+          p = one_hot(prd$response)
+        }
+        return(p)
+      }
     }
   ),
   active = list(

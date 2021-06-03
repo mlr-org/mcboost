@@ -122,7 +122,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Should buckets be re-done at each iteration? Default: `FALSE`.
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
-    #' @param subpop_fitter [`ResidualFitter`|`character`|`Learner`] \cr
+    #' @param subpop_fitter [`ResidualFitter`]|[`character`]|(mlr3)qq[`Learner`] \cr
     #'   Specifies the type of model used to fit the
     #'   residuals. The default is [`RidgeResidualFitter`]).
     #'   Can be a `character`, the name of a [`ResidualFitter`]`, a (mlr3)[`Learner`] that is then
@@ -173,7 +173,7 @@ MCBoost = R6::R6Class("MCBoost",
         } else if (inherits(subpop_fitter, "ResidualFitter")) {
           self$subpop_fitter = subpop_fitter
         } else if (inherits(subpop_fitter, "character")) {
-          switch(subpop_fitter,
+          self$subpop_fitter = switch(subpop_fitter,
             "TreeResidualFitter" = TreeResidualFitter$new(),
             "RidgeResidualFitter" = RidgeResidualFitter$new(),
             "CVTreeResidualFitter" = CVTreeResidualFitter$new(),
