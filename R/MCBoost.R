@@ -14,10 +14,10 @@
 #'   \itemize{
 #'   For additional details, please refer to the relevant publication:
 #'     \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
-#'      Guy Rothblum Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
+#'      Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
 #'      http://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
 #'     \item{Michael P. Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
-#'     In Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
+#'     Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
 #'     Association for Computing Machinery, New York, NY, USA, 247–254.
 #'     https://dl.acm.org/doi/10.1145/3306618.3314287}{}
 #'  }
@@ -122,10 +122,10 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Should buckets be re-done at each iteration? Default: `FALSE`.
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
-    #' @param subpop_fitter [`ResidualFitter`]|[`character`]|(mlr3)qq[`Learner`] \cr
+    #' @param subpop_fitter [`ResidualFitter`]|[`character`]|(mlr3)[`Learner`] \cr
     #'   Specifies the type of model used to fit the
     #'   residuals. The default is [`RidgeResidualFitter`]).
-    #'   Can be a `character`, the name of a [`ResidualFitter`]`, a (mlr3)[`Learner`] that is then
+    #'   Can be a `character`, the name of a [`ResidualFitter`], a (mlr3)[`Learner`] that is then
     #'   auto-converted into a [`LearnerResidualFitter`] or a custom [`ResidualFitter`].
     #' @template params_subpops
     #' @param default_model_class [`Predictor`] \cr
