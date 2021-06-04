@@ -1,22 +1,22 @@
-#' Multi-Calibration and Multi-Accuracy Boosting
+#' Multi-Calibration Boosting
 #'
 #' @description
 #'   Implements Multi-Calibration (Hebert Johnson et al., 2018) and
 #'   Multi-Accuracy Boosting (Kim et al., 2019) for calibration of any
-#'   (binary classification)  machine learning model's prediction.
-#'   Multi-calibration works best in scenarios where the underlying data & labels are un-biased
+#'   (binary classification) machine learning model's prediction.
+#'   Multi-Calibration works best in scenarios where the underlying data & labels are unbiased
 #'   but a bias is introduced within the algorithm's fitting procedure. This is often the case,
 #'   e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 #'   populations.\cr
-#'   The method defaults to `multi-accuracy boosting` as described in Kim et al., 2019.
-#'   In order to obtain behaviour as described in Hebert-Johnson et al., 2018 set `partition=TRUE`
+#'   The method defaults to `multi-accuracy boosting` as described in Kim et al. (2019).
+#'   In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set `partition=TRUE`
 #'   and `multiplicative=FALSE`.
 #'   \itemize{
 #'   For additional details, please refer to the relevant publication:
 #'     \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
 #'      Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
 #'      http://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
-#'     \item{Michael P. Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
+#'     \item{Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
 #'     Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
 #'     Association for Computing Machinery, New York, NY, USA, 247–254.
 #'     https://dl.acm.org/doi/10.1145/3306618.3314287}{}
