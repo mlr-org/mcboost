@@ -48,11 +48,11 @@ xy_to_task = function(x, y) {
 mlr3_init_predictor = function(learner) {
   if (is.null(learner$state)) stop("Learner needs to be trained first!")
   if (learner$predict_type == "response") {
-    function(data) {
+    function(data, ...) {
       one_hot(learner$predict_newdata(data)$response)
     }
   } else {
-    function(data) {
+    function(data, ...) {
       learner$predict_newdata(data)$prob[,1L]
     }
   }

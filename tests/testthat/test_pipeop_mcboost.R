@@ -18,3 +18,18 @@ test_that("MCBoost class instantiation", {
   pr = gr$predict(tsk$clone()$filter(setdiff(1:208, tid)))
   expect_is(pr[[1]], "Prediction")
 })
+
+
+test_that("MCBoost ppl", {
+  skip_if_not(require("mlr3"))
+  skip_if_not(require("mlr3pipelines"))
+
+  l = lrn("classif.featureless")$train(tsk("sonar"))
+  pp = ppl_mcboost()
+  expect_is(pp, "Graph")
+  pp$param_set$values$mcboost.init_predictor = l
+  pp$train(tsk("sonar"))
+  expect_true(!is.null(pp$state))
+  prd = pp$predict(tsk("sonar"))
+  expect_is(prd[[1]], "PredictionClassif")
+})
