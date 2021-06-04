@@ -132,7 +132,7 @@ Initialize a multi-calibration instance.
 \describe{
 \item{\code{max_iter}}{\code{\link{integer}} \cr
 The maximum number of iterations of the multicalibration/multiaccuracy method.
-Default `5L.}
+Default \code{5L}.}
 
 \item{\code{alpha}}{\code{\link{numeric}} \cr
 Accuracy parameter that determines the stopping condition. Default \code{1e-4}.}
@@ -159,7 +159,7 @@ Specifies the strategy for updating the weights (multiplicative weight vs additi
 
 \item{\code{subpop_fitter}}{\code{\link{ResidualFitter}}|\code{\link{character}}|(mlr3)\code{\link{Learner}} \cr
 Specifies the type of model used to fit the
-residuals. The default is \code{\link{RidgeResidualFitter}}).
+residuals. The default is \code{\link{RidgeResidualFitter}}.
 Can be a \code{character}, the name of a \code{\link{ResidualFitter}}, a (mlr3)\code{\link{Learner}} that is then
 auto-converted into a \code{\link{LearnerResidualFitter}} or a custom \code{\link{ResidualFitter}}.}
 

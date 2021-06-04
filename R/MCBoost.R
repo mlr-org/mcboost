@@ -105,7 +105,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'
     #' @param max_iter [`integer`] \cr
     #'   The maximum number of iterations of the multicalibration/multiaccuracy method.
-    #'   Default `5L.
+    #'   Default `5L`.
     #' @param alpha  [`numeric`] \cr
     #'   Accuracy parameter that determines the stopping condition. Default `1e-4`.
     #' @param eta  [`numeric`] \cr
@@ -124,7 +124,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
     #' @param subpop_fitter [`ResidualFitter`]|[`character`]|(mlr3)[`Learner`] \cr
     #'   Specifies the type of model used to fit the
-    #'   residuals. The default is [`RidgeResidualFitter`]).
+    #'   residuals. The default is [`RidgeResidualFitter`].
     #'   Can be a `character`, the name of a [`ResidualFitter`], a (mlr3)[`Learner`] that is then
     #'   auto-converted into a [`LearnerResidualFitter`] or a custom [`ResidualFitter`].
     #' @template params_subpops
