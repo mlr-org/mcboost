@@ -1,7 +1,7 @@
 Package: mcboost
 Type: Package
 Title: Multi-Calibration Boosting for R
-Version: 0.2.0
+Version: 0.2.1
 Authors@R:
     c(person(given = "Florian",
              family = "Pfisterer",
@@ -19,7 +19,7 @@ Authors@R:
              email = "c.kern@uni-mannheim.de",
              comment = c(ORCID = "0000-0001-7363-4299")))
 Maintainer: Florian Pfisterer <pfistererf@googlemail.com>
-Description: Implements Multi-Calibration Boosting (Hebert Johnson et al., 2018; Kim et al., 2019) 
+Description: Implements Multi-Calibration Boosting (Hebert Johnson et al., 2018; Kim et al., 2019)
     for calibration of a machine learning model's prediction.
     MCBoost is a technique, that iteratively updates predictions for sub-groups in order to mitigate biases
     like poor calibration or large accuracy differences across subgroups.

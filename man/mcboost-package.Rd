@@ -6,7 +6,7 @@
 \alias{mcboost-package}
 \title{mcboost: Multi-Calibration Boosting for R}
 \description{
-Implements Multi-Calibration Boosting (Hebert Johnson et al., 2018; Kim et al., 2019) 
+Implements Multi-Calibration Boosting (Hebert Johnson et al., 2018; Kim et al., 2019)
     for calibration of a machine learning model's prediction.
     MCBoost is a technique, that iteratively updates predictions for sub-groups in order to mitigate biases
     like poor calibration or large accuracy differences across subgroups.

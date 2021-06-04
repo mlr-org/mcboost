@@ -6,8 +6,10 @@
 #'
 #' @description
 #' Post-process a learner prediction using multi-calibration.
-#' For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018).
-#' The preceeding learner's predictions are used as an initial predictor for mcboost.
+#' For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
+#' or the help for [`MCBoost`].
+#' If no `init_predictor` is provided, the preceeding learner's predictions
+#' corresponding to the `prediction` slot are used as an initial predictor for mcboost.
 #'
 #' @section Construction:
 #' ```
@@ -74,7 +76,8 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
         paradox::ParamLgl$new("multiplicative", default = TRUE, tags = "train"),
         paradox::ParamUty$new("subpop_fitter", default = NULL, tags = "train"),
         paradox::ParamUty$new("subpops", default = NULL, tags = "train"),
-        paradox::ParamUty$new("default_model_class", default = ConstantPredictor, tags = "train")
+        paradox::ParamUty$new("default_model_class", default = ConstantPredictor, tags = "train"),
+        paradox::ParamUty$new("init_predictor", default = NULL, tags = "train")
       ))
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = c("data", "prediction"), train = c("TaskClassif", "TaskClassif"), predict = c("TaskClassif", "TaskClassif")),
@@ -86,24 +89,29 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
     .train = function(inputs) {
       d = inputs$data$data(cols = inputs$data$feature_names)
       l = inputs$data$data(cols = inputs$data$target_names)
-      # Construct an initial predictor from the input model.
-      init_predictor = function(data, prediction) {
-        # Prob or response prediction
-        if (length(prediction$feature_names) > 1L) {
-          prds = prediction$data(cols = prediction$feature_names)
-          as.matrix(prds)
-        } else {
-          prds = prediction$data(cols = prediction$feature_names)[[1]]
-          one_hot(prds)
-        }
-      }
+
       args = self$param_set$get_values(tags = "train")
-      args$init_predictor = init_predictor
+
+      if (is.null(args$init_predictor)) {
+        # Construct an initial predictor from the input model if non is provided.
+        init_predictor = function(data, prediction) {
+          # Prob or response prediction
+          if (length(prediction$feature_names) > 1L) {
+            prds = prediction$data(cols = prediction$feature_names)
+            as.matrix(prds)
+          } else {
+            prds = prediction$data(cols = prediction$feature_names)[[1]]
+            one_hot(prds)
+          }
+        }
+        args$init_predictor = init_predictor
+      }
       mc = invoke(MCBoost$new, .args = args)
       mc$multicalibrate(d, l, predictor_args = inputs$prediction)
       self$state = list("mc" = mc)
       list(NULL)
     },
+
     .predict = function(inputs) {
       d = inputs$data$data(cols = inputs$data$feature_names)
       prob = self$state$mc$predict_probs(d, predictor_args = inputs$prediction)
@@ -141,8 +149,10 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 #'   Initial learner. Internally wrapped into a `PipeOpLearnerCV`
 #'   with `resampling.method = "insample"` as a default.
 #'   All parameters can be adjusted through the resulting `Graph's param_set.
+#'   Defaults to `lrn("classif.featureless")`.
+#'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
 #' @export
-ppl_mcboost = function(lrn = lrn("classif.rpart")) {
+ppl_mcboost = function(lrn = lrn("classif.featureless")) {
   assert_learner(lrn)
   po_lrn = mlr3pipelines::po("learner_cv", lrn, resampling.method = "insample")
   gr = mlr3pipelines::`%>>%`(
