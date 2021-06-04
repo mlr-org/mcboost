@@ -4,14 +4,14 @@
 \name{mcboost-package}
 \alias{mcboost}
 \alias{mcboost-package}
-\title{mcboost: Multi-Calibration Boosting for R}
+\title{mcboost: Multi-Calibration Boosting}
 \description{
-Implements Multi-Calibration Boosting (Hebert Johnson et al., 2018; Kim et al., 2019)
-    for calibration of a machine learning model's prediction.
+Implements Multi-Calibration (Hebert Johnson et al., 2018) and 
+    Multi-Accuracy Boosting (Kim et al., 2019) for the calibration of any machine learning model's prediction.
     MCBoost is a technique, that iteratively updates predictions for sub-groups in order to mitigate biases
     like poor calibration or large accuracy differences across subgroups.
     Multi-calibration works best in scenarios where the underlying data & labels are un-biased
-    but a bias is introduced within the algoritm's fitting procedure. This is often the case,
+    but a bias is introduced within the algorithm's fitting procedure. This is often the case,
     e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 }
 \references{
@@ -25,6 +25,7 @@ Other contributors:
 \itemize{
   \item Susanne Dandl \email{susanne.dandl@stat.uni-muenchen.de} (\href{https://orcid.org/0000-0003-4324-4163}{ORCID}) [contributor]
   \item Christoph Kern \email{c.kern@uni-mannheim.de} (\href{https://orcid.org/0000-0001-7363-4299}{ORCID}) [contributor]
+  \item Bernd Bischl \email{bernd_bischl@gmx.net} (\href{https://orcid.org/0000-0001-6002-6980}{ORCID}) [contributor]
 }
 
 }

@@ -271,7 +271,7 @@ This section tries to introduce a method to regularize against this overfitting.
 ### 3.1 CVLearner
 
 In this section we use a
-`Cross-Validated` learner that predicts on held-out data during the training phase. This idea is based on Wopert (1992)'s Stacked Generalization.
+`Cross-Validated` learner that predicts on held-out data during the training phase. This idea is based on Wolpert (1992)'s Stacked Generalization.
 Other, simpler methods include choosing a smaller step size `eta` or reducing the number of `iters`.
 
 ```{r}

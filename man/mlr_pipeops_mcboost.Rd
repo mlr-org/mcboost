@@ -11,7 +11,7 @@
 Post-process a learner prediction using multi-calibration.
 For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
 or the help for \code{\link{MCBoost}}.
-If no \code{init_predictor} is provided, the preceeding learner's predictions
+If no \code{init_predictor} is provided, the preceding learner's predictions
 corresponding to the \code{prediction} slot are used as an initial predictor for mcboost.
 }
 \section{Construction}{
@@ -34,7 +34,7 @@ A \code{\link[mlr3:PredictionClassif]{PredictionClassif}} is required as input a
 
 \section{State}{
 
-The \verb{$state} is a \code{MCBoost} Object as obained from \code{MCBoost$new()}.
+The \verb{$state} is a \code{MCBoost} Object as obtained from \code{MCBoost$new()}.
 }
 
 \section{Parameters}{

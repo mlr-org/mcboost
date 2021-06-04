@@ -109,7 +109,7 @@ Array of probabilities}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Logical array, whether alements are in ProbRange or not.
+Logical array, whether elements are in ProbRange or not.
 }
 }
 \if{html}{\out{<hr>}}

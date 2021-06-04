@@ -106,7 +106,7 @@ This R package is licensed under the LGPL-3.
 If you encounter problems using this software (lack of documentation, misleading or wrong documentation, unexpected behaviour, bugs, …) or just want to suggest features, please open an issue in the issue tracker.
 Pull requests are welcome and will be included at the discretion of the maintainers.
 
-As this project is developed with [mlr3's](https://github.com/mlr-org/mlr3/) style guide in mind, the following ressources can be helpful
+As this project is developed with [mlr3's](https://github.com/mlr-org/mlr3/) style guide in mind, the following resources can be helpful
 to individuals wishing to contribute: Please consult the [wiki](https://github.com/mlr-org/mlr3/wiki/) for a [style guide](https://github.com/mlr-org/mlr3/wiki/Style-Guide), a [roxygen guide](https://github.com/mlr-org/mlr3/wiki/Roxygen-Guide) and a [pull request guide](https://github.com/mlr-org/mlr3/wiki/PR-Guidelines).
 
 ### Code of Conduct

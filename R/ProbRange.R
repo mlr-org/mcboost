@@ -52,7 +52,7 @@ ProbRange = R6::R6Class("ProbRange",
     #' @param x [`numeric`]\cr
     #'   Array of probabilities
     #' @return
-    #'   Logical array, whether alements are in ProbRange or not.
+    #'   Logical array, whether elements are in ProbRange or not.
     in_range_mask = function(x) {
       (x >= self$lower) & (x < self$upper)
     },

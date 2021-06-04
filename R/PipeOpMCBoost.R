@@ -8,7 +8,7 @@
 #' Post-process a learner prediction using multi-calibration.
 #' For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
 #' or the help for [`MCBoost`].
-#' If no `init_predictor` is provided, the preceeding learner's predictions
+#' If no `init_predictor` is provided, the preceding learner's predictions
 #' corresponding to the `prediction` slot are used as an initial predictor for mcboost.
 #'
 #' @section Construction:
@@ -26,7 +26,7 @@
 #' A [`PredictionClassif`][mlr3::PredictionClassif] is required as input and returned as output during prediction.
 #'
 #' @section State:
-#' The `$state` is a `MCBoost` Object as obained from `MCBoost$new()`.
+#' The `$state` is a `MCBoost` Object as obtained from `MCBoost$new()`.
 #'
 #' @section Parameters:
 #' * `max_iter` :: `integer`\cr
