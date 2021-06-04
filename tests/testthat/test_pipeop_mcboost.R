@@ -19,7 +19,6 @@ test_that("MCBoost class instantiation", {
   expect_is(pr[[1]], "Prediction")
 })
 
-
 test_that("MCBoost ppl", {
   skip_if_not(require("mlr3"))
   skip_if_not(require("mlr3pipelines"))

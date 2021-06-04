@@ -3,8 +3,8 @@
 #' @description
 #'   Implements Multi-Calibration (Hebert Johnson et al., 2018) and
 #'   Multi-Accuracy Boosting (Kim et al., 2019) for calibration of any
-#'   machine learning model's prediction.
-#'   Multi-calibration works best in scenarios where the underlying data & labels are unbiased
+#'   (binary classification)  machine learning model's prediction.
+#'   Multi-calibration works best in scenarios where the underlying data & labels are un-biased
 #'   but a bias is introduced within the algorithm's fitting procedure. This is often the case,
 #'   e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 #'   populations.\cr
