@@ -29,7 +29,7 @@ Description: Implements Multi-Calibration (Hebert Johnson et al., 2018) and
     Multi-Accuracy Boosting (Kim et al., 2019) for the calibration of any machine learning model's prediction.
     MCBoost is a technique, that iteratively updates predictions for sub-groups in order to mitigate biases
     like poor calibration or large accuracy differences across subgroups.
-    Multi-calibration works best in scenarios where the underlying data & labels are un-biased
+    Multi-calibration works best in scenarios where the underlying data & labels are unbiased
     but a bias is introduced within the algorithm's fitting procedure. This is often the case,
     e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 License: GPL-3
