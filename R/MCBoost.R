@@ -1,12 +1,12 @@
-#' Multi-Accuracy Boosting for R
+#' Multi-Calibration and Multi-Accuracy Boosting
 #'
 #' @description
-#'   Implements "multi-calibration" (Hebert Johnson et al., 2018) and
-#'   multi-accuracy boosting (Kim et al., 2019) for calibration of a
-#'   (binary classification) machine learning model's prediction.
-#'   Multi-calibration works best in scenarios where the underlying data & labels is un-biased
-#'   but a bias is introduced within the algoritm's fitting procedure. This is often the case,
-#'   e.g. when an algorithm fits a majority sub-population while ignoring or under-fitting minority
+#'   Implements Multi-Calibration (Hebert Johnson et al., 2018) and
+#'   Multi-Accuracy Boosting (Kim et al., 2019) for calibration of any
+#'   (binary classification)  machine learning model's prediction.
+#'   Multi-calibration works best in scenarios where the underlying data & labels are un-biased
+#'   but a bias is introduced within the algorithm's fitting procedure. This is often the case,
+#'   e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 #'   populations.\cr
 #'   The method defaults to `multi-accuracy boosting` as described in Kim et al., 2019.
 #'   In order to obtain behaviour as described in Hebert-Johnson et al., 2018 set `partition=TRUE`
@@ -81,15 +81,15 @@ MCBoost = R6::R6Class("MCBoost",
     subpop_fitter = NULL,
 
     #' @field predictor [`function`] \cr
-    #'   Initial redictor function.
+    #'   Initial predictor function.
     predictor = NULL,
 
     #' @field iter_models [`list`] \cr
-    #'   Cummulative list of fitted models.
+    #'   Cumulative list of fitted models.
     iter_models = list(),
 
     #' @field iter_partitions [`list`] \cr
-    #'   Cummulative list of data partitions for models.
+    #'   Cumulative list of data partitions for models.
     iter_partitions = list(),
 
     #' @field iter_corr [`list`] \cr
@@ -116,7 +116,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param num_buckets [`integer`] \cr
     #'   The number of buckets to split into in addition to using the whole sample. Default `2L`.
     #' @param bucket_strategy  [`character`] \cr
-    #'   Currently onle supports "simple", even split along probabilities.
+    #'   Currently only supports "simple", even split along probabilities.
     #'   Only taken into account for num_buckets > 1.
     #' @param rebucket [`logical`] \cr
     #'   Should buckets be re-done at each iteration? Default: `FALSE`.
@@ -359,7 +359,7 @@ MCBoost = R6::R6Class("MCBoost",
       }
     },
     #' @description
-    #' Prints information about multicalibaration.
+    #' Prints information about multicalibration.
     #' @param ... `any`\cr
     #' Not used.
     print = function(...) {

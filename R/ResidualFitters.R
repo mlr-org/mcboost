@@ -104,7 +104,7 @@ SubpopFitter = R6::R6Class("SubpopFitter",
     #'   List of subpopulation indicators.
     subpops = NULL,
     #' @description
-    #' Initialize SubPopFilter
+    #' Initialize SubPopFitter
     #'
     #' @template params_subpops
     initialize = function(subpops) {

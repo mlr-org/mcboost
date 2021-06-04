@@ -2,14 +2,14 @@
 % Please edit documentation in R/MCBoost.R
 \name{MCBoost}
 \alias{MCBoost}
-\title{Multi-Accuracy Boosting for R}
+\title{Multi-Calibration and Multi-Accuracy Boosting}
 \description{
-Implements "multi-calibration" (Hebert Johnson et al., 2018) and
-multi-accuracy boosting (Kim et al., 2019) for calibration of a
+Implements Multi-Calibration (Hebert Johnson et al., 2018) and
+Multi-Accuracy Boosting (Kim et al., 2019) for calibration of any
 machine learning model's prediction.
-Multi-calibration works best in scenarios where the underlying data & labels is un-biased
-but a bias is introduced within the algoritm's fitting procedure. This is often the case,
-e.g. when an algorithm fits a majority sub-population while ignoring or under-fitting minority
+Multi-calibration works best in scenarios where the underlying data & labels are un-biased
+but a bias is introduced within the algorithm's fitting procedure. This is often the case,
+e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 populations.\cr
 The method defaults to \verb{multi-accuracy boosting} as described in Kim et al., 2019.
 In order to obtain behaviour as described in Hebert-Johnson et al., 2018 set \code{partition=TRUE}
@@ -77,13 +77,13 @@ Specifies the type of model used to fit the
 residual fxn ('TreeResidualFitter' or 'RidgeResidualFitter' (default)).}
 
 \item{\code{predictor}}{\code{\link{function}} \cr
-Initial redictor function.}
+Initial predictor function.}
 
 \item{\code{iter_models}}{\code{\link{list}} \cr
-Cummulative list of fitted models.}
+Cumulative list of fitted models.}
 
 \item{\code{iter_partitions}}{\code{\link{list}} \cr
-Cummulative list of data partitions for models.}
+Cumulative list of data partitions for models.}
 
 \item{\code{iter_corr}}{\code{\link{list}} \cr
 Auditor correlation in each iteration.}
@@ -148,7 +148,7 @@ True/False flag for whether to split up predictions by their "partition"
 The number of buckets to split into in addition to using the whole sample. Default \code{2L}.}
 
 \item{\code{bucket_strategy}}{\code{\link{character}} \cr
-Currently onle supports "simple", even split along probabilities.
+Currently only supports "simple", even split along probabilities.
 Only taken into account for num_buckets > 1.}
 
 \item{\code{rebucket}}{\code{\link{logical}} \cr
@@ -287,7 +287,7 @@ Numeric vector of multi-calibrated predictions.
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Prints information about multicalibaration.
+Prints information about multicalibration.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MCBoost$print(...)}\if{html}{\out{</div>}}
 }
