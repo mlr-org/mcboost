@@ -206,7 +206,7 @@ hist(ae)
 We can see that there are a few instances with more pronounced effects, while most have actually only a low effect.
 
 In order to get more insights, we compute quantiles of the
-less and more effected population (median as cut-point) and analyse differences.
+less and more effected population (median as cut-point) and analyze differences.
 
 ```{r}
 effect = apply(test_data[ae >= median(ae[ae>0]),], 2, quantile)
