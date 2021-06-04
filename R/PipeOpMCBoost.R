@@ -145,16 +145,15 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 #' Wraps MCBoost in a Pipeline to be used with `mlr3pipelines`.
 #' For now this assumes training on the same dataset that is later used
 #' for multi-calibration.
-#' @param lrn [`Learner`]\cr
+#' @param learner (mlr3)[`Learner`]\cr
 #'   Initial learner. Internally wrapped into a `PipeOpLearnerCV`
 #'   with `resampling.method = "insample"` as a default.
 #'   All parameters can be adjusted through the resulting `Graph's param_set.
 #'   Defaults to `lrn("classif.featureless")`.
 #'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
 #' @export
-ppl_mcboost = function(lrn = lrn("classif.featureless")) {
-  assert_learner(lrn)
-  po_lrn = mlr3pipelines::po("learner_cv", lrn, resampling.method = "insample")
+ppl_mcboost = function(learner = lrn("classif.featureless")) {
+  po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
     "data" = mlr3pipelines::po("nop"),

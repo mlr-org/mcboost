@@ -4,10 +4,10 @@
 \alias{ppl_mcboost}
 \title{Multi-calibration pipeline}
 \usage{
-ppl_mcboost(lrn = lrn("classif.featureless"))
+ppl_mcboost(learner = lrn("classif.featureless"))
 }
 \arguments{
-\item{lrn}{\code{\link{Learner}}\cr
+\item{learner}{(mlr3)\code{\link{Learner}}\cr
 Initial learner. Internally wrapped into a \code{PipeOpLearnerCV}
 with \code{resampling.method = "insample"} as a default.
 All parameters can be adjusted through the resulting \verb{Graph's param_set. Defaults to }lrn("classif.featureless")\verb{. Note: An initial predictor can also be supplied via the }init_predictor` parameter.}
