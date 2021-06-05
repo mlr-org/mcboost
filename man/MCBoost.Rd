@@ -2,25 +2,25 @@
 % Please edit documentation in R/MCBoost.R
 \name{MCBoost}
 \alias{MCBoost}
-\title{Multi-Calibration and Multi-Accuracy Boosting}
+\title{Multi-Calibration Boosting}
 \description{
 Implements Multi-Calibration (Hebert Johnson et al., 2018) and
 Multi-Accuracy Boosting (Kim et al., 2019) for calibration of any
-machine learning model's prediction.
-Multi-calibration works best in scenarios where the underlying data & labels are unbiased
+(binary classification) machine learning model's prediction.
+Multi-Calibration works best in scenarios where the underlying data & labels are unbiased
 but a bias is introduced within the algorithm's fitting procedure. This is often the case,
 e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 populations.\cr
-The method defaults to \verb{multi-accuracy boosting} as described in Kim et al., 2019.
-In order to obtain behaviour as described in Hebert-Johnson et al., 2018 set \code{partition=TRUE}
+The method defaults to \verb{multi-accuracy boosting} as described in Kim et al. (2019).
+In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set \code{partition=TRUE}
 and \code{multiplicative=FALSE}.
 \itemize{
 For additional details, please refer to the relevant publication:
 \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
-Guy Rothblum Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
+Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
 http://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
-\item{Michael P. Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
-In Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
+\item{Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
+Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
 Association for Computing Machinery, New York, NY, USA, 247–254.
 https://dl.acm.org/doi/10.1145/3306618.3314287}{}
 }
@@ -132,7 +132,7 @@ Initialize a multi-calibration instance.
 \describe{
 \item{\code{max_iter}}{\code{\link{integer}} \cr
 The maximum number of iterations of the multicalibration/multiaccuracy method.
-Default `5L.}
+Default \code{5L}.}
 
 \item{\code{alpha}}{\code{\link{numeric}} \cr
 Accuracy parameter that determines the stopping condition. Default \code{1e-4}.}
@@ -157,10 +157,11 @@ Should buckets be re-done at each iteration? Default: \code{FALSE}.}
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive)}
 
-\item{\code{subpop_fitter}}{\code{\link{ResidualFitter}}|\code{\link{character}}|(mlr3)qq\code{\link{Learner}} \cr
+\item{\code{subpop_fitter}}{\code{\link{ResidualFitter}}|\code{\link{character}}|(mlr3)\code{\link{Learner}} \cr
 Specifies the type of model used to fit the
-residuals. The default is \code{\link{RidgeResidualFitter}}).
-Can be a \code{character}, the name of a \code{\link{ResidualFitter}}\verb{, a (mlr3)[}Learner\verb{] that is then auto-converted into a [}LearnerResidualFitter\verb{] or a custom [}ResidualFitter`].}
+residuals. The default is \code{\link{RidgeResidualFitter}}.
+Can be a \code{character}, the name of a \code{\link{ResidualFitter}}, a (mlr3)\code{\link{Learner}} that is then
+auto-converted into a \code{\link{LearnerResidualFitter}} or a custom \code{\link{ResidualFitter}}.}
 
 \item{\code{subpops}}{\code{\link{list}} \cr
 Specifies a collection of characteristic attributes

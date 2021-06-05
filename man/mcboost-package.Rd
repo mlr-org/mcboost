@@ -6,17 +6,23 @@
 \alias{mcboost-package}
 \title{mcboost: Multi-Calibration Boosting}
 \description{
-Implements Multi-Calibration (Hebert Johnson et al., 2018) and 
-    Multi-Accuracy Boosting (Kim et al., 2019) for the calibration of any machine learning model's prediction.
-    MCBoost is a technique, that iteratively updates predictions for sub-groups in order to mitigate biases
-    like poor calibration or large accuracy differences across subgroups.
-    Multi-calibration works best in scenarios where the underlying data & labels are unbiased
-    but a bias is introduced within the algorithm's fitting procedure. This is often the case,
-    e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
+Implements Multi-Calibration (Hebert-Johnson et al. 2018) <jmlr:http://proceedings.mlr.press/v80/hebert-johnson18a.html> and
+    Multi-Accuracy Boosting (Kim et al. 2019) <arxiv:https://arxiv.org/abs/1805.12317> for the (multi-)calibration of a machine learning model's prediction.
+    MCBoost iteratively updates predictions for sub-groups in order to mitigate biases like poor calibration or large accuracy differences across subgroups.
+    Multi-Calibration works best in scenarios where the underlying data & labels are un-biased, but resulting models are.
+    This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 }
 \references{
-Kim et al, 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification
-Hebert-Johnson et al., 2017: Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses
+Kim et al., 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
+Hebert-Johnson et al., 2018: Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/pfistfl/mcboost}
+  \item Report bugs at \url{https://github.com/pfistfl/mcboost/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Florian Pfisterer \email{pfistererf@googlemail.com} (\href{https://orcid.org/0000-0001-8867-762X}{ORCID})
