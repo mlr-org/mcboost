@@ -21,7 +21,7 @@ set.seed(83007)
 ```
 
 
-## Example 0: Multi-Calibration in 6 Lines of code
+## Example 0: Multi-Accuracy in 6 Lines of code
 
 As a brief introduction we show how to use **mcboost** in only 6 lines of code.
 For our example, we use the data from the *sonar* binary classification task.
@@ -47,7 +47,25 @@ After the calibration, we use the model to predict on the left-out data (8 obser
 mc$predict_probs(d[201:208,])
 ```
 
-## Example 1: Multi-Calibration Boosting on the Adult Dataset
+
+## What does mcboost do?
+
+Internally mcboost runs the following procedure `max_iters` times:
+
+1. Predict on X using the model from the previous iteration, `init_predictor` in the first iteration.
+1. Compute the residuals `r = y - y_hat`
+1. Split predictions into `num_buckets` acording to `y_hat`.
+1. Fit the auditor (`subpop_fitter`) (here called`c(x)`) on the data in each bucket with target variable `r`.
+1. Compute `misscal = mean(c(x) * r(x))`
+1. if `misscal > alpha`:
+    For the bucket with highest `misscal`, update the model using the prediction `c(x)`.
+    else:
+    Stop the procedure
+
+A lot more details can be found either in the code, or in the corresponding publications.
+
+
+## Example 1: Multi-Accuracy Boosting on the Adult Dataset
 
 First we download the data and create an `mlr3` classification task:
 
@@ -225,7 +243,9 @@ test_data[ae >= median(ae[ae>0]), names(which(difference > 0.1)), with = FALSE]
 
 ### Predicting using only the first 'n' iterations
 
-The `t` parameter can be use to predict using only the first `t` iterations.
+Multi-calibration is an iterative prodedure.
+The `t` parameter can be used to predict using only the first `t` iterations.
+This then predicts using only the first `t` iterations of the multi-calibration proceedure.
 
 ```{r}
 prs = mc$predict_probs(test_data, t = 3L)

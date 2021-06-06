@@ -70,7 +70,7 @@ TreeResidualFitter = R6::R6Class("TreeResidualFitter",
     #' @description
     #' Define a ResidualFitter from a rpart learner
     initialize = function() {
-      mlr3misc::require_namespaces(c("mlr3learners", "rpart"))
+      mlr3misc::require_namespaces("rpart")
       super$initialize(learner = lrn("regr.rpart"))
     }
   )

@@ -7,9 +7,13 @@
 [![Mattermost](https://img.shields.io/badge/chat-mattermost-orange.svg)](https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/)
 <!-- badges: end -->
 
+## What does it do ?
+
 **mcboost** implements Multi-Calibration Boosting ([Hebert-Johnson et al., 2018](http://proceedings.mlr.press/v80/hebert-johnson18a.html); [Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)) for the (multi-)calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased but a bias is introduced within the algorithm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 
 For more information and example, see the package's [website](https://pfistfl.github.io/mcboost/).
+
+More details with respect to usage and the procedures can be found in the pacakge vignettes.
 
 ## Installation
 
@@ -24,7 +28,7 @@ remotes::install_github("pfistfl/mcboost")
 Post-processing with `mcboost` needs three components. We start with an initial prediction model (1) and an auditing algorithm (2) that may be customized by the user. The auditing algorithm then runs Multi-Calibration-Boosting on a labeled auditing dataset (3). The resulting model can be used for obtaining multi-calibrated predictions.
 
 <p align="center">
-  <img src="paper/MCBoost.png" />
+  <img src="https://github.com/pfistfl/mcboost/raw/main/paper/MCBoost.png" />
 </p>
 
 ## Example
@@ -32,6 +36,8 @@ Post-processing with `mcboost` needs three components. We start with an initial 
 In this simple example, our goal is to improve calibration
 for an `initial predictor`, e.g. a ML algorithm trained on
 an initial task.
+Internally, `mcboost` often makes use of `mlr3` and learners that come with `mlr3learners`.
+
 
 ``` r
 library(mcboost)
@@ -65,9 +71,13 @@ We can now wrap this initial learner's predict function for use with `mcboost`, 
 
 We can now run Multi-Calibration Boosting by instantiating the object and calling the `multicalibrate` method.
 Note, that typically, we would use Multi-Calibration on a separate validation set!
+We furthermore select the auditor model, a `SubpopFitter`,
+in our case a `Decision Tree`:
 
 ```r
-  mc = MCBoost$new(init_predictor = init_predictor)
+  mc = MCBoost$new(
+    init_predictor = init_predictor,
+    subpop_fitter = "TreeResidualFitter")
   mc$multicalibrate(train_data, train_labels)
 ```
 
@@ -77,6 +87,21 @@ Lastly, we predict on new data.
 tstid = setdiff(tsk$row_ids, tid) # held-out data
 test_data = tsk$data(cols = tsk$feature_names, rows = tstid)
 mc$predict_probs(test_data)
+```
+
+### Multi-Calibration
+
+While `mcboost` in its defaults implements Multi-Accuracy ([Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)),
+it can also multi-calibrate predictors ([Hebert-Johnson et al., 2018](http://proceedings.mlr.press/v80/hebert-johnson18a.html)).
+In order to achieve this, we have to set the following hyperparameters:
+
+```r
+  mc = MCBoost$new(
+    init_predictor = init_predictor,
+    subpop_fitter = "TreeResidualFitter",
+    num_buckets = 10,
+    multiplicative = FALSE
+  )
 ```
 
 ## MCBoost as a PipeOp
