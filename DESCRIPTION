@@ -34,7 +34,6 @@ License: LGPL (>= 3)
 URL: https://github.com/pfistfl/mcboost
 BugReports: https://github.com/pfistfl/mcboost/issues
 Encoding: UTF-8
-LazyData: true
 Depends:
     R (>= 3.1.0)
 Imports:
@@ -42,9 +41,9 @@ Imports:
     checkmate (>= 2.0.0),
     lifecycle,
     data.table (>= 1.13.6),
-    mlr3,
+    mlr3 (>= 0.10),
     mlr3misc (>= 0.9.0),
-    mlr3pipelines,
+    mlr3pipelines (>= 0.3.0),
     R6 (>= 2.4.1),
     rpart
 Suggests:
