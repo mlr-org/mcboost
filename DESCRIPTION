@@ -30,7 +30,7 @@ Description: Implements Multi-Calibration (Hebert-Johnson et al. 2018) <jmlr:htt
     MCBoost iteratively updates predictions for sub-groups in order to mitigate biases like poor calibration or large accuracy differences across subgroups.
     Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are.
     This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
-License: GPL-3
+License: LGPL (>= 3)
 URL: https://github.com/pfistfl/mcboost
 BugReports: https://github.com/pfistfl/mcboost/issues
 Encoding: UTF-8
