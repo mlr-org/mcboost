@@ -9,8 +9,8 @@
 #'   e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 #'   populations.\cr
 #'   The method defaults to `multi-accuracy boosting` as described in Kim et al. (2019).
-#'   In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set `partition=TRUE`
-#'   and `multiplicative=FALSE`.
+#'   In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
+#'   `multiplicative=FALSE` and `num_buckets` to 10.
 #'   \itemize{
 #'   For additional details, please refer to the relevant publication:
 #'     \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
@@ -59,7 +59,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' @field partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
     #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
-    #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
+    #'   Defaults to `TRUE` (multi-accuracy boosting).
     partition = NULL,
 
     #' @field multiplicative [`logical`] \cr

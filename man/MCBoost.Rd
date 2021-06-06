@@ -12,8 +12,8 @@ but a bias is introduced within the algorithm's fitting procedure. This is often
 e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 populations.\cr
 The method defaults to \verb{multi-accuracy boosting} as described in Kim et al. (2019).
-In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set \code{partition=TRUE}
-and \code{multiplicative=FALSE}.
+In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
+\code{multiplicative=FALSE} and \code{num_buckets} to 10.
 \itemize{
 For additional details, please refer to the relevant publication:
 \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
@@ -59,7 +59,7 @@ Should buckets be re-calculated at each iteration?}
 \item{\code{partition}}{\code{\link{logical}} \cr
 True/False flag for whether to split up predictions by their "partition"
 (e.g., predictions less than 0.5 and predictions greater than 0.5).
-Defaults to \code{TRUE} (multi-accuracy boosting). Set to \code{FALSE} for multi-calibration.}
+Defaults to \code{TRUE} (multi-accuracy boosting).}
 
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive).

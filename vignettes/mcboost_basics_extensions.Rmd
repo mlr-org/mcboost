@@ -53,10 +53,10 @@ mc$predict_probs(d[201:208,])
 Internally mcboost runs the following procedure `max_iters` times:
 
 1. Predict on X using the model from the previous iteration, `init_predictor` in the first iteration.
-1. Compute the residuals `r = y - y_hat`
+1. Compute the residuals `res = y - y_hat`
 1. Split predictions into `num_buckets` acording to `y_hat`.
 1. Fit the auditor (`subpop_fitter`) (here called`c(x)`) on the data in each bucket with target variable `r`.
-1. Compute `misscal = mean(c(x) * r(x))`
+1. Compute `misscal = mean(c(x) * res(x))`
 1. if `misscal > alpha`:
     For the bucket with highest `misscal`, update the model using the prediction `c(x)`.
     else:
