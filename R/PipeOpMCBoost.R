@@ -155,7 +155,6 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 #' @examples
 #'   library("mlr3pipelines")
 #'   gr = ppl_mcboost()
-#'   as_learner(gr)
 #' @export
 ppl_mcboost = function(learner = lrn("classif.featureless")) {
   mlr3misc::require_namespaces("mlr3pipelines")

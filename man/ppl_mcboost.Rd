@@ -23,5 +23,4 @@ for multi-calibration.
 \examples{
   library("mlr3pipelines")
   gr = ppl_mcboost()
-  as_learner(gr)
 }
