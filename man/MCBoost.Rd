@@ -33,6 +33,8 @@ https://dl.acm.org/doi/10.1145/3306618.3314287}{}
   mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
   # Predict on test set
   mc$predict_probs(iris[101:150,1:4])
+  # Get auditor effect
+  mc$auditor_effect(iris[101:150,1:4])
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -157,10 +159,10 @@ Should buckets be re-done at each iteration? Default: \code{FALSE}.}
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive)}
 
-\item{\code{auditor_fitter}}{\code{\link{AuditorFitter}}|\code{\link{character}}|(mlr3)\code{\link{Learner}} \cr
+\item{\code{auditor_fitter}}{\code{\link{AuditorFitter}}|\code{\link{character}}|\code{\link[mlr3:Learner]{mlr3::Learner}} \cr
 Specifies the type of model used to fit the
 residuals. The default is \code{\link{RidgeAuditorFitter}}.
-Can be a \code{character}, the name of a \code{\link{AuditorFitter}}, a (mlr3)\code{\link{Learner}} that is then
+Can be a \code{character}, the name of a \code{\link{AuditorFitter}}, a \code{\link[mlr3:Learner]{mlr3::Learner}} that is then
 auto-converted into a \code{\link{LearnerAuditorFitter}} or a custom \code{\link{AuditorFitter}}.}
 
 \item{\code{subpops}}{\code{\link{list}} \cr
@@ -171,10 +173,10 @@ e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 \item{\code{default_model_class}}{\code{Predictor} \cr
 The class of the model that should be used as the init predictor model.}
 
-\item{\code{init_predictor}}{\code{\link{function}}|\code{\link{Learner}} \cr
+\item{\code{init_predictor}}{\code{\link{function}}|\code{\link[mlr3:Learner]{mlr3::Learner}} \cr
 The initial predictor function to use (i.e., if the user has a pretrained model).
 If a \code{mlr3} \code{Learner} is passed, it will be autoconverted using \code{mlr3_init_predictor}.
-This requires the \code{\link{Learner}} to be trained.}
+This requires the \code{\link[mlr3:Learner]{mlr3::Learner}} to be trained.}
 
 \item{\code{iter_sampling}}{\code{\link{character}} \cr
 How to sample the validation data for each iteration?

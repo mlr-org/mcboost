@@ -4,7 +4,7 @@
 \alias{SubpopAuditorFitter}
 \title{Static AuditorFitter based on Subpopulations}
 \value{
-\code{\link{AuditorFitter}}
+\code{\link{AuditorFitter}}\cr
 
 \code{list} with items\cr
 \itemize{

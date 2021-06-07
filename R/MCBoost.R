@@ -127,7 +127,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param auditor_fitter [`AuditorFitter`]|[`character`]|[`mlr3::Learner`] \cr
     #'   Specifies the type of model used to fit the
     #'   residuals. The default is [`RidgeAuditorFitter`].
-    #'   Can be a `character`, the name of a [`AuditorFitter`], a [`mlr3::arnerarner`] that is then
+    #'   Can be a `character`, the name of a [`AuditorFitter`], a [`mlr3::Learner`] that is then
     #'   auto-converted into a [`LearnerAuditorFitter`] or a custom [`AuditorFitter`].
     #' @template params_subpops
     #' @param default_model_class `Predictor` \cr

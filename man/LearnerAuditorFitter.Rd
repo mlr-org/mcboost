@@ -6,7 +6,7 @@
 \alias{RidgeAuditorFitter}
 \title{AuditorFitter from a Learner}
 \value{
-\code{\link{AuditorFitter}}
+\code{\link{AuditorFitter}}\cr
 
 \code{list} with items\cr
 \itemize{
@@ -14,9 +14,9 @@
 \item \code{l}: the trained learner.
 }
 
-\code{\link{AuditorFitter}}
+\code{\link{AuditorFitter}}\cr
 
-\code{\link{AuditorFitter}}
+\code{\link{AuditorFitter}}\cr
 }
 \description{
 AuditorFitter from a Learner
@@ -90,7 +90,7 @@ Available instantiations: \code{\link{TreeAuditorFitter}} (rpart) and
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{learner}}{\code{\link{Learner}}\cr
+\item{\code{learner}}{\code{\link[mlr3:Learner]{mlr3::Learner}}\cr
 Regression Learner to use.}
 }
 \if{html}{\out{</div>}}

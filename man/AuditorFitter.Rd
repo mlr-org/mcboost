@@ -4,7 +4,11 @@
 \alias{AuditorFitter}
 \title{AuditorFitter Abstract Base Class}
 \value{
-\code{\link{AuditorFitter}}
+\code{list} with items\cr
+\itemize{
+\item \code{corr}: pseudo-correlation between residuals and learner prediction.
+\item \code{l}: the trained learner.
+}
 
 \code{list} with items\cr
 \itemize{
@@ -49,7 +53,7 @@ This is an abstract base class.
 \if{html}{\out{<a id="method-fit_to_resid"></a>}}
 \if{latex}{\out{\hypertarget{method-fit_to_resid}{}}}
 \subsection{Method \code{fit_to_resid()}}{
-Fit to residuals
+Fit to residuals.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{AuditorFitter$fit_to_resid(data, resid, mask)}\if{html}{\out{</div>}}
 }
@@ -82,7 +86,7 @@ Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 \if{html}{\out{<a id="method-fit"></a>}}
 \if{latex}{\out{\hypertarget{method-fit}{}}}
 \subsection{Method \code{fit()}}{
-Fit to residuals
+Fit (mostly used internally, use \code{fit_to_resid}).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{AuditorFitter$fit(data, resid, mask)}\if{html}{\out{</div>}}
 }

@@ -6,7 +6,7 @@
 \alias{CVRidgeAuditorFitter}
 \title{Cross-validated AuditorFitter from a Learner}
 \value{
-\code{\link{AuditorFitter}}
+\code{\link{AuditorFitter}}\cr
 
 \code{list} with items\cr
 \itemize{
@@ -14,9 +14,9 @@
 \item \code{l}: the trained learner.
 }
 
-\code{\link{AuditorFitter}}
+\code{\link{AuditorFitter}}\cr
 
-\code{\link{AuditorFitter}}
+\code{\link{AuditorFitter}}\cr
 }
 \description{
 CVLearnerAuditorFitter returns the cross-validated predictions
@@ -95,7 +95,7 @@ cross-validated learners.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{learner}}{\code{\link{Learner}}\cr
+\item{\code{learner}}{\code{\link[mlr3:Learner]{mlr3::Learner}}\cr
 Regression Learner to use.}
 
 \item{\code{folds}}{\code{\link{integer}}\cr

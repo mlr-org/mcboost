@@ -4,7 +4,7 @@
 \alias{SubgroupAuditorFitter}
 \title{Static AuditorFitter based on Subgroups}
 \value{
-\code{\link{AuditorFitter}}
+\code{\link{AuditorFitter}}\cr
 
 \code{list} with items\cr
 \itemize{
