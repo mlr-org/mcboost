@@ -25,8 +25,8 @@ set.seed(83007)
 
 As a brief introduction we show how to use **mcboost** in only 6 lines of code.
 For our example, we use the data from the *sonar* binary classification task.
-We instantiate a `MCBoost` instance by specifying a `subpop_fitter`.
-This `subpop_fitter` defines the splits into groups in each boosting iteration
+We instantiate a `MCBoost` instance by specifying a `auditor_fitter`.
+This `auditor_fitter` defines the splits into groups in each boosting iteration
 based on the obtained residuals.
 In this example, we choose a `Tree` based model.
 Afterwards, we run the `$multicalibrate()` method on our data to start multi-calibration.
@@ -37,7 +37,7 @@ We only use the first 200 samples of the *sonar* data set to train our multi-cal
 tsk = tsk("sonar")
 d = tsk$data(cols = tsk$feature_names)
 l = tsk$data(cols = tsk$target_names)[[1]]
-mc = MCBoost$new(subpop_fitter = "TreeAuditorFitter")
+mc = MCBoost$new(auditor_fitter = "TreeAuditorFitter")
 mc$multicalibrate(d[1:200,], l[1:200])
 ```
 
@@ -55,7 +55,7 @@ Internally mcboost runs the following procedure `max_iter` times:
 1. Predict on X using the model from the previous iteration, `init_predictor` in the first iteration.
 1. Compute the residuals `res = y - y_hat`
 1. Split predictions into `num_buckets` acording to `y_hat`.
-1. Fit the auditor (`subpop_fitter`) (here called`c(x)`) on the data in each bucket with target variable `r`.
+1. Fit the auditor (`auditor_fitter`) (here called`c(x)`) on the data in each bucket with target variable `r`.
 1. Compute `misscal = mean(c(x) * res(x))`
 1. if `misscal > alpha`:
     For the bucket with highest `misscal`, update the model using the prediction `c(x)`.
@@ -140,7 +140,7 @@ labels = 1 - one_hot(prep_task$data(cols = prep_task$target_names)[[1]])
 We use a ridge regularized linear regression model as the auditor.
 
 ```{r}
-mc = MCBoost$new(subpop_fitter = "RidgeAuditorFitter", init_predictor = init_predictor)
+mc = MCBoost$new(auditor_fitter = "RidgeAuditorFitter", init_predictor = init_predictor)
 mc$multicalibrate(data, labels)
 ```
 
@@ -315,7 +315,7 @@ Note, that this can sometimes take a little longer since each learner is cross-v
 ```{r}
 d = data[, -1]
 l = data$Class
-mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=CVTreeAuditorFitter$new(), max_iter = 2L)
+mc = MCBoost$new(init_predictor = init_predictor, auditor_fitter=CVTreeAuditorFitter$new(), max_iter = 2L)
 mc$multicalibrate(d[1:200,], l[1:200])
 mc$predict_probs(d[201:208,])
 ```
@@ -343,7 +343,7 @@ d = data[, -1]
 l = data$Class
 mc = MCBoost$new(
   init_predictor = init_predictor,
-  subpop_fitter= TreeAuditorFitter$new(),
+  auditor_fitter= TreeAuditorFitter$new(),
   iter_sampling = "bootstrap"
 )
 mc$multicalibrate(d[1:200,], l[1:200])
@@ -369,7 +369,7 @@ See [here](https://mlr3extralearners.mlr-org.com/articles/learners/list_learners
 
 ```{r}
 rf = LearnerAuditorFitter$new(lrn("regr.rpart", minsplit = 10L))
-mc = MCBoost$new(subpop_fitter = rf)
+mc = MCBoost$new(auditor_fitter = rf)
 mc$multicalibrate(data, labels)
 ```
 
@@ -402,7 +402,7 @@ rf = SubpopAuditorFitter$new(list(
 ```
 
 ```{r}
-mc = MCBoost$new(subpop_fitter = rf)
+mc = MCBoost$new(auditor_fitter = rf)
 mc$multicalibrate(data, labels)
 ```
 
@@ -426,7 +426,7 @@ rf = SubgroupAuditorFitter$new(list(
 ```
 
 ```{r}
-mc = MCBoost$new(subpop_fitter = rf)
+mc = MCBoost$new(auditor_fitter = rf)
 mc$multicalibrate(data, labels)
 ```
 
@@ -477,7 +477,7 @@ init_model$predict(tsk)$score()
 # We define a pipeline that imputes missings and encodes categoricals
 auditor = as_learner(po("encode") %>>% po("imputehist") %>>% lrn("regr.rpart"))
 
-mc = MCBoost$new(subpop_fitter = auditor, init_predictor = init_model)
+mc = MCBoost$new(auditor_fitter = auditor, init_predictor = init_model)
 mc$multicalibrate(X, y)
 ```
 
@@ -560,7 +560,7 @@ labels = prep_task$data(cols = prep_task$target_names)[[1]]
 ```
 
 ```{r}
-mc = MCBoost$new(subpop_fitter = "RidgeAuditorFitter", init_predictor = init_predictor, eta = 0.1)
+mc = MCBoost$new(auditor_fitter = "RidgeAuditorFitter", init_predictor = init_predictor, eta = 0.1)
 mc$multicalibrate(data, labels)
 ```
 

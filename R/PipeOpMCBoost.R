@@ -74,7 +74,7 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
         paradox::ParamInt$new("num_buckets", lower = 1, upper = Inf, default = 2L, tags = "train"),
         paradox::ParamLgl$new("rebucket", default = FALSE, tags = "train"),
         paradox::ParamLgl$new("multiplicative", default = TRUE, tags = "train"),
-        paradox::ParamUty$new("subpop_fitter", default = NULL, tags = "train"),
+        paradox::ParamUty$new("auditor_fitter", default = NULL, tags = "train"),
         paradox::ParamUty$new("subpops", default = NULL, tags = "train"),
         paradox::ParamUty$new("default_model_class", default = ConstantPredictor, tags = "train"),
         paradox::ParamUty$new("init_predictor", default = NULL, tags = "train")

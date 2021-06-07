@@ -72,7 +72,7 @@ Can be \code{bootstrap}, \code{split} or \code{none}.\cr
 "bootstrap" uses a new bootstrap sample in each iteration.\cr
 "none" uses the same dataset in each iteration.}
 
-\item{\code{subpop_fitter}}{\code{\link{AuditorFitter}} \cr
+\item{\code{auditor_fitter}}{\code{\link{AuditorFitter}} \cr
 Specifies the type of model used to fit the
 residual fxn ('TreeAuditorFitter' or 'RidgeAuditorFitter' (default)).}
 
@@ -119,7 +119,7 @@ Initialize a multi-calibration instance.
   bucket_strategy = "simple",
   rebucket = FALSE,
   multiplicative = TRUE,
-  subpop_fitter = NULL,
+  auditor_fitter = NULL,
   subpops = NULL,
   default_model_class = ConstantPredictor,
   init_predictor = NULL,
@@ -157,7 +157,7 @@ Should buckets be re-done at each iteration? Default: \code{FALSE}.}
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive)}
 
-\item{\code{subpop_fitter}}{\code{\link{AuditorFitter}}|\code{\link{character}}|(mlr3)\code{\link{Learner}} \cr
+\item{\code{auditor_fitter}}{\code{\link{AuditorFitter}}|\code{\link{character}}|(mlr3)\code{\link{Learner}} \cr
 Specifies the type of model used to fit the
 residuals. The default is \code{\link{RidgeAuditorFitter}}.
 Can be a \code{character}, the name of a \code{\link{AuditorFitter}}, a (mlr3)\code{\link{Learner}} that is then

@@ -77,7 +77,7 @@ in our case a `Decision Tree`:
 ```r
   mc = MCBoost$new(
     init_predictor = init_predictor,
-    subpop_fitter = "TreeAuditorFitter")
+    auditor_fitter = "TreeAuditorFitter")
   mc$multicalibrate(train_data, train_labels)
 ```
 
@@ -98,7 +98,7 @@ In order to achieve this, we have to set the following hyperparameters:
 ```r
   mc = MCBoost$new(
     init_predictor = init_predictor,
-    subpop_fitter = "TreeAuditorFitter",
+    auditor_fitter = "TreeAuditorFitter",
     num_buckets = 10,
     multiplicative = FALSE
   )

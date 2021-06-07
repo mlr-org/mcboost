@@ -6,9 +6,7 @@ AuditorFitter = R6::R6Class("AuditorFitter",
     #' @description
     #' Initialize a [`AuditorFitter`]
     #' This is an abstract base class.
-    initialize = function() {
-      stop("Abstract!")
-    },
+    initialize = function() {},
     #' @description
     #' Fit to residuals
     #' @template params_data_resid

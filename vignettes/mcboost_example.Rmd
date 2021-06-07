@@ -163,14 +163,14 @@ The ridge regression will only be given access to the initial predictor variable
 
 ```{r}
 nnet_mc_ridge = MCBoost$new(init_predictor = init_nnet,
-                            subpop_fitter = ridge,
+                            auditor_fitter = ridge,
                             multiplicative = TRUE,
                             partition = TRUE,
                             max_iter = 15)
 nnet_mc_ridge$multicalibrate(d1, l)
 
 nnet_mc_subpop = MCBoost$new(init_predictor = init_nnet,
-                             subpop_fitter = pops,
+                             auditor_fitter = pops,
                              partition = TRUE,
                              max_iter = 15)
 nnet_mc_subpop$multicalibrate(d2, l)
@@ -268,14 +268,14 @@ The ridge regression will only be given access to the initial predictor variable
 
 ```{r}
 rf_mc_ridge = MCBoost$new(init_predictor = init_rf,
-                          subpop_fitter = ridge,
+                          auditor_fitter = ridge,
                           multiplicative = TRUE,
                           partition = TRUE,
                           max_iter = 15)
 rf_mc_ridge$multicalibrate(d1, l)
 
 rf_mc_lasso = MCBoost$new(init_predictor = init_rf,
-                          subpop_fitter = lasso,
+                          auditor_fitter = lasso,
                           multiplicative = TRUE,
                           partition = TRUE,
                           max_iter = 15)

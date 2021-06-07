@@ -15,7 +15,7 @@ test_that("MCBoost multicalibrate and predict_probs - CV Predictor", {
   data = tsk$data(cols = tsk$feature_names)
   labels = tsk$data(cols = tsk$target_names)[[1]]
   set.seed(123L)
-  mc = MCBoost$new(subpop_fitter = "CVTreeAuditorFitter")
+  mc = MCBoost$new(auditor_fitter = "CVTreeAuditorFitter")
   mc$multicalibrate(data, labels)
 
   expect_list(mc$iter_models, types = "CVLearnerPredictor")
@@ -33,7 +33,7 @@ test_that("Creating own CV Predictor works with different folds", {
   ln = lrn("regr.rpart")
   cvfit = CVLearnerAuditorFitter$new(ln, folds = 2L)
   set.seed(123L)
-  mc = MCBoost$new(subpop_fitter = cvfit)
+  mc = MCBoost$new(auditor_fitter = cvfit)
   mc$multicalibrate(data, labels)
 
   expect_equal(cvfit$learner$pipeop$param_set$values$resampling.folds, 2L)

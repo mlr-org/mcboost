@@ -75,10 +75,10 @@ MCBoost = R6::R6Class("MCBoost",
     #'   "none" uses the same dataset in each iteration.
     iter_sampling = NULL,
 
-    #' @field subpop_fitter [`AuditorFitter`] \cr
+    #' @field auditor_fitter [`AuditorFitter`] \cr
     #'   Specifies the type of model used to fit the
     #'   residual fxn ('TreeAuditorFitter' or 'RidgeAuditorFitter' (default)).
-    subpop_fitter = NULL,
+    auditor_fitter = NULL,
 
     #' @field predictor [`function`] \cr
     #'   Initial predictor function.
@@ -122,7 +122,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Should buckets be re-done at each iteration? Default: `FALSE`.
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
-    #' @param subpop_fitter [`AuditorFitter`]|[`character`]|(mlr3)[`Learner`] \cr
+    #' @param auditor_fitter [`AuditorFitter`]|[`character`]|(mlr3)[`Learner`] \cr
     #'   Specifies the type of model used to fit the
     #'   residuals. The default is [`RidgeAuditorFitter`].
     #'   Can be a `character`, the name of a [`AuditorFitter`], a (mlr3)[`Learner`] that is then
@@ -146,7 +146,7 @@ MCBoost = R6::R6Class("MCBoost",
                  bucket_strategy="simple",
                  rebucket=FALSE,
                  multiplicative=TRUE,
-                 subpop_fitter=NULL,
+                 auditor_fitter=NULL,
                  subpops=NULL,
                  default_model_class=ConstantPredictor,
                  init_predictor=NULL,
@@ -164,24 +164,24 @@ MCBoost = R6::R6Class("MCBoost",
 
       # Subpopulation fitters.
       if (!is.null(subpops)) {
-        self$subpop_fitter = SubpopAuditorFitter$new(subpops)
+        self$auditor_fitter = SubpopAuditorFitter$new(subpops)
       } else {
-        if (is.null(subpop_fitter)) {
-          self$subpop_fitter = RidgeAuditorFitter$new()
-        } else if (inherits(subpop_fitter, "Learner")) {
-          self$subpop_fitter = LearnerAuditorFitter$new(subpop_fitter)
-        } else if (inherits(subpop_fitter, "AuditorFitter")) {
-          self$subpop_fitter = subpop_fitter
-        } else if (inherits(subpop_fitter, "character")) {
-          self$subpop_fitter = switch(subpop_fitter,
+        if (is.null(auditor_fitter)) {
+          self$auditor_fitter = RidgeAuditorFitter$new()
+        } else if (inherits(auditor_fitter, "Learner")) {
+          self$auditor_fitter = LearnerAuditorFitter$new(auditor_fitter)
+        } else if (inherits(auditor_fitter, "AuditorFitter")) {
+          self$auditor_fitter = auditor_fitter
+        } else if (inherits(auditor_fitter, "character")) {
+          self$auditor_fitter = switch(auditor_fitter,
             "TreeAuditorFitter" = TreeAuditorFitter$new(),
             "RidgeAuditorFitter" = RidgeAuditorFitter$new(),
             "CVTreeAuditorFitter" = CVTreeAuditorFitter$new(),
             "CVRidgeAuditorFitter" = CVRidgeAuditorFitter$new(),
-             stop(sprintf("subpop_fitter '%s' not found, must be '[CV]TreeAuditorFitter' or '[CV]RidgeAuditorFitter'", subpop_fitter))
+             stop(sprintf("auditor_fitter '%s' not found, must be '[CV]TreeAuditorFitter' or '[CV]RidgeAuditorFitter'", auditor_fitter))
           )
         } else {
-          stop(sprintf("subpop_fitter must be of type 'AuditorFitter' or character"))
+          stop(sprintf("auditor_fitter must be of type 'AuditorFitter' or character"))
         }
       }
 
@@ -243,7 +243,7 @@ MCBoost = R6::R6Class("MCBoost",
         if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
       }
 
-      pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data))
+      pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data), finite = TRUE)
       resid = private$compute_residuals(pred_probs, labels)
       new_probs = pred_probs
       if (self$iter_sampling == "split")  {
@@ -274,7 +274,7 @@ MCBoost = R6::R6Class("MCBoost",
           if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
           data_m = data[idx,][mask,]
           resid_m = resid[idx][mask]
-          out = self$subpop_fitter$fit_to_resid(data_m, resid_m, idx[mask])
+          out = self$auditor_fitter$fit_to_resid(data_m, resid_m, idx[mask])
           corrs[j] = out[[1]]
           models[[j]] = out[[2]]
         }
