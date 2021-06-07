@@ -1,9 +1,9 @@
 context("MCBoost Class")
 
 test_that("MCBoost class instantiation", {
-  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter")
+  mc = MCBoost$new(subpop_fitter = "TreeAuditorFitter")
   expect_class(mc, "MCBoost")
-  expect_class(mc$subpop_fitter, "ResidualFitter")
+  expect_class(mc$subpop_fitter, "AuditorFitter")
   expect_function(mc$predictor, args = "data")
 
 })
@@ -15,7 +15,7 @@ test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
   data = tsk$data(cols = tsk$feature_names)
   labels = tsk$data(cols = tsk$target_names)[[1]]
 
-  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter")
+  mc = MCBoost$new(subpop_fitter = "TreeAuditorFitter")
   mc$multicalibrate(data, labels)
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
@@ -41,7 +41,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
     p = prd$predict(data)
   }
 
-  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeResidualFitter", eta = 0.1)
+  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeAuditorFitter", eta = 0.1)
   mc$multicalibrate(d, l)
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
@@ -71,7 +71,7 @@ test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredic
   lp = LearnerPredictor$new(lrn("classif.rpart"))
   lp$fit(data, labels)
 
-  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter", default_model_class = lp, multiplicative = TRUE)
+  mc = MCBoost$new(subpop_fitter = "TreeAuditorFitter", default_model_class = lp, multiplicative = TRUE)
   mc$multicalibrate(data, labels)
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
@@ -91,7 +91,7 @@ test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredic
   lp = LearnerPredictor$new(lrn("classif.rpart", predict_type = "prob"))
   lp$fit(data, labels)
 
-  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter", default_model_class = lp, partition = TRUE, rebucket = TRUE)
+  mc = MCBoost$new(subpop_fitter = "TreeAuditorFitter", default_model_class = lp, partition = TRUE, rebucket = TRUE)
   mc$multicalibrate(data, labels)
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
@@ -141,7 +141,7 @@ test_that("MCBoost multicalibrate with Subgroups", {
     rep(c(1,0), 104),
     rep(c(1,1,1,0), 52)
   )
-  sf = SubgroupFitter$new(masks)
+  sf = SubgroupAuditorFitter$new(masks)
 
   mc = MCBoost$new(subpop_fitter = sf, default_model_class = lp, alpha = 0, partition = FALSE)
   mc$multicalibrate(data, labels)
@@ -195,7 +195,7 @@ test_that("MCBoost Edge Cases", {
   l = tsk$data(cols = tsk$target_names, rows = c(1:10, 200:208))[[1]]
 
   check_predictor = function(init_predictor) {
-      mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeResidualFitter", max_iter = 2L)
+      mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeAuditorFitter", max_iter = 2L)
       mc$multicalibrate(d, l)
 
       expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
@@ -246,7 +246,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
   }
 
   for (iter_strat in c("bootstrap", "split")) {
-    mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeResidualFitter", iter_sampling = iter_strat, max_iter=2L)
+    mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter = "TreeAuditorFitter", iter_sampling = iter_strat, max_iter=2L)
     mc$multicalibrate(d, l)
     expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
     expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
@@ -266,13 +266,13 @@ test_that("MCBoost throws error for multi level outcomes", {
   d = tsk$data(cols = tsk$feature_names)
   l = tsk$data(cols = tsk$target_names)
 
-  mc = MCBoost$new(subpop_fitter = "TreeResidualFitter")
+  mc = MCBoost$new(subpop_fitter = "TreeAuditorFitter")
   expect_error(mc$multicalibrate(d, l), "cannot handle multiclass classification")
 })
 
 test_that("MCBoost throws error if wrong subpop_fitter", {
   expect_error(MCBoost$new(subpop_fitter = "Ts"), "'Ts' not found")
-  expect_error(MCBoost$new(subpop_fitter = 1234), "subpop_fitter must be of type 'ResidualFitter' or character")
+  expect_error(MCBoost$new(subpop_fitter = 1234), "subpop_fitter must be of type 'AuditorFitter' or character")
 })
 
 test_that("init predictor wrapper works", {
@@ -289,7 +289,7 @@ test_that("init predictor wrapper works", {
   learner$train(tsk)
   init_predictor = mlr3_init_predictor(learner)
 
-  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=TreeResidualFitter$new())
+  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=TreeAuditorFitter$new())
   mc$multicalibrate(d, l)
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
@@ -302,7 +302,7 @@ test_that("init predictor wrapper works", {
 
   expect_class(init_predictor, "function")
 
-  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=TreeResidualFitter$new())
+  mc = MCBoost$new(init_predictor = init_predictor, subpop_fitter=TreeAuditorFitter$new())
   expect_warning(mc$multicalibrate(d, l), "already calibrated")
 
   expect_list(mc$iter_models, types = "LearnerPredictor", len = 0)

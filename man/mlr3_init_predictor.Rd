@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{mlr3_init_predictor}
 \alias{mlr3_init_predictor}
-\title{Create an initial predictor from a mlr3 learner}
+\title{Create an initial predictor function from a trained mlr3 learner}
 \usage{
 mlr3_init_predictor(learner)
 }
@@ -14,8 +14,10 @@ A trained learner used for initialization.}
 \code{\link{function}}
 }
 \description{
-Create an initial predictor from a mlr3 learner
+Create an initial predictor function from a trained mlr3 learner
 }
 \examples{
-  mlr3_init_predictor(lrn("classif.featureless"))
+  library("mlr3")
+  l = lrn("classif.featureless")$train(tsk("sonar"))
+  mlr3_init_predictor(l)
 }

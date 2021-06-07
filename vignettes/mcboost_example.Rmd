@@ -147,12 +147,12 @@ d2 <- select(post, -notcov)
 l <- 1 - one_hot(post$notcov)
 ```
 
-We initialize two custom auditors for MCBoost: Ridge regression with a small penalty on model complexity, and a `SubpopFitter` with a fixed set of subpopulations.
+We initialize two custom auditors for MCBoost: Ridge regression with a small penalty on model complexity, and a `SubpopAuditorFitter` with a fixed set of subpopulations.
 
 ```{r}
-ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
+ridge = LearnerAuditorFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
 
-pops = SubpopFitter$new(list("sex2", "hisp2", "hisp3", "hisp4", "race2", "race3"))
+pops = SubpopAuditorFitter$new(list("sex2", "hisp2", "hisp3", "hisp4", "race2", "race3"))
 ```
 
 The ridge regression will only be given access to the initial predictor variables when post-processing the neural net predictions with the auditing data. In contrast, we guide the subpop-fitter to audit the initial predictions explicitly on the outlined subpopulations (sex, hispanic ethnicity, race). In summary, we have:
@@ -255,9 +255,9 @@ init_rf = function(data) {
 We use two custom auditors for MCBoost, i.e., ridge and lasso regression with different penalties on model complexity.
 
 ```{r}
-ridge = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
+ridge = LearnerAuditorFitter$new(lrn("regr.glmnet", alpha = 0, lambda = 2 / nrow(post)))
 
-lasso = LearnerResidualFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 40 / nrow(post)))
+lasso = LearnerAuditorFitter$new(lrn("regr.glmnet", alpha = 1, lambda = 40 / nrow(post)))
 ```
 
 The ridge regression will only be given access to the initial predictor variables when post-processing the random forest predictions. In contrast, we allow the lasso regression to audit the initial predictions both with the initial predictors and the subpopulations (sex, hispanic ethnicity, race). In summary, we have:

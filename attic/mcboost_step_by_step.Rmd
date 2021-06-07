@@ -55,7 +55,7 @@ init_predictor = function(data) {
   predict(mod, data, type = "response")
 }
 mc = MCBoost$new(
-  subpop_fitter = "TreeResidualFitter",
+  subpop_fitter = "TreeAuditorFitter",
   init_predictor = init_predictor,
   max_iter = 10L,
   eta = .2,

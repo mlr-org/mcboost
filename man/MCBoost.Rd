@@ -18,7 +18,7 @@ In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
 For additional details, please refer to the relevant publication:
 \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
 Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
-http://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
+https://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
 \item{Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
 Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
 Association for Computing Machinery, New York, NY, USA, 247–254.
@@ -72,9 +72,9 @@ Can be \code{bootstrap}, \code{split} or \code{none}.\cr
 "bootstrap" uses a new bootstrap sample in each iteration.\cr
 "none" uses the same dataset in each iteration.}
 
-\item{\code{subpop_fitter}}{\code{\link{ResidualFitter}} \cr
+\item{\code{subpop_fitter}}{\code{\link{AuditorFitter}} \cr
 Specifies the type of model used to fit the
-residual fxn ('TreeResidualFitter' or 'RidgeResidualFitter' (default)).}
+residual fxn ('TreeAuditorFitter' or 'RidgeAuditorFitter' (default)).}
 
 \item{\code{predictor}}{\code{\link{function}} \cr
 Initial predictor function.}
@@ -157,18 +157,18 @@ Should buckets be re-done at each iteration? Default: \code{FALSE}.}
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive)}
 
-\item{\code{subpop_fitter}}{\code{\link{ResidualFitter}}|\code{\link{character}}|(mlr3)\code{\link{Learner}} \cr
+\item{\code{subpop_fitter}}{\code{\link{AuditorFitter}}|\code{\link{character}}|(mlr3)\code{\link{Learner}} \cr
 Specifies the type of model used to fit the
-residuals. The default is \code{\link{RidgeResidualFitter}}.
-Can be a \code{character}, the name of a \code{\link{ResidualFitter}}, a (mlr3)\code{\link{Learner}} that is then
-auto-converted into a \code{\link{LearnerResidualFitter}} or a custom \code{\link{ResidualFitter}}.}
+residuals. The default is \code{\link{RidgeAuditorFitter}}.
+Can be a \code{character}, the name of a \code{\link{AuditorFitter}}, a (mlr3)\code{\link{Learner}} that is then
+auto-converted into a \code{\link{LearnerAuditorFitter}} or a custom \code{\link{AuditorFitter}}.}
 
 \item{\code{subpops}}{\code{\link{list}} \cr
 Specifies a collection of characteristic attributes
 and the values they take defining the S in subpops
 e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 
-\item{\code{default_model_class}}{\code{\link{Predictor}} \cr
+\item{\code{default_model_class}}{\code{Predictor} \cr
 The class of the model that should be used as the init predictor model.}
 
 \item{\code{init_predictor}}{\code{\link{function}}|\code{\link{Learner}} \cr

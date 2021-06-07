@@ -1,5 +1,6 @@
 #' Predictor
-#' @export
+#' @family Predictor
+#' @noRd
 Predictor = R6::R6Class("Predictor",
   public = list(
     #' @description
@@ -26,7 +27,8 @@ Predictor = R6::R6Class("Predictor",
 )
 
 #' ConstantPredictor
-#' @export
+#' @family Predictor
+#' @noRd
 ConstantPredictor = R6::R6Class("ConstantPredictor",
   inherit = Predictor,
   public = list(
@@ -41,6 +43,7 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
     #'
     #' @param constant [`numeric`]\cr
     #'   Constant to predict with.
+    #' @template return_predictor
     initialize = function(constant = 0.5) {
       self$constant = assert_number(constant)
       invisible(self)
@@ -63,9 +66,10 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
 )
 
 #' LearnerPredictor
+#' @family Predictor
 #' Wraps a mlr3 Learner into a `LearnerPredictor` object that can be used
 #' with mcboost.
-#' @export
+#' @noRd
 LearnerPredictor = R6::R6Class("LearnerPredictor",
   inherit = Predictor,
   public = list(
@@ -77,6 +81,7 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
     #'
     #' @param learner [`Learner`]\cr
     #'   Learner used for train/predict.
+    #' @template return_predictor
     initialize = function(learner) {
       self$learner = assert_class(learner, "Learner")
     },
@@ -119,7 +124,8 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
 
 
 #' SubpopPredictor
-#' @export
+#' @family Predictor
+#' @noRd
 SubpopPredictor = R6::R6Class("SubpopPredictor",
   inherit = Predictor,
   public = list(
@@ -140,6 +146,7 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
     #'   feature column, that defines a sub-population.
     #' @param value [`numeric`] \cr
     #'   Correlation value for the given subpop.
+    #' @template return_predictor
     initialize = function(subpop, value) {
       # Can be character (referring to a column) or a function.
       if (is.character(subpop)) {
@@ -160,6 +167,7 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
     #'   Prediction data.
     #' @param ... [`any`] \cr
     #'   Not used, only for compatibility with other methods.
+    #' @template return_predictor
     predict = function(data, ...) {
       data[, self$subpop(.SD)] * self$value
     }
@@ -168,7 +176,8 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
 
 
 #' SubgroupModel
-#' @export
+#' @family Predictor
+#' @noRd
 SubgroupModel = R6::R6Class("SubgroupModel",
   public = list(
     #' @field subgroup_masks [`list`] \cr
@@ -181,6 +190,7 @@ SubgroupModel = R6::R6Class("SubgroupModel",
     #' Instantiate a SubpopPredictor
     #' @param subgroup_masks [`list`] \cr
     #'   List of subgroup masks.
+    #' @template return_predictor
     initialize = function(subgroup_masks) {
       self$subgroup_masks = assert_list(subgroup_masks)
       invisible(self)
@@ -223,9 +233,10 @@ SubgroupModel = R6::R6Class("SubgroupModel",
 )
 
 #' CVLearnerPredictor
+#' @family Predictor
 #' @description Wraps a mlr3 Learner into a `CVLearnerPredictor` object that can be used
 #' with mcboost. Internally cross-validates predictions.
-#' @export
+#' @noRd
 CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
   inherit = Predictor,
   public = list(
@@ -241,6 +252,7 @@ CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
     #'   Learner used for train/predict.
     #' @param folds [`integer`]\cr
     #'   Number of folds to use for PipeOpLearnerCV.
+    #' @template return_predictor
     initialize = function(learner, folds) {
       self$pipeop = mlr3pipelines::po("learner_cv", learner, resampling.folds = folds)
     },

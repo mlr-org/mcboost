@@ -75,9 +75,9 @@ MCBoost = R6::R6Class("MCBoost",
     #'   "none" uses the same dataset in each iteration.
     iter_sampling = NULL,
 
-    #' @field subpop_fitter [`ResidualFitter`] \cr
+    #' @field subpop_fitter [`AuditorFitter`] \cr
     #'   Specifies the type of model used to fit the
-    #'   residual fxn ('TreeResidualFitter' or 'RidgeResidualFitter' (default)).
+    #'   residual fxn ('TreeAuditorFitter' or 'RidgeAuditorFitter' (default)).
     subpop_fitter = NULL,
 
     #' @field predictor [`function`] \cr
@@ -122,13 +122,13 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Should buckets be re-done at each iteration? Default: `FALSE`.
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
-    #' @param subpop_fitter [`ResidualFitter`]|[`character`]|(mlr3)[`Learner`] \cr
+    #' @param subpop_fitter [`AuditorFitter`]|[`character`]|(mlr3)[`Learner`] \cr
     #'   Specifies the type of model used to fit the
-    #'   residuals. The default is [`RidgeResidualFitter`].
-    #'   Can be a `character`, the name of a [`ResidualFitter`], a (mlr3)[`Learner`] that is then
-    #'   auto-converted into a [`LearnerResidualFitter`] or a custom [`ResidualFitter`].
+    #'   residuals. The default is [`RidgeAuditorFitter`].
+    #'   Can be a `character`, the name of a [`AuditorFitter`], a (mlr3)[`Learner`] that is then
+    #'   auto-converted into a [`LearnerAuditorFitter`] or a custom [`AuditorFitter`].
     #' @template params_subpops
-    #' @param default_model_class [`Predictor`] \cr
+    #' @param default_model_class `Predictor` \cr
     #'   The class of the model that should be used as the init predictor model.
     #' @param init_predictor [`function`]|[`Learner`] \cr
     #'   The initial predictor function to use (i.e., if the user has a pretrained model).
@@ -164,24 +164,24 @@ MCBoost = R6::R6Class("MCBoost",
 
       # Subpopulation fitters.
       if (!is.null(subpops)) {
-        self$subpop_fitter = SubpopFitter$new(subpops)
+        self$subpop_fitter = SubpopAuditorFitter$new(subpops)
       } else {
         if (is.null(subpop_fitter)) {
-          self$subpop_fitter = RidgeResidualFitter$new()
+          self$subpop_fitter = RidgeAuditorFitter$new()
         } else if (inherits(subpop_fitter, "Learner")) {
-          self$subpop_fitter = LearnerResidualFitter$new(subpop_fitter)
-        } else if (inherits(subpop_fitter, "ResidualFitter")) {
+          self$subpop_fitter = LearnerAuditorFitter$new(subpop_fitter)
+        } else if (inherits(subpop_fitter, "AuditorFitter")) {
           self$subpop_fitter = subpop_fitter
         } else if (inherits(subpop_fitter, "character")) {
           self$subpop_fitter = switch(subpop_fitter,
-            "TreeResidualFitter" = TreeResidualFitter$new(),
-            "RidgeResidualFitter" = RidgeResidualFitter$new(),
-            "CVTreeResidualFitter" = CVTreeResidualFitter$new(),
-            "CVRidgeResidualFitter" = CVRidgeResidualFitter$new(),
-             stop(sprintf("subpop_fitter '%s' not found, must be '[CV]TreeResidualFitter' or '[CV]RidgeResidualFitter'", subpop_fitter))
+            "TreeAuditorFitter" = TreeAuditorFitter$new(),
+            "RidgeAuditorFitter" = RidgeAuditorFitter$new(),
+            "CVTreeAuditorFitter" = CVTreeAuditorFitter$new(),
+            "CVRidgeAuditorFitter" = CVRidgeAuditorFitter$new(),
+             stop(sprintf("subpop_fitter '%s' not found, must be '[CV]TreeAuditorFitter' or '[CV]RidgeAuditorFitter'", subpop_fitter))
           )
         } else {
-          stop(sprintf("subpop_fitter must be of type 'ResidualFitter' or character"))
+          stop(sprintf("subpop_fitter must be of type 'AuditorFitter' or character"))
         }
       }
 

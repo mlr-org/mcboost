@@ -1,6 +1,6 @@
-test_that("TreeResidualFitters work", {
+test_that("TreeAuditorFitters work", {
   skip_if_not_installed("rpart")
-  rf = CVTreeResidualFitter$new()
+  rf = CVTreeAuditorFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
   expect_is(out[[2]], "CVLearnerPredictor")
@@ -15,7 +15,7 @@ test_that("MCBoost multicalibrate and predict_probs - CV Predictor", {
   data = tsk$data(cols = tsk$feature_names)
   labels = tsk$data(cols = tsk$target_names)[[1]]
   set.seed(123L)
-  mc = MCBoost$new(subpop_fitter = "CVTreeResidualFitter")
+  mc = MCBoost$new(subpop_fitter = "CVTreeAuditorFitter")
   mc$multicalibrate(data, labels)
 
   expect_list(mc$iter_models, types = "CVLearnerPredictor")
@@ -31,7 +31,7 @@ test_that("Creating own CV Predictor works with different folds", {
   data = tsk$data(cols = tsk$feature_names)
   labels = tsk$data(cols = tsk$target_names)[[1]]
   ln = lrn("regr.rpart")
-  cvfit = CVLearnerResidualFitter$new(ln, folds = 2L)
+  cvfit = CVLearnerAuditorFitter$new(ln, folds = 2L)
   set.seed(123L)
   mc = MCBoost$new(subpop_fitter = cvfit)
   mc$multicalibrate(data, labels)

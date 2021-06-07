@@ -11,7 +11,8 @@ one_hot(labels)
 Factor to encode.}
 }
 \value{
-\code{\link{integer}}
+\code{\link{integer}}\cr
+Integer vector of encoded labels.
 }
 \description{
 One-hot encode a factor variable

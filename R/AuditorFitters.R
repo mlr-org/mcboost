@@ -1,10 +1,10 @@
-#' ResidualFitter Abstract Base Class
-#' @family SubPopFitters
+#' AuditorFitter Abstract Base Class
+#' @family AuditorFitter
 #' @export
-ResidualFitter = R6::R6Class("ResidualFitter",
+AuditorFitter = R6::R6Class("AuditorFitter",
   public = list(
     #' @description
-    #' Initialize a [`ResidualFitter`]
+    #' Initialize a [`AuditorFitter`]
     #' This is an abstract base class.
     initialize = function() {
       stop("Abstract!")
@@ -13,6 +13,7 @@ ResidualFitter = R6::R6Class("ResidualFitter",
     #' Fit to residuals
     #' @template params_data_resid
     #' @template params_mask
+    #' @template return_auditor
     fit_to_resid = function(data, resid, mask) {
       # Learners fail on constant residuals.
       if (all(unique(resid) == resid[1])) {
@@ -24,28 +25,30 @@ ResidualFitter = R6::R6Class("ResidualFitter",
     #' Fit to residuals
     #' @template params_data_resid
     #' @template params_mask
+    #' @template return_fit
     fit = function(data, resid, mask) {
       stop("Not implemented")
     }
   )
 )
 
-#' ResidualFitter from a Learner
-#' @family SubPopFitters
+#' AuditorFitter from a Learner
+#' @family AuditorFitter
 #' @export
-LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
-  inherit = ResidualFitter,
+LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
+  inherit = AuditorFitter,
   public = list(
-    #' @field learner [`LearnerPredictor`]\cr
+    #' @field learner `LearnerPredictor`\cr
     #' Learner used for fitting residuals.
     learner = NULL,
     #' @description
-    #' Define a ResidualFitter from a Learner
-    #' Available instantiations: [`TreeResidualFitter`] (rpart) and
-    #' [`RidgeResidualFitter`] (glmnet).
+    #' Define a AuditorFitter from a Learner
+    #' Available instantiations: [`TreeAuditorFitter`] (rpart) and
+    #' [`RidgeAuditorFitter`] (glmnet).
     #'
     #' @param learner [`Learner`]\cr
     #' Regression Learner to use.
+    #' @template return_auditor
     initialize = function(learner) {
       self$learner = LearnerPredictor$new(learner)
     },
@@ -54,9 +57,7 @@ LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
     #'
     #' @template params_data_resid
     #' @template params_mask
-    #' @return `list` with items\cr
-    #'   - `corr`: pseudo-correlation between residuals and learner prediction.
-    #'   - `l`: the trained learner.
+    #' @template return_fit
     fit = function(data, resid, mask) {
       l = self$learner$clone()
       l$fit(data, resid)
@@ -67,14 +68,15 @@ LearnerResidualFitter = R6::R6Class("LearnerResidualFitter",
   )
 )
 
-#' @describeIn LearnerResidualFitter ResidualFitter based on rpart
-#' @family SubPopFitters
+#' @describeIn LearnerAuditorFitter AuditorFitter based on rpart
+#' @family AuditorFitter
 #' @export
-TreeResidualFitter = R6::R6Class("TreeResidualFitter",
-  inherit = LearnerResidualFitter,
+TreeAuditorFitter = R6::R6Class("TreeAuditorFitter",
+  inherit = LearnerAuditorFitter,
   public = list(
     #' @description
-    #' Define a ResidualFitter from a rpart learner
+    #' Define a AuditorFitter from a rpart learner
+    #' @template return_auditor
     initialize = function() {
       mlr3misc::require_namespaces("rpart")
       super$initialize(learner = lrn("regr.rpart"))
@@ -82,14 +84,15 @@ TreeResidualFitter = R6::R6Class("TreeResidualFitter",
   )
 )
 
-#' @describeIn LearnerResidualFitter ResidualFitter based on glmnet
-#' @family SubPopFitters
+#' @describeIn LearnerAuditorFitter AuditorFitter based on glmnet
+#' @family AuditorFitter
 #' @export
-RidgeResidualFitter = R6::R6Class("RidgeResidualFitter",
-  inherit = LearnerResidualFitter,
+RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
+  inherit = LearnerAuditorFitter,
   public = list(
     #' @description
-    #' Define a ResidualFitter from a glmnet learner
+    #' Define a AuditorFitter from a glmnet learner
+    #' @template return_auditor
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
       super$initialize(learner = lrn("regr.glmnet", alpha = 0))
@@ -97,11 +100,11 @@ RidgeResidualFitter = R6::R6Class("RidgeResidualFitter",
   )
 )
 
-#' Static ResidualFitter based on Subpopulations
-#' @family SubPopFitters
+#' Static AuditorFitter based on Subpopulations
+#' @family AuditorFitter
 #' @export
-SubpopFitter = R6::R6Class("SubpopFitter",
-  inherit = ResidualFitter,
+SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
+  inherit = AuditorFitter,
   public = list(
     #' @field subgroup_masks [`list`] \cr
     #'   List of subgroup masks.
@@ -113,6 +116,7 @@ SubpopFitter = R6::R6Class("SubpopFitter",
     #' Initialize SubPopFitter
     #'
     #' @template params_subpops
+    #' @template return_auditor
     initialize = function(subpops) {
       assert_list(subpops)
       self$subpops = map(subpops, function(pop) {
@@ -129,9 +133,7 @@ SubpopFitter = R6::R6Class("SubpopFitter",
     #'
     #' @template params_data_resid
     #' @template params_mask
-    #' @return `list` with items\cr
-    #'   - `corr`: pseudo-correlation between residuals and learner prediction.
-    #'   - `l`: the trained learner.
+    #' @template return_fit
     fit = function(data, resid, mask) {
       worstCorr = 0
       worst_subpop = function(pt) {return(rep(0L, nrow(pt)))} # nocov
@@ -148,22 +150,23 @@ SubpopFitter = R6::R6Class("SubpopFitter",
   )
 )
 
-#' Static ResidualFitter based on Subgroups
-#' @family SubPopFitters
+#' Static AuditorFitter based on Subgroups
+#' @family AuditorFitter
 #' @export
-SubgroupFitter = R6::R6Class("SubgroupFitter",
-  inherit = ResidualFitter,
+SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
+  inherit = AuditorFitter,
   public = list(
     #' @field subgroup_masks [`list`] \cr
     #'   List of subgroup masks.
     subgroup_masks = NULL,
     #' @description
-    #' Initialize SubgroupFitter
+    #' Initialize SubgroupAuditorFitter
     #'
     #' @param subgroup_masks [`list`] \cr
     #'   List of subgroup masks. Subgroup masks are list(s) of integer masks,
     #'   each with the same length as data to be fitted on.
     #'   They allow defining sub-groups of the data.
+    #' @template return_auditor
     initialize = function(subgroup_masks) {
       subgroup_masks = tryCatch({map(subgroup_masks, as.integer)},
         warning = function(w) {
@@ -179,9 +182,7 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
     #'
     #' @template params_data_resid
     #' @template params_mask
-    #' @return `list` with items\cr
-    #'   - `corr`: pseudo-correlation between residuals and learner prediction.
-    #'   - `l`: the trained learner.
+    #' @template return_fit
     fit = function(data, resid, mask) {
       sg = map(self$subgroup_masks, function(x) x[mask])
       if (!all(map_lgl(sg, function(x) {nrow(data) == length(x)}))) {
@@ -196,25 +197,25 @@ SubgroupFitter = R6::R6Class("SubgroupFitter",
   )
 )
 
-#' Cross-validated ResidualFitter from a Learner
-#' @description CVLearnerResidualFitter returns the cross-validated predictions
+#' Cross-validated AuditorFitter from a Learner
+#' @description CVLearnerAuditorFitter returns the cross-validated predictions
 #' instead of the in-sample predictions.
 #'
 #' Available data is cut into complementary subsets (folds).
 #' For each subset out-of-sample predictions are received by training a model
 #' on all other subset and predicting afterwards on the left-out subset.
-#' @family SubPopFitters
+#' @family AuditorFitter
 #' @export
-CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
-  inherit = ResidualFitter,
+CVLearnerAuditorFitter = R6::R6Class("CVLearnerAuditorFitter",
+  inherit = AuditorFitter,
   public = list(
-    #' @field learner [`CVLearnerPredictor`]\cr
+    #' @field learner `CVLearnerPredictor`\cr
     #' Learner used for fitting residuals.
     learner = NULL,
     #' @description
-    #' Define a CVResidualFitter from a Learner.
-    #' Available instantiations: [`CVTreeResidualFitter`] (rpart) and
-    #' [`CVRidgeResidualFitter`] (glmnet).
+    #' Define a CVAuditorFitter from a Learner.
+    #' Available instantiations: [`CVTreeAuditorFitter`] (rpart) and
+    #' [`CVRidgeAuditorFitter`] (glmnet).
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
     #'
@@ -222,6 +223,7 @@ CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
     #' Regression Learner to use.
     #' @param folds [`integer`]\cr
     #'   Number of folds to use for PipeOpLearnerCV. Default: 3.
+    #' @template return_auditor
     initialize = function(learner, folds = 3L) {
       self$learner = CVLearnerPredictor$new(learner, folds)
     },
@@ -230,9 +232,7 @@ CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
     #'
     #' @template params_data_resid
     #' @template params_mask
-    #' @return `list` with items\cr
-    #'   - `corr`: pseudo-correlation between residuals and learner prediction.
-    #'   - `l`: the trained learner.
+    #' @template return_fit
     fit = function(data, resid, mask) {
       l = self$learner$clone()
       h = l$fit_transform(data, resid)
@@ -242,16 +242,17 @@ CVLearnerResidualFitter = R6::R6Class("CVLearnerResidualFitter",
   )
 )
 
-#' @describeIn CVLearnerResidualFitter Cross-Validated ResidualFitter based on rpart
-#' @family SubPopFitters
+#' @describeIn CVLearnerAuditorFitter Cross-Validated AuditorFitter based on rpart
+#' @family AuditorFitter
 #' @export
-CVTreeResidualFitter = R6::R6Class("CVTreeResidualFitter",
-  inherit = CVLearnerResidualFitter,
+CVTreeAuditorFitter = R6::R6Class("CVTreeAuditorFitter",
+  inherit = CVLearnerAuditorFitter,
   public = list(
     #' @description
-    #' Define a cross-validated ResidualFitter from a rpart learner
+    #' Define a cross-validated AuditorFitter from a rpart learner
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
+    #' @template return_auditor
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "rpart"))
       super$initialize(learner = lrn("regr.rpart"))
@@ -259,16 +260,17 @@ CVTreeResidualFitter = R6::R6Class("CVTreeResidualFitter",
   )
 )
 
-#' @describeIn CVLearnerResidualFitter Cross-Validated ResidualFitter based on glmnet
-#' @family SubPopFitters
+#' @describeIn CVLearnerAuditorFitter Cross-Validated AuditorFitter based on glmnet
+#' @family AuditorFitter
 #' @export
-CVRidgeResidualFitter = R6::R6Class("CVRidgeResidualFitter",
-  inherit = CVLearnerResidualFitter,
+CVRidgeAuditorFitter = R6::R6Class("CVRidgeAuditorFitter",
+  inherit = CVLearnerAuditorFitter,
   public = list(
     #' @description
-    #' Define a cross-validated ResidualFitter from a glmnet learner
+    #' Define a cross-validated AuditorFitter from a glmnet learner
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
+    #' @template return_auditor
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
       super$initialize(learner = lrn("regr.glmnet", alpha = 0))

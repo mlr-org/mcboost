@@ -3,7 +3,8 @@
 #'   Factor to encode.
 #' @examples
 #'   one_hot(factor(c("a", "b", "a")))
-#' @return [`integer`]
+#' @return [`integer`]\cr
+#'   Integer vector of encoded labels.
 #' @export
 one_hot = function(labels) {
   con = contrasts(labels, contrasts = FALSE)
@@ -43,12 +44,14 @@ xy_to_task = function(x, y) {
   ti$new(id = "tmptsk", backend = x, target = yname)
 }
 
-#' Create an initial predictor from a mlr3 learner
+#' Create an initial predictor function from a trained mlr3 learner
 #'
 #' @param learner [`mlr3::Learner`]
 #'   A trained learner used for initialization.
 #' @examples
-#'   mlr3_init_predictor(lrn("classif.featureless"))
+#'   library("mlr3")
+#'   l = lrn("classif.featureless")$train(tsk("sonar"))
+#'   mlr3_init_predictor(l)
 #' @return [`function`]
 #' @export
 mlr3_init_predictor = function(learner) {

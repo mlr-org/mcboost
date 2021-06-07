@@ -71,13 +71,13 @@ We can now wrap this initial learner's predict function for use with `mcboost`, 
 
 We can now run Multi-Calibration Boosting by instantiating the object and calling the `multicalibrate` method.
 Note, that typically, we would use Multi-Calibration on a separate validation set!
-We furthermore select the auditor model, a `SubpopFitter`,
+We furthermore select the auditor model, a `SubpopAuditorFitter`,
 in our case a `Decision Tree`:
 
 ```r
   mc = MCBoost$new(
     init_predictor = init_predictor,
-    subpop_fitter = "TreeResidualFitter")
+    subpop_fitter = "TreeAuditorFitter")
   mc$multicalibrate(train_data, train_labels)
 ```
 
@@ -98,7 +98,7 @@ In order to achieve this, we have to set the following hyperparameters:
 ```r
   mc = MCBoost$new(
     init_predictor = init_predictor,
-    subpop_fitter = "TreeResidualFitter",
+    subpop_fitter = "TreeAuditorFitter",
     num_buckets = 10,
     multiplicative = FALSE
   )

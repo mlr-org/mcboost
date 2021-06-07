@@ -1,34 +1,34 @@
-context("ResidualFitters")
+context("AuditorFitters")
 
 
-test_that("ResidualFitters work", {
-  rf = ResidualFitter$new()
-  expect_class(rf, "ResidualFitter")
+test_that("AuditorFitters work", {
+  rf = AuditorFitter$new()
+  expect_class(rf, "AuditorFitter")
   expect_error(rf$fit(1, 1), "Not implemented")
 })
 
 
-test_that("LearnerResidualFitters work", {
-  rf = LearnerResidualFitter$new(lrn("regr.featureless"))
+test_that("LearnerAuditorFitters work", {
+  rf = LearnerAuditorFitter$new(lrn("regr.featureless"))
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
   expect_class(out[[2]], "LearnerPredictor")
   expect_true(out[[2]]$is_fitted)
 })
 
-test_that("TreeResidualFitters work", {
+test_that("TreeAuditorFitters work", {
   skip_if_not_installed("rpart")
-  rf = TreeResidualFitter$new()
+  rf = TreeAuditorFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
   expect_class(out[[2]], "LearnerPredictor")
   expect_true(out[[2]]$is_fitted)
 })
 
-test_that("RidgeResidualFitters work", {
+test_that("RidgeAuditorFitters work", {
   skip_if_not_installed("mlr3learners")
   skip_if_not_installed("glmnet")
-  rf = RidgeResidualFitter$new()
+  rf = RidgeAuditorFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
   expect_class(out[[2]], "LearnerPredictor")
@@ -47,14 +47,14 @@ test_that("SubPopFitter work", {
   label = c(1,0,0,1,1)
 
   pops = list("AGE_NA", "AGE_0_10", "AGE_11_20", "AGE_21_31", function(x) {x[["X1" > 0.5]]})
-  rf = SubpopFitter$new(subpops = pops)
+  rf = SubpopAuditorFitter$new(subpops = pops)
   out = rf$fit(data, label - 0.5)
   expect_list(out)
   expect_number(out[[1]], lower = 0.2, upper = 0.2)
   expect_class(out[[2]], "SubpopPredictor")
 
   pops = list("AGE_NA")
-  rf = SubpopFitter$new(subpops = pops)
+  rf = SubpopAuditorFitter$new(subpops = pops)
   out = rf$fit(data, label - 0.5)
   expect_list(out)
   expect_number(out[[1]], lower = 0, upper = 0)
@@ -75,7 +75,7 @@ test_that("SubGroupFitter work", {
     "M1" = c(1L, 0L, 1L, 1L, 0L),
     "M2" = c(1L, 0L, 0L, 0L, 1L)
   )
-  rf = SubgroupFitter$new(masks)
+  rf = SubgroupAuditorFitter$new(masks)
   out = rf$fit(data, label - 0.5, rep(1, length(label)))
   expect_list(out)
   expect_number(out[[1]], lower = 0, upper = 1)
@@ -94,14 +94,14 @@ test_that("SubPopFitter iterates through all columns", {
   label = c(1,0,0,1,1)
 
   pops = list("AGE_21_31", "AGE_11_20")
-  rf = SubpopFitter$new(subpops = pops)
+  rf = SubpopAuditorFitter$new(subpops = pops)
   out = rf$fit(data, label - 0.5)
   expect_list(out)
   expect_number(out[[1]], lower = 0.2, upper = 0.2)
   expect_class(out[[2]], "SubpopPredictor")
 
   pops = rev(list("AGE_21_31", "AGE_11_20"))
-  rf = SubpopFitter$new(subpops = pops)
+  rf = SubpopAuditorFitter$new(subpops = pops)
   out = rf$fit(data, label - 0.5)
   expect_list(out)
   expect_number(out[[1]], lower = 0.2, upper = 0.2)
@@ -116,7 +116,7 @@ test_that("SubPopFitter throws proper error if not binary or wrong length", {
   masks =  list(
     rep(c("1", "0"), 5)
   )
-  sf = SubgroupFitter$new(masks)
+  sf = SubgroupAuditorFitter$new(masks)
 
   mean1 = sf$fit(data = data, resid = rs,rep(1, length(rs)))
   sm =  SubgroupModel$new(masks)
@@ -126,28 +126,28 @@ test_that("SubPopFitter throws proper error if not binary or wrong length", {
   masks =  list(
     c("ab", "cc")
   )
-  expect_error(SubgroupFitter$new(masks), "subgroup_masks must be a list of integers")
+  expect_error(SubgroupAuditorFitter$new(masks), "subgroup_masks must be a list of integers")
 
   # wrong length
   masks = list(
     rep(c(1, 0), 10)
   )
-  sf = SubgroupFitter$new(masks)
+  sf = SubgroupAuditorFitter$new(masks)
   expect_error(sf$fit(data = data, resid = rs, mask = rep(1, 20)), "Length of subgroup masks must match length of data")
 
   # not binary
   masks = list(
     rep(c(1, 3, 0, 4))
   )
-  expect_error(SubgroupFitter$new(masks), "subgroup_masks must be binary vectors")
+  expect_error(SubgroupAuditorFitter$new(masks), "subgroup_masks must be binary vectors")
 })
 
-test_that("Bug in SubgroupFitter #16", {
+test_that("Bug in SubgroupAuditorFitter #16", {
   data = data.frame(X1 = rnorm(n = 10L), X2 = rnorm(n = 10L))
   masks =  list(
       rep(c(1, 0), 5)
    )
-  sf = SubgroupFitter$new(masks)
+  sf = SubgroupAuditorFitter$new(masks)
   resid = c(1, rep(0, 9))
   sm =  SubgroupModel$new(masks)
   mn = sm$fit(data = data, labels = resid)

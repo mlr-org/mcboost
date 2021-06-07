@@ -1,6 +1,7 @@
 #' Range of Probabilities
 #' @description
 #' Range of format [lower; upper).
+#' @noRd
 ProbRange = R6::R6Class("ProbRange",
   public = list(
     #' @field lower [`numeric`] \cr
