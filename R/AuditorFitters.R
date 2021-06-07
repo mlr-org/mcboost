@@ -8,10 +8,10 @@ AuditorFitter = R6::R6Class("AuditorFitter",
     #' This is an abstract base class.
     initialize = function() {},
     #' @description
-    #' Fit to residuals
+    #' Fit to residuals.
     #' @template params_data_resid
     #' @template params_mask
-    #' @template return_auditor
+    #' @template return_fit
     fit_to_resid = function(data, resid, mask) {
       # Learners fail on constant residuals.
       if (all(unique(resid) == resid[1])) {
@@ -20,7 +20,7 @@ AuditorFitter = R6::R6Class("AuditorFitter",
       self$fit(data, resid, mask)
     },
     #' @description
-    #' Fit to residuals
+    #' Fit (mostly used internally, use `fit_to_resid`).
     #' @template params_data_resid
     #' @template params_mask
     #' @template return_fit
@@ -44,7 +44,7 @@ LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
     #' Available instantiations: [`TreeAuditorFitter`] (rpart) and
     #' [`RidgeAuditorFitter`] (glmnet).
     #'
-    #' @param learner [`Learner`]\cr
+    #' @param learner [`mlr3::Learner`]\cr
     #' Regression Learner to use.
     #' @template return_auditor
     initialize = function(learner) {
@@ -217,7 +217,7 @@ CVLearnerAuditorFitter = R6::R6Class("CVLearnerAuditorFitter",
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
     #'
-    #' @param learner [`Learner`]\cr
+    #' @param learner [`mlr3::Learner`]\cr
     #' Regression Learner to use.
     #' @param folds [`integer`]\cr
     #'   Number of folds to use for PipeOpLearnerCV. Default: 3.

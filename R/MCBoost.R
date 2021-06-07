@@ -124,18 +124,18 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Should buckets be re-done at each iteration? Default: `FALSE`.
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
-    #' @param auditor_fitter [`AuditorFitter`]|[`character`]|(mlr3)[`Learner`] \cr
+    #' @param auditor_fitter [`AuditorFitter`]|[`character`]|[`mlr3::Learner`] \cr
     #'   Specifies the type of model used to fit the
     #'   residuals. The default is [`RidgeAuditorFitter`].
-    #'   Can be a `character`, the name of a [`AuditorFitter`], a (mlr3)[`Learner`] that is then
+    #'   Can be a `character`, the name of a [`AuditorFitter`], a [`mlr3::arnerarner`] that is then
     #'   auto-converted into a [`LearnerAuditorFitter`] or a custom [`AuditorFitter`].
     #' @template params_subpops
     #' @param default_model_class `Predictor` \cr
     #'   The class of the model that should be used as the init predictor model.
-    #' @param init_predictor [`function`]|[`Learner`] \cr
+    #' @param init_predictor [`function`]|[`mlr3::Learner`] \cr
     #'   The initial predictor function to use (i.e., if the user has a pretrained model).
     #'   If a `mlr3` `Learner` is passed, it will be autoconverted using `mlr3_init_predictor`.
-    #'   This requires the [`Learner`] to be trained.
+    #'   This requires the [`mlr3::Learner`] to be trained.
     #' @param iter_sampling [`character`] \cr
     #'   How to sample the validation data for each iteration?
     #'   Can be `bootstrap`, `split` or `none`.\cr

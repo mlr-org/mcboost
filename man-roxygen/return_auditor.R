@@ -1,1 +1,1 @@
-#' @return [`AuditorFitter`]
+#' @return [`AuditorFitter`]\cr

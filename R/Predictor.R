@@ -73,13 +73,13 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
 LearnerPredictor = R6::R6Class("LearnerPredictor",
   inherit = Predictor,
   public = list(
-    #' @field learner [`Learner`]\cr
+    #' @field learner [`mlr3::Learner`]\cr
     #' mlr3 Learner used for fitting residuals.
     learner = NULL,
     #' @description
     #' Instantiate a LearnerPredictor
     #'
-    #' @param learner [`Learner`]\cr
+    #' @param learner [`mlr3::Learner`]\cr
     #'   Learner used for train/predict.
     #' @template return_predictor
     initialize = function(learner) {
@@ -240,7 +240,7 @@ SubgroupModel = R6::R6Class("SubgroupModel",
 CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
   inherit = Predictor,
   public = list(
-    #' @field pipeop [`Learner`]\cr
+    #' @field pipeop [`mlr3::Learner`]\cr
     #' mlr3pipelines PipeOp used for fitting residuals.
     pipeop = NULL,
 
@@ -248,7 +248,7 @@ CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
     #' Instantiate a LearnerPredictor with internal cross-validation.
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information.
     #'
-    #' @param learner [`Learner`]\cr
+    #' @param learner [`mlr3::Learner`]\cr
     #'   Learner used for train/predict.
     #' @param folds [`integer`]\cr
     #'   Number of folds to use for PipeOpLearnerCV.

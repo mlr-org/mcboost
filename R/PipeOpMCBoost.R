@@ -145,7 +145,7 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 #' Wraps MCBoost in a Pipeline to be used with `mlr3pipelines`.
 #' For now this assumes training on the same dataset that is later used
 #' for multi-calibration.
-#' @param learner (mlr3)[`Learner`]\cr
+#' @param learner (mlr3)[`mlr3::Learner`]\cr
 #'   Initial learner. Internally wrapped into a `PipeOpLearnerCV`
 #'   with `resampling.method = "insample"` as a default.
 #'   All parameters can be adjusted through the resulting `Graph's param_set.

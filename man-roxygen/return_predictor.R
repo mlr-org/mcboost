@@ -1,1 +1,1 @@
-#' @return [`Predictor`]
+#' @return [`Predictor`]\cr
