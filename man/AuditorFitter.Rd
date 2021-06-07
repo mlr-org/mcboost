@@ -21,14 +21,6 @@ AuditorFitter Abstract Base Class
 
 AuditorFitter Abstract Base Class
 }
-\seealso{
-Other AuditorFitter: 
-\code{\link{CVLearnerAuditorFitter}},
-\code{\link{LearnerAuditorFitter}},
-\code{\link{SubgroupAuditorFitter}},
-\code{\link{SubpopAuditorFitter}}
-}
-\concept{AuditorFitter}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

@@ -19,7 +19,6 @@ Static AuditorFitter based on Subpopulations
 }
 \seealso{
 Other AuditorFitter: 
-\code{\link{AuditorFitter}},
 \code{\link{CVLearnerAuditorFitter}},
 \code{\link{LearnerAuditorFitter}},
 \code{\link{SubgroupAuditorFitter}}

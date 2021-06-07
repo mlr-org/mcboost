@@ -24,26 +24,23 @@ on all other subset and predicting afterwards on the left-out subset.
 }
 \section{Functions}{
 \itemize{
-\item \code{CVTreeAuditorFitter}: Cross-Validated AuditorFitter based on rpart
+\item \code{CVTreeAuditorFitter}: Cross-Validated auditor based on rpart
 
-\item \code{CVRidgeAuditorFitter}: Cross-Validated AuditorFitter based on glmnet
+\item \code{CVRidgeAuditorFitter}: Cross-Validated auditor based on glmnet
 }}
 
 \seealso{
 Other AuditorFitter: 
-\code{\link{AuditorFitter}},
 \code{\link{LearnerAuditorFitter}},
 \code{\link{SubgroupAuditorFitter}},
 \code{\link{SubpopAuditorFitter}}
 
 Other AuditorFitter: 
-\code{\link{AuditorFitter}},
 \code{\link{LearnerAuditorFitter}},
 \code{\link{SubgroupAuditorFitter}},
 \code{\link{SubpopAuditorFitter}}
 
 Other AuditorFitter: 
-\code{\link{AuditorFitter}},
 \code{\link{LearnerAuditorFitter}},
 \code{\link{SubgroupAuditorFitter}},
 \code{\link{SubpopAuditorFitter}}
@@ -80,7 +77,7 @@ Learner used for fitting residuals.}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Define a CVAuditorFitter from a Learner.
-Available instantiations: \code{\link{CVTreeAuditorFitter}} (rpart) and
+Available instantiations:\cr \code{\link{CVTreeAuditorFitter}} (rpart) and
 \code{\link{CVRidgeAuditorFitter}} (glmnet).
 See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information on
 cross-validated learners.

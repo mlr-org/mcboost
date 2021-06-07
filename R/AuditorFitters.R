@@ -1,5 +1,4 @@
 #' AuditorFitter Abstract Base Class
-#' @family AuditorFitter
 #' @export
 AuditorFitter = R6::R6Class("AuditorFitter",
   public = list(
@@ -31,6 +30,9 @@ AuditorFitter = R6::R6Class("AuditorFitter",
 )
 
 #' Create an AuditorFitter from a Learner
+#' @description
+#'   Instantiates an AuditorFitter that trains a [`mlr3::Learner`]
+#'   on the data.
 #' @family AuditorFitter
 #' @export
 LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
@@ -41,7 +43,7 @@ LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
     learner = NULL,
     #' @description
     #' Define a AuditorFitter from a Learner
-    #' Available instantiations: [`TreeAuditorFitter`] (rpart) and
+    #' Available instantiations:\cr [`TreeAuditorFitter`] (rpart) and
     #' [`RidgeAuditorFitter`] (glmnet).
     #'
     #' @param learner [`mlr3::Learner`]\cr
@@ -66,7 +68,7 @@ LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
   )
 )
 
-#' @describeIn LearnerAuditorFitter based on rpart
+#' @describeIn LearnerAuditorFitter Learner auditor based on rpart
 #' @family AuditorFitter
 #' @export
 TreeAuditorFitter = R6::R6Class("TreeAuditorFitter",
@@ -81,7 +83,7 @@ TreeAuditorFitter = R6::R6Class("TreeAuditorFitter",
   )
 )
 
-#' @describeIn LearnerAuditorFitter based on glmnet
+#' @describeIn LearnerAuditorFitter Learner auditor based on glmnet
 #' @family AuditorFitter
 #' @export
 RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
@@ -210,7 +212,7 @@ CVLearnerAuditorFitter = R6::R6Class("CVLearnerAuditorFitter",
     learner = NULL,
     #' @description
     #' Define a CVAuditorFitter from a Learner.
-    #' Available instantiations: [`CVTreeAuditorFitter`] (rpart) and
+    #' Available instantiations:\cr [`CVTreeAuditorFitter`] (rpart) and
     #' [`CVRidgeAuditorFitter`] (glmnet).
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
@@ -238,7 +240,7 @@ CVLearnerAuditorFitter = R6::R6Class("CVLearnerAuditorFitter",
   )
 )
 
-#' @describeIn CVLearnerAuditorFitter Cross-Validated AuditorFitter based on rpart
+#' @describeIn CVLearnerAuditorFitter  Cross-Validated auditor based on rpart
 #' @family AuditorFitter
 #' @export
 CVTreeAuditorFitter = R6::R6Class("CVTreeAuditorFitter",
@@ -255,7 +257,7 @@ CVTreeAuditorFitter = R6::R6Class("CVTreeAuditorFitter",
   )
 )
 
-#' @describeIn CVLearnerAuditorFitter Cross-Validated AuditorFitter based on glmnet
+#' @describeIn CVLearnerAuditorFitter Cross-Validated auditor based on glmnet
 #' @family AuditorFitter
 #' @export
 CVRidgeAuditorFitter = R6::R6Class("CVRidgeAuditorFitter",

@@ -15,32 +15,28 @@
 }
 }
 \description{
-Create an AuditorFitter from a Learner
-
-Create an AuditorFitter from a Learner
+Instantiates an AuditorFitter that trains a \code{\link[mlr3:Learner]{mlr3::Learner}}
+on the data.
 }
 \section{Functions}{
 \itemize{
-\item \code{TreeAuditorFitter}: based on rpart
+\item \code{TreeAuditorFitter}: Learner auditor based on rpart
 
-\item \code{RidgeAuditorFitter}: based on glmnet
+\item \code{RidgeAuditorFitter}: Learner auditor based on glmnet
 }}
 
 \seealso{
 Other AuditorFitter: 
-\code{\link{AuditorFitter}},
 \code{\link{CVLearnerAuditorFitter}},
 \code{\link{SubgroupAuditorFitter}},
 \code{\link{SubpopAuditorFitter}}
 
 Other AuditorFitter: 
-\code{\link{AuditorFitter}},
 \code{\link{CVLearnerAuditorFitter}},
 \code{\link{SubgroupAuditorFitter}},
 \code{\link{SubpopAuditorFitter}}
 
 Other AuditorFitter: 
-\code{\link{AuditorFitter}},
 \code{\link{CVLearnerAuditorFitter}},
 \code{\link{SubgroupAuditorFitter}},
 \code{\link{SubpopAuditorFitter}}
@@ -77,7 +73,7 @@ Learner used for fitting residuals.}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Define a AuditorFitter from a Learner
-Available instantiations: \code{\link{TreeAuditorFitter}} (rpart) and
+Available instantiations:\cr \code{\link{TreeAuditorFitter}} (rpart) and
 \code{\link{RidgeAuditorFitter}} (glmnet).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerAuditorFitter$new(learner)}\if{html}{\out{</div>}}
