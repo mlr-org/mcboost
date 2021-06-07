@@ -10,6 +10,12 @@ one_hot(labels)
 \item{labels}{\code{\link{factor}}\cr
 Factor to encode.}
 }
+\value{
+\code{\link{integer}}
+}
 \description{
 One-hot encode a factor variable
+}
+\examples{
+  one_hot(factor(c("a", "b", "a")))
 }

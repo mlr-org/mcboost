@@ -214,6 +214,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
     #' @param ... [`any`] \cr
     #'  Params passed on to other methods.
+    #' @return `NULL`
     multicalibrate = function(data, labels, predictor_args = NULL, ...) {
 
       if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
@@ -307,7 +308,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'  Should audit weights be stored? Default `FALSE`.
     #' @param ... [`any`] \cr
     #'  Params passed on to the residual prediction model's predict method.
-    #' @return
+    #' @return [`numeric`]\cr
     #'   Numeric vector of multi-calibrated predictions.
     predict_probs = function(x, t = Inf, predictor_args = NULL, audit = FALSE, ...) {
       if (!length(self$iter_models)) {
@@ -345,8 +346,8 @@ MCBoost = R6::R6Class("MCBoost",
     #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
     #' @param ... [`any`] \cr
     #'  Params passed on to the residual prediction model's predict method.
-    #' @return
-    #'   Numeric vector of multi-calibrated predictions.
+    #' @return [`numeric`] \cr
+    #'   Numeric vector of auditor effects for each row in `x`.
     auditor_effect = function(x, aggregate = TRUE, t = Inf, predictor_args = NULL, ...) {
       assert_flag(aggregate)
       # Reset the auditor effects after returning

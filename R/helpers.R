@@ -1,6 +1,9 @@
 #' One-hot encode a factor variable
 #' @param labels [`factor`]\cr
 #'   Factor to encode.
+#' @examples
+#'   one_hot(factor(c("a", "b", "a")))
+#' @return [`integer`]
 #' @export
 one_hot = function(labels) {
   con = contrasts(labels, contrasts = FALSE)
@@ -44,6 +47,9 @@ xy_to_task = function(x, y) {
 #'
 #' @param learner [`mlr3::Learner`]
 #'   A trained learner used for initialization.
+#' @examples
+#'   mlr3_init_predictor(lrn("classif.featureless"))
+#' @return [`function`]
 #' @export
 mlr3_init_predictor = function(learner) {
   if (is.null(learner$state)) stop("Learner needs to be trained first!")

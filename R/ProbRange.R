@@ -1,7 +1,6 @@
 #' Range of Probabilities
 #' @description
 #' Range of format [lower; upper).
-#' @export
 ProbRange = R6::R6Class("ProbRange",
   public = list(
     #' @field lower [`numeric`] \cr
@@ -18,9 +17,11 @@ ProbRange = R6::R6Class("ProbRange",
     #'   Lower bound of the ProbRange.
     #' @param upper [`numeric`]\cr
     #'   Upper bound of the ProbRange.
+    #' @return [`ProbRange`]
     initialize = function(lower = -Inf, upper = Inf) {
       self$lower = assert_number(lower)
       self$upper = assert_number(upper)
+      invisible(self)
     },
     #' @description
     #' Compare with 'other' Probability Range regarding equality

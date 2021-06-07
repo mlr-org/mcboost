@@ -48,6 +48,9 @@ Upper bound of the ProbRange.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+\code{\link{ProbRange}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_equal"></a>}}

@@ -19,10 +19,22 @@ Other SubPopFitters:
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-new}{\code{ResidualFitter$new()}}
 \item \href{#method-fit_to_resid}{\code{ResidualFitter$fit_to_resid()}}
 \item \href{#method-fit}{\code{ResidualFitter$fit()}}
 \item \href{#method-clone}{\code{ResidualFitter$clone()}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Initialize a \code{\link{ResidualFitter}}
+This is an abstract base class.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ResidualFitter$new()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fit_to_resid"></a>}}

@@ -10,6 +10,12 @@ mlr3_init_predictor(learner)
 \item{learner}{\code{\link[mlr3:Learner]{mlr3::Learner}}
 A trained learner used for initialization.}
 }
+\value{
+\code{\link{function}}
+}
 \description{
 Create an initial predictor from a mlr3 learner
+}
+\examples{
+  mlr3_init_predictor(lrn("classif.featureless"))
 }

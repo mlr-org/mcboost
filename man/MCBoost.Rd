@@ -209,6 +209,9 @@ Params passed on to other methods.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+\code{NULL}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-predict_probs"></a>}}
@@ -240,6 +243,7 @@ Params passed on to the residual prediction model's predict method.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
+\code{\link{numeric}}\cr
 Numeric vector of multi-calibrated predictions.
 }
 }
@@ -281,7 +285,8 @@ Params passed on to the residual prediction model's predict method.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Numeric vector of multi-calibrated predictions.
+\code{\link{numeric}} \cr
+Numeric vector of auditor effects for each row in \code{x}.
 }
 }
 \if{html}{\out{<hr>}}

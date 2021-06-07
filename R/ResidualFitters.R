@@ -4,6 +4,12 @@
 ResidualFitter = R6::R6Class("ResidualFitter",
   public = list(
     #' @description
+    #' Initialize a [`ResidualFitter`]
+    #' This is an abstract base class.
+    initialize = function() {
+      stop("Abstract!")
+    },
+    #' @description
     #' Fit to residuals
     #' @template params_data_resid
     #' @template params_mask
