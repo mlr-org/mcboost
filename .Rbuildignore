@@ -16,3 +16,4 @@ test/testthat/_snaps
 ^CODE_OF_CONDUCT\.md$
 ^paper$
 ^contributions.md$
+^cran-comments\.md$
