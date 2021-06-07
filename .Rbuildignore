@@ -17,3 +17,4 @@ test/testthat/_snaps
 ^paper$
 ^contributions.md$
 ^cran-comments\.md$
+^mcboost-manual.tex$

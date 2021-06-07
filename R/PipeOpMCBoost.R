@@ -152,8 +152,13 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 #'   Defaults to `lrn("classif.featureless")`.
 #'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
 #' @return (mlr3pipelines)[`Graph`]
+#' @examples
+#'   library("mlr3pipelines")
+#'   gr = ppl_mcboost()
+#'   as_learner(gr)
 #' @export
 ppl_mcboost = function(learner = lrn("classif.featureless")) {
+  mlr3misc::require_namespaces("mlr3pipelines")
   po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
