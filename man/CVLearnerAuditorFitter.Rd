@@ -13,10 +13,6 @@
 \item \code{corr}: pseudo-correlation between residuals and learner prediction.
 \item \code{l}: the trained learner.
 }
-
-\code{\link{AuditorFitter}}\cr
-
-\code{\link{AuditorFitter}}\cr
 }
 \description{
 CVLearnerAuditorFitter returns the cross-validated predictions

@@ -4,7 +4,7 @@
 \alias{LearnerAuditorFitter}
 \alias{TreeAuditorFitter}
 \alias{RidgeAuditorFitter}
-\title{AuditorFitter from a Learner}
+\title{Create an AuditorFitter from a Learner}
 \value{
 \code{\link{AuditorFitter}}\cr
 
@@ -13,21 +13,17 @@
 \item \code{corr}: pseudo-correlation between residuals and learner prediction.
 \item \code{l}: the trained learner.
 }
-
-\code{\link{AuditorFitter}}\cr
-
-\code{\link{AuditorFitter}}\cr
 }
 \description{
-AuditorFitter from a Learner
+Create an AuditorFitter from a Learner
 
-AuditorFitter from a Learner
+Create an AuditorFitter from a Learner
 }
 \section{Functions}{
 \itemize{
-\item \code{TreeAuditorFitter}: AuditorFitter based on rpart
+\item \code{TreeAuditorFitter}: based on rpart
 
-\item \code{RidgeAuditorFitter}: AuditorFitter based on glmnet
+\item \code{RidgeAuditorFitter}: based on glmnet
 }}
 
 \seealso{
@@ -160,7 +156,7 @@ The objects of this class are cloneable with this method.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Define a AuditorFitter from a rpart learner
+Define a AuditorFitter from a rpart learner.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreeAuditorFitter$new()}\if{html}{\out{</div>}}
 }
@@ -206,7 +202,7 @@ The objects of this class are cloneable with this method.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Define a AuditorFitter from a glmnet learner
+Define a AuditorFitter from a glmnet learner.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RidgeAuditorFitter$new()}\if{html}{\out{</div>}}
 }

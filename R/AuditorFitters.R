@@ -30,7 +30,7 @@ AuditorFitter = R6::R6Class("AuditorFitter",
   )
 )
 
-#' AuditorFitter from a Learner
+#' Create an AuditorFitter from a Learner
 #' @family AuditorFitter
 #' @export
 LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
@@ -66,15 +66,14 @@ LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
   )
 )
 
-#' @describeIn LearnerAuditorFitter AuditorFitter based on rpart
+#' @describeIn LearnerAuditorFitter based on rpart
 #' @family AuditorFitter
 #' @export
 TreeAuditorFitter = R6::R6Class("TreeAuditorFitter",
   inherit = LearnerAuditorFitter,
   public = list(
     #' @description
-    #' Define a AuditorFitter from a rpart learner
-    #' @template return_auditor
+    #' Define a AuditorFitter from a rpart learner.
     initialize = function() {
       mlr3misc::require_namespaces("rpart")
       super$initialize(learner = lrn("regr.rpart"))
@@ -82,15 +81,14 @@ TreeAuditorFitter = R6::R6Class("TreeAuditorFitter",
   )
 )
 
-#' @describeIn LearnerAuditorFitter AuditorFitter based on glmnet
+#' @describeIn LearnerAuditorFitter based on glmnet
 #' @family AuditorFitter
 #' @export
 RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
   inherit = LearnerAuditorFitter,
   public = list(
     #' @description
-    #' Define a AuditorFitter from a glmnet learner
-    #' @template return_auditor
+    #' Define a AuditorFitter from a glmnet learner.
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
       super$initialize(learner = lrn("regr.glmnet", alpha = 0))
@@ -250,7 +248,6 @@ CVTreeAuditorFitter = R6::R6Class("CVTreeAuditorFitter",
     #' Define a cross-validated AuditorFitter from a rpart learner
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
-    #' @template return_auditor
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "rpart"))
       super$initialize(learner = lrn("regr.rpart"))
@@ -268,7 +265,6 @@ CVRidgeAuditorFitter = R6::R6Class("CVRidgeAuditorFitter",
     #' Define a cross-validated AuditorFitter from a glmnet learner
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
-    #' @template return_auditor
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
       super$initialize(learner = lrn("regr.glmnet", alpha = 0))

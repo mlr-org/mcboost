@@ -6,8 +6,7 @@
 \alias{mcboost-package}
 \title{mcboost: Multi-Calibration Boosting}
 \description{
-Implements Multi- Calibration by Hebert-Johnson, Kim, Reingold, and Rothblum (2018)
-    <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and
+Implements Multi- Calibration by Hebert-Johnson, Kim, Reingold, and Rothblum (2018) <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and
     Multi-Accuracy Boosting by Kim, Ghorbani, and Zhou (2019) <arXiv:1805.12317> for the multicalibration of a machine learning model's prediction.
     'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups.
     Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are.
