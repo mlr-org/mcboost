@@ -15,7 +15,7 @@
 #'   For additional details, please refer to the relevant publication:
 #'     \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
 #'      Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
-#'      http://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
+#'      https://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
 #'     \item{Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
 #'     Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
 #'     Association for Computing Machinery, New York, NY, USA, 247–254.
