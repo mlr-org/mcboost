@@ -124,7 +124,7 @@
 <li>Predict on X using the model from the previous iteration, <code>init_predictor</code> in the first iteration.</li>
 <li>Compute the residuals <code>res = y - y_hat</code>
 </li>
-<li>Split predictions into <code>num_buckets</code> acording to <code>y_hat</code>.</li>
+<li>Split predictions into <code>num_buckets</code> according to <code>y_hat</code>.</li>
 <li>Fit the auditor (<code>auditor_fitter</code>) (here called<code><a href="https://rdrr.io/r/base/c.html">c(x)</a></code>) on the data in each bucket with target variable <code>r</code>.</li>
 <li>Compute <code>misscal = mean(c(x) * res(x))</code>
 </li>
