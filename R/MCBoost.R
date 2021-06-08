@@ -9,7 +9,7 @@
 #'   e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 #'   populations.\cr
 #'   Expects initial models that fit binary outcomes or continuous outcomes with
-#'   predictions that are in (or scaled to) the range [0, 1].
+#'   predictions that are in (or scaled to) the range \[0, 1\].
 #'   The method defaults to `Multi-Accuracy Boosting` as described in Kim et al. (2019).
 #'   In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
 #'   `multiplicative=FALSE` and `num_buckets` to 10.

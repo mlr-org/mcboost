@@ -12,7 +12,7 @@ Post-process a learner prediction using multi-calibration.
 For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
 or the help for \code{\link{MCBoost}}.
 If no \code{init_predictor} is provided, the preceding learner's predictions
-corresponding to the \code{prediction} slot are used as an initial predictor for mcboost.
+corresponding to the \code{prediction} slot are used as an initial predictor for \code{MCBoost}.
 }
 \section{Construction}{
 \preformatted{PipeOpMCBoost$new(id = "mcboost", param_vals = list())

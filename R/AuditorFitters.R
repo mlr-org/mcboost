@@ -41,12 +41,12 @@ LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
     #' Learner used for fitting residuals.
     learner = NULL,
     #' @description
-    #' Define a AuditorFitter from a Learner
+    #' Define an `AuditorFitter` from a Learner.
     #' Available instantiations:\cr [`TreeAuditorFitter`] (rpart) and
     #' [`RidgeAuditorFitter`] (glmnet).
     #'
     #' @param learner [`mlr3::Learner`]\cr
-    #' Regression Learner to use.
+    #' Regression learner to use.
     #' @template return_auditor
     initialize = function(learner) {
       self$learner = LearnerPredictor$new(learner)
@@ -202,7 +202,7 @@ SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
 #'
 #' Available data is cut into complementary subsets (folds).
 #' For each subset out-of-sample predictions are received by training a model
-#' on all other subset and predicting afterwards on the left-out subset.
+#' on all other subsets and predicting afterwards on the left-out subset.
 #' @family AuditorFitter
 #' @export
 CVLearnerAuditorFitter = R6::R6Class("CVLearnerAuditorFitter",
@@ -212,7 +212,7 @@ CVLearnerAuditorFitter = R6::R6Class("CVLearnerAuditorFitter",
     #' Learner used for fitting residuals.
     learner = NULL,
     #' @description
-    #' Define a CVAuditorFitter from a Learner.
+    #' Define a `CVAuditorFitter` from a learner.
     #' Available instantiations:\cr [`CVTreeAuditorFitter`] (rpart) and
     #' [`CVRidgeAuditorFitter`] (glmnet).
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
@@ -221,13 +221,13 @@ CVLearnerAuditorFitter = R6::R6Class("CVLearnerAuditorFitter",
     #' @param learner [`mlr3::Learner`]\cr
     #' Regression Learner to use.
     #' @param folds [`integer`]\cr
-    #'   Number of folds to use for PipeOpLearnerCV. Default: 3.
+    #'   Number of folds to use for PipeOpLearnerCV. Defaults to 3.
     #' @template return_auditor
     initialize = function(learner, folds = 3L) {
       self$learner = CVLearnerPredictor$new(learner, folds)
     },
     #' @description
-    #' Fit the cv-learner and compute correlation
+    #' Fit the cross-validated learner and compute correlation
     #'
     #' @template params_data_resid
     #' @template params_mask
@@ -265,7 +265,7 @@ CVRidgeAuditorFitter = R6::R6Class("CVRidgeAuditorFitter",
   inherit = CVLearnerAuditorFitter,
   public = list(
     #' @description
-    #' Define a cross-validated AuditorFitter from a glmnet learner
+    #' Define a cross-validated AuditorFitter from a glmnet learner.
     #' See [`mlr3pipelines::PipeOpLearnerCV`] for more information on
     #' cross-validated learners.
     initialize = function() {

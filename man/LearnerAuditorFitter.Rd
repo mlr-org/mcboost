@@ -72,7 +72,7 @@ Learner used for fitting residuals.}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Define a AuditorFitter from a Learner
+Define an \code{AuditorFitter} from a Learner.
 Available instantiations:\cr \code{\link{TreeAuditorFitter}} (rpart) and
 \code{\link{RidgeAuditorFitter}} (glmnet).
 \subsection{Usage}{
@@ -83,7 +83,7 @@ Available instantiations:\cr \code{\link{TreeAuditorFitter}} (rpart) and
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{learner}}{\code{\link[mlr3:Learner]{mlr3::Learner}}\cr
-Regression Learner to use.}
+Regression learner to use.}
 }
 \if{html}{\out{</div>}}
 }

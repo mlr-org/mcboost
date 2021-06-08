@@ -20,7 +20,7 @@ instead of the in-sample predictions.
 
 Available data is cut into complementary subsets (folds).
 For each subset out-of-sample predictions are received by training a model
-on all other subset and predicting afterwards on the left-out subset.
+on all other subsets and predicting afterwards on the left-out subset.
 }
 \section{Functions}{
 \itemize{
@@ -76,7 +76,7 @@ Learner used for fitting residuals.}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Define a CVAuditorFitter from a Learner.
+Define a \code{CVAuditorFitter} from a learner.
 Available instantiations:\cr \code{\link{CVTreeAuditorFitter}} (rpart) and
 \code{\link{CVRidgeAuditorFitter}} (glmnet).
 See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information on
@@ -92,7 +92,7 @@ cross-validated learners.
 Regression Learner to use.}
 
 \item{\code{folds}}{\code{\link{integer}}\cr
-Number of folds to use for PipeOpLearnerCV. Default: 3.}
+Number of folds to use for PipeOpLearnerCV. Defaults to 3.}
 }
 \if{html}{\out{</div>}}
 }
@@ -101,7 +101,7 @@ Number of folds to use for PipeOpLearnerCV. Default: 3.}
 \if{html}{\out{<a id="method-fit"></a>}}
 \if{latex}{\out{\hypertarget{method-fit}{}}}
 \subsection{Method \code{fit()}}{
-Fit the cv-learner and compute correlation
+Fit the cross-validated learner and compute correlation
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CVLearnerAuditorFitter$fit(data, resid, mask)}\if{html}{\out{</div>}}
 }
@@ -209,7 +209,7 @@ The objects of this class are cloneable with this method.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Define a cross-validated AuditorFitter from a glmnet learner
+Define a cross-validated AuditorFitter from a glmnet learner.
 See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information on
 cross-validated learners.
 \subsection{Usage}{

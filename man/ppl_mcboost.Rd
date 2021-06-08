@@ -10,10 +10,12 @@ ppl_mcboost(learner = lrn("classif.featureless"))
 \item{learner}{(mlr3)\code{\link[mlr3:Learner]{mlr3::Learner}}\cr
 Initial learner. Internally wrapped into a \code{PipeOpLearnerCV}
 with \code{resampling.method = "insample"} as a default.
-All parameters can be adjusted through the resulting \verb{Graph's param_set. Defaults to }lrn("classif.featureless")\verb{. Note: An initial predictor can also be supplied via the }init_predictor` parameter.}
+All parameters can be adjusted through the resulting Graph's \code{param_set}.
+Defaults to \code{lrn("classif.featureless")}.
+Note: An initial predictor can also be supplied via the \code{init_predictor} parameter.}
 }
 \value{
-(mlr3pipelines)\code{\link{Graph}}
+(mlr3pipelines) \code{\link{Graph}}
 }
 \description{
 Wraps MCBoost in a Pipeline to be used with \code{mlr3pipelines}.

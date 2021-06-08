@@ -9,7 +9,7 @@
 #' For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
 #' or the help for [`MCBoost`].
 #' If no `init_predictor` is provided, the preceding learner's predictions
-#' corresponding to the `prediction` slot are used as an initial predictor for mcboost.
+#' corresponding to the `prediction` slot are used as an initial predictor for `MCBoost`.
 #'
 #' @section Construction:
 #' ```
@@ -148,10 +148,10 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 #' @param learner (mlr3)[`mlr3::Learner`]\cr
 #'   Initial learner. Internally wrapped into a `PipeOpLearnerCV`
 #'   with `resampling.method = "insample"` as a default.
-#'   All parameters can be adjusted through the resulting `Graph's param_set.
+#'   All parameters can be adjusted through the resulting Graph's `param_set`.
 #'   Defaults to `lrn("classif.featureless")`.
 #'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
-#' @return (mlr3pipelines)[`Graph`]
+#' @return (mlr3pipelines) [`Graph`]
 #' @examples
 #'   library("mlr3pipelines")
 #'   gr = ppl_mcboost()
