@@ -9,17 +9,9 @@
 \item \code{corr}: pseudo-correlation between residuals and learner prediction.
 \item \code{l}: the trained learner.
 }
-
-\code{list} with items\cr
-\itemize{
-\item \code{corr}: pseudo-correlation between residuals and learner prediction.
-\item \code{l}: the trained learner.
-}
 }
 \description{
-AuditorFitter Abstract Base Class
-
-AuditorFitter Abstract Base Class
+Defines an \code{AuditorFitter} abstract base class.
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -34,7 +26,7 @@ AuditorFitter Abstract Base Class
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize a \code{\link{AuditorFitter}}
+Initialize a \code{\link{AuditorFitter}}.
 This is an abstract base class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{AuditorFitter$new()}\if{html}{\out{</div>}}
@@ -56,17 +48,8 @@ Fit to residuals.
 \item{\code{data}}{\code{\link{data.table}}\cr
 Features.}
 
-\item{\code{data}}{\code{\link{data.table}}\cr
-Features.}
-
 \item{\code{resid}}{\code{\link{numeric}}\cr
 Residuals (of same length as data).}
-
-\item{\code{resid}}{\code{\link{numeric}}\cr
-Residuals (of same length as data).}
-
-\item{\code{mask}}{\code{\link{integer}}\cr
-Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 
 \item{\code{mask}}{\code{\link{integer}}\cr
 Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
@@ -89,17 +72,8 @@ Fit (mostly used internally, use \code{fit_to_resid}).
 \item{\code{data}}{\code{\link{data.table}}\cr
 Features.}
 
-\item{\code{data}}{\code{\link{data.table}}\cr
-Features.}
-
 \item{\code{resid}}{\code{\link{numeric}}\cr
 Residuals (of same length as data).}
-
-\item{\code{resid}}{\code{\link{numeric}}\cr
-Residuals (of same length as data).}
-
-\item{\code{mask}}{\code{\link{integer}}\cr
-Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 
 \item{\code{mask}}{\code{\link{integer}}\cr
 Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}

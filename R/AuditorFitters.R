@@ -1,9 +1,11 @@
 #' AuditorFitter Abstract Base Class
+#' @description
+#'   Defines an `AuditorFitter` abstract base class.
 #' @export
 AuditorFitter = R6::R6Class("AuditorFitter",
   public = list(
     #' @description
-    #' Initialize a [`AuditorFitter`]
+    #' Initialize a [`AuditorFitter`].
     #' This is an abstract base class.
     initialize = function() {},
     #' @description
@@ -20,9 +22,6 @@ AuditorFitter = R6::R6Class("AuditorFitter",
     },
     #' @description
     #' Fit (mostly used internally, use `fit_to_resid`).
-    #' @template params_data_resid
-    #' @template params_mask
-    #' @template return_fit
     fit = function(data, resid, mask) {
       stop("Not implemented")
     }

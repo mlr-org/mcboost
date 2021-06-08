@@ -164,8 +164,8 @@ auto-converted into a \code{\link{LearnerAuditorFitter}} or a custom \code{\link
 
 \item{\code{subpops}}{\code{\link{list}} \cr
 Specifies a collection of characteristic attributes
-and the values they take defining the S in subpops
-e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
+and the values they take to define subpopulations
+e.g. list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 
 \item{\code{default_model_class}}{\code{Predictor} \cr
 The class of the model that should be used as the init predictor model if
