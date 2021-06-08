@@ -17,8 +17,23 @@ Static AuditorFitter based on Subpopulations
 
 Static AuditorFitter based on Subpopulations
 }
+\examples{
+  library("data.table")
+  data = data.table(
+    "AGE_NA" = c(0, 0, 0, 0, 0),
+    "AGE_0_10" =  c(1, 1, 0, 0, 0),
+    "AGE_11_20" = c(0, 0, 1, 0, 0),
+    "AGE_21_31" = c(0, 0, 0, 1, 1),
+    "X1" = runif(5),
+    "X2" = runif(5)
+  )
+  label = c(1,0,0,1,1)
+  pops = list("AGE_NA", "AGE_0_10", "AGE_11_20", "AGE_21_31", function(x) {x[["X1" > 0.5]]})
+  sf = SubpopAuditorFitter$new(subpops = pops)
+  sf$fit(data, label - 0.5)
+}
 \seealso{
-Other AuditorFitter: 
+Other AuditorFitter:
 \code{\link{CVLearnerAuditorFitter}},
 \code{\link{LearnerAuditorFitter}},
 \code{\link{SubgroupAuditorFitter}}
@@ -30,11 +45,9 @@ Other AuditorFitter:
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{subgroup_masks}}{\code{\link{list}} \cr
-List of subgroup masks.}
-
 \item{\code{subpops}}{\code{\link{list}} \cr
-List of subpopulation indicators.}
+List of subpopulation indicators.
+Initialize a SubpopAuditorFitter}
 }
 \if{html}{\out{</div>}}
 }
@@ -57,7 +70,10 @@ List of subpopulation indicators.}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize \code{SubPopFitter}.
+Initializes a \code{\link{SubpopAuditorFitter}} that
+assesses multi-calibration within each group defined
+by the \verb{subpops'. Names in }subpops` must correspond to
+columns in the data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SubpopAuditorFitter$new(subpops)}\if{html}{\out{</div>}}
 }
