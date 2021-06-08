@@ -11,11 +11,13 @@ Multi-Calibration works best in scenarios where the underlying data & labels are
 but a bias is introduced within the algorithm's fitting procedure. This is often the case,
 e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 populations.\cr
+Expects initial models that fit binary outcomes or continuous outcomes with
+predictions that are in (or scaled to) the range \link{0, 1}.
 The method defaults to \verb{Multi-Accuracy Boosting} as described in Kim et al. (2019).
 In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
 \code{multiplicative=FALSE} and \code{num_buckets} to 10.
 \itemize{
-For additional details, please refer to the relevant publication:
+For additional details, please refer to the relevant publications:
 \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
 Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
 https://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
@@ -29,7 +31,7 @@ https://dl.acm.org/doi/10.1145/3306618.3314287}{}
   # See vignette for more examples.
   # Instantiate the object
   mc = MCBoost$new()
-  # Run multicalibration on training dataset.
+  # Run multi-calibration on training dataset.
   mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
   # Predict on test set
   mc$predict_probs(iris[101:150,1:4])
@@ -40,7 +42,7 @@ https://dl.acm.org/doi/10.1145/3306618.3314287}{}
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{max_iter}}{\code{\link{integer}} \cr
-The maximum number of iterations of the multicalibration/multiaccuracy method.}
+The maximum number of iterations of the multi-calibration/multi-accuracy method.}
 
 \item{\code{alpha}}{\code{\link{numeric}} \cr
 Accuracy parameter that determines the stopping condition.}
@@ -49,34 +51,27 @@ Accuracy parameter that determines the stopping condition.}
 Parameter for multiplicative weight update (step size).}
 
 \item{\code{num_buckets}}{\code{\link{integer}} \cr
-The number of buckets to split into in addition to using the whole sample. Default \code{2}.}
+The number of buckets to split into in addition to using the whole sample.}
 
 \item{\code{bucket_strategy}}{\code{\link{character}} \cr
 Currently only supports "simple", even split along probabilities.
-Only relevant for num_buckets > 1.}
+Only relevant for \code{num_buckets} > 1.}
 
 \item{\code{rebucket}}{\code{\link{logical}} \cr
 Should buckets be re-calculated at each iteration?}
 
 \item{\code{partition}}{\code{\link{logical}} \cr
 True/False flag for whether to split up predictions by their "partition"
-(e.g., predictions less than 0.5 and predictions greater than 0.5).
-Defaults to \code{TRUE} (multi-accuracy boosting).}
+(e.g., predictions less than 0.5 and predictions greater than 0.5).}
 
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
-Specifies the strategy for updating the weights (multiplicative weight vs additive).
-Defaults to \code{TRUE} (multi-accuracy boosting). Set to \code{FALSE} for multi-calibration.}
+Specifies the strategy for updating the weights (multiplicative weight vs additive).}
 
 \item{\code{iter_sampling}}{\code{\link{character}} \cr
-How to sample the validation data for each iteration?
-Can be \code{bootstrap}, \code{split} or \code{none}.\cr
-"split" splits the data into \code{max_iter} parts and validates on each sample in each iteration.\cr
-"bootstrap" uses a new bootstrap sample in each iteration.\cr
-"none" uses the same dataset in each iteration.}
+Specifies the strategy to sample the validation data for each iteration.}
 
 \item{\code{auditor_fitter}}{\code{\link{AuditorFitter}} \cr
-Specifies the type of model used to fit the
-residual fxn ('TreeAuditorFitter' or 'RidgeAuditorFitter' (default)).}
+Specifies the type of model used to fit the residuals.}
 
 \item{\code{predictor}}{\code{\link{function}} \cr
 Initial predictor function.}
@@ -133,7 +128,7 @@ Initialize a multi-calibration instance.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{max_iter}}{\code{\link{integer}} \cr
-The maximum number of iterations of the multicalibration/multiaccuracy method.
+The maximum number of iterations of the multi-calibration/multi-accuracy method.
 Default \code{5L}.}
 
 \item{\code{alpha}}{\code{\link{numeric}} \cr
@@ -144,20 +139,22 @@ Parameter for multiplicative weight update (step size). Default \code{1.0}.}
 
 \item{\code{partition}}{\code{\link{logical}} \cr
 True/False flag for whether to split up predictions by their "partition"
-(e.g., predictions less than 0.5 and predictions greater than 0.5)}
+(e.g., predictions less than 0.5 and predictions greater than 0.5).
+Defaults to \code{TRUE} (multi-accuracy boosting).}
 
 \item{\code{num_buckets}}{\code{\link{integer}} \cr
 The number of buckets to split into in addition to using the whole sample. Default \code{2L}.}
 
 \item{\code{bucket_strategy}}{\code{\link{character}} \cr
 Currently only supports "simple", even split along probabilities.
-Only taken into account for num_buckets > 1.}
+Only taken into account for \code{num_buckets} > 1.}
 
 \item{\code{rebucket}}{\code{\link{logical}} \cr
-Should buckets be re-done at each iteration? Default: \code{FALSE}.}
+Should buckets be re-done at each iteration? Default \code{FALSE}.}
 
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
-Specifies the strategy for updating the weights (multiplicative weight vs additive)}
+Specifies the strategy for updating the weights (multiplicative weight vs additive).
+Defaults to \code{TRUE} (multi-accuracy boosting). Set to \code{FALSE} for multi-calibration.}
 
 \item{\code{auditor_fitter}}{\code{\link{AuditorFitter}}|\code{\link{character}}|\code{\link[mlr3:Learner]{mlr3::Learner}} \cr
 Specifies the type of model used to fit the
@@ -171,7 +168,9 @@ and the values they take defining the S in subpops
 e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 
 \item{\code{default_model_class}}{\code{Predictor} \cr
-The class of the model that should be used as the init predictor model.}
+The class of the model that should be used as the init predictor model if
+\code{init_predictor} is not specified. Defaults to \code{ConstantPredictor} which
+predicts a constant value.}
 
 \item{\code{init_predictor}}{\code{\link{function}}|\code{\link[mlr3:Learner]{mlr3::Learner}} \cr
 The initial predictor function to use (i.e., if the user has a pretrained model).
@@ -180,7 +179,10 @@ This requires the \code{\link[mlr3:Learner]{mlr3::Learner}} to be trained.}
 
 \item{\code{iter_sampling}}{\code{\link{character}} \cr
 How to sample the validation data for each iteration?
-Can be \code{bootstrap}, \code{split} or \code{none}.\cr}
+Can be \code{bootstrap}, \code{split} or \code{none}.\cr
+"split" splits the data into \code{max_iter} parts and validates on each sample in each iteration.\cr
+"bootstrap" uses a new bootstrap sample in each iteration.\cr
+"none" uses the same dataset in each iteration.}
 }
 \if{html}{\out{</div>}}
 }
@@ -189,7 +191,7 @@ Can be \code{bootstrap}, \code{split} or \code{none}.\cr}
 \if{html}{\out{<a id="method-multicalibrate"></a>}}
 \if{latex}{\out{\hypertarget{method-multicalibrate}{}}}
 \subsection{Method \code{multicalibrate()}}{
-Run multicalibration.
+Run multi-calibration.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels, predictor_args = NULL, ...)}\if{html}{\out{</div>}}
 }
@@ -204,7 +206,7 @@ Features.}
 One-hot encoded labels (of same length as data).}
 
 \item{\code{predictor_args}}{\code{\link{any}} \cr
-Arguments passed on to\code{init_predictor}. Defaults to \code{NULL}.}
+Arguments passed on to \code{init_predictor}. Defaults to \code{NULL}.}
 
 \item{\code{...}}{\code{\link{any}} \cr
 Params passed on to other methods.}
@@ -234,7 +236,7 @@ Prediction data.}
 Number of multi-calibration steps to predict. Default: \code{Inf} (all).}
 
 \item{\code{predictor_args}}{\code{\link{any}} \cr
-Arguments passed on to\code{init_predictor}. Defaults to \code{NULL}.}
+Arguments passed on to \code{init_predictor}. Defaults to \code{NULL}.}
 
 \item{\code{audit}}{\code{\link{logical}} \cr
 Should audit weights be stored? Default \code{FALSE}.}
@@ -273,13 +275,13 @@ each observation was affected by multi-calibration on average across iterations.
 Prediction data.}
 
 \item{\code{aggregate}}{\code{\link{logical}} \cr
-Should the auditor effect be aggregated across iterations?}
+Should the auditor effect be aggregated across iterations? Defaults to \code{TRUE}.}
 
 \item{\code{t}}{\code{\link{integer}} \cr
-Number of multi-calibration steps to predict. Default: \code{Inf} (all).}
+Number of multi-calibration steps to predict. Defaults to \code{Inf} (all).}
 
 \item{\code{predictor_args}}{\code{\link{any}} \cr
-Arguments passed on to\code{init_predictor}. Defaults to \code{NULL}.}
+Arguments passed on to \code{init_predictor}. Defaults to \code{NULL}.}
 
 \item{\code{...}}{\code{\link{any}} \cr
 Params passed on to the residual prediction model's predict method.}
@@ -295,7 +297,7 @@ Numeric vector of auditor effects for each row in \code{x}.
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Prints information about multicalibration.
+Prints information about multi-calibration.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MCBoost$print(...)}\if{html}{\out{</div>}}
 }
