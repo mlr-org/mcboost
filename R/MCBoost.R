@@ -12,7 +12,7 @@
 #'   In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
 #'   `multiplicative=FALSE` and `num_buckets` to 10.
 #'   \itemize{
-#'   For additional details, please refer to the relevant publication:
+#'   For additional details, please refer to the relevant publications:
 #'     \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
 #'      Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
 #'      https://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
@@ -26,7 +26,7 @@
 #'   # See vignette for more examples.
 #'   # Instantiate the object
 #'   mc = MCBoost$new()
-#'   # Run multicalibration on training dataset.
+#'   # Run multi-calibration on training dataset.
 #'   mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
 #'   # Predict on test set
 #'   mc$predict_probs(iris[101:150,1:4])
@@ -37,7 +37,7 @@ MCBoost = R6::R6Class("MCBoost",
   public = list(
 
     #' @field max_iter [`integer`] \cr
-    #'   The maximum number of iterations of the multicalibration/multiaccuracy method.
+    #'   The maximum number of iterations of the multi-calibration/multi-accuracy method.
     max_iter = NULL,
 
     #' @field alpha  [`numeric`] \cr
@@ -49,11 +49,11 @@ MCBoost = R6::R6Class("MCBoost",
     eta = NULL,
 
     #' @field num_buckets [`integer`] \cr
-    #' The number of buckets to split into in addition to using the whole sample. Default `2`.
+    #' The number of buckets to split into in addition to using the whole sample.
     num_buckets = NULL,
     #' @field bucket_strategy  [`character`] \cr
     #'   Currently only supports "simple", even split along probabilities.
-    #'   Only relevant for num_buckets > 1.
+    #'   Only relevant for `num_buckets` > 1.
     bucket_strategy = NULL,
     #' @field rebucket [`logical`] \cr
     #'   Should buckets be re-calculated at each iteration?
@@ -61,25 +61,18 @@ MCBoost = R6::R6Class("MCBoost",
     #' @field partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
     #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
-    #'   Defaults to `TRUE` (multi-accuracy boosting).
     partition = NULL,
 
     #' @field multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive).
-    #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
     multiplicative = NULL,
 
     #' @field iter_sampling [`character`] \cr
-    #'   How to sample the validation data for each iteration?
-    #'   Can be `bootstrap`, `split` or `none`.\cr
-    #'   "split" splits the data into `max_iter` parts and validates on each sample in each iteration.\cr
-    #'   "bootstrap" uses a new bootstrap sample in each iteration.\cr
-    #'   "none" uses the same dataset in each iteration.
+    #'   Specifies the strategy to sample the validation data for each iteration.
     iter_sampling = NULL,
 
     #' @field auditor_fitter [`AuditorFitter`] \cr
-    #'   Specifies the type of model used to fit the
-    #'   residual fxn ('TreeAuditorFitter' or 'RidgeAuditorFitter' (default)).
+    #'   Specifies the type of model used to fit the residuals.
     auditor_fitter = NULL,
 
     #' @field predictor [`function`] \cr
@@ -106,7 +99,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Initialize a multi-calibration instance.
     #'
     #' @param max_iter [`integer`] \cr
-    #'   The maximum number of iterations of the multicalibration/multiaccuracy method.
+    #'   The maximum number of iterations of the multi-calibration/multi-accuracy method.
     #'   Default `5L`.
     #' @param alpha  [`numeric`] \cr
     #'   Accuracy parameter that determines the stopping condition. Default `1e-4`.
@@ -114,16 +107,18 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Parameter for multiplicative weight update (step size). Default `1.0`.
     #' @param partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
-    #'   (e.g., predictions less than 0.5 and predictions greater than 0.5)
+    #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
+    #'   Defaults to `TRUE` (multi-accuracy boosting).
     #' @param num_buckets [`integer`] \cr
     #'   The number of buckets to split into in addition to using the whole sample. Default `2L`.
     #' @param bucket_strategy  [`character`] \cr
     #'   Currently only supports "simple", even split along probabilities.
-    #'   Only taken into account for num_buckets > 1.
+    #'   Only taken into account for `num_buckets` > 1.
     #' @param rebucket [`logical`] \cr
-    #'   Should buckets be re-done at each iteration? Default: `FALSE`.
+    #'   Should buckets be re-done at each iteration? Default `FALSE`.
     #' @param multiplicative [`logical`] \cr
-    #'   Specifies the strategy for updating the weights (multiplicative weight vs additive)
+    #'   Specifies the strategy for updating the weights (multiplicative weight vs additive).
+    #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
     #' @param auditor_fitter [`AuditorFitter`]|[`character`]|[`mlr3::Learner`] \cr
     #'   Specifies the type of model used to fit the
     #'   residuals. The default is [`RidgeAuditorFitter`].
@@ -131,7 +126,9 @@ MCBoost = R6::R6Class("MCBoost",
     #'   auto-converted into a [`LearnerAuditorFitter`] or a custom [`AuditorFitter`].
     #' @template params_subpops
     #' @param default_model_class `Predictor` \cr
-    #'   The class of the model that should be used as the init predictor model.
+    #'   The class of the model that should be used as the init predictor model if
+    #'   `init_predictor` is not specified. Defaults to `ConstantPredictor` which
+    #'   predicts a constant value.
     #' @param init_predictor [`function`]|[`mlr3::Learner`] \cr
     #'   The initial predictor function to use (i.e., if the user has a pretrained model).
     #'   If a `mlr3` `Learner` is passed, it will be autoconverted using `mlr3_init_predictor`.
@@ -139,6 +136,9 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param iter_sampling [`character`] \cr
     #'   How to sample the validation data for each iteration?
     #'   Can be `bootstrap`, `split` or `none`.\cr
+    #'   "split" splits the data into `max_iter` parts and validates on each sample in each iteration.\cr
+    #'   "bootstrap" uses a new bootstrap sample in each iteration.\cr
+    #'   "none" uses the same dataset in each iteration.
     initialize = function(
                  max_iter=5,
                  alpha=1e-4,
@@ -210,10 +210,10 @@ MCBoost = R6::R6Class("MCBoost",
     },
 
     #' @description
-    #' Run multicalibration.
+    #' Run multi-calibration.
     #' @template params_data_label
     #' @param predictor_args [`any`] \cr
-    #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
+    #'  Arguments passed on to `init_predictor`. Defaults to `NULL`.
     #' @param ... [`any`] \cr
     #'  Params passed on to other methods.
     #' @return `NULL`
@@ -305,7 +305,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param t [`integer`] \cr
     #'   Number of multi-calibration steps to predict. Default: `Inf` (all).
     #' @param predictor_args [`any`] \cr
-    #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
+    #'  Arguments passed on to `init_predictor`. Defaults to `NULL`.
     #' @param audit [`logical`] \cr
     #'  Should audit weights be stored? Default `FALSE`.
     #' @param ... [`any`] \cr
@@ -341,11 +341,11 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param x [`data.table`] \cr
     #'   Prediction data.
     #' @param aggregate [`logical`] \cr
-    #'   Should the auditor effect be aggregated across iterations?
+    #'   Should the auditor effect be aggregated across iterations? Defaults to `TRUE`.
     #' @param t [`integer`] \cr
-    #'   Number of multi-calibration steps to predict. Default: `Inf` (all).
+    #'   Number of multi-calibration steps to predict. Defaults to `Inf` (all).
     #' @param predictor_args [`any`] \cr
-    #'  Arguments passed on to`init_predictor`. Defaults to `NULL`.
+    #'  Arguments passed on to `init_predictor`. Defaults to `NULL`.
     #' @param ... [`any`] \cr
     #'  Params passed on to the residual prediction model's predict method.
     #' @return [`numeric`] \cr
@@ -362,7 +362,7 @@ MCBoost = R6::R6Class("MCBoost",
       }
     },
     #' @description
-    #' Prints information about multicalibration.
+    #' Prints information about multi-calibration.
     #' @param ... `any`\cr
     #' Not used.
     print = function(...) {
