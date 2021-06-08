@@ -181,7 +181,7 @@ https://dl.acm.org/doi/10.1145/3306618.3314287</p></li>
 
     <p><div class="r6-fields"></p><dl>
 <dt><code>max_iter</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> <br />
-The maximum number of iterations of the multicalibration/multiaccuracy method.</p></dd>
+The maximum number of iterations of the multi-calibration/multi-accuracy method.</p></dd>
 
 <dt><code>alpha</code></dt><dd><p><code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code> <br />
 Accuracy parameter that determines the stopping condition.</p></dd>
@@ -190,34 +190,27 @@ Accuracy parameter that determines the stopping condition.</p></dd>
 Parameter for multiplicative weight update (step size).</p></dd>
 
 <dt><code>num_buckets</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> <br />
-The number of buckets to split into in addition to using the whole sample. Default <code>2</code>.</p></dd>
+The number of buckets to split into in addition to using the whole sample.</p></dd>
 
 <dt><code>bucket_strategy</code></dt><dd><p><code><a href='https://rdrr.io/r/base/character.html'>character</a></code> <br />
 Currently only supports "simple", even split along probabilities.
-Only relevant for num_buckets &gt; 1.</p></dd>
+Only relevant for <code>num_buckets</code> &gt; 1.</p></dd>
 
 <dt><code>rebucket</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
 Should buckets be re-calculated at each iteration?</p></dd>
 
 <dt><code>partition</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
 True/False flag for whether to split up predictions by their "partition"
-(e.g., predictions less than 0.5 and predictions greater than 0.5).
-Defaults to <code>TRUE</code> (multi-accuracy boosting).</p></dd>
+(e.g., predictions less than 0.5 and predictions greater than 0.5).</p></dd>
 
 <dt><code>multiplicative</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
-Specifies the strategy for updating the weights (multiplicative weight vs additive).
-Defaults to <code>TRUE</code> (multi-accuracy boosting). Set to <code>FALSE</code> for multi-calibration.</p></dd>
+Specifies the strategy for updating the weights (multiplicative weight vs additive).</p></dd>
 
 <dt><code>iter_sampling</code></dt><dd><p><code><a href='https://rdrr.io/r/base/character.html'>character</a></code> <br />
-How to sample the validation data for each iteration?
-Can be <code>bootstrap</code>, <code>split</code> or <code>none</code>.<br />
-"split" splits the data into <code>max_iter</code> parts and validates on each sample in each iteration.<br />
-"bootstrap" uses a new bootstrap sample in each iteration.<br />
-"none" uses the same dataset in each iteration.</p></dd>
+Specifies the strategy to sample the validation data for each iteration.</p></dd>
 
 <dt><code>auditor_fitter</code></dt><dd><p><code><a href='AuditorFitter.html'>AuditorFitter</a></code> <br />
-Specifies the type of model used to fit the
-residual fxn ('TreeAuditorFitter' or 'RidgeAuditorFitter' (default)).</p></dd>
+Specifies the type of model used to fit the residuals.</p></dd>
 
 <dt><code>predictor</code></dt><dd><p><code><a href='https://rdrr.io/r/base/function.html'>function</a></code> <br />
 Initial predictor function.</p></dd>
@@ -270,7 +263,7 @@ Auditor effect in each iteration.</p></dd>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>max_iter</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> <br />
-The maximum number of iterations of the multicalibration/multiaccuracy method.
+The maximum number of iterations of the multi-calibration/multi-accuracy method.
 Default <code>5L</code>.</p></dd>
 
 <dt><code>alpha</code></dt><dd><p><code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code> <br />
@@ -281,20 +274,22 @@ Parameter for multiplicative weight update (step size). Default <code>1.0</code>
 
 <dt><code>partition</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
 True/False flag for whether to split up predictions by their "partition"
-(e.g., predictions less than 0.5 and predictions greater than 0.5)</p></dd>
+(e.g., predictions less than 0.5 and predictions greater than 0.5).
+Defaults to <code>TRUE</code> (multi-accuracy boosting).</p></dd>
 
 <dt><code>num_buckets</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> <br />
 The number of buckets to split into in addition to using the whole sample. Default <code>2L</code>.</p></dd>
 
 <dt><code>bucket_strategy</code></dt><dd><p><code><a href='https://rdrr.io/r/base/character.html'>character</a></code> <br />
 Currently only supports "simple", even split along probabilities.
-Only taken into account for num_buckets &gt; 1.</p></dd>
+Only taken into account for <code>num_buckets</code> &gt; 1.</p></dd>
 
 <dt><code>rebucket</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
-Should buckets be re-done at each iteration? Default: <code>FALSE</code>.</p></dd>
+Should buckets be re-done at each iteration? Default <code>FALSE</code>.</p></dd>
 
 <dt><code>multiplicative</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
-Specifies the strategy for updating the weights (multiplicative weight vs additive)</p></dd>
+Specifies the strategy for updating the weights (multiplicative weight vs additive).
+Defaults to <code>TRUE</code> (multi-accuracy boosting). Set to <code>FALSE</code> for multi-calibration.</p></dd>
 
 <dt><code>auditor_fitter</code></dt><dd><p><code><a href='AuditorFitter.html'>AuditorFitter</a></code>|<code><a href='https://rdrr.io/r/base/character.html'>character</a></code>|<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code> <br />
 Specifies the type of model used to fit the
@@ -304,11 +299,13 @@ auto-converted into a <code><a href='LearnerAuditorFitter.html'>LearnerAuditorFi
 
 <dt><code>subpops</code></dt><dd><p><code><a href='https://rdrr.io/r/base/list.html'>list</a></code> <br />
 Specifies a collection of characteristic attributes
-and the values they take defining the S in subpops
-e.g. C = list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).</p></dd>
+and the values they take to define subpopulations
+e.g. list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).</p></dd>
 
 <dt><code>default_model_class</code></dt><dd><p><code>Predictor</code> <br />
-The class of the model that should be used as the init predictor model.</p></dd>
+The class of the model that should be used as the init predictor model if
+<code>init_predictor</code> is not specified. Defaults to <code>ConstantPredictor</code> which
+predicts a constant value.</p></dd>
 
 <dt><code>init_predictor</code></dt><dd><p><code><a href='https://rdrr.io/r/base/function.html'>function</a></code>|<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code> <br />
 The initial predictor function to use (i.e., if the user has a pretrained model).
@@ -317,12 +314,15 @@ This requires the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html
 
 <dt><code>iter_sampling</code></dt><dd><p><code><a href='https://rdrr.io/r/base/character.html'>character</a></code> <br />
 How to sample the validation data for each iteration?
-Can be <code>bootstrap</code>, <code>split</code> or <code>none</code>.<br /></p></dd>
+Can be <code>bootstrap</code>, <code>split</code> or <code>none</code>.<br />
+"split" splits the data into <code>max_iter</code> parts and validates on each sample in each iteration.<br />
+"bootstrap" uses a new bootstrap sample in each iteration.<br />
+"none" uses the same dataset in each iteration.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-multicalibrate"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>multicalibrate()</code></h3>
-<p>Run multicalibration.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Run multi-calibration.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>MCBoost</span><span class='op'>$</span><span class='fu'>multicalibrate</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>labels</span>, predictor_args <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -334,7 +334,7 @@ Features.</p></dd>
 One-hot encoded labels (of same length as data).</p></dd>
 
 <dt><code>predictor_args</code></dt><dd><p><code><a href='https://rdrr.io/r/base/any.html'>any</a></code> <br />
-Arguments passed on to<code>init_predictor</code>. Defaults to <code>NULL</code>.</p></dd>
+Arguments passed on to <code>init_predictor</code>. Defaults to <code>NULL</code>.</p></dd>
 
 <dt><code>...</code></dt><dd><p><code><a href='https://rdrr.io/r/base/any.html'>any</a></code> <br />
 Params passed on to other methods.</p></dd>
@@ -356,7 +356,7 @@ Prediction data.</p></dd>
 Number of multi-calibration steps to predict. Default: <code>Inf</code> (all).</p></dd>
 
 <dt><code>predictor_args</code></dt><dd><p><code><a href='https://rdrr.io/r/base/any.html'>any</a></code> <br />
-Arguments passed on to<code>init_predictor</code>. Defaults to <code>NULL</code>.</p></dd>
+Arguments passed on to <code>init_predictor</code>. Defaults to <code>NULL</code>.</p></dd>
 
 <dt><code>audit</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
 Should audit weights be stored? Default <code>FALSE</code>.</p></dd>
@@ -387,13 +387,13 @@ each observation was affected by multi-calibration on average across iterations.
 Prediction data.</p></dd>
 
 <dt><code>aggregate</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
-Should the auditor effect be aggregated across iterations?</p></dd>
+Should the auditor effect be aggregated across iterations? Defaults to <code>TRUE</code>.</p></dd>
 
 <dt><code>t</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> <br />
-Number of multi-calibration steps to predict. Default: <code>Inf</code> (all).</p></dd>
+Number of multi-calibration steps to predict. Defaults to <code>Inf</code> (all).</p></dd>
 
 <dt><code>predictor_args</code></dt><dd><p><code><a href='https://rdrr.io/r/base/any.html'>any</a></code> <br />
-Arguments passed on to<code>init_predictor</code>. Defaults to <code>NULL</code>.</p></dd>
+Arguments passed on to <code>init_predictor</code>. Defaults to <code>NULL</code>.</p></dd>
 
 <dt><code>...</code></dt><dd><p><code><a href='https://rdrr.io/r/base/any.html'>any</a></code> <br />
 Params passed on to the residual prediction model's predict method.</p></dd>
@@ -404,7 +404,7 @@ Params passed on to the residual prediction model's predict method.</p></dd>
 Numeric vector of auditor effects for each row in <code>x</code>.</p>
 <p><hr>
 <a id="method-print"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
-<p>Prints information about multicalibration.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Prints information about multi-calibration.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>MCBoost</span><span class='op'>$</span><span class='fu'>print</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -430,7 +430,7 @@ Not used.</p></dd>
     <pre class="examples"><div class='input'>  <span class='co'># See vignette for more examples.</span>
   <span class='co'># Instantiate the object</span>
   <span class='va'>mc</span> <span class='op'>=</span> <span class='va'>MCBoost</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-  <span class='co'># Run multicalibration on training dataset.</span>
+  <span class='co'># Run multi-calibration on training dataset.</span>
   <span class='va'>mc</span><span class='op'>$</span><span class='fu'>multicalibrate</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>,<span class='st'>"B"</span><span class='op'>)</span>, <span class='fl'>100</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
   <span class='co'># Predict on test set</span>
   <span class='va'>mc</span><span class='op'>$</span><span class='fu'>predict_probs</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span><span class='op'>)</span>

@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="AuditorFitter Abstract Base Class — AuditorFitter" />
-<meta property="og:description" content="AuditorFitter Abstract Base Class
-AuditorFitter Abstract Base Class" />
+<meta property="og:description" content="Defines an AuditorFitter abstract base class." />
 
 
 
@@ -133,8 +132,7 @@ AuditorFitter Abstract Base Class" />
     </div>
 
     <div class="ref-description">
-    <p>AuditorFitter Abstract Base Class</p>
-<p>AuditorFitter Abstract Base Class</p>
+    <p>Defines an <code>AuditorFitter</code> abstract base class.</p>
     </div>
 
 
@@ -142,11 +140,6 @@ AuditorFitter Abstract Base Class" />
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>list</code> with items<br /></p><ul>
-<li><p><code>corr</code>: pseudo-correlation between residuals and learner prediction.</p></li>
-<li><p><code>l</code>: the trained learner.</p></li>
-</ul>
-
-<p><code>list</code> with items<br /></p><ul>
 <li><p><code>corr</code>: pseudo-correlation between residuals and learner prediction.</p></li>
 <li><p><code>l</code>: the trained learner.</p></li>
 </ul>
@@ -164,7 +157,7 @@ AuditorFitter Abstract Base Class" />
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>Initialize a <code>AuditorFitter</code>
+<p>Initialize a <code>AuditorFitter</code>.
 This is an abstract base class.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>AuditorFitter</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
@@ -178,17 +171,8 @@ This is an abstract base class.</p><h4 class='hasAnchor' id='arguments'><a class
 <dt><code>data</code></dt><dd><p><code>data.table</code><br />
 Features.</p></dd>
 
-<dt><code>data</code></dt><dd><p><code>data.table</code><br />
-Features.</p></dd>
-
 <dt><code>resid</code></dt><dd><p><code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code><br />
 Residuals (of same length as data).</p></dd>
-
-<dt><code>resid</code></dt><dd><p><code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code><br />
-Residuals (of same length as data).</p></dd>
-
-<dt><code>mask</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code><br />
-Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p></dd>
 
 <dt><code>mask</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code><br />
 Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p></dd>
@@ -204,17 +188,8 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <dt><code>data</code></dt><dd><p><code>data.table</code><br />
 Features.</p></dd>
 
-<dt><code>data</code></dt><dd><p><code>data.table</code><br />
-Features.</p></dd>
-
 <dt><code>resid</code></dt><dd><p><code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code><br />
 Residuals (of same length as data).</p></dd>
-
-<dt><code>resid</code></dt><dd><p><code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code><br />
-Residuals (of same length as data).</p></dd>
-
-<dt><code>mask</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code><br />
-Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p></dd>
 
 <dt><code>mask</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code><br />
 Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p></dd>

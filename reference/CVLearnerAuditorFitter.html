@@ -44,7 +44,7 @@
 instead of the in-sample predictions.
 Available data is cut into complementary subsets (folds).
 For each subset out-of-sample predictions are received by training a model
-on all other subset and predicting afterwards on the left-out subset." />
+on all other subsets and predicting afterwards on the left-out subset." />
 
 
 
@@ -140,7 +140,7 @@ on all other subset and predicting afterwards on the left-out subset." />
 instead of the in-sample predictions.</p>
 <p>Available data is cut into complementary subsets (folds).
 For each subset out-of-sample predictions are received by training a model
-on all other subset and predicting afterwards on the left-out subset.</p>
+on all other subsets and predicting afterwards on the left-out subset.</p>
     </div>
 
 
@@ -202,7 +202,7 @@ Learner used for fitting residuals.</p></dd>
 
 <hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>Define a CVAuditorFitter from a Learner.
+<p>Define a <code>CVAuditorFitter</code> from a learner.
 Available instantiations:<br /> <code>CVTreeAuditorFitter</code> (rpart) and
 <code>CVRidgeAuditorFitter</code> (glmnet).
 See <code><a href='https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_learner_cv.html'>mlr3pipelines::PipeOpLearnerCV</a></code> for more information on
@@ -215,12 +215,12 @@ cross-validated learners.</p><h4 class='hasAnchor' id='arguments'><a class='anch
 Regression Learner to use.</p></dd>
 
 <dt><code>folds</code></dt><dd><p><code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code><br />
-Number of folds to use for PipeOpLearnerCV. Default: 3.</p></dd>
+Number of folds to use for PipeOpLearnerCV. Defaults to 3.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-fit"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>fit()</code></h3>
-<p>Fit the cv-learner and compute correlation</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Fit the cross-validated learner and compute correlation</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>CVLearnerAuditorFitter</span><span class='op'>$</span><span class='fu'>fit</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>resid</span>, <span class='va'>mask</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -306,7 +306,7 @@ cross-validated learners.</p><h4 class='hasAnchor' id='arguments'><a class='anch
 
 <hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>Define a cross-validated AuditorFitter from a glmnet learner
+<p>Define a cross-validated AuditorFitter from a glmnet learner.
 See <code><a href='https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_learner_cv.html'>mlr3pipelines::PipeOpLearnerCV</a></code> for more information on
 cross-validated learners.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>CVRidgeAuditorFitter</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
