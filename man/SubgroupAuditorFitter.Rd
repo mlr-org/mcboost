@@ -31,7 +31,8 @@ Other AuditorFitter:
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{subgroup_masks}}{\code{\link{list}} \cr
-List of subgroup masks.}
+List of subgroup masks.
+Initialize a SubgroupAuditorFitter}
 }
 \if{html}{\out{</div>}}
 }
@@ -54,7 +55,9 @@ List of subgroup masks.}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize SubgroupAuditorFitter
+Initializes a \code{\link{SubgroupAuditorFitter}} that
+assesses multi-calibration within each group defined
+by the `subpops'.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SubgroupAuditorFitter$new(subgroup_masks)}\if{html}{\out{</div>}}
 }

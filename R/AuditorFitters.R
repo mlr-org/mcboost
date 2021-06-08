@@ -100,18 +100,33 @@ RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
 
 #' Static AuditorFitter based on Subpopulations
 #' @family AuditorFitter
+#' @examples
+#'   library("data.table")
+#'   data = data.table(
+#'     "AGE_NA" = c(0, 0, 0, 0, 0),
+#'     "AGE_0_10" =  c(1, 1, 0, 0, 0),
+#'     "AGE_11_20" = c(0, 0, 1, 0, 0),
+#'     "AGE_21_31" = c(0, 0, 0, 1, 1),
+#'     "X1" = runif(5),
+#'     "X2" = runif(5)
+#'   )
+#'   label = c(1,0,0,1,1)
+#'   pops = list("AGE_NA", "AGE_0_10", "AGE_11_20", "AGE_21_31", function(x) {x[["X1" > 0.5]]})
+#'   sf = SubpopAuditorFitter$new(subpops = pops)
+#'   sf$fit(data, label - 0.5)
 #' @export
 SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
   inherit = AuditorFitter,
   public = list(
-    #' @field subgroup_masks [`list`] \cr
-    #'   List of subgroup masks.
-    subgroup_masks = NULL,
     #' @field subpops [`list`] \cr
     #'   List of subpopulation indicators.
     subpops = NULL,
+    #' Initialize a SubpopAuditorFitter
     #' @description
-    #' Initialize SubPopFitter
+    #' Initializes a [`SubpopAuditorFitter`] that
+    #' assesses multi-calibration within each group defined
+    #' by the `subpops'. Names in `subpops` must correspond to
+    #' columns in the data.
     #'
     #' @template params_subpops
     #' @template return_auditor
@@ -157,8 +172,11 @@ SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
     #' @field subgroup_masks [`list`] \cr
     #'   List of subgroup masks.
     subgroup_masks = NULL,
+    #' Initialize a SubgroupAuditorFitter
     #' @description
-    #' Initialize SubgroupAuditorFitter
+    #' Initializes a [`SubgroupAuditorFitter`] that
+    #' assesses multi-calibration within each group defined
+    #' by the `subpops'.
     #'
     #' @param subgroup_masks [`list`] \cr
     #'   List of subgroup masks. Subgroup masks are list(s) of integer masks,
