@@ -47,6 +47,8 @@ Multi-Calibration works best in scenarios where the underlying data &amp;amp; la
 but a bias is introduced within the algorithm's fitting procedure. This is often the case,
 e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 populations.
+Expects initial models that fit binary outcomes or continuous outcomes with
+predictions that are in (or scaled to) the 0-1 range.
 The method defaults to Multi-Accuracy Boosting as described in Kim et al. (2019).
 In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
 multiplicative=FALSE and num_buckets to 10.
@@ -157,6 +159,8 @@ Multi-Calibration works best in scenarios where the underlying data &amp; labels
 but a bias is introduced within the algorithm's fitting procedure. This is often the case,
 e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 populations.<br />
+Expects initial models that fit binary outcomes or continuous outcomes with
+predictions that are in (or scaled to) the 0-1 range.
 The method defaults to <code>Multi-Accuracy Boosting</code> as described in Kim et al. (2019).
 In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
 <code>multiplicative=FALSE</code> and <code>num_buckets</code> to 10.</p><ul>

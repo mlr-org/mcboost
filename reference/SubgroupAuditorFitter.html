@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="Static AuditorFitter based on Subgroups — SubgroupAuditorFitter" />
-<meta property="og:description" content="Static AuditorFitter based on Subgroups
-Static AuditorFitter based on Subgroups" />
+<meta property="og:description" content="Used to assess multi-calibration based on a list of
+binary subgroup_masks passed during initialization." />
 
 
 
@@ -133,8 +133,8 @@ Static AuditorFitter based on Subgroups" />
     </div>
 
     <div class="ref-description">
-    <p>Static AuditorFitter based on Subgroups</p>
-<p>Static AuditorFitter based on Subgroups</p>
+    <p>Used to assess multi-calibration based on a list of
+binary <code>subgroup_masks</code> passed during initialization.</p>
     </div>
 
 
@@ -202,7 +202,7 @@ They allow defining sub-groups of the data.</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>data</code></dt><dd><p><code>data.table</code><br />
+<dt><code>data</code></dt><dd><p><code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code><br />
 Features.</p></dd>
 
 <dt><code>resid</code></dt><dd><p><code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code><br />
@@ -225,6 +225,22 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://r-datatable.com'>"data.table"</a></span><span class='op'>)</span>
+ <span class='va'>data</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
+   <span class='st'>"AGE_0_10"</span> <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
+   <span class='st'>"AGE_11_20"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
+   <span class='st'>"AGE_21_31"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
+   <span class='st'>"X1"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>,
+   <span class='st'>"X2"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
+ <span class='op'>)</span>
+ <span class='va'>label</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>
+ <span class='va'>masks</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+   <span class='st'>"M1"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1L</span>, <span class='fl'>0L</span>, <span class='fl'>1L</span>, <span class='fl'>1L</span>, <span class='fl'>0L</span><span class='op'>)</span>,
+   <span class='st'>"M2"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1L</span>, <span class='fl'>0L</span>, <span class='fl'>0L</span>, <span class='fl'>0L</span>, <span class='fl'>1L</span><span class='op'>)</span>
+ <span class='op'>)</span>
+ <span class='va'>sg</span> <span class='op'>=</span> <span class='va'>SubgroupAuditorFitter</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>masks</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
