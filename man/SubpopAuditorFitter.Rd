@@ -13,9 +13,8 @@
 }
 }
 \description{
-Static AuditorFitter based on Subpopulations
-
-Static AuditorFitter based on Subpopulations
+Used to assess multi-calibration based on a list of
+binary valued columns: \code{subpops} passed during initialization.
 }
 \examples{
   library("data.table")

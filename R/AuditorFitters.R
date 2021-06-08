@@ -99,6 +99,9 @@ RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
 )
 
 #' Static AuditorFitter based on Subpopulations
+#' @description
+#'   Used to assess multi-calibration based on a list of
+#'   binary valued columns: `subpops` passed during initialization.
 #' @family AuditorFitter
 #' @examples
 #'   library("data.table")
@@ -163,8 +166,25 @@ SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
   )
 )
 
-#' Static AuditorFitter based on Subgroups
+#' @title Static AuditorFitter based on Subgroups
+#' @description
+#'   Used to assess multi-calibration based on a list of
+#'   binary `subgroup_masks` passed during initialization.
 #' @family AuditorFitter
+#' @examples
+#'  data = data.table(
+#'    "AGE_0_10" =  c(1, 1, 0, 0, 0),
+#'    "AGE_11_20" = c(0, 0, 1, 0, 0),
+#'    "AGE_21_31" = c(0, 0, 0, 1, 1),
+#'    "X1" = runif(5),
+#'    "X2" = runif(5)
+#'  )
+#'  label = c(1,0,0,1,1)
+#'  masks = list(
+#'    "M1" = c(1L, 0L, 1L, 1L, 0L),
+#'    "M2" = c(1L, 0L, 0L, 0L, 1L)
+#'  )
+#'  sg = SubgroupAuditorFitter$new(masks)
 #' @export
 SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
   inherit = AuditorFitter,
