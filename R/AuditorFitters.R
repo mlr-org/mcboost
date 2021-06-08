@@ -110,7 +110,7 @@ SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
     #'   List of subpopulation indicators.
     subpops = NULL,
     #' @description
-    #' Initialize SubPopFitter
+    #' Initialize `SubPopFitter`.
     #'
     #' @template params_subpops
     #' @template return_auditor
@@ -148,6 +148,8 @@ SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
 )
 
 #' Static AuditorFitter based on Subgroups
+#' @description
+#'  Defines a statistic [`AuditorFitter`] based on Subgroups.
 #' @family AuditorFitter
 #' @export
 SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
@@ -157,12 +159,12 @@ SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
     #'   List of subgroup masks.
     subgroup_masks = NULL,
     #' @description
-    #' Initialize SubgroupAuditorFitter
+    #' Initialize `SubgroupAuditorFitter`
     #'
     #' @param subgroup_masks [`list`] \cr
     #'   List of subgroup masks. Subgroup masks are list(s) of integer masks,
     #'   each with the same length as data to be fitted on.
-    #'   They allow defining sub-groups of the data.
+    #'   They allow defining subgroups of the data.
     #' @template return_auditor
     initialize = function(subgroup_masks) {
       subgroup_masks = tryCatch({map(subgroup_masks, as.integer)},

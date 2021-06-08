@@ -13,9 +13,7 @@
 }
 }
 \description{
-Static AuditorFitter based on Subgroups
-
-Static AuditorFitter based on Subgroups
+Defines a statistic \code{\link{AuditorFitter}} based on Subgroups.
 }
 \seealso{
 Other AuditorFitter: 
@@ -54,7 +52,7 @@ List of subgroup masks.}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize SubgroupAuditorFitter
+Initialize \code{SubgroupAuditorFitter}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SubgroupAuditorFitter$new(subgroup_masks)}\if{html}{\out{</div>}}
 }
@@ -65,7 +63,7 @@ Initialize SubgroupAuditorFitter
 \item{\code{subgroup_masks}}{\code{\link{list}} \cr
 List of subgroup masks. Subgroup masks are list(s) of integer masks,
 each with the same length as data to be fitted on.
-They allow defining sub-groups of the data.}
+They allow defining subgroups of the data.}
 }
 \if{html}{\out{</div>}}
 }

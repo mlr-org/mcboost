@@ -57,7 +57,7 @@ List of subpopulation indicators.}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize SubPopFitter
+Initialize \code{SubPopFitter}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SubpopAuditorFitter$new(subpops)}\if{html}{\out{</div>}}
 }
