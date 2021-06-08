@@ -45,13 +45,13 @@ Imports:
     mlr3misc (>= 0.9.0),
     mlr3pipelines (>= 0.3.0),
     R6 (>= 2.4.1),
-    rpart
+    rpart,
+    glmnet
 Suggests:
     curl,
     formattable,
     tidyverse,
     PracTools,
-    glmnet,
     mlr3learners,
     mlr3oml,
     neuralnet,

@@ -54,7 +54,7 @@ Internally mcboost runs the following procedure `max_iter` times:
 
 1. Predict on X using the model from the previous iteration, `init_predictor` in the first iteration.
 1. Compute the residuals `res = y - y_hat`
-1. Split predictions into `num_buckets` acording to `y_hat`.
+1. Split predictions into `num_buckets` according to `y_hat`.
 1. Fit the auditor (`auditor_fitter`) (here called`c(x)`) on the data in each bucket with target variable `r`.
 1. Compute `misscal = mean(c(x) * res(x))`
 1. if `misscal > alpha`:

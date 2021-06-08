@@ -2,6 +2,8 @@
 #' @import checkmate
 #' @import mlr3
 #' @import mlr3misc
+#' @import glmnet
+#' @import rpart
 #' @importFrom R6 R6Class is.R6
 #' @importFrom utils head
 #' @importFrom stats contrasts runif rnorm  setNames
