@@ -172,6 +172,7 @@ SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
 #'   binary `subgroup_masks` passed during initialization.
 #' @family AuditorFitter
 #' @examples
+#'  library("data.table")
 #'  data = data.table(
 #'    "AGE_0_10" =  c(1, 1, 0, 0, 0),
 #'    "AGE_11_20" = c(0, 0, 1, 0, 0),

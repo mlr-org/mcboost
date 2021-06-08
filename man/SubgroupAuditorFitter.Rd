@@ -17,6 +17,7 @@ Used to assess multi-calibration based on a list of
 binary \code{subgroup_masks} passed during initialization.
 }
 \examples{
+ library("data.table")
  data = data.table(
    "AGE_0_10" =  c(1, 1, 0, 0, 0),
    "AGE_11_20" = c(0, 0, 1, 0, 0),
