@@ -12,7 +12,7 @@ but a bias is introduced within the algorithm's fitting procedure. This is often
 e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
 populations.\cr
 Expects initial models that fit binary outcomes or continuous outcomes with
-predictions that are in (or scaled to) the range \link{0, 1}.
+predictions that are in (or scaled to) the 0-1 range.
 The method defaults to \verb{Multi-Accuracy Boosting} as described in Kim et al. (2019).
 In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
 \code{multiplicative=FALSE} and \code{num_buckets} to 10.
