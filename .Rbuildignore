@@ -19,3 +19,4 @@ test/testthat/_snaps
 ^cran-comments\.md$
 ^mcboost-manual.tex$
 ^CRAN-RELEASE$
+^codemeta\.json$
