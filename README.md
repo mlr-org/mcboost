@@ -17,9 +17,15 @@ More details with respect to usage and the procedures can be found in the packag
 
 ## Installation
 
-You can install the released version of mcboost from **Github** with:
+The current version can be downloaded from CRAN using:
 
-``` r
+```r
+install.packages("mcboost")
+```
+
+You can install the development version of mcboost from **Github** with:
+
+```r
 remotes::install_github("mlr-org/mcboost")
 ```
 
