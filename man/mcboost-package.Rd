@@ -19,8 +19,8 @@ Hebert-Johnson et al., 2018: Multicalibration: Calibration for the ({C}omputatio
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/pfistfl/mcboost}
-  \item Report bugs at \url{https://github.com/pfistfl/mcboost/issues}
+  \item \url{https://github.com/mlr-org/mcboost}
+  \item Report bugs at \url{https://github.com/mlr-org/mcboost/issues}
 }
 
 }

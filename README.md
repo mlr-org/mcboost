@@ -1,7 +1,7 @@
 # mcboost
 
 <!-- badges: start -->
-[![tic](https://github.com/pfistfl/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/pfistfl/mcboost/actions)
+[![tic](https://github.com/mlr-org/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/mlr-org/mcboost/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Mattermost](https://img.shields.io/badge/chat-mattermost-orange.svg)](https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/)
@@ -28,7 +28,7 @@ remotes::install_github("mlr-org/mcboost")
 Post-processing with `mcboost` needs three components. We start with an initial prediction model (1) and an auditing algorithm (2) that may be customized by the user. The auditing algorithm then runs Multi-Calibration-Boosting on a labeled auditing dataset (3). The resulting model can be used for obtaining multi-calibrated predictions.
 
 <p align="center">
-  <img src="https://github.com/pfistfl/mcboost/raw/main/paper/MCBoost.png" />
+  <img src="https://github.com/mlr-org/mcboost/raw/main/paper/MCBoost.png" />
 </p>
 
 ## Example
@@ -122,7 +122,7 @@ In order to achieve this, we have to set the following hyperparameters:
 
 ## Further Examples
 
-The `mcboost` vignettes [**Basics and Extensions**](https://pfistfl.github.io/mcboost/articles/mcboost_basics_extensions.html) and [**Health Survey Example**](https://pfistfl.github.io/mcboost/articles/mcboost_example.html) demonstrate a lot of interesting showcases for applying `mcboost`.
+The `mcboost` vignettes [**Basics and Extensions**](https://mlr-org.github.io/mcboost/articles/mcboost_basics_extensions.html) and [**Health Survey Example**](https://mlr-org.github.io/mcboost/articles/mcboost_example.html) demonstrate a lot of interesting showcases for applying `mcboost`.
 
 
 ## Contributing
