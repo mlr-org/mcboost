@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mcboost</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -103,8 +103,11 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of mcboost from <strong>Github</strong> with:</p>
+<p>The current version can be downloaded from CRAN using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"mcboost"</span><span class="op">)</span></code></pre></div>
+<p>You can install the development version of mcboost from <strong>Github</strong> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"mlr-org/mcboost"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
@@ -118,18 +121,18 @@
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>In this simple example, our goal is to improve calibration for an <code>initial predictor</code>, e.g. a ML algorithm trained on an initial task. Internally, <code>mcboost</code> often makes use of <code>mlr3</code> and learners that come with <code>mlr3learners</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlr-org/mcboost">mcboost</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com">mlr3</a></span><span class="op">)</span></code></pre></div>
 <p>First we set up an example dataset.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="co">#  Example Data: Sonar Task</span>
   <span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span>
   <span class="va">tid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="va">row_ids</span>, <span class="fl">100</span><span class="op">)</span> <span class="co"># 100 rows for training</span>
   <span class="va">train_data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span>, rows <span class="op">=</span> <span class="va">tid</span><span class="op">)</span>
   <span class="va">train_labels</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span>, rows <span class="op">=</span> <span class="va">tid</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 <p>To provide an example, we assume that we have already a learner <code>l</code> which we train below. We can now wrap this initial learner’s predict function for use with <code>mcboost</code>, since <code>mcboost</code> expects the initial model to be specified as a <code>function</code> with <code>data</code> as input.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="va">l</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span>
   <span class="va">l</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">tid</span><span class="op">)</span><span class="op">)</span>
 
@@ -140,13 +143,13 @@
     <span class="fu"><a href="reference/one_hot.html">one_hot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
   <span class="op">}</span></code></pre></div>
 <p>We can now run Multi-Calibration Boosting by instantiating the object and calling the <code>multicalibrate</code> method. Note, that typically, we would use Multi-Calibration on a separate validation set! We furthermore select the auditor model, a <code>SubpopAuditorFitter</code>, in our case a <code>Decision Tree</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
     init_predictor <span class="op">=</span> <span class="va">init_predictor</span>,
     auditor_fitter <span class="op">=</span> <span class="st">"TreeAuditorFitter"</span><span class="op">)</span>
   <span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">train_data</span>, <span class="va">train_labels</span><span class="op">)</span></code></pre></div>
 <p>Lastly, we predict on new data.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tstid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="va">row_ids</span>, <span class="va">tid</span><span class="op">)</span> <span class="co"># held-out data</span>
 <span class="va">test_data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span>, rows <span class="op">=</span> <span class="va">tstid</span><span class="op">)</span>
 <span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></code></pre></div>
@@ -154,7 +157,7 @@
 <h3 class="hasAnchor">
 <a href="#multi-calibration" class="anchor"></a>Multi-Calibration</h3>
 <p>While <code>mcboost</code> in its defaults implements Multi-Accuracy (<a href="https://arxiv.org/pdf/1805.12317.pdf">Kim et al., 2019</a>), it can also multi-calibrate predictors (<a href="http://proceedings.mlr.press/v80/hebert-johnson18a.html">Hebert-Johnson et al., 2018</a>). In order to achieve this, we have to set the following hyperparameters:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
     init_predictor <span class="op">=</span> <span class="va">init_predictor</span>,
     auditor_fitter <span class="op">=</span> <span class="st">"TreeAuditorFitter"</span>,
@@ -167,7 +170,7 @@
 <h2 class="hasAnchor">
 <a href="#mcboost-as-a-pipeop" class="anchor"></a>MCBoost as a PipeOp</h2>
 <p><code>mcboost</code> can also be used within a <code>mlr3pipeline</code> in order to use at the full end-to-end pipeline (in the form of a <code>GraphLearner</code>).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com">mlr3</a></span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3pipelines.mlr-org.com">mlr3pipelines</a></span><span class="op">)</span>
   <span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="reference/ppl_mcboost.html">ppl_mcboost</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span>
@@ -238,6 +241,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=mcboost">https://​cloud.r-project.org/​package=mcboost</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/mlr-org/mcboost/">https://​github.com/​mlr-org/​mcboost/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/mlr-org/mcboost/issues">https://​github.com/​mlr-org/​mcboost/​issues</a>
