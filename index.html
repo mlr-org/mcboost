@@ -71,7 +71,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/pfistfl/mcboost/">
+  <a href="https://github.com/mlr-org/mcboost/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -97,7 +97,7 @@
 <h2 class="hasAnchor">
 <a href="#what-does-it-do" class="anchor"></a>What does it do?</h2>
 <p><strong>mcboost</strong> implements Multi-Calibration Boosting (<a href="https://proceedings.mlr.press/v80/hebert-johnson18a.html">Hebert-Johnson et al., 2018</a>; <a href="https://arxiv.org/pdf/1805.12317.pdf">Kim et al., 2019</a>) for the multi-calibration of a machine learning model’s prediction. Multi-Calibration works best in scenarios where the underlying data &amp; labels are unbiased but a bias is introduced within the algorithm’s fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.</p>
-<p>For more information and example, see the package’s <a href="https://pfistfl.github.io/mcboost/">website</a>.</p>
+<p>For more information and example, see the package’s <a href="https://mlr-org.github.io/mcboost/">website</a>.</p>
 <p>More details with respect to usage and the procedures can be found in the package vignettes.</p>
 </div>
 <div id="installation" class="section level2">
@@ -105,7 +105,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the released version of mcboost from <strong>Github</strong> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"pfistfl/mcboost"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"mlr-org/mcboost"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -119,7 +119,7 @@
 <a href="#example" class="anchor"></a>Example</h2>
 <p>In this simple example, our goal is to improve calibration for an <code>initial predictor</code>, e.g. a ML algorithm trained on an initial task. Internally, <code>mcboost</code> often makes use of <code>mlr3</code> and learners that come with <code>mlr3learners</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pfistfl/mcboost">mcboost</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlr-org/mcboost">mcboost</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com">mlr3</a></span><span class="op">)</span></code></pre></div>
 <p>First we set up an example dataset.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -238,9 +238,9 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/pfistfl/mcboost/">https://​github.com/​pfistfl/​mcboost/​</a>
+<li>Browse source code at <br><a href="https://github.com/mlr-org/mcboost/">https://​github.com/​mlr-org/​mcboost/​</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/pfistfl/mcboost/issues">https://​github.com/​pfistfl/​mcboost/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/mlr-org/mcboost/issues">https://​github.com/​mlr-org/​mcboost/​issues</a>
 </li>
 </ul>
 </div>
