@@ -17,6 +17,7 @@ and worked towards thorough unit testing of the different methods.
 ### Matthew Sun
 
 Matthew Sun wrote the initial Python implementation of MCBoost, with feedback and oversight provided by Michael.
+His version guided large parts of mcboost's current design and architecture.
 
 ### Michael P. Kim
 
