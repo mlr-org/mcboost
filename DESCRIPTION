@@ -31,8 +31,8 @@ Description: Implements 'Multi-Calibration Boosting' (2018) <https://proceedings
     Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are.
     This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 License: LGPL (>= 3)
-URL: https://github.com/pfistfl/mcboost
-BugReports: https://github.com/pfistfl/mcboost/issues
+URL: https://github.com/mlr-org/mcboost
+BugReports: https://github.com/mlr-org/mcboost/issues
 Encoding: UTF-8
 Depends:
     R (>= 3.1.0)

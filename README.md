@@ -11,7 +11,7 @@
 
 **mcboost** implements Multi-Calibration Boosting ([Hebert-Johnson et al., 2018](https://proceedings.mlr.press/v80/hebert-johnson18a.html); [Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)) for the multi-calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased but a bias is introduced within the algorithm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 
-For more information and example, see the package's [website](https://pfistfl.github.io/mcboost/).
+For more information and example, see the package's [website](https://mlr-org.github.io/mcboost/).
 
 More details with respect to usage and the procedures can be found in the package vignettes.
 
@@ -20,7 +20,7 @@ More details with respect to usage and the procedures can be found in the packag
 You can install the released version of mcboost from **Github** with:
 
 ``` r
-remotes::install_github("pfistfl/mcboost")
+remotes::install_github("mlr-org/mcboost")
 ```
 
 ## Usage
