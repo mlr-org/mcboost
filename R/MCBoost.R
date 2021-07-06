@@ -223,31 +223,13 @@ MCBoost = R6::R6Class("MCBoost",
 
       if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
       assert_data_table(data)
-      # data.table to factor
-      if (is.data.table(labels) && ncol(labels) == 1L) {
-        labels = labels[[1]]
-      }
-      # factor to one-hot
-      if (is.factor(labels)) {
-        labels = one_hot(labels)
-        if (is.matrix(labels)) stop("MCBoost cannot handle multiclass classification")
-      }
-      assert_numeric(labels, lower = 0, upper = 1)
-
-      # Instantiate buckets
-      buckets = list(ProbRange$new())
-      if (self$partition && self$num_buckets > 1L) {
-        frac = 1 / self$num_buckets
-        buckets = c(buckets, mlr3misc::map(seq_len(self$num_buckets), function(b) {
-          ProbRange$new((b-1) * frac, b * frac)
-        }))
-        buckets[[2]]$lower = -Inf
-        buckets[[length(buckets)]]$upper = Inf
-      } else {
-        if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
-      }
-
-      pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data), finite = TRUE)
+      
+      labels = private$check_labels(labels)
+      
+      pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data)
+      
+      buckets = private$create_buckets(pred_probs)
+      
       resid = private$compute_residuals(pred_probs, labels)
       new_probs = pred_probs
       if (self$iter_sampling == "split")  {
@@ -266,11 +248,7 @@ MCBoost = R6::R6Class("MCBoost",
           idx = seq_len(nrow(data))
         }
 
-        if (self$rebucket) {
-          probs = new_probs
-        } else {
-          probs = pred_probs
-        }
+        probs = private$get_probs(pred_probs, new_probs)
 
         # Fit on partitions
         for (j in seq_along(buckets)) {
@@ -321,15 +299,11 @@ MCBoost = R6::R6Class("MCBoost",
       # convert to data.table
       if (is.matrix(x) || is.data.frame(x)) x = as.data.table(as.data.frame(x))
       assert_data_table(x)
-      orig_preds = assert_numeric(do.call(self$predictor, discard(list(x, predictor_args), is.null)), len = nrow(x))
+      orig_preds = private$assert_prob(do.call(self$predictor, discard(list(x, predictor_args), is.null)), x)
       new_preds = orig_preds
       for (i in seq_along(self$iter_models)) {
         if (i <= t) {
-          if (self$rebucket) {
-            probs = new_preds
-          } else {
-            probs = orig_preds
-          }
+          orig_preds = private$assert_prob(do.call(self$predictor, discard(list(x, predictor_args), is.null)), x)
           mask = self$iter_partitions[[i]]$in_range_mask(probs)
           new_preds = private$update_probs(new_preds, self$iter_models[[i]], x, mask=mask, audit=audit, ...)
         }
@@ -386,19 +360,72 @@ MCBoost = R6::R6Class("MCBoost",
 
       if (self$multiplicative) {
         update_weights = exp(- self$eta * deltas)
-        # Add a small term to enable moving away from 0.
-        new_preds = update_weights * pmax(orig_preds, 1e-4)
       } else {
-        update_weights = (self$eta * deltas)
-        new_preds = orig_preds + update_weights
+        update_weights = -(self$eta * deltas)
       }
+      
+      new_preds = private$calc_new_preds(orig_preds, update_weights)
+      
       if (audit) {
         self$auditor_effects = c(self$auditor_effects, list(abs(deltas)))
       }
       return(clip_prob(new_preds))
     },
+    
+    calc_new_preds = function(orig_preds, update_weights){
+      if (self$multiplicative) {
+        # Add a small term to enable moving away from 0.
+        update_weights * pmax(orig_preds, 1e-4)
+      } else {
+        orig_preds + update_weights
+      }
+    },
+    
+    
     compute_residuals = function(prediction, labels) {
       prediction - labels
-    }
+    }, 
+    
+    check_labels =  function(labels){
+      # data.table to factor
+      if (is.data.table(labels) && ncol(labels) == 1L) {
+        labels = labels[[1]]
+      }
+      # factor to one-hot
+      if (is.factor(labels)) {
+        labels = one_hot(labels)
+        if (is.matrix(labels)) stop("MCBoost cannot handle multiclass classification")
+      }
+      assert_numeric(labels, lower = 0, upper = 1)
+      
+      labels
+    }, 
+    
+    create_buckets = function(pred_probs) {
+      # not use pred_probs
+      buckets = list(ProbRange$new())
+      if (self$partition && self$num_buckets > 1L) {
+        frac = 1 / self$num_buckets
+        buckets = c(buckets, mlr3misc::map(seq_len(self$num_buckets), function(b) {
+          ProbRange$new((b-1) * frac, b * frac)
+        }))
+        buckets[[2]]$lower = -Inf
+        buckets[[length(buckets)]]$upper = Inf
+      } else {
+        if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
+      }
+      buckets
+    }, 
+    
+    assert_prob = function(prob, data) {
+      assert_numeric(prob, len = nrow(data), finite = TRUE)
+    }, 
+    
+    get_probs = function(pred_probs, new_probs){
+      if (self$rebucket) {
+        probs = new_probs
+      } else {
+        probs = pred_probs
+      }
   )
 )
