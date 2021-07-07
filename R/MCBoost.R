@@ -427,5 +427,6 @@ MCBoost = R6::R6Class("MCBoost",
       } else {
         probs = pred_probs
       }
+    }
   )
 )
