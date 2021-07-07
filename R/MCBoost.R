@@ -390,7 +390,7 @@ MCBoost = R6::R6Class("MCBoost",
         new_preds = update_weights * pmax(orig_preds, 1e-4)
       } else {
         update_weights = (self$eta * deltas)
-        new_preds = orig_preds + update_weights
+        new_preds = orig_preds - update_weights
       }
       if (audit) {
         self$auditor_effects = c(self$auditor_effects, list(abs(deltas)))
