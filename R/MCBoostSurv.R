@@ -4,10 +4,10 @@
 MCBoostSurv = R6::R6Class("MCBoostSurv",
   inherit = MCBoost,
   public = list(
-    times = NULL, 
+    time_points = NULL, 
     #FIXME --- additional parameters? e.g. time buckets? 
     initialize = function(
-      times,
+      time_points,
       max_iter=5,
       alpha=1e-4,
       eta=1,
@@ -22,9 +22,9 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       init_predictor=NULL,
       iter_sampling="none") {
       
-      #FIXME does it make sense to include times here already? Preprocess? Checks? 
+      #FIXME does it make sense to include time_points here already? Preprocess? Checks? 
       
-      self$times = times
+      self$time_points = time_points
       
       super$initialize(
         max_iter,
@@ -128,11 +128,11 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       distr6::decorate(distribution , c("CoreStatistics", "ExoticStatistics"))
       
       
-      if (is.null(self$times) || !length(self$times)) {
+      if (is.null(self$time_points) || !length(self$time_points)) {
         unique_times = unique(sort(labels[, "time"]))
       } else {
         #FIXME use of internal method of mlr3proba
-        unique_times = mlr3proba:::c_get_unique_times(labels[, "time"], self$times) 
+        unique_times = mlr3proba:::c_get_unique_times(labels[, "time"], self$time_points) 
       }
       
       residuals = private$calc_residual_matrix_r(labels, unique_times,
