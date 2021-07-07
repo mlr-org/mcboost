@@ -359,9 +359,12 @@ MCBoost = R6::R6Class("MCBoost",
       deltas[mask] = model$predict(x, ...)[mask]
 
       if (self$multiplicative) {
+        
         update_weights = exp(- self$eta * deltas)
+        
       } else {
         update_weights = (self$eta * deltas)
+      
       }
       
       new_preds = private$calc_new_preds(orig_preds, update_weights)
@@ -377,7 +380,7 @@ MCBoost = R6::R6Class("MCBoost",
         # Add a small term to enable moving away from 0.
         update_weights * pmax(orig_preds, 1e-4)
       } else {
-        orig_preds + update_weights
+        orig_preds - update_weights
       }
     },
     

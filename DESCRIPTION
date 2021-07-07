@@ -1,7 +1,7 @@
 Package: mcboost
 Type: Package
 Title: Multi-Calibration Boosting
-Version: 0.3.0.9000
+Version: 0.3.1
 Authors@R:
     c(person(given = "Florian",
              family = "Pfisterer",

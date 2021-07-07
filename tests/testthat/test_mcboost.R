@@ -310,3 +310,30 @@ test_that("init predictor wrapper works", {
   expect_warning(mc$predict_probs(d),  "multicalibrate was not run!")
 
 })
+
+test_that("mcboost on training data sanity checks", {
+  tsk = tsk("sonar")
+  d = tsk$data(cols = tsk$feature_names)
+  l = tsk$data(cols = tsk$target_names)[[1]]
+  mc = MCBoost$new(auditor_fitter = "TreeAuditorFitter")
+  mc$multicalibrate(d[1:200,], l[1:200])
+  df = do.call("rbind", mc$iter_corr)
+  expect_true(all(diff(df) <= 0))
+
+  mc = MCBoost$new(auditor_fitter = "TreeAuditorFitter", multiplicative = FALSE)
+  mc$multicalibrate(d[1:200,], l[1:200])
+  df = do.call("rbind", mc$iter_corr)
+  expect_true(all(diff(df) <= 0))
+
+  mc = MCBoost$new(auditor_fitter = "RidgeAuditorFitter", partition = TRUE, num_buckets = 5)
+  mc$multicalibrate(d[1:200,], l[1:200])
+  df = do.call("rbind", mc$iter_corr)
+  expect_true(all(diff(df) <= 0))
+
+  mc = MCBoost$new(auditor_fitter = "RidgeAuditorFitter", partition = TRUE, num_buckets = 5, multiplicative = FALSE)
+  mc$multicalibrate(d[1:200,], l[1:200])
+  df = do.call("rbind", mc$iter_corr)
+  expect_true(all(diff(df) <= 0))
+})
+
+
