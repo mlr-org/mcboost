@@ -167,9 +167,9 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       for (i in seq_len(nr_obs)) {
         for (j in seq_len(nc_times)) {
           if(labels_num[i] > unique_times[j]) {
-            igs[i, j] = (1 - survival[j, i])
+            igs[i, j] = (survival[j, i] - 1 )
           } else {
-            igs[i, j] = (0 - survival[j, i])
+            igs[i, j] = (survival[j, i] - 0)
           }
         }
       }
