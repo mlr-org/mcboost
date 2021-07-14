@@ -231,7 +231,9 @@ MCBoost = R6::R6Class("MCBoost",
       buckets = private$create_buckets(pred_probs)
       
       resid = private$compute_residuals(pred_probs, labels)
+      
       new_probs = pred_probs
+      
       if (self$iter_sampling == "split")  {
         idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data)/self$max_iter))[seq_len(nrow(data))])
       }
@@ -262,6 +264,7 @@ MCBoost = R6::R6Class("MCBoost",
         }
 
         self$iter_corr = c(self$iter_corr, list(corrs))
+        
         if (abs(max(corrs)) < self$alpha) {
           break
         } else {
@@ -303,7 +306,7 @@ MCBoost = R6::R6Class("MCBoost",
       new_preds = orig_preds
       for (i in seq_along(self$iter_models)) {
         if (i <= t) {
-          orig_preds = private$assert_prob(do.call(self$predictor, discard(list(x, predictor_args), is.null)), x)
+          probs = private$get_probs(orig_preds, new_probs)
           mask = self$iter_partitions[[i]]$in_range_mask(probs)
           new_preds = private$update_probs(new_preds, self$iter_models[[i]], x, mask=mask, audit=audit, ...)
         }

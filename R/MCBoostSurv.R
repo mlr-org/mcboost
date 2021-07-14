@@ -1,6 +1,3 @@
-
-# inherit from MCBoost object and just change private methods
-
 MCBoostSurv = R6::R6Class("MCBoostSurv",
   inherit = MCBoost,
   public = list(
@@ -43,89 +40,45 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       )
     }
   ),
-  
-  
-  
   private = list(
     update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, ...) {
-      
-      deltas = numeric(length(orig_preds))
-      deltas[mask] = model$predict(x, ...)[mask]
-      
+
       if (self$multiplicative) {
         update_weights = exp(- self$eta * deltas)
       } else {
-        update_weights = -(self$eta * deltas)
+        update_weights = (self$eta * deltas)
       }
-      
+
       new_preds = private$calc_new_preds(orig_preds, update_weights)
+
       
       if (audit) {
         self$auditor_effects = c(self$auditor_effects, list(abs(deltas)))
       }
-      return(new_preds)
+      return(clip_prob(new_preds))
     },
     
     calc_new_preds = function(orig_preds, update_weights){
       if (self$multiplicative) {
-        distlist = lapply(seq_len(length(orig_preds$ids)), function(x){
-          
-          model = orig_preds$wrappedModels(orig_preds$ids[[x]])
-          distr6::decorate(model , c("CoreStatistics", "ExoticStatistics"))
-          
-          orig_support = as.numeric(model$properties$support)
-          orig_survival = model$survival(orig_support)
-          
-          #calculate new survival probabilities
-          new_survival = clip_prob(pmax(orig_survival, 1e-4)*update_weights[x])
-          
-          # survival cannot be input, only cdf
-          new_cdf = 1- new_survival
-          distr6::WeightedDiscrete$new(x=orig_support, cdf = new_cdf)
-        })
-        
-        distr6::VectorDistribution$new(distlist = distlist)
+        # multiply weight by row wise + add noise when 0 
+        pmax(orig_preds, 1e-4) * update_weights
+        #sweep(pmax(orig_preds, 1e-4), 1, update_weights, "*"))
       } else {
-        distlist = lapply(seq_len(length(orig_preds$ids)), function(x){
-          
-          model = orig_preds$wrappedModels(orig_preds$ids[[x]])
-          distr6::decorate(model , c("CoreStatistics", "ExoticStatistics"))
-          
-          
-          orig_support = as.numeric(model$properties$support)
-          orig_survival = model$survival(orig_support)
-          
-          #calculate new survival probabilities
-          new_survival = clip_prob(orig_survival + update_weights[x])
-          
-          # survival cannot be input, only cdf
-          new_cdf = 1-new_survival
-          distr6::WeightedDiscrete$new(x=orig_support, cdf = new_cdf)
-        })
-        
-        distr6::VectorDistribution$new(distlist = distlist)
+        clip_prob(orig_preds - update_weights)
       }
     },
-    
-    
+
     compute_residuals = function(prediction, labels) {
-      weighted_score_matrix =  private$calc_weighted_residuals(distribution = prediction, 
-                                                               labels = labels)
+      weighted_score_matrix =  private$calc_weighted_residuals(prediction, labels)
       rowMeans(weighted_score_matrix)
     }, 
     
     
-    
     #FIXME should be proper & eps a hyperparameter?
-    calc_weighted_residuals = function (distribution, 
+    calc_weighted_residuals = function (prediction, 
                                         labels,
                                         proper = FALSE, 
                                         eps = 1e-4){
-      #FIXME use of internal method of mlr3proba
-      mlr3proba:::assert_surv(labels)
-      distr6::assertDistribution(distribution)
-      
-      distr6::decorate(distribution , c("CoreStatistics", "ExoticStatistics"))
       
       
       if (is.null(self$time_points) || !length(self$time_points)) {
@@ -135,17 +88,18 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         unique_times = mlr3proba:::c_get_unique_times(labels[, "time"], self$time_points) 
       }
       
-      residuals = private$calc_residual_matrix_r(labels, unique_times,
-                                                 as.matrix(distribution$survival(unique_times)))
+      residuals = private$calc_residual_matrix_r(prediction, labels, unique_times)
       
-      cens_distr = survival::survfit(survival::Surv(labels[, "time"], 1 - labels[, "status"]) ~ 1)
-      
+      cens_distr = survival::survfit(survival::Surv(labels[, "time"], (1 - labels[, "status"])) ~ 1)
+      cens_matrix = matrix(c(cens_distr$time, cens_distr$surv), ncol = 2)
       
       #FIXME use of internal method of mlr3proba
       
       # weight the residual matrix according to Graf et.al(1999)
-      weighted_residuals = mlr3proba:::c_weight_survival_score(residuals, labels, unique_times,
-                                                               matrix(c(cens_distr$time, cens_distr$surv), ncol = 2),
+      weighted_residuals = mlr3proba:::c_weight_survival_score(residuals, 
+                                                               labels, 
+                                                               unique_times,
+                                                               cens_matrix,
                                                                proper, eps)
       
       weighted_residuals = as.data.frame(weighted_residuals)
@@ -157,7 +111,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     
     
     #calculate for every time step and every survival curve the residual
-    calc_residual_matrix_r = function (labels, unique_times,survival){
+    calc_residual_matrix_r = function (prediction, labels, unique_times){
       nr_obs = length(labels)
       nc_times = length(unique_times)
       labels_num = as.numeric(labels)
@@ -167,9 +121,9 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       for (i in seq_len(nr_obs)) {
         for (j in seq_len(nc_times)) {
           if(labels_num[i] > unique_times[j]) {
-            igs[i, j] = (survival[j, i] - 1 )
+            igs[i, j] = (prediction[i, j] - 1)
           } else {
-            igs[i, j] = (survival[j, i] - 0)
+            igs[i, j] = (prediction[i, j] - 0)
           }
         }
       }
@@ -215,15 +169,23 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       
       # distr6::assertDistribution(prob)
       # checkmate::assertTRUE(length(prob) == nrow(data))
+
+      
+      if (inherits(probs,"Distribution"))
+        probs = t(as.matrix(probs$survival(self$time_points)))
+        colnames(probs) = self$time_points
+        
+      #FIXME insert check 
+      
       probs
     },
     
     get_probs = function(pred_probs, new_probs){
-      #FIXME do not always calculate again? 
+      #FIXME do not always calculate again? Does it make sense to take mean?  
       if (self$rebucket) {
-        probs = sapply(pred_probs$ids, function(x) pred_probs$wrappedModels(x)$mean())
+        probs = rowMeans(new_probs)
       } else {
-        probs = sapply(pred_probs$ids, function(x) pred_probs$wrappedModels(x)$mean())
+        probs = rowMeans(pred_probs)
       }
     }
     
