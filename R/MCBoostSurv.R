@@ -1,7 +1,10 @@
+# Check if several time_points? 
+
 MCBoostSurv = R6::R6Class("MCBoostSurv",
   inherit = MCBoost,
   public = list(
     time_points = NULL, 
+    num_buckets_time = NULL, 
     #FIXME --- additional parameters? e.g. time buckets? 
     initialize = function(
       time_points,
@@ -10,6 +13,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       eta=1,
       partition=TRUE,
       num_buckets=2,
+      num_buckets_time = 1, 
       bucket_strategy="simple",
       rebucket=FALSE,
       multiplicative=TRUE,
@@ -22,6 +26,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       #FIXME does it make sense to include time_points here already? Preprocess? Checks? 
       
       self$time_points = time_points
+
+      self$num_buckets_time = num_buckets_time
       
       super$initialize(
         max_iter,
@@ -40,8 +46,12 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       )
     }
   ),
+  #FIXME kann man das vielleicht do mit MCBoost zusammenführen ? 
   private = list(
     update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, ...) {
+      
+      deltas = numeric(length(orig_preds))
+      deltas[mask$mask] = model$predict(x, ...)[mask$mask]
 
       if (self$multiplicative) {
         update_weights = exp(- self$eta * deltas)
@@ -70,7 +80,11 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
     compute_residuals = function(prediction, labels) {
       weighted_score_matrix =  private$calc_weighted_residuals(prediction, labels)
-      rowMeans(weighted_score_matrix)
+      #FIX ME IBS or BS
+      
+      #rowMeans(weighted_score_matrix)
+      
+      weighted_score_matrix
     }, 
     
     
@@ -80,15 +94,9 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
                                         proper = FALSE, 
                                         eps = 1e-4){
       
+  
       
-      if (is.null(self$time_points) || !length(self$time_points)) {
-        unique_times = unique(sort(labels[, "time"]))
-      } else {
-        #FIXME use of internal method of mlr3proba
-        unique_times = mlr3proba:::c_get_unique_times(labels[, "time"], self$time_points) 
-      }
-      
-      residuals = private$calc_residual_matrix_r(prediction, labels, unique_times)
+      residuals = private$calc_residual_matrix_r(prediction, labels, self$time_points)
       
       cens_distr = survival::survfit(survival::Surv(labels[, "time"], (1 - labels[, "status"])) ~ 1)
       cens_matrix = matrix(c(cens_distr$time, cens_distr$surv), ncol = 2)
@@ -96,31 +104,31 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       #FIXME use of internal method of mlr3proba
       
       # weight the residual matrix according to Graf et.al(1999)
-      weighted_residuals = mlr3proba:::c_weight_survival_score(residuals, 
+      weighted_residuals = mlr3proba::.c_weight_survival_score(residuals, 
                                                                labels, 
-                                                               unique_times,
+                                                               self$time_points,
                                                                cens_matrix,
                                                                proper, eps)
       
       weighted_residuals = as.data.frame(weighted_residuals)
       
-      colnames(weighted_residuals) = unique_times
+      colnames(weighted_residuals) = self$time_points
       
       weighted_residuals
     }, 
     
     
     #calculate for every time step and every survival curve the residual
-    calc_residual_matrix_r = function (prediction, labels, unique_times){
+    calc_residual_matrix_r = function (prediction, labels, time_points){
       nr_obs = length(labels)
-      nc_times = length(unique_times)
+      nc_times = length(time_points)
       labels_num = as.numeric(labels)
       
       igs = matrix (nrow = nr_obs, ncol = nc_times)
       
       for (i in seq_len(nr_obs)) {
         for (j in seq_len(nc_times)) {
-          if(labels_num[i] > unique_times[j]) {
+          if(labels_num[i] > time_points[j]) {
             igs[i, j] = (prediction[i, j] - 1)
           } else {
             igs[i, j] = (prediction[i, j] - 0)
@@ -134,7 +142,16 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     check_labels =  function(labels){
       #FIXME # somthing missing
       #FIXME use of internal method of mlr3proba
-      mlr3proba:::assert_surv(labels)
+      
+      #FIXME woanders hin
+      if (is.null(self$time_points) || !length(self$time_points)) {
+        self$time_points = unique(sort(labels[, "time"]))
+      } else {
+        #FIXME use of internal method of mlr3proba
+        self$time_points = mlr3proba::.c_get_unique_times(labels[, "time"], self$time_points) 
+      }
+      
+      mlr3proba::assert_surv(labels)
     }, 
     
     create_buckets = function(pred_probs) {
@@ -142,18 +159,46 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       # maybe als buckets throuh time?  
       probs = private$get_probs(pred_probs, new_probs)
       
-      buckets = list(ProbRange$new())
+      buckets = list(ProbRange2D$new())
       
-      if (self$partition && self$num_buckets > 1L) {
-        quantiles = quantile(probs, seq(0,1,length.out=self$num_buckets + 1))
+      if (self$partition&& (self$num_buckets > 1L || self$num_buckets_time > 1L)) {
+        #FIXME
+        #if(self$num_buckets > 1L){
+          quantiles = quantile(probs, seq(0,1,length.out=self$num_buckets + 1))
+        #} else {
+          #quantiles = c(-Inf, Inf)
+        #}
+          
         
-        buckets = c(buckets, 
-                    lapply(seq_len(self$num_buckets), 
-                           function(b) {
-                             ProbRange$new(quantiles[b], quantiles[b+1])
-                           }))
+        #if(self$num_buckets_time > 1L){
+          quantiles_time = quantile(self$time_points, seq(0,1,length.out=self$num_buckets_time + 1))
+        #}else{
+          #quantiles_time = c(-Inf, Inf)
+        #}
+          
+        #FIXME
+        #only one bucket for 
+        #if(self$num_buckets_time == 1L){ 
+          
+        #FIXME ist lapply sehr viel besser? wie in 2d? 
+        for (b in seq_len(self$num_buckets)){
+          for(c in seq_len(self$num_buckets_time)){
+            buckets = c(buckets, 
+                        ProbRange2D$new(lower = quantiles[b], 
+                                                 upper = quantiles[b+1], 
+                                                 lower_time = quantiles_time[c] ,
+                                                 upper_time = quantiles_time[c+1]))
+            
+            
+          }
+        }
+        #}
+        
+
         buckets[[2]]$lower = -Inf
+        buckets[[2]]$lower_time = -Inf
         buckets[[length(buckets)]]$upper = Inf
+        buckets[[length(buckets)]]$upper_time = Inf
       } else {
         #FIXME Kann wa nicht auch sein, dass partition hier FALSE ist?
         if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
@@ -180,12 +225,24 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       probs
     },
     
+
+    get_masked  = function(data,resid, idx, probs, bucket){
+      mask = bucket$in_range_mask(probs[idx,])
+      #FIXME geht das?
+      #if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
+      data_m = data[idx,][mask$mask,]
+      resid_m = resid[idx,][mask$mask, mask$mask_time]
+      idx_m = idx[mask$mask]
+      
+      return (list(data_m = data_m, resid_m = resid_m, idx_m = idx_m))
+    },
+    
     get_probs = function(pred_probs, new_probs){
       #FIXME do not always calculate again? Does it make sense to take mean?  
       if (self$rebucket) {
-        probs = rowMeans(new_probs)
+        probs = new_probs
       } else {
-        probs = rowMeans(pred_probs)
+        probs = pred_probs
       }
     }
     

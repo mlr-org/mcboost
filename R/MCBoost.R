@@ -220,14 +220,14 @@ MCBoost = R6::R6Class("MCBoost",
     #'  Params passed on to other methods.
     #' @return `NULL`
     multicalibrate = function(data, labels, predictor_args = NULL, ...) {
-
+      
       if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
       assert_data_table(data)
       
       labels = private$check_labels(labels)
       
       pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data)
-      
+
       buckets = private$create_buckets(pred_probs)
       
       resid = private$compute_residuals(pred_probs, labels)
@@ -237,6 +237,7 @@ MCBoost = R6::R6Class("MCBoost",
       if (self$iter_sampling == "split")  {
         idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data)/self$max_iter))[seq_len(nrow(data))])
       }
+      
       for (i in seq_len(self$max_iter)) {
         corrs = integer(length(buckets))
         models = vector(mode = "list", length = length(buckets))
@@ -254,11 +255,10 @@ MCBoost = R6::R6Class("MCBoost",
 
         # Fit on partitions
         for (j in seq_along(buckets)) {
-          mask = buckets[[j]]$in_range_mask(probs[idx])
-          if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
-          data_m = data[idx,][mask,]
-          resid_m = resid[idx][mask]
-          out = self$auditor_fitter$fit_to_resid(data_m, resid_m, idx[mask])
+          
+          masked = private$get_masked(data,resid, idx, probs, buckets[[j]])
+          
+          out = self$auditor_fitter$fit_to_resid(masked$data_m, masked$resid_m, masked$idx_m)
           corrs[j] = out[[1]]
           models[[j]] = out[[2]]
         }
@@ -426,7 +426,20 @@ MCBoost = R6::R6Class("MCBoost",
     assert_prob = function(prob, data) {
       assert_numeric(prob, len = nrow(data), finite = TRUE)
     }, 
+
     
+    #FIXME vielleicht doch lieber in den Auditor? 
+    get_masked  = function(data,resid, idx, probs, bucket){
+      mask = bucket$in_range_mask(probs[idx])
+      #FIXME geht das?
+      # if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
+      data_m = data[idx,][mask,]
+      resid_m = resid[idx][mask]
+      idx_m = idx[mask]
+      
+      return (list(data_m = data_m, resid_m = resid_m, idx_m = idx_m))
+    },
+
     get_probs = function(pred_probs, new_probs){
       if (self$rebucket) {
         probs = new_probs
