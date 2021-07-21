@@ -26,6 +26,7 @@ test_that("TreeAuditorFitters work", {
 })
 
 test_that("RidgeAuditorFitters work", {
+  skip_on_os("solaris")
   skip_if_not_installed("mlr3learners")
   skip_if_not_installed("glmnet")
   rf = RidgeAuditorFitter$new()

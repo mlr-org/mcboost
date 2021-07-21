@@ -103,6 +103,7 @@ test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredic
 
 
 test_that("MCBoost multicalibrate with subpops", {
+  skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -128,6 +129,7 @@ test_that("MCBoost multicalibrate with subpops", {
 
 
 test_that("MCBoost multicalibrate with Subgroups", {
+  skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -153,6 +155,7 @@ test_that("MCBoost multicalibrate with Subgroups", {
 })
 
 test_that("MCBoost various settings", {
+  skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -220,6 +223,7 @@ test_that("MCBoost Edge Cases", {
 })
 
 test_that("MCBoost args for self-defined init predictor", {
+  skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -314,6 +318,7 @@ test_that("init predictor wrapper works", {
 })
 
 test_that("mcboost on training data sanity checks", {
+  skip_on_os("solaris")
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names)
   l = tsk$data(cols = tsk$target_names)[[1]]
