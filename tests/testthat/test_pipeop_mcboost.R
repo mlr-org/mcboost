@@ -1,6 +1,7 @@
 context("MCBoost PipeOp")
 
 test_that("MCBoost class instantiation", {
+  skip_on_os("solaris")
   skip_if_not(require("mlr3"))
   skip_if_not(require("mlr3pipelines"))
   gr = gunion(list(
@@ -20,6 +21,7 @@ test_that("MCBoost class instantiation", {
 })
 
 test_that("MCBoost ppl", {
+  skip_on_os("solaris")
   skip_if_not(require("mlr3"))
   skip_if_not(require("mlr3pipelines"))
 
