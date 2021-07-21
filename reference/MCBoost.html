@@ -199,6 +199,9 @@ Only relevant for <code>num_buckets</code> &gt; 1.</p></dd>
 <dt><code>rebucket</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
 Should buckets be re-calculated at each iteration?</p></dd>
 
+<dt><code>eval_fulldata</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
+Should auditor be evaluated on the full data?</p></dd>
+
 <dt><code>partition</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
 True/False flag for whether to split up predictions by their "partition"
 (e.g., predictions less than 0.5 and predictions greater than 0.5).</p></dd>
@@ -252,6 +255,7 @@ Auditor effect in each iteration.</p></dd>
   num_buckets <span class='op'>=</span> <span class='fl'>2</span>,
   bucket_strategy <span class='op'>=</span> <span class='st'>"simple"</span>,
   rebucket <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  eval_fulldata <span class='op'>=</span> <span class='cn'>FALSE</span>,
   multiplicative <span class='op'>=</span> <span class='cn'>TRUE</span>,
   auditor_fitter <span class='op'>=</span> <span class='cn'>NULL</span>,
   subpops <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -286,6 +290,13 @@ Only taken into account for <code>num_buckets</code> &gt; 1.</p></dd>
 
 <dt><code>rebucket</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
 Should buckets be re-done at each iteration? Default <code>FALSE</code>.</p></dd>
+
+<dt><code>eval_fulldata</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
+Should the auditor be evaluated on the full data or on the respective bucket for determining
+the stopping criterion? Default <code>FALSE</code>, auditor is only evaluated on the bucket.
+This setting keeps the implementation closer to the Algorithm proposed in the corresponding
+multi-accuracy paper (Kim et al., 2019) where auditor effects are computed across the full
+sample (i.e. eval_fulldata = TRUE).</p></dd>
 
 <dt><code>multiplicative</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> <br />
 Specifies the strategy for updating the weights (multiplicative weight vs additive).
