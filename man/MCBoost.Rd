@@ -30,6 +30,7 @@ https://dl.acm.org/doi/10.1145/3306618.3314287}{}
 \examples{
   # See vignette for more examples.
   # Instantiate the object
+  \dontrun{
   mc = MCBoost$new()
   # Run multi-calibration on training dataset.
   mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
@@ -37,6 +38,7 @@ https://dl.acm.org/doi/10.1145/3306618.3314287}{}
   mc$predict_probs(iris[101:150,1:4])
   # Get auditor effect
   mc$auditor_effect(iris[101:150,1:4])
+  }
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

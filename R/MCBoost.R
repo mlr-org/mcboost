@@ -27,6 +27,7 @@
 #' @examples
 #'   # See vignette for more examples.
 #'   # Instantiate the object
+#'   \dontrun{
 #'   mc = MCBoost$new()
 #'   # Run multi-calibration on training dataset.
 #'   mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
@@ -34,6 +35,7 @@
 #'   mc$predict_probs(iris[101:150,1:4])
 #'   # Get auditor effect
 #'   mc$auditor_effect(iris[101:150,1:4])
+#'   }
 #' @export
 MCBoost = R6::R6Class("MCBoost",
   public = list(
