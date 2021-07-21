@@ -60,6 +60,9 @@ Only relevant for \code{num_buckets} > 1.}
 \item{\code{rebucket}}{\code{\link{logical}} \cr
 Should buckets be re-calculated at each iteration?}
 
+\item{\code{eval_fulldata}}{\code{\link{logical}} \cr
+Should auditor be evaluated on the full data?}
+
 \item{\code{partition}}{\code{\link{logical}} \cr
 True/False flag for whether to split up predictions by their "partition"
 (e.g., predictions less than 0.5 and predictions greater than 0.5).}
@@ -115,6 +118,7 @@ Initialize a multi-calibration instance.
   num_buckets = 2,
   bucket_strategy = "simple",
   rebucket = FALSE,
+  eval_fulldata = FALSE,
   multiplicative = TRUE,
   auditor_fitter = NULL,
   subpops = NULL,
@@ -151,6 +155,13 @@ Only taken into account for \code{num_buckets} > 1.}
 
 \item{\code{rebucket}}{\code{\link{logical}} \cr
 Should buckets be re-done at each iteration? Default \code{FALSE}.}
+
+\item{\code{eval_fulldata}}{\code{\link{logical}} \cr
+Should the auditor be evaluated on the full data or on the respective bucket for determining
+the stopping criterion? Default \code{FALSE}, auditor is only evaluated on the bucket.
+This setting keeps the implementation closer to the Algorithm proposed in the corresponding
+multi-accuracy paper (Kim et al., 2019) where auditor effects are computed across the full
+sample (i.e. eval_fulldata = TRUE).}
 
 \item{\code{multiplicative}}{\code{\link{logical}} \cr
 Specifies the strategy for updating the weights (multiplicative weight vs additive).

@@ -4,6 +4,8 @@
 
 * Fixed a bug for additive weight updates, were updates went
   in the wrong direction.
+* Added new parameter `eval_fulldata` that allows to compute
+  auditor effect across the full sample (as opposed to the bucket).
 
 # mcboost 0.3.0
 

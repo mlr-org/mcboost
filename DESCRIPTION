@@ -39,7 +39,6 @@ Depends:
 Imports:
     backports,
     checkmate (>= 2.0.0),
-    lifecycle,
     data.table (>= 1.13.6),
     mlr3 (>= 0.10),
     mlr3misc (>= 0.8.0),

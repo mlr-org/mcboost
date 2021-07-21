@@ -165,7 +165,9 @@ test_that("MCBoost various settings", {
   # Check a list of settings
   mcs = list(
      MCBoost$new(auditor_fitter = NULL),
-     MCBoost$new(alpha = 0.05)
+     MCBoost$new(alpha = 0.05),
+     MCBoost$new(eval_fulldata = TRUE),
+     MCBoost$new(eval_fulldata = TRUE, multiplicative = FALSE)
   )
   for (mc in mcs) {
     mc$multicalibrate(data, labels)
@@ -335,5 +337,3 @@ test_that("mcboost on training data sanity checks", {
   df = do.call("rbind", mc$iter_corr)
   expect_true(all(diff(df) <= 0))
 })
-
-

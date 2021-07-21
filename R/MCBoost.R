@@ -57,9 +57,15 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Currently only supports "simple", even split along probabilities.
     #'   Only relevant for `num_buckets` > 1.
     bucket_strategy = NULL,
+
     #' @field rebucket [`logical`] \cr
     #'   Should buckets be re-calculated at each iteration?
     rebucket = NULL,
+
+    #' @field eval_fulldata [`logical`] \cr
+    #'   Should auditor be evaluated on the full data?
+    eval_fulldata = NULL,
+
     #' @field partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
     #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
@@ -118,6 +124,12 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Only taken into account for `num_buckets` > 1.
     #' @param rebucket [`logical`] \cr
     #'   Should buckets be re-done at each iteration? Default `FALSE`.
+    #' @param eval_fulldata [`logical`] \cr
+    #'   Should the auditor be evaluated on the full data or on the respective bucket for determining
+    #'   the stopping criterion? Default `FALSE`, auditor is only evaluated on the bucket.
+    #'   This setting keeps the implementation closer to the Algorithm proposed in the corresponding
+    #'   multi-accuracy paper (Kim et al., 2019) where auditor effects are computed across the full
+    #'   sample (i.e. eval_fulldata = TRUE).
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive).
     #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
@@ -141,6 +153,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   "split" splits the data into `max_iter` parts and validates on each sample in each iteration.\cr
     #'   "bootstrap" uses a new bootstrap sample in each iteration.\cr
     #'   "none" uses the same dataset in each iteration.
+
     initialize = function(
                  max_iter=5,
                  alpha=1e-4,
@@ -149,6 +162,7 @@ MCBoost = R6::R6Class("MCBoost",
                  num_buckets=2,
                  bucket_strategy="simple",
                  rebucket=FALSE,
+                 eval_fulldata=FALSE,
                  multiplicative=TRUE,
                  auditor_fitter=NULL,
                  subpops=NULL,
@@ -162,6 +176,7 @@ MCBoost = R6::R6Class("MCBoost",
       self$num_buckets = assert_int(num_buckets)
       self$bucket_strategy = assert_choice(bucket_strategy, choices = c("simple"))
       self$rebucket = assert_flag(rebucket)
+      self$eval_fulldata = assert_flag(eval_fulldata)
       self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)
       self$iter_sampling = assert_choice(iter_sampling, choices = c("none", "bootstrap", "split"))
@@ -281,6 +296,13 @@ MCBoost = R6::R6Class("MCBoost",
           out = self$auditor_fitter$fit_to_resid(data_m, resid_m, idx[mask])
           corrs[j] = out[[1]]
           models[[j]] = out[[2]]
+        }
+
+        if (self$eval_fulldata) {
+          corrs = map_dbl(models, function(m) {
+            if (is.null(m)) return(0)
+            mean(m$predict(data[idx,]) * resid[idx])
+          })
         }
 
         self$iter_corr = c(self$iter_corr, list(corrs))
