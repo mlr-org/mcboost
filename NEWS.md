@@ -1,5 +1,12 @@
 # mcboost (development version)
 
+# mcboost 0.3.3
+* Auditors can now also update weights if correlations are negative by switching the sign of the update direction as intended in the paper.
+* Minor adaptions to improve stability of unit tests
+
+# mcboost 0.3.2
+* Minor adpations to improve stability of unit tests
+
 # mcboost 0.3.1
 
 * Fixed a bug for additive weight updates, were updates went
