@@ -311,11 +311,12 @@ MCBoost = R6::R6Class("MCBoost",
         if (abs(max(corrs)) < self$alpha) {
           break
         } else {
-          max_key = buckets[[which.max(corrs)]]
+          bucket_id = which.max(abs(corrs))
+          max_key = buckets[[bucket_id]]
           prob_mask = max_key$in_range_mask(probs)
-          self$iter_models = c(self$iter_models, models[[which.max(corrs)]])
+          self$iter_models = c(self$iter_models, models[[bucket_id]])
           self$iter_partitions = c(self$iter_partitions, max_key)
-          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask)
+          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask, update_sign = sign(corrs[bucket_id]))
           resid = private$compute_residuals(new_probs, labels)
         }
       }
@@ -403,17 +404,17 @@ MCBoost = R6::R6Class("MCBoost",
     }
   ),
   private = list(
-    update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, ...) {
+    update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, update_sign = 1, ...) {
 
       deltas = numeric(length(orig_preds))
       deltas[mask] = model$predict(x, ...)[mask]
 
       if (self$multiplicative) {
-        update_weights = exp(- self$eta * deltas)
+        update_weights = exp(- self$eta * update_sign * deltas)
         # Add a small term to enable moving away from 0.
         new_preds = update_weights * pmax(orig_preds, 1e-4)
       } else {
-        update_weights = (self$eta * deltas)
+        update_weights = (self$eta * update_sign * deltas)
         new_preds = orig_preds - update_weights
       }
       if (audit) {
