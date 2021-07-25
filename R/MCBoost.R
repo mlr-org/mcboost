@@ -120,10 +120,10 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param eta  [`numeric`] \cr
     #'   Parameter for multiplicative weight update (step size). Default `1.0`.
     # FIXME
-    #' @param partition [`logical`] \cr
-    #'   True/False flag for whether to split up predictions by their "partition"
-    #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
-    #'   Defaults to `TRUE` (multi-accuracy boosting).
+        #' @param partition [`logical`] \cr
+        #'   True/False flag for whether to split up predictions by their "partition"
+        #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
+        #'   Defaults to `TRUE` (multi-accuracy boosting).
     #' @param num_buckets [`integer`] \cr
     #'   The number of buckets to split into in addition to using the whole sample. Default `2L`.
     #' @param bucket_strategy  [`character`] \cr
@@ -166,7 +166,7 @@ MCBoost = R6::R6Class("MCBoost",
                  max_iter=5,
                  alpha=1e-4,
                  eta=1,
-                 partition=TRUE,
+                 # partition=TRUE,
                  num_buckets=2,
                  bucket_strategy="simple",
                  rebucket=FALSE,
@@ -187,7 +187,7 @@ MCBoost = R6::R6Class("MCBoost",
       self$bucket_strategy = assert_choice(bucket_strategy, choices = self$bucket_strategies)
       self$rebucket = assert_flag(rebucket)
       self$eval_fulldata = assert_flag(eval_fulldata)
-      self$partition = assert_flag(partition)
+      #self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)
       self$auditor_fitter = private$get_auditor_fitter(subpops, auditor_fitter)
       self$predictor = private$get_predictor(init_predictor, default_model_class)
@@ -247,7 +247,7 @@ MCBoost = R6::R6Class("MCBoost",
         if (self$eval_fulldata) {
           corrs = map_dbl(models, function(m) {
             if (is.null(m)) return(0)
-            mean(m$predict(data[idx,]) * resid[idx])
+            private$calculate_corr(auditor = m, data = data, resid = resid, idx  =idx)
           })
         }
 
@@ -481,6 +481,9 @@ MCBoost = R6::R6Class("MCBoost",
         }
       }
       assert_function(init_predictor, args = "data")
+    },
+    calculate_corr = function (auditor, data, resid, idx){
+      mean(auditor$predict(data[idx,]) * resid[idx])
     }
   )
 )
