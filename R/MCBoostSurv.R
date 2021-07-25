@@ -21,7 +21,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       # partition=TRUE,
       num_buckets = 2, # probability_buckets
       time_buckets = 1L,
-      time_eval = 1, #FIXME macht die Variable sinn? 
+      time_eval = 1, #FIXME macht die Variable sinn?
       bucket_strategy = "even_splits",
       bucket_aggregation = NULL,
       rebucket = FALSE,
@@ -56,7 +56,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         sorted = TRUE, unique = TRUE,
         min.len = 1, any.missing = FALSE,
         lower = 0, null.ok = TRUE)
-      
+
       self$time_eval = assert_double(time_eval, lower = 0.1, upper = 1, finite = TRUE, len =1 )
 
 
@@ -84,7 +84,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       deltas = deltas * auditor_predictions
 
       if (self$multiplicative) {
-        
+
         update_weights = exp(- self$eta * update_sign * deltas)
         # Add a small term to enable moving away from 0.
         new_preds = update_weights * pmax(orig_preds, 1e-4)
@@ -101,14 +101,14 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     },
 
     compute_residuals = function(prediction, labels) {
-      
+
       residuals = private$calc_residual_matrix_r(prediction, labels)
-      
-      if(self$loss = "brier"){
+
+      if(self$loss == "brier"){
         residuals
       }
 
-      if(self$loss = "censored_brier"){
+      if(self$loss == "censored_brier"){
         proper = FALSE
         eps = 1e-4
 
@@ -133,7 +133,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
         return (weighted_residuals)
       }
-     
+
 
     },
 
@@ -170,8 +170,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         # FIXME use of internal method of mlr3proba
         self$time_points = mlr3proba::.c_get_unique_times(labels[, "time"], self$time_points)
       }
-      
-      
+
+
       if(self$time_eval<1){
         self$time_points = self$time_points[self$time_points<max(self$time_points[is.finite(self$time_points)])*self$time_eval]
       }
@@ -183,7 +183,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     create_buckets = function(pred_probs) {
       max_time =  max(self$time_points)
       min_time = min(self$time_points[is.finite(self$time_points)])
-      
+
       if(self$time_eval== 1L){
         buckets = list(ProbRange2D$new())
       }else{
@@ -220,9 +220,9 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         if (!any(in_time)) {
           next
         }
-        
+
         prob_in_time = pred_probs[, in_time]
-        
+
         if (!is.null(self$bucket_aggregation)) {
           prob_in_time = apply(as.matrix(prob_in_time), 1, self$bucket_aggregation)
         }
@@ -272,7 +272,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       colnames(probs) = self$time_points
       # FIXME insert check
-      
+
       #check if columnnames
 
       probs
@@ -293,7 +293,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       data_m = data[idx, ][mask$n, ]
       idx_m = idx[mask$n]
       resid_m = resid[idx, ][mask$n, mask$time]
-      
+
       if (is.null(self$bucket_aggregation)) {
         resid_m = resid_m * as.numeric(mask$matrix)
       }
@@ -302,10 +302,10 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       if(!is.null(dim(resid_m))){
         resid_m = rowMeans(resid_m)
       }
-        
+
 
       return(list(data_m = data_m, resid_m = resid_m, idx_m = idx_m))
-    }, 
+    },
     calculate_corr = function (auditor, data, resid, idx){
       mean(auditor$predict(data[idx,]) * rowMeans(resid[idx,]))
     }
