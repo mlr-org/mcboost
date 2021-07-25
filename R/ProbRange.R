@@ -56,6 +56,9 @@ ProbRange = R6::R6Class("ProbRange",
     #' @return
     #'   Logical array, whether elements are in ProbRange or not.
     in_range_mask = function(x) {
+      if(self$upper==Inf)
+        return((x >= self$lower) & (x <= self$upper)) #FIXME
+      
       (x >= self$lower) & (x < self$upper)
     },
     #' @description
