@@ -59,6 +59,7 @@ Only methods inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::Pip
 library(mlr3)
 library(mlr3pipelines)
 # Attention: gunion inputs have to be in the correct order for now.
+\dontrun{
  gr = gunion(list(
    "data" = po("nop"),
    "prediction" = po("learner_cv", lrn("classif.rpart"))
@@ -68,6 +69,7 @@ tsk = tsk("sonar")
 tid = sample(1:208, 108)
 gr$train(tsk$clone()$filter(tid))
 gr$predict(tsk$clone()$filter(setdiff(1:208, tid)))
+}
 }
 \seealso{
 https://mlr3book.mlr-org.com/list-pipeops.html

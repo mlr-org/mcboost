@@ -9,6 +9,7 @@ test_that("AuditorFitters work", {
 
 
 test_that("LearnerAuditorFitters work", {
+  skip_on_cran()
   rf = LearnerAuditorFitter$new(lrn("regr.featureless"))
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
@@ -26,8 +27,12 @@ test_that("TreeAuditorFitters work", {
 })
 
 test_that("RidgeAuditorFitters work", {
+  skip_on_cran()
+  skip_on_os("mac")
+  skip_on_os("solaris")
   skip_if_not_installed("mlr3learners")
   skip_if_not_installed("glmnet")
+
   rf = RidgeAuditorFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))
   expect_number(out[[1]])
@@ -36,6 +41,7 @@ test_that("RidgeAuditorFitters work", {
 })
 
 test_that("SubPopFitter work", {
+  skip_on_cran()
   data = data.table(
     "AGE_NA" = c(0, 0, 0, 0, 0),
     "AGE_0_10" =  c(1, 1, 0, 0, 0),
@@ -62,6 +68,7 @@ test_that("SubPopFitter work", {
 })
 
 test_that("SubGroupFitter work", {
+  skip_on_cran()
   data = data.table(
     "AGE_0_10" =  c(1, 1, 0, 0, 0),
     "AGE_11_20" = c(0, 0, 1, 0, 0),
@@ -83,6 +90,7 @@ test_that("SubGroupFitter work", {
 })
 
 test_that("SubPopFitter iterates through all columns", {
+  skip_on_cran()
   data = data.table(
     "AGE_NA" = c(0, 0, 0, 0, 0),
     "AGE_0_10" =  c(1, 1, 0, 0, 0),
@@ -109,6 +117,7 @@ test_that("SubPopFitter iterates through all columns", {
 })
 
 test_that("SubPopFitter throws proper error if not binary or wrong length", {
+  skip_on_cran()
   data = data.frame(X1 = rnorm(n = 10L), X2 = rnorm(n = 10L))
   rs = c(1, rep(0, 9))
 
@@ -143,6 +152,7 @@ test_that("SubPopFitter throws proper error if not binary or wrong length", {
 })
 
 test_that("Bug in SubgroupAuditorFitter #16", {
+  skip_on_cran()
   data = data.frame(X1 = rnorm(n = 10L), X2 = rnorm(n = 10L))
   masks =  list(
       rep(c(1, 0), 5)
