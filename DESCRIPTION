@@ -1,7 +1,7 @@
 Package: mcboost
 Type: Package
 Title: Multi-Calibration Boosting
-Version: 0.3.1
+Version: 0.3.3.0
 Authors@R:
     c(person(given = "Florian",
              family = "Pfisterer",
@@ -39,7 +39,6 @@ Depends:
 Imports:
     backports,
     checkmate (>= 2.0.0),
-    lifecycle,
     data.table (>= 1.13.6),
     mlr3 (>= 0.10),
     mlr3misc (>= 0.8.0),

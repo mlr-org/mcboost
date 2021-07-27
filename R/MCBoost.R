@@ -27,6 +27,7 @@
 #' @examples
 #'   # See vignette for more examples.
 #'   # Instantiate the object
+#'   \dontrun{
 #'   mc = MCBoost$new()
 #'   # Run multi-calibration on training dataset.
 #'   mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
@@ -34,6 +35,7 @@
 #'   mc$predict_probs(iris[101:150,1:4])
 #'   # Get auditor effect
 #'   mc$auditor_effect(iris[101:150,1:4])
+#'   }
 #' @export
 MCBoost = R6::R6Class("MCBoost",
   public = list(
@@ -57,9 +59,15 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Currently only supports "simple", even split along probabilities.
     #'   Only relevant for `num_buckets` > 1.
     bucket_strategy = NULL,
+
     #' @field rebucket [`logical`] \cr
     #'   Should buckets be re-calculated at each iteration?
     rebucket = NULL,
+
+    #' @field eval_fulldata [`logical`] \cr
+    #'   Should auditor be evaluated on the full data?
+    eval_fulldata = NULL,
+
     #' @field partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
     #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
@@ -118,6 +126,12 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Only taken into account for `num_buckets` > 1.
     #' @param rebucket [`logical`] \cr
     #'   Should buckets be re-done at each iteration? Default `FALSE`.
+    #' @param eval_fulldata [`logical`] \cr
+    #'   Should the auditor be evaluated on the full data or on the respective bucket for determining
+    #'   the stopping criterion? Default `FALSE`, auditor is only evaluated on the bucket.
+    #'   This setting keeps the implementation closer to the Algorithm proposed in the corresponding
+    #'   multi-accuracy paper (Kim et al., 2019) where auditor effects are computed across the full
+    #'   sample (i.e. eval_fulldata = TRUE).
     #' @param multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive).
     #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
@@ -141,6 +155,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'   "split" splits the data into `max_iter` parts and validates on each sample in each iteration.\cr
     #'   "bootstrap" uses a new bootstrap sample in each iteration.\cr
     #'   "none" uses the same dataset in each iteration.
+
     initialize = function(
                  max_iter=5,
                  alpha=1e-4,
@@ -149,6 +164,7 @@ MCBoost = R6::R6Class("MCBoost",
                  num_buckets=2,
                  bucket_strategy="simple",
                  rebucket=FALSE,
+                 eval_fulldata=FALSE,
                  multiplicative=TRUE,
                  auditor_fitter=NULL,
                  subpops=NULL,
@@ -162,6 +178,7 @@ MCBoost = R6::R6Class("MCBoost",
       self$num_buckets = assert_int(num_buckets)
       self$bucket_strategy = assert_choice(bucket_strategy, choices = c("simple"))
       self$rebucket = assert_flag(rebucket)
+      self$eval_fulldata = assert_flag(eval_fulldata)
       self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)
       self$iter_sampling = assert_choice(iter_sampling, choices = c("none", "bootstrap", "split"))
@@ -283,15 +300,23 @@ MCBoost = R6::R6Class("MCBoost",
           models[[j]] = out[[2]]
         }
 
+        if (self$eval_fulldata) {
+          corrs = map_dbl(models, function(m) {
+            if (is.null(m)) return(0)
+            mean(m$predict(data[idx,]) * resid[idx])
+          })
+        }
+
         self$iter_corr = c(self$iter_corr, list(corrs))
         if (abs(max(corrs)) < self$alpha) {
           break
         } else {
-          max_key = buckets[[which.max(corrs)]]
+          bucket_id = which.max(abs(corrs))
+          max_key = buckets[[bucket_id]]
           prob_mask = max_key$in_range_mask(probs)
-          self$iter_models = c(self$iter_models, models[[which.max(corrs)]])
+          self$iter_models = c(self$iter_models, models[[bucket_id]])
           self$iter_partitions = c(self$iter_partitions, max_key)
-          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask)
+          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask, update_sign = sign(corrs[bucket_id]))
           resid = private$compute_residuals(new_probs, labels)
         }
       }
@@ -379,17 +404,17 @@ MCBoost = R6::R6Class("MCBoost",
     }
   ),
   private = list(
-    update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, ...) {
+    update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, update_sign = 1, ...) {
 
       deltas = numeric(length(orig_preds))
       deltas[mask] = model$predict(x, ...)[mask]
 
       if (self$multiplicative) {
-        update_weights = exp(- self$eta * deltas)
+        update_weights = exp(- self$eta * update_sign * deltas)
         # Add a small term to enable moving away from 0.
         new_preds = update_weights * pmax(orig_preds, 1e-4)
       } else {
-        update_weights = (self$eta * deltas)
+        update_weights = (self$eta * update_sign * deltas)
         new_preds = orig_preds - update_weights
       }
       if (audit) {

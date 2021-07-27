@@ -42,6 +42,7 @@
 #' library(mlr3)
 #' library(mlr3pipelines)
 #' # Attention: gunion inputs have to be in the correct order for now.
+#' \dontrun{
 #'  gr = gunion(list(
 #'    "data" = po("nop"),
 #'    "prediction" = po("learner_cv", lrn("classif.rpart"))
@@ -51,6 +52,7 @@
 #' tid = sample(1:208, 108)
 #' gr$train(tsk$clone()$filter(tid))
 #' gr$predict(tsk$clone()$filter(setdiff(1:208, tid)))
+#' }
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @export
