@@ -244,7 +244,7 @@ MCBoost = R6::R6Class("MCBoost",
         buckets[[2]]$lower = -Inf
         buckets[[length(buckets)]]$upper = Inf
       } else {
-        if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets musst be > 1!")
+        if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets must be > 1!")
       }
 
       pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data), finite = TRUE)
