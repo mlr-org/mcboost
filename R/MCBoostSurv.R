@@ -1,5 +1,4 @@
-# Check if several time_points?
-# To-Do:
+#label must be object of Surv
 
 MCBoostSurv = R6::R6Class("MCBoostSurv",
   inherit = MCBoost,
@@ -97,7 +96,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         auditor_effects = c(auditor_effects, list(abs(deltas)))
       }
 
-      return(clip_prob(new_preds)) # FIXME also check for survival property?
+      #also correct for survival property: monotonically decreasing & between 0 and 1
+      return(make_decreasing_curve(clip_prob(new_preds)))
     },
 
     compute_residuals = function(prediction, labels) {
@@ -111,8 +111,6 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       if(self$loss == "censored_brier"){
         proper = FALSE
         eps = 1e-4
-
-        residuals = private$calc_residual_matrix_r(prediction, labels)
 
         cens_distr = survival::survfit(survival::Surv(labels[, "time"], (1 - labels[, "status"])) ~ 1)
         cens_matrix = matrix(c(cens_distr$time, cens_distr$surv), ncol = 2)
@@ -160,23 +158,24 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     },
 
     check_labels = function(labels) {
-      # FIXME # somthing missing? e.g. other formats
       labels = mlr3proba::assert_surv(labels)
 
+      private$create_time_points(labels)
+
+      labels
+    },
+
+    create_time_points = function(labels){
       # FIXME woanders hin
       if (is.null(self$time_points) || !length(self$time_points)) {
         self$time_points = unique(sort(labels[, "time"]))
       } else {
-        # FIXME use of internal method of mlr3proba
         self$time_points = mlr3proba::.c_get_unique_times(labels[, "time"], self$time_points)
       }
-
 
       if(self$time_eval<1){
         self$time_points = self$time_points[self$time_points<max(self$time_points[is.finite(self$time_points)])*self$time_eval]
       }
-
-      labels
     },
 
     # FIXME
@@ -299,7 +298,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       }
 
       # IBS
-      if(!is.null(dim(resid_m))){
+      if(test_data_frame(resid_m, min.cols = 2) | testArray(resid_m, min.d = 2)){
         resid_m = rowMeans(resid_m)
       }
 

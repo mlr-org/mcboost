@@ -207,7 +207,7 @@ MCBoost = R6::R6Class("MCBoost",
 
       if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
       assert_data_table(data)
-      
+
       labels = private$check_labels(labels)
       pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data)
       buckets = private$create_buckets(pred_probs)
@@ -236,9 +236,9 @@ MCBoost = R6::R6Class("MCBoost",
         # Fit on partitions
         for (j in seq_along(buckets)) {
           in_bucket = private$get_masked(data, resid, idx, probs, buckets[[j]])
-          
+
           if(is.null(in_bucket)) next
-          
+
           out = self$auditor_fitter$fit_to_resid(in_bucket$data_m, in_bucket$resid_m, in_bucket$idx_m)
           corrs[j] = out[[1]]
           models[[j]] = out[[2]]
@@ -364,13 +364,13 @@ MCBoost = R6::R6Class("MCBoost",
         update_weights = (self$eta * update_sign * deltas)
         new_preds = orig_preds - update_weights
       }
-      
+
       if (audit) {
         self$auditor_effects = c(self$auditor_effects, list(abs(deltas)))
       }
       return(clip_prob(new_preds))
     },
-    
+
     compute_residuals = function(prediction, labels) {
       prediction - labels
     },
@@ -417,7 +417,7 @@ MCBoost = R6::R6Class("MCBoost",
       mask = bucket$in_range_mask(probs[idx])
       # FIXME geht das?
       if (sum(mask) < 1L) return(NULL) # case no obs. are in the bucket. Are assigned corrs=0.
-      
+
       data_m = data[idx, ][mask, ]
       resid_m = resid[idx][mask]
       idx_m = idx[mask]
