@@ -67,7 +67,7 @@ Furthermore, `mcboost` includes utilities to guard against overfitting to the au
 
 # Statement of need
 
-Given the ubiquitous use of machine learning models in crucial areas and growing concerns of biased predictions for minority subpopulations, Multi-Calibration Boosting should be widely accessible in form of a free and open-source software package.
+Given the ubiquitous use of machine learning models in crucial areas and growing concerns of biased predictions for minority subpopulations, Multi-Calibration Boosting should be widely accessible in the form of a free and open-source software package.
 Prior to the development of `mcboost`, Multi-Calibration Boosting has not been released as a software package for R.
 
 The results in @kim2019 highlight that MCBoost can improve classification accuracy for subpopulations in various settings, including gender detection with image data, income classification with survey data and disease prediction using biomedical data.
