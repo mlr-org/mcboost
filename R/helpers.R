@@ -76,11 +76,11 @@ even_bucket = function(pos, frac, min, max) {
 
 make_decreasing_curve = function (prediction){
   for(i in 1:nrow(prediction)){
-    if (!all(prediction[i,] == cummax(prediction[i, ]))){
-      message("Resulting curve is post-processed,
-              as it is not monotonically decreasing anymore.")
+    if (!all(prediction[i,] == cummin(prediction[i, ]))){
+
       for(j in 2:ncol(prediction)){
         if (prediction[i,j]>prediction[i,j-1]){
+          message("Resulting curve was corrected,as it was not monotonically decreasing.")
           prediction[i,j] = prediction[i,j-1]
         }
       }
