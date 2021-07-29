@@ -180,7 +180,12 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
     # FIXME
     create_buckets = function(pred_probs) {
-      max_time =  max(self$time_points)
+      if(self$time_eval<1){
+        max_time =  max(self$time_points)
+      } else{
+        max_time = Inf
+      }
+
       min_time = min(self$time_points[is.finite(self$time_points)])
 
       if(self$time_eval== 1L){
@@ -226,19 +231,24 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
           prob_in_time = apply(as.matrix(prob_in_time), 1, self$bucket_aggregation)
         }
 
-        if (self$bucket_strategy == "even_splits") {
+
+        if (self$bucket_strategy == "even_splits" && self$num_buckets > 1) {
           prob_parts = even_bucket(
             c(0, seq_len(self$num_buckets)),
             self$num_buckets, min(prob_in_time[is.finite(prob_in_time)]),
             max(prob_in_time[is.finite(prob_in_time)]))
         }
 
-        if (self$bucket_strategy == "quantiles") {
+        if (self$bucket_strategy == "quantiles" && self$num_buckets > 1) {
           prob_parts = quantile(prob_in_time, seq(0, 1, length.out = self$num_buckets + 1))
         }
 
+        if(self$num_buckets == 1){
+          prob_parts = list(0,1)
+        }
+
         prob_range = c(mlr3misc::map(seq_len(self$num_buckets), function(b) {
-          ProbRange$new(prob_parts[b], prob_parts[b + 1])
+          ProbRange$new(prob_parts[[b]], prob_parts[[b + 1]])
         }))
 
         # FIXME --> Was passiert, wenn hier ein keine Wahrscheinlichkeit in der prob_part ist?

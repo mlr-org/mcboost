@@ -80,7 +80,7 @@ make_decreasing_curve = function (prediction){
 
       for(j in 2:ncol(prediction)){
         if (prediction[i,j]>prediction[i,j-1]){
-          message("Resulting curve was corrected,as it was not monotonically decreasing.")
+          message("Resulting curve was corrected, as it was not monotonically decreasing.")
           prediction[i,j] = prediction[i,j-1]
         }
       }
