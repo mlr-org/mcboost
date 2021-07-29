@@ -10,6 +10,7 @@ test_that("MCBoost class instantiation", {
 
 
 test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -27,6 +28,7 @@ test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
 
 
 test_that("MCBoost multicalibrate and predict_probs - init_predictor function", {
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names)
@@ -63,6 +65,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
 
 
 test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredictor - response", {
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   data = as.matrix(tsk$data(cols = tsk$feature_names))
@@ -83,6 +86,7 @@ test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredic
 
 
 test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredictor - prob", {
+  skip_on_cran()
   # Breast Cancer task
   tsk = tsk("breast_cancer")
   data = tsk$data(cols = tsk$feature_names)
@@ -130,6 +134,7 @@ test_that("MCBoost multicalibrate with subpops", {
 
 
 test_that("MCBoost multicalibrate with Subgroups", {
+  skip_on_cran()
   skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
@@ -156,6 +161,7 @@ test_that("MCBoost multicalibrate with Subgroups", {
 })
 
 test_that("MCBoost various settings", {
+  skip_on_cran()
   skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
@@ -271,6 +277,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
 
 
 test_that("MCBoost throws error for multi level outcomes", {
+  skip_on_cran()
   tsk = tsk("iris")
   d = tsk$data(cols = tsk$feature_names)
   l = tsk$data(cols = tsk$target_names)
@@ -280,11 +287,13 @@ test_that("MCBoost throws error for multi level outcomes", {
 })
 
 test_that("MCBoost throws error if wrong auditor_fitter", {
+  skip_on_cran()
   expect_error(MCBoost$new(auditor_fitter = "Ts"), "'Ts' not found")
   expect_error(MCBoost$new(auditor_fitter = 1234), "auditor_fitter must be of type 'AuditorFitter' or character")
 })
 
 test_that("init predictor wrapper works", {
+  skip_on_cran()
   # sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names, rows = c(1:10, 200:208))

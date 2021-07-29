@@ -1,6 +1,7 @@
 context("Predictor")
 
 test_that("Predictor class instantiation", {
+  skip_on_cran()
   prd = Predictor$new()
   expect_class(prd, "Predictor")
   expect_error(prd$fit(), fixed = "Abstract base class")
@@ -8,6 +9,7 @@ test_that("Predictor class instantiation", {
 })
 
 test_that("ConstantPredictor", {
+  skip_on_cran()
   prd = ConstantPredictor$new(0.7)
   expect_class(prd, "ConstantPredictor")
   expect_true(prd$is_fitted)
@@ -16,6 +18,7 @@ test_that("ConstantPredictor", {
 })
 
 test_that("LearnerPredictor - response", {
+  skip_on_cran()
   prd = LearnerPredictor$new(lrn("classif.rpart"))
   expect_class(prd, "LearnerPredictor")
   prd$fit(iris[1:100,1:4], factor(iris$Species[1:100]))
@@ -25,6 +28,7 @@ test_that("LearnerPredictor - response", {
 })
 
 test_that("LearnerPredictor - probs", {
+  skip_on_cran()
   prd = LearnerPredictor$new(lrn("classif.rpart", predict_type = "prob"))
   expect_class(prd, "LearnerPredictor")
   prd$fit(iris[51:150,1:4], factor(iris$Species[51:150]))

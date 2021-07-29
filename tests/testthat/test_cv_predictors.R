@@ -1,4 +1,5 @@
 test_that("TreeAuditorFitters work", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   rf = CVTreeAuditorFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))

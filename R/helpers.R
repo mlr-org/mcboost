@@ -2,7 +2,9 @@
 #' @param labels [`factor`]\cr
 #'   Factor to encode.
 #' @examples
-#'   one_hot(factor(c("a", "b", "a")))
+#'  \dontrun{
+#'  one_hot(factor(c("a", "b", "a")))
+#'  }
 #' @return [`integer`]\cr
 #'   Integer vector of encoded labels.
 #' @export
@@ -49,9 +51,11 @@ xy_to_task = function(x, y) {
 #' @param learner [`mlr3::Learner`]
 #'   A trained learner used for initialization.
 #' @examples
-#'   library("mlr3")
-#'   l = lrn("classif.featureless")$train(tsk("sonar"))
-#'   mlr3_init_predictor(l)
+#'  \dontrun{
+#'  library("mlr3")
+#'  l = lrn("classif.featureless")$train(tsk("sonar"))
+#'  mlr3_init_predictor(l)
+#'  }
 #' @return [`function`]
 #' @export
 mlr3_init_predictor = function(learner) {
