@@ -58,7 +58,6 @@ Post-processing with `mcboost` starts with an initial prediction model that is p
 Users may also specify a fixed set of subgroups, instead of a learner, on which predictions should be audited.
 Furthermore, `mcboost` includes utilities to guard against overfitting to the auditing dataset during post-processing.
 
-
 ![Fig 1. Conceptual illustration of Multi-Calibration Boosting with `mcboost`.\label{fig:overview}](MCBoost.png)
 
 # Statement of need

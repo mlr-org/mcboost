@@ -1,6 +1,5 @@
 context("AuditorFitters")
 
-
 test_that("AuditorFitters work", {
   rf = AuditorFitter$new()
   expect_class(rf, "AuditorFitter")
