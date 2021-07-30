@@ -56,14 +56,12 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
                           },
                           
                           .predict = function(inputs) {
-                            
-                            #FIXME geht das so? 
                             d = inputs$data$data(cols = inputs$data$feature_names)
                             probs = self$state$mc$predict_probs(d, predictor_args = inputs$prediction)
          
                             distlist = lapply(seq_len(nrow(probs)), function(x){
                               distr6::WeightedDiscrete$new(x=as.numeric(colnames(probs)), cdf = 1-probs[x,])
-                            }
+                            })
         
                             vector_distribution = distr6::VectorDistribution$new(distlist = distlist)
                             
@@ -89,7 +87,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 )
 
 
-ppl_mcboostsurv = function(learner = lrn("surv.kaplan")) { #FIXME Can this be replaced with featureless? 
+ppl_mcboostsurv = function(learner = lrn("surv.kaplan")) { 
   mlr3misc::require_namespaces("mlr3pipelines")
   po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
   gr = mlr3pipelines::`%>>%`(
