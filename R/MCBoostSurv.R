@@ -28,7 +28,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       multiplicative = TRUE,
       auditor_fitter = NULL,
       subpops = NULL,
-      default_model_class = ConstantPredictor, # FIXME must be constant over time
+      default_model_class = LearnerSurvKaplan, # FIXME must be constant over time
       init_predictor = NULL,
       loss = "censored_brier",
       iter_sampling = "none") {
@@ -63,6 +63,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       # if (self$time_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
       self$bucket_aggregation = assert_function(bucket_aggregation, null.ok = TRUE)
       self$loss = assert_choice(loss, choices = c("censored_brier", "brier"))
+
     }
   ),
   # FIXME kann man das vielleicht do mit MCBoost zusammenführen ?
@@ -97,7 +98,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       }
 
       #also correct for survival property: monotonically decreasing & between 0 and 1
-      return(make_decreasing_curve(clip_prob(new_preds)))
+      return(make_survival_curve(clip_prob(new_preds)))
     },
 
     compute_residuals = function(prediction, labels) {
@@ -158,6 +159,20 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     },
 
     check_labels = function(labels) {
+
+      if(!inherits(labels, "Surv")){
+        if (is.matrix(labels) || is.data.frame(labels)){
+          data = as.data.table(as.data.frame(labels))
+        }
+
+        if(is.data.table(labels)){
+          assert_data_table(labels, col.names ="named")
+          if(sum(colnames(labels) %in% c("status", "time"))<2) stop("labels must have the names status and time")
+
+          labels = survival::Surv(unlist(labels[, "time"]),unlist( labels[, "status"])) #FIXME make other names possible
+        }
+      }
+
       labels = mlr3proba::assert_surv(labels)
 
       private$create_time_points(labels)
@@ -168,14 +183,18 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     create_time_points = function(labels){
       # FIXME woanders hin
       if (is.null(self$time_points) || !length(self$time_points)) {
-        self$time_points = unique(sort(labels[, "time"]))
+        label_times = unique(sort(labels[, "time"]))
+        self$time_points = c(0,label_times, label_times[length(label_times)]+0.001)
       } else {
-        self$time_points = mlr3proba::.c_get_unique_times(labels[, "time"], self$time_points)
+         self$time_points = mlr3proba::.c_get_unique_times(labels[, "time"], self$time_points)
       }
+      #FIXME confusion with time_points
+
 
       if(self$time_eval<1){
         self$time_points = self$time_points[self$time_points<max(self$time_points[is.finite(self$time_points)])*self$time_eval]
       }
+
     },
 
     # FIXME
@@ -277,6 +296,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       if (inherits(probs, "Distribution")) {
         probs = t(as.matrix(probs$survival(self$time_points)))
+        #as.data.table(p)$distr [[1]][[1]] #FIXME faster?
       }
 
       colnames(probs) = self$time_points
@@ -292,6 +312,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       # fixme what happens with only one time point
       # FIXME geht das?
       # if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
+
 
       mask = bucket$in_range_mask(probs[idx, ])
 
@@ -315,8 +336,10 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       return(list(data_m = data_m, resid_m = resid_m, idx_m = idx_m))
     },
+
     calculate_corr = function (auditor, data, resid, idx){
       mean(auditor$predict(data[idx,]) * rowMeans(resid[idx,]))
     }
+
   )
 )

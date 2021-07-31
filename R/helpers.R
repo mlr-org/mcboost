@@ -37,7 +37,10 @@ xy_to_task = function(x, y) {
   }
 
   x[, (yname) := y]
-  if (is.numeric(y)) {
+
+  if (inherits(y,"Surv")){
+    ti = TaskSurv
+  } else if (is.numeric(y)) {
     ti = TaskRegr
   } else {
     ti = TaskClassif
@@ -74,10 +77,9 @@ even_bucket = function(pos, frac, min, max) {
 }
 
 
-make_decreasing_curve = function (prediction){
+make_survival_curve = function (prediction){
   for(i in 1:nrow(prediction)){
     if (!all(prediction[i,] == cummin(prediction[i, ]))){
-
       for(j in 2:ncol(prediction)){
         if (prediction[i,j]>prediction[i,j-1]){
           message("Resulting curve was corrected, as it was not monotonically decreasing.")
