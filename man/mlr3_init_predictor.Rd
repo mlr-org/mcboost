@@ -17,7 +17,9 @@ A trained learner used for initialization.}
 Create an initial predictor function from a trained mlr3 learner
 }
 \examples{
-  library("mlr3")
-  l = lrn("classif.featureless")$train(tsk("sonar"))
-  mlr3_init_predictor(l)
+ \dontrun{
+ library("mlr3")
+ l = lrn("classif.featureless")$train(tsk("sonar"))
+ mlr3_init_predictor(l)
+ }
 }

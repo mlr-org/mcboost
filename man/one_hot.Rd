@@ -18,5 +18,7 @@ Integer vector of encoded labels.
 One-hot encode a factor variable
 }
 \examples{
-  one_hot(factor(c("a", "b", "a")))
+ \dontrun{
+ one_hot(factor(c("a", "b", "a")))
+ }
 }

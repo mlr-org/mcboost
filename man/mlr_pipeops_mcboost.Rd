@@ -56,10 +56,10 @@ Only methods inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::Pip
 }
 
 \examples{
+\dontrun{
 library(mlr3)
 library(mlr3pipelines)
-# Attention: gunion inputs have to be in the correct order for now.
-\dontrun{
+# Attention: gunion inputs have to be in the correct order for now
  gr = gunion(list(
    "data" = po("nop"),
    "prediction" = po("learner_cv", lrn("classif.rpart"))

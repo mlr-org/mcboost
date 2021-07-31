@@ -23,6 +23,8 @@ For now this assumes training on the same dataset that is later used
 for multi-calibration.
 }
 \examples{
+  \dontrun{
   library("mlr3pipelines")
   gr = ppl_mcboost()
+  }
 }
