@@ -17,6 +17,8 @@ Solaris output with Vignettes:
 
 ```r
 > rhub::check_on_solaris(check_args="")
+> rhub::check_with_rdevel()
+> rhub::check(platform="windows-x86_64-devel")
 ```
 
-Returns no NOTEs, WARNINGs or ERRORs
+Return no NOTEs, WARNINGs or ERRORs
