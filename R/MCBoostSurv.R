@@ -105,7 +105,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       residuals = private$calc_residual_matrix_r(prediction, labels)
 
       if (self$loss == "brier") {
-        residuals
+        return(residuals)
       }
 
       if (self$loss == "censored_brier") {

@@ -77,7 +77,7 @@ even_bucket = function(pos, frac, min, max) {
 }
 
 
-make_survival_curve = function(prediction) {
+make_survival_curve = function(prediction) { #FIXME smoothing?
   survival_curves = apply(prediction, 1, function(x) {
     cm = cummin(x)
     if (x != cm) {
