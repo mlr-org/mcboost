@@ -79,13 +79,19 @@ even_bucket = function(pos, frac, min, max) {
 
 make_survival_curve = function(prediction) { #FIXME smoothing?
   survival_curves = apply(prediction, 1, function(x) {
+    x[is.na(x)] = 0 #FIXME Somehow in a pileline an extre time_point is added?!
     cm = cummin(x)
-    if (x != cm) {
-      x = cm
+    if (any(x != cm)) {
       message("Resulting curve was corrected, as it was not monotonically decreasing.")
-    } else {
+      cm
+    }else{
       x
     }
   })
-  survival_curves
+  survival_curves = t(survival_curves)
+  #neeeded for PredictionSurv
+  survival_curves[,1]=1
+  survival_curves[,ncol(survival_curves)]=0
+
+  as.data.table(survival_curves)
 }

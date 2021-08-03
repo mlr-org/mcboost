@@ -25,17 +25,17 @@
 #'  }
 #'
 #' @examples
-#'   # See vignette for more examples.
-#'   # Instantiate the object
-#'   \dontrun{
-#'   mc = MCBoost$new()
-#'   # Run multi-calibration on training dataset.
-#'   mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
-#'   # Predict on test set
-#'   mc$predict_probs(iris[101:150,1:4])
-#'   # Get auditor effect
-#'   mc$auditor_effect(iris[101:150,1:4])
-#'   }
+#' # See vignette for more examples.
+#' # Instantiate the object
+#' \dontrun{
+#' mc = MCBoost$new()
+#' # Run multi-calibration on training dataset.
+#' mc$multicalibrate(iris[1:100, 1:4], factor(sample(c("A", "B"), 100, TRUE)))
+#' # Predict on test set
+#' mc$predict_probs(iris[101:150, 1:4])
+#' # Get auditor effect
+#' mc$auditor_effect(iris[101:150, 1:4])
+#' }
 #' @export
 MCBoost = R6::R6Class("MCBoost",
   public = list(
@@ -120,10 +120,10 @@ MCBoost = R6::R6Class("MCBoost",
     #' @param eta  [`numeric`] \cr
     #'   Parameter for multiplicative weight update (step size). Default `1.0`.
     # FIXME
-        #' @param partition [`logical`] \cr
-        #'   True/False flag for whether to split up predictions by their "partition"
-        #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
-        #'   Defaults to `TRUE` (multi-accuracy boosting).
+    #' @param partition [`logical`] \cr
+    #'   True/False flag for whether to split up predictions by their "partition"
+    #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
+    #'   Defaults to `TRUE` (multi-accuracy boosting).
     #' @param num_buckets [`integer`] \cr
     #'   The number of buckets to split into in addition to using the whole sample. Default `2L`.
     #' @param bucket_strategy  [`character`] \cr
@@ -162,21 +162,20 @@ MCBoost = R6::R6Class("MCBoost",
     #'   "none" uses the same dataset in each iteration.
 
     initialize = function(
-
-                 max_iter=5,
-                 alpha=1e-4,
-                 eta=1,
-                 # partition=TRUE,
-                 num_buckets=2,
-                 bucket_strategy="simple",
-                 rebucket=FALSE,
-                 eval_fulldata=FALSE,
-                 multiplicative=TRUE,
-                 auditor_fitter=NULL,
-                 subpops=NULL,
-                 default_model_class=ConstantPredictor,
-                 init_predictor=NULL,
-                 iter_sampling="none") {
+      max_iter = 5,
+      alpha = 1e-4,
+      eta = 1,
+      # partition=TRUE,
+      num_buckets = 2,
+      bucket_strategy = "simple",
+      rebucket = FALSE,
+      eval_fulldata = FALSE,
+      multiplicative = TRUE,
+      auditor_fitter = NULL,
+      subpops = NULL,
+      default_model_class = ConstantPredictor,
+      init_predictor = NULL,
+      iter_sampling = "none") {
 
       self$max_iter = assert_int(max_iter, lower = 0)
       self$alpha = assert_number(alpha, lower = 0)
@@ -187,7 +186,7 @@ MCBoost = R6::R6Class("MCBoost",
       self$bucket_strategy = assert_choice(bucket_strategy, choices = self$bucket_strategies)
       self$rebucket = assert_flag(rebucket)
       self$eval_fulldata = assert_flag(eval_fulldata)
-      #self$partition = assert_flag(partition)
+      # self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)
       self$auditor_fitter = private$get_auditor_fitter(subpops, auditor_fitter)
       self$predictor = private$get_predictor(init_predictor, default_model_class)
@@ -202,14 +201,17 @@ MCBoost = R6::R6Class("MCBoost",
     #'  Arguments passed on to `init_predictor`. Defaults to `NULL`.
     #' @param ... [`any`] \cr
     #'  Params passed on to other methods.
+    #'
+    #'  #FIXME time_points ?
+    #'
     #' @return `NULL`
     multicalibrate = function(data, labels, predictor_args = NULL, ...) {
 
       if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
       assert_data_table(data)
 
-      labels = private$check_labels(labels)
-      pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data)
+      labels = private$assert_labels(labels, ...)
+      pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data, ...)
       buckets = private$create_buckets(pred_probs)
       resid = private$compute_residuals(pred_probs, labels)
       new_probs = pred_probs
@@ -235,24 +237,23 @@ MCBoost = R6::R6Class("MCBoost",
 
         # Fit on partitions
         for (j in seq_along(buckets)) {
-          in_bucket = private$get_masked(data, resid, idx, probs, buckets[[j]])
-
-          if(is.null(in_bucket)) next
+          in_bucket = private$get_masked(data, resid, idx, probs, buckets[[j]]
+          if (is.null(in_bucket)) next
 
           out = self$auditor_fitter$fit_to_resid(in_bucket$data_m, in_bucket$resid_m, in_bucket$idx_m)
           corrs[j] = out[[1]]
           models[[j]] = out[[2]]
         }
-
         if (self$eval_fulldata) {
           corrs = map_dbl(models, function(m) {
-            if (is.null(m)) return(0)
-            private$calculate_corr(auditor = m, data = data, resid = resid, idx  =idx)
+            if (is.null(m)) {
+              return(0)
+            }
+            private$calculate_corr(auditor = m, data = data, resid = resid, idx = idx)
           })
         }
 
         self$iter_corr = c(self$iter_corr, list(corrs))
-
         if (abs(max(corrs)) < self$alpha) {
           break
         } else {
@@ -291,7 +292,7 @@ MCBoost = R6::R6Class("MCBoost",
       # convert to data.table
       if (is.matrix(x) || is.data.frame(x)) x = as.data.table(as.data.frame(x))
       assert_data_table(x)
-      orig_preds = private$assert_prob(do.call(self$predictor, discard(list(x, predictor_args), is.null)), x)
+      orig_preds = private$assert_prob(do.call(self$predictor, discard(list(x, predictor_args), is.null)), x, ...)
       new_preds = orig_preds
       for (i in seq_along(self$iter_models)) {
         if (i <= t) {
@@ -351,13 +352,12 @@ MCBoost = R6::R6Class("MCBoost",
   ),
   private = list(
     update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, update_sign = 1, ...) {
-
       deltas = numeric(length(orig_preds))
       deltas[mask] = model$predict(x, ...)[mask]
 
       if (self$multiplicative) {
 
-        update_weights = exp(- self$eta * update_sign * deltas)
+        update_weights = exp(-self$eta * update_sign * deltas)
         # Add a small term to enable moving away from 0.
         new_preds = update_weights * pmax(orig_preds, 1e-4)
       } else {
@@ -375,7 +375,7 @@ MCBoost = R6::R6Class("MCBoost",
       prediction - labels
     },
 
-    check_labels = function(labels) {
+    assert_labels = function(labels, ...) {
       # data.table to factor
       if (is.data.table(labels) && ncol(labels) == 1L) {
         labels = labels[[1]]
@@ -407,8 +407,8 @@ MCBoost = R6::R6Class("MCBoost",
       buckets
     },
 
-    assert_prob = function(prob, data) {
-      assert_numeric(prob, len = nrow(data), finite = TRUE)
+    assert_prob = function(prob, data, ...) {
+      assert_numeric(prob, len = nrow(data), finite = TRUE, lower = 0, upper = 1)
     },
 
 
@@ -416,7 +416,9 @@ MCBoost = R6::R6Class("MCBoost",
     get_masked = function(data, resid, idx, probs, bucket) {
       mask = bucket$in_range_mask(probs[idx])
       # FIXME geht das?
-      if (sum(mask) < 1L) return(NULL) # case no obs. are in the bucket. Are assigned corrs=0.
+      if (sum(mask) < 1L) {
+        return(NULL)
+      } # case no obs. are in the bucket. Are assigned corrs=0.
 
       data_m = data[idx, ][mask, ]
       resid_m = resid[idx][mask]
@@ -482,8 +484,9 @@ MCBoost = R6::R6Class("MCBoost",
       }
       assert_function(init_predictor, args = "data")
     },
-    calculate_corr = function (auditor, data, resid, idx){
-      mean(auditor$predict(data[idx,]) * resid[idx])
+
+    calculate_corr = function(auditor, data, resid, idx) {
+      mean(auditor$predict(data[idx, ]) * resid[idx])
     }
   )
 )
