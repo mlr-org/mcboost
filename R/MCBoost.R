@@ -237,7 +237,7 @@ MCBoost = R6::R6Class("MCBoost",
 
         # Fit on partitions
         for (j in seq_along(buckets)) {
-          in_bucket = private$get_masked(data, resid, idx, probs, buckets[[j]]
+          in_bucket = private$get_masked(data, resid, idx, probs, buckets[[j]])
           if (is.null(in_bucket)) next
 
           out = self$auditor_fitter$fit_to_resid(in_bucket$data_m, in_bucket$resid_m, in_bucket$idx_m)
