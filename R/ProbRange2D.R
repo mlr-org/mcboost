@@ -1,7 +1,8 @@
-#' Range of Probabilities
+#' Range of Probabilities and Time
 #' @description
 #' Range of format list(prob = [lower_prob; upper_prob), time = [lower_time; upper_time).
 #' @noRd
+#' @export
 ProbRange2D = R6::R6Class("ProbRange2D",
   public = list(
     #' @field prob [`ProbRange`] \cr
@@ -10,9 +11,7 @@ ProbRange2D = R6::R6Class("ProbRange2D",
     #' @field time [`ProbRange`] \cr
     #'   Range of time
     time = NULL,
-    #' @field lower_time [`numeric`] \cr
-    #'   Lower time bound of the ProbRange2D.
-    #' @field aggregation [`fuction`] \cr
+    #' @field aggregation [`function`] \cr
     #' Type of aggregation, if there are several values per row
     #' (e.g., mean or median)
     aggregation = NULL,
@@ -37,7 +36,7 @@ ProbRange2D = R6::R6Class("ProbRange2D",
       invisible(self)
     },
     #' @description
-    #' Compare with 'other' Probability Range regarding equality
+    #' Compare with 'other' Probability Range (2D) regarding equality
     #'
     #' @param other [`ProbRange2D`]\cr
     #'   ProbRange2D to compare to.
@@ -45,7 +44,7 @@ ProbRange2D = R6::R6Class("ProbRange2D",
     #' Logical, whether ProbRanges2D are equal.
     is_equal = function(other) {
       if (test_class(other, "ProbRange2D")) {
-        return(prob$is_equal(other$prob) && time$is_equal(other$time))
+        return(self$prob$is_equal(other$prob) && self$time$is_equal(other$time))
       }
       return(FALSE)
     },
@@ -58,7 +57,7 @@ ProbRange2D = R6::R6Class("ProbRange2D",
     #' Logical, whether ProbRanges2D are in-equal.
     is_not_equal = function(other) {
       if (test_class(other, "ProbRange2D")) {
-        return(prob$is_not_equal(other$prob) || time$is_not_equal(other$time))
+        return(self$prob$is_not_equal(other$prob) || self$time$is_not_equal(other$time))
       }
       return(TRUE)
     },
@@ -67,39 +66,45 @@ ProbRange2D = R6::R6Class("ProbRange2D",
     #' are in the ProbRange2D.
     #'
     #' @param x [`numeric`]\cr
-    #'   Array of probabilities
+    #'   Matrix of probabilities with times as columnnames
     #' @return
     #'   Logical array, whether elements are in ProbRange2D or not.
     in_range_mask = function(x) {
+
       time = as.numeric(colnames(x))
+
       time_mask = self$time$in_range_mask(time)
-      
-      if(!(any(time_mask))){
-        return (NULL)}
-      
-      
-      if(!is.null(self$aggregation)){
+
+      if (!(any(time_mask))) {
+        return(NULL)
+      }
+
+
+      if (!is.null(self$aggregation)) {
         x = x[, time_mask]
-        
-        if(length(dim(x))<1)
-          return (NULL)
-        
+
+        if (length(dim(x)) < 1) {
+          return(NULL)
+        }
+
         x = apply(x, 1, self$aggregation)
         n = self$prob$in_range_mask(x)
-        
-        if(!(any(n)))
-          return (NULL)
-        
-        matrix = matrix(TRUE, nrow= sum(n), ncol= sum(time_mask))
-      }else{
+
+        if (!(any(n))) {
+          return(NULL)
+        }
+
+        matrix = matrix(TRUE, nrow = sum(n), ncol = sum(time_mask))
+      } else {
         matrix = self$prob$in_range_mask(x)
         matrix [, !time_mask] = FALSE
         n = apply(matrix, 1, any)
-  
-        if(!(any(n))){
-          return (NULL)}
-        
-        matrix = matrix[n,time_mask]
+
+        if (!(any(n))) {
+          return(NULL)
+        }
+
+        matrix = matrix[n, time_mask]
       }
       return(list(
         matrix = matrix,

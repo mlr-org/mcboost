@@ -71,8 +71,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' @field partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
     #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
-    # FIXME
-    # partition = NULL,
+    partition = NULL,
 
     #' @field multiplicative [`logical`] \cr
     #'   Specifies the strategy for updating the weights (multiplicative weight vs additive).
@@ -106,8 +105,9 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Auditor effect in each iteration.
     auditor_effects = list(),
 
-
-    bucket_strategies = c("simple"), # FIXME Darf ich das?
+    #' @field bucket_strategies [`character`] \cr
+    #'   Possible bucket_strategies in McBoostSurv.
+    bucket_strategies = c("simple"),
 
     #' @description
     #'   Initialize a multi-calibration instance.
@@ -119,7 +119,6 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Accuracy parameter that determines the stopping condition. Default `1e-4`.
     #' @param eta  [`numeric`] \cr
     #'   Parameter for multiplicative weight update (step size). Default `1.0`.
-    # FIXME
     #' @param partition [`logical`] \cr
     #'   True/False flag for whether to split up predictions by their "partition"
     #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
@@ -165,7 +164,7 @@ MCBoost = R6::R6Class("MCBoost",
       max_iter = 5,
       alpha = 1e-4,
       eta = 1,
-      # partition=TRUE,
+      partition = TRUE,
       num_buckets = 2,
       bucket_strategy = "simple",
       rebucket = FALSE,
@@ -180,13 +179,12 @@ MCBoost = R6::R6Class("MCBoost",
       self$max_iter = assert_int(max_iter, lower = 0)
       self$alpha = assert_number(alpha, lower = 0)
       self$eta = assert_number(eta)
-      # self$partition = assert_flag(partition)
+      self$partition = assert_flag(partition)
       self$num_buckets = assert_int(num_buckets, lower = 1)
-      # if (self$num_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
+      if (self$num_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
       self$bucket_strategy = assert_choice(bucket_strategy, choices = self$bucket_strategies)
       self$rebucket = assert_flag(rebucket)
       self$eval_fulldata = assert_flag(eval_fulldata)
-      # self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)
       self$auditor_fitter = private$get_auditor_fitter(subpops, auditor_fitter)
       self$predictor = private$get_predictor(init_predictor, default_model_class)
@@ -201,8 +199,6 @@ MCBoost = R6::R6Class("MCBoost",
     #'  Arguments passed on to `init_predictor`. Defaults to `NULL`.
     #' @param ... [`any`] \cr
     #'  Params passed on to other methods.
-    #'
-    #'  #FIXME time_points ?
     #'
     #' @return `NULL`
     multicalibrate = function(data, labels, predictor_args = NULL, ...) {

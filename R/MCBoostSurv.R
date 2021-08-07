@@ -1,24 +1,208 @@
-# label must be object of Surv
+#' Multi-Calibration Boosting
+#'
+#' @description
+#'   Implements Multi-Calibration Boosting by Hebert-Johnson et al. (2018) and
+#'   Multi-Accuracy Boosting by Kim et al. (2019) for the multi-calibration of a
+#'   machine learning model's prediction for survival models.
+#'   Multi-Calibration works best in scenarios where the underlying data & labels are unbiased
+#'   but a bias is introduced within the algorithm's fitting procedure. This is often the case,
+#'   e.g. when an algorithm fits a majority population while ignoring or under-fitting minority
+#'   populations.\cr
+#'   Expects initial models that predict probobilities (between 0 and 1) for different time points.
+#'   The method defaults to `Multi-Accuracy Boosting` as described in Kim et al. (2019).
+#'   In order to obtain behaviour as described in Hebert-Johnson et al. (2018) set
+#'   `multiplicative=FALSE` and `num_buckets` to 10.
+#'   \itemize{
+#'   For additional details, please refer to the relevant publications:
+#'     \item{Hebert-Johnson et al., 2018. Multicalibration: Calibration for the (Computationally-Identifiable) Masses.
+#'      Proceedings of the 35th International Conference on Machine Learning, PMLR 80:1939-1948.
+#'      https://proceedings.mlr.press/v80/hebert-johnson18a.html.}{}
+#'     \item{Kim et al., 2019. Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
+#'     Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society (AIES '19).
+#'     Association for Computing Machinery, New York, NY, USA, 247–254.
+#'     https://dl.acm.org/doi/10.1145/3306618.3314287}{}
+#'  }
 #' @export
 MCBoostSurv = R6::R6Class("MCBoostSurv",
   inherit = MCBoost,
   public = list(
-    # if time_points = NULL, use timepoints in data
-    time_points = NULL,
-    time_buckets = NULL,
-    bucket_strategies = c("even_splits", "quantiles"), # , "predictions"),#FIXME Darf ich das?
-    bucket_aggregation = NULL,
-    time_eval = NULL, # like 75% IBS#
-    time_points_eval = NULL,
-    loss = c("censored_brier", "brier", "censored_brier_proper"),
-    # FIXME --- additional parameters? e.g. time buckets?
 
+    #' @field max_iter [`integer`] \cr
+    #'   The maximum number of iterations of the multi-calibration/multi-accuracy method.
+    max_iter = NULL,
+
+    #' @field alpha  [`numeric`] \cr
+    #'   Accuracy parameter that determines the stopping condition.
+    alpha = NULL,
+
+    #' @field eta  [`numeric`] \cr
+    #'   Parameter for multiplicative weight update (step size).
+    eta = NULL,
+
+    #' @field num_buckets [`integer`] \cr
+    #' The number of buckets to split into in addition to using the whole sample.
+    num_buckets = NULL,
+
+    #' @field bucket_strategy  [`character`] \cr
+    #'   Currently only supports "simple", even split along probabilities.
+    #'   Only relevant for `num_buckets` > 1.
+    bucket_strategy = NULL,
+
+    #' @field rebucket [`logical`] \cr
+    #'   Should buckets be re-calculated at each iteration?
+    rebucket = NULL,
+
+    #' @field eval_fulldata [`logical`] \cr
+    #'   Should auditor be evaluated on the full data?
+    eval_fulldata = NULL,
+
+    #' @field partition [`logical`] \cr
+    #'   True/False flag for whether to split up predictions by their "partition"
+    #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
+    partition = NULL,
+
+    #' @field multiplicative [`logical`] \cr
+    #'   Specifies the strategy for updating the weights (multiplicative weight vs additive).
+    multiplicative = NULL,
+
+    #' @field iter_sampling [`character`] \cr
+    #'   Specifies the strategy to sample the validation data for each iteration.
+    iter_sampling = NULL,
+
+    #' @field auditor_fitter [`AuditorFitter`] \cr
+    #'   Specifies the type of model used to fit the residuals.
+    auditor_fitter = NULL,
+
+    #' @field predictor [`function`] \cr
+    #'   Initial predictor function.
+    predictor = NULL,
+
+    #' @field iter_models [`list`] \cr
+    #'   Cumulative list of fitted models.
+    iter_models = list(),
+
+    #' @field iter_partitions [`list`] \cr
+    #'   Cumulative list of data partitions for models.
+    iter_partitions = list(),
+
+    #' @field iter_corr [`list`] \cr
+    #'   Auditor correlation in each iteration.
+    iter_corr = list(),
+
+    #' @field auditor_effects [`list`] \cr
+    #'   Auditor effect in each iteration.
+    auditor_effects = list(),
+
+    #' @field time_points [`integer`] \cr
+    #'   Times included in the prediction (columnames)
+    time_points = NULL,
+
+    #' @field time_buckets [`integer`] \cr
+    #'   The number of buckets to split the time points (columns) of the prediction.
+    time_buckets = NULL,
+
+    #' @field bucket_strategies [`character`] \cr
+    #'   Possible bucket_strategies in McBoostSurv.
+    #'   Only relevant for `time_buckets` > 1.
+    #'   `even_splits`: split buckets evenly
+    #'   `quantiles`: split buckets by quantiles
+    bucket_strategies = c("even_splits", "quantiles"),
+
+    #' @field bucket_aggregation [`function`] \cr
+    #'   If not NULL, predictions are not selected by time/probability,
+    #'   but by time/individual. Individuals are selected by aggregated value per
+    #'   individual (e.g. mean).
+    #'   Only relevant for `time_buckets` > 1.
+    bucket_aggregation = NULL,
+
+    #' @field time_eval [`double`] \cr
+    #' Time quantile which should be evaluated and multicalibrated.
+    #' Similar to a 75%-Integrated Brier Score.
+    time_eval = NULL,
+
+    #' @field time_points_eval [`integer`] \cr
+    #' Vector of time_points that should be evaluated.
+    time_points_eval = NULL,
+
+    #' @field loss [`character`] \cr
+    #' Loss function which is optimized during boosting.
+    #'  `censored_brier`: censored version of the integrated brier score
+    #'  `brier`: uncensored version of the integrated brier score
+    #'  `censored_brier_proper`: proper version of the censored version of the integrated brier score
+    #'  For more details, we are referring to https://mlr3proba.mlr-org.com/reference/mlr_measures_surv.graf.html.
+    loss = c("censored_brier", "brier", "censored_brier_proper"),
+    #' @description
+    #'   Initialize a multi-calibration instance.
+    #'
+    #' @param max_iter [`integer`] \cr
+    #'   The maximum number of iterations of the multi-calibration/multi-accuracy method.
+    #'   Default `5L`.
+    #' @param alpha  [`numeric`] \cr
+    #'   Accuracy parameter that determines the stopping condition. Default `1e-4`.
+    #' @param eta  [`numeric`] \cr
+    #'   Parameter for multiplicative weight update (step size). Default `1.0`.
+    #' @param partition [`logical`] \cr
+    #'   True/False flag for whether to split up predictions by their "partition"
+    #'   (e.g., predictions less than 0.5 and predictions greater than 0.5).
+    #'   Defaults to `TRUE` (multi-accuracy boosting).
+    #' @param num_buckets [`integer`] \cr
+    #'   The number of buckets to split into in addition to using the whole sample. Default `2L`.
+    #' @param rebucket [`logical`] \cr
+    #'   Should buckets be re-done at each iteration? Default `FALSE`.
+    #' @param eval_fulldata [`logical`] \cr
+    #'   Should the auditor be evaluated on the full data or on the respective bucket for determining
+    #'   the stopping criterion? Default `FALSE`, auditor is only evaluated on the bucket.
+    #'   This setting keeps the implementation closer to the Algorithm proposed in the corresponding
+    #'   multi-accuracy paper (Kim et al., 2019) where auditor effects are computed across the full
+    #'   sample (i.e. eval_fulldata = TRUE).
+    #' @param multiplicative [`logical`] \cr
+    #'   Specifies the strategy for updating the weights (multiplicative weight vs additive).
+    #'   Defaults to `TRUE` (multi-accuracy boosting). Set to `FALSE` for multi-calibration.
+    #' @param auditor_fitter [`AuditorFitter`]|[`character`]|[`mlr3::Learner`] \cr
+    #'   Specifies the type of model used to fit the
+    #'   residuals. The default is [`RidgeAuditorFitter`].
+    #'   Can be a `character`, the name of a [`AuditorFitter`], a [`mlr3::Learner`] that is then
+    #'   auto-converted into a [`LearnerAuditorFitter`] or a custom [`AuditorFitter`].
+    #' @template params_subpops
+    #' @param default_model_class `Predictor` \cr
+    #'   The class of the model that should be used as the init predictor model if
+    #'   `init_predictor` is not specified. Defaults to `ConstantPredictor` which
+    #'   predicts a constant value.
+    #' @param init_predictor [`function`]|[`mlr3::Learner`] \cr
+    #'   The initial predictor function to use (i.e., if the user has a pretrained model).
+    #'   If a `mlr3` `Learner` is passed, it will be autoconverted using `mlr3_init_predictor`.
+    #'   This requires the [`mlr3::Learner`] to be trained.
+    #' @param iter_sampling [`character`] \cr
+    #'   How to sample the validation data for each iteration?
+    #'   Can be `bootstrap`, `split` or `none`.\cr
+    #'   "split" splits the data into `max_iter` parts and validates on each sample in each iteration.\cr
+    #'   "bootstrap" uses a new bootstrap sample in each iteration.\cr
+    #'   "none" uses the same dataset in each iteration.
+    #' @param time_buckets [`integer`] \cr
+    #'  The number of buckets to split the time points (columns) of the prediction.
+    #' @param bucket_strategy [`character`] \cr
+    #' Bucketstragy for bucketing.
+    #'   `even_splits`: split buckets evenly
+    #'   `quantiles`: split buckets by quantiles
+    #' @param time_eval [`double`] \cr
+    #' Time quantile which should be evaluated and multicalibrated.
+    #' Similar to a 75%-Integrated Brier Score.
+    #' @param bucket_aggregation [`function`] \cr
+    #'   If not NULL, predictions are not selected by time/probability,
+    #'   but by time/individual. Individuals are selected by aggregated value per
+    #'   individual (e.g. mean).
+    #'   Only relevant for `time_buckets` > 1.
+    #' @param loss [`character`] \cr
+    #'      #' Loss function which is optimized during boosting.
+    #'  `censored_brier`: censored version of the integrated brier score
+    #'  `brier`: uncensored version of the integrated brier score
+    #'  `censored_brier_proper`: proper version of the censored version of the integrated brier score
+    #'  For more details, we are referring to https://mlr3proba.mlr-org.com/reference/mlr_measures_surv.graf.html.
     initialize = function(
-      # time_points = NULL,
       max_iter = 5,
       alpha = 1e-4,
       eta = 1,
-      # partition=TRUE,
+      partition = TRUE,
       num_buckets = 2, # probability_buckets
       time_buckets = 1L,
       time_eval = 1,
@@ -38,7 +222,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         max_iter,
         alpha,
         eta,
-        # partition,
+        partition,
         num_buckets,
         bucket_strategy,
         rebucket,
@@ -53,13 +237,12 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       self$time_eval = assert_double(time_eval, lower = 0.1, upper = 1, finite = TRUE, len = 1)
       self$time_buckets = assert_int(time_buckets, lower = 1)
-      # if (self$time_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
+      if (self$time_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
       self$bucket_aggregation = assert_function(bucket_aggregation, null.ok = TRUE)
       self$loss = assert_choice(loss, choices = c("censored_brier", "brier", "censored_brier_proper"))
 
     }
   ),
-  # FIXME kann man das vielleicht do mit MCBoost zusammenführen ?
 
   private = list(
     update_probs = function(orig_preds, model, x, mask = NULL, update_sign = 1, audit = FALSE, ...) {
@@ -86,7 +269,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         new_preds = orig_preds - update_weights
       }
 
-      if (audit) { # FIXME does this need to change?
+      if (audit) {
         auditor_effects = c(auditor_effects, list(abs(deltas)))
       }
 
@@ -112,13 +295,13 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         weighted_residuals = mlr3proba::.c_weight_survival_score(
           residuals,
           labels,
-          self$time_points,
+          self$time_points_eval,
           cens_matrix,
           proper,
           eps = 1e-4)
 
         weighted_residuals = as.data.table(as.data.frame(weighted_residuals))
-        colnames(weighted_residuals) = as.character(self$time_points)
+        colnames(weighted_residuals) = as.character(self$time_points_eval)
 
         return(weighted_residuals)
       }
@@ -128,7 +311,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     # calculate for every time step and every survival curve the residual
     calc_residual_matrix = function(prediction, labels) {
       igs = as.matrix(prediction)
-      mask = outer(as.numeric(unlist(labels[, "time"])), self$time_points, FUN = ">")
+      mask = outer(as.numeric(unlist(labels[, "time"])), self$time_points_eval, FUN = ">")
       igs[mask] = igs[mask] - 1
       as.matrix(igs)
     },
@@ -179,6 +362,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     },
 
     assert_prob = function(probs, data, ...) {
+
       if (inherits(probs, "PredictionSurv")) {
         probs = as.data.table(probs)$distr[[1]][[1]]
       }
@@ -191,28 +375,37 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       probs = assert_data_table(as.data.table(as.data.frame(probs)), types = c("numeric"), col.names = "named", min.cols = 1, min.rows = 1, any.missing = FALSE, null.ok = FALSE)
 
       num_colnames = as.numeric(colnames(probs))
+
+      num_colnames <<- num_colnames
+      tm <<- self$time_points
+
       diff = setdiff(num_colnames, self$time_points)
+      diff2 = setdiff(self$time_points, num_colnames)
+      # diff = unique(c(diff, diff2))
 
       # There are different time_points in the predicted probabilities
       # & the columns of predicted probabilities have names
       # Time points might not have first time_point (0) and "Inf" (or last time_point)
 
       if (length(diff) && length(num_colnames)) {
-
+        print(diff)
         # if there are more time points in prediction, just add them.
 
-        add_time_points = diff %in% num_colnames
+        # add_time_points = diff %in% num_colnames
 
-        if (length(add_time_points)) {
+        # if (length(add_time_points)) {
 
-          self$time_points = sort(unique(c(self$time_points, diff[add_time_points])))
+          # self$time_points = sort(unique(c(self$time_points, diff[add_time_points])))
 
-          diff <- diff[!add_time_points]
-        }
+          # diff <- diff[!add_time_points]
+        # }
 
-        if (length(diff)) warning(paste0("Your input time_points have more points than the predicted time_points:", diff, ". The input time_points or extracted frome the labels are not used."))
-
+        self$time_points = sort(unique(num_colnames))
+        warning("Time points from the prediction are used.")
       }
+
+      if (length(diff2)) warning(paste0("Your input time_points have more points than the predicted time_points.
+                                         The input time_points or extracted frome the labels are not used."))
 
       # There are different time_points in the predicted probabilities
       # & the columns of predicted probabilities not have names
@@ -234,7 +427,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       # set time_points_eval
       if (self$time_eval < 1) {
-        self$time_points_eval = self$time_points[self$time_points < max(self$time_points[is.finite(self$time_points)]) * self$time_eval]
+        q = quantile(self$time_points[is.finite(self$time_points)], self$time_eval)
+        self$time_points_eval = unique(self$time_points[self$time_points < q])
       } else {
         self$time_points_eval = self$time_points
       }
@@ -248,12 +442,12 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     create_buckets = function(pred_probs) {
 
       if (self$time_eval < 1) {
-        max_time = max(self$time_points)
+        max_time = max(self$time_points_eval)
       } else {
         max_time = Inf
       }
 
-      min_time = min(self$time_points[is.finite(self$time_points)])
+      min_time = min(self$time_points_eval[is.finite(self$time_points_eval)])
 
       if (self$time_eval == 1L) {
         buckets = list(ProbRange2D$new())
@@ -269,10 +463,9 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
         if (self$bucket_strategy == "even_splits") {
           time_parts = even_bucket(
-            c(0, seq_len(self$time_buckets)),
             self$time_buckets, min_time, max_time)
         } else { # if (self$bucket_strategy == "quantiles") {
-          time_parts = quantile(self$time_points, seq(0, 1, length.out = self$time_buckets + 1))
+          time_parts = quantile(self$time_points_eval, seq(0, 1, length.out = self$time_buckets + 1))
         }
 
         time_parts[[1]] = -Inf
@@ -285,14 +478,26 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       for (i in seq_len(self$time_buckets)) {
 
         time_range = ProbRange$new(lower = time_parts[[i]], upper = time_parts[[i + 1]])
-        in_time = time_range$in_range_mask(self$time_points)
+
+        column_time = as.numeric(colnames(pred_probs))
+
+        if(is.null(column_time)){
+          column_time = self$time_points
+        }
+
+        in_time = time_range$in_range_mask(column_time)
 
         # skip if there is no probability in time frame
         if (!any(in_time)) {
           next
         }
 
+
+        pred_probs <<- pred_probs
+        in_time <<- in_time
+        time <<- self$time_points_eval
         prob_in_time = unlist(pred_probs[, in_time, with = FALSE])
+
 
         if (!is.null(self$bucket_aggregation)) {
           prob_in_time = apply(as.matrix(prob_in_time), 1, self$bucket_aggregation)
@@ -301,7 +506,6 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
         if (self$bucket_strategy == "even_splits" && self$num_buckets > 1) {
           prob_parts = even_bucket(
-            c(0, seq_len(self$num_buckets)),
             self$num_buckets, min(prob_in_time[is.finite(prob_in_time)]),
             max(prob_in_time[is.finite(prob_in_time)]))
         }

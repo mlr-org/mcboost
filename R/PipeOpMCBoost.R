@@ -43,10 +43,10 @@
 #' library(mlr3pipelines)
 #' # Attention: gunion inputs have to be in the correct order for now.
 #' \dontrun{
-#'  gr = gunion(list(
-#'    "data" = po("nop"),
-#'    "prediction" = po("learner_cv", lrn("classif.rpart"))
-#'   )) %>>%
+#' gr = gunion(list(
+#'   "data" = po("nop"),
+#'   "prediction" = po("learner_cv", lrn("classif.rpart"))
+#' )) %>>%
 #'   PipeOpMCBoost$new()
 #' tsk = tsk("sonar")
 #' tid = sample(1:208, 108)
@@ -69,7 +69,7 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
     #'   List of hyperparameters for the `PipeOp`.
     initialize = function(id = "mcboost", param_vals = list()) {
       param_set = paradox::ParamSet$new(list(
-        paradox::ParamInt$new("max_iter", lower = 0L, upper = Inf, default =5L, tags = "train"),
+        paradox::ParamInt$new("max_iter", lower = 0L, upper = Inf, default = 5L, tags = "train"),
         paradox::ParamDbl$new("alpha", lower = 0, upper = 1, default = 1e-4, tags = "train"),
         paradox::ParamDbl$new("eta", lower = 0, upper = 1, default = 1, tags = "train"),
         paradox::ParamLgl$new("partition", tags = "train", default = TRUE),
@@ -81,7 +81,8 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
         paradox::ParamUty$new("default_model_class", default = ConstantPredictor, tags = "train"),
         paradox::ParamUty$new("init_predictor", default = NULL, tags = "train")
       ))
-      super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
+      super$initialize(id,
+        param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = c("data", "prediction"), train = c("TaskClassif", "TaskClassif"), predict = c("TaskClassif", "TaskClassif")),
         output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"),
         tags = "target transform")
@@ -89,6 +90,7 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
   ),
   private = list(
     .train = function(inputs) {
+
       d = inputs$data$data(cols = inputs$data$feature_names)
       l = inputs$data$data(cols = inputs$data$target_names)
 
@@ -155,16 +157,16 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 #'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
 #' @return (mlr3pipelines) [`Graph`]
 #' @examples
-#'   library("mlr3pipelines")
-#'   gr = ppl_mcboost()
+#' library("mlr3pipelines")
+#' gr = ppl_mcboost()
 #' @export
 ppl_mcboost = function(learner = lrn("classif.featureless")) {
   mlr3misc::require_namespaces("mlr3pipelines")
   po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
-    "data" = mlr3pipelines::po("nop"),
-    "prediction" = po_lrn
+      "data" = mlr3pipelines::po("nop"),
+      "prediction" = po_lrn
     )),
     PipeOpMCBoost$new()
   )

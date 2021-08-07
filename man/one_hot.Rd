@@ -18,5 +18,5 @@ Integer vector of encoded labels.
 One-hot encode a factor variable
 }
 \examples{
-  one_hot(factor(c("a", "b", "a")))
+one_hot(factor(c("a", "b", "a")))
 }

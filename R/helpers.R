@@ -72,14 +72,31 @@ mlr3_init_predictor = function(learner) {
 }
 
 
-even_bucket = function(pos, frac, min, max) {
+#' Create even intervals
+#' @param frac [`numeric`]
+#' number of buckets
+#' @param min [`numeric`]
+#' maximum value
+#' @param max [`numeric`]
+#' minimum value
+#' @return [`numeric`]
+#' @export
+even_bucket = function(frac, min, max) {
+  pos = c(0, seq_len(frac))
   min + pos / frac * (max - min)
 }
 
-
-make_survival_curve = function(prediction) { #FIXME smoothing?
+#' Make every row monotonically decreasing in order to obtain the survival property.
+#' Additionally, many predicitions need 1 as a first value and 0 as a last value.
+#' (e.g. `PredictionSurv` needs this attribute.)
+#' @param prediction [`data.table`]
+#' Data.table with predictions. Every row is survival probability for the corresponding time.
+#' Every column corresponds to  a specific time point.
+#' @return [`data.table`]
+#' @export
+make_survival_curve = function(prediction) {
   survival_curves = apply(prediction, 1, function(x) {
-    x[is.na(x)] = 0 #FIXME Somehow in a pileline an extre time_point is added?!
+    x[is.na(x)] = 0
     cm = cummin(x)
     if (any(x != cm)) {
       message("Resulting curve was corrected, as it was not monotonically decreasing.")
@@ -89,6 +106,7 @@ make_survival_curve = function(prediction) { #FIXME smoothing?
     }
   })
   survival_curves = t(survival_curves)
+
   #neeeded for PredictionSurv
   survival_curves[,1]=1
   survival_curves[,ncol(survival_curves)]=0
