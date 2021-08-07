@@ -237,7 +237,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       self$time_eval = assert_double(time_eval, lower = 0.1, upper = 1, finite = TRUE, len = 1)
       self$time_buckets = assert_int(time_buckets, lower = 1)
-      if (self$time_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
+      #FIXME
+      #if (self$time_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
       self$bucket_aggregation = assert_function(bucket_aggregation, null.ok = TRUE)
       self$loss = assert_choice(loss, choices = c("censored_brier", "brier", "censored_brier_proper"))
 
@@ -376,30 +377,14 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       num_colnames = as.numeric(colnames(probs))
 
-      num_colnames <<- num_colnames
-      tm <<- self$time_points
-
       diff = setdiff(num_colnames, self$time_points)
       diff2 = setdiff(self$time_points, num_colnames)
-      # diff = unique(c(diff, diff2))
 
       # There are different time_points in the predicted probabilities
       # & the columns of predicted probabilities have names
       # Time points might not have first time_point (0) and "Inf" (or last time_point)
 
       if (length(diff) && length(num_colnames)) {
-        print(diff)
-        # if there are more time points in prediction, just add them.
-
-        # add_time_points = diff %in% num_colnames
-
-        # if (length(add_time_points)) {
-
-          # self$time_points = sort(unique(c(self$time_points, diff[add_time_points])))
-
-          # diff <- diff[!add_time_points]
-        # }
-
         self$time_points = sort(unique(num_colnames))
         warning("Time points from the prediction are used.")
       }
@@ -492,10 +477,6 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
           next
         }
 
-
-        pred_probs <<- pred_probs
-        in_time <<- in_time
-        time <<- self$time_points_eval
         prob_in_time = unlist(pred_probs[, in_time, with = FALSE])
 
 
