@@ -1,5 +1,5 @@
 # label must be object of Surv
-
+#' @export
 MCBoostSurv = R6::R6Class("MCBoostSurv",
   inherit = MCBoost,
   public = list(
