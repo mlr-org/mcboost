@@ -152,7 +152,8 @@ If you use `mcboost`, please cite our package as well as the two papers it is ba
 
 ```
   @article{pfisterer2021,
-    author = {Florian Pfisterer and Christoph Kern and Susanne Dandl and Matthew Sun and Michael P. Kim and Bernd Bischl},
+    author = {Pfisterer, Florian and Kern, Christoph and Dandl, Susanne and Sun, Matthew and 
+    Kim, Michael P. and Bischl, Bernd},
     title = {mcboost: Multi-Calibration Boosting for R},
     journal = {Journal of Open Source Software},
     doi = {10.21105/joss.03453},
@@ -166,7 +167,7 @@ If you use `mcboost`, please cite our package as well as the two papers it is ba
   # Multi-Calibration
   @inproceedings{hebert-johnson2018,
     title = {Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses},
-    author = {Hebert-Johnson, Ursula and Kim, Michael and Reingold, Omer and Rothblum, Guy},
+    author = {Hebert-Johnson, Ursula and Kim, Michael P. and Reingold, Omer and Rothblum, Guy},
     booktitle = {Proceedings of the 35th International Conference on Machine Learning},
     pages = {1939--1948},
     year = {2018},
