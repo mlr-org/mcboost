@@ -540,8 +540,12 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       print(dim(resid))
       print(dim(resid[idx, ]))
 
+      s_r <<- resid
+      s_i <<-idx
+      s_m <<- mask
 
       resid_m = resid[idx, ][mask$n, mask$time, with = FALSE]
+      print("compl")
 
       if (is.null(self$bucket_aggregation)) {
         resid_m [!mask$matrix] = 0
