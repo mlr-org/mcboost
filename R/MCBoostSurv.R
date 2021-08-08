@@ -475,9 +475,6 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         if (!any(in_time)) {
           next
         }
-        print("a")
-        print(length(in_time))
-        print(dim(pred_probs))
         prob_in_time = unlist(pred_probs[, in_time, with = FALSE])
 
 
@@ -534,18 +531,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       data_m = data[idx, ][mask$n, ]
       idx_m = idx[mask$n]
-
-      print("mask$time")
-      print(length(mask$time))
-      print(dim(resid))
-      print(dim(resid[idx, ]))
-
-      s_r <<- resid
-      s_i <<-idx
-      s_m <<- mask
-
       resid_m = resid[idx, ][mask$n, mask$time, with = FALSE]
-      print("compl")
 
       if (is.null(self$bucket_aggregation) && !is.null(nrow(mask$matrix))) {
         resid_m [!mask$matrix] = 0

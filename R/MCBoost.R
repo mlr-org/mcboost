@@ -235,11 +235,6 @@ MCBoost = R6::R6Class("MCBoost",
         for (j in seq_along(buckets)) {
           in_bucket = private$get_masked(data, resid, idx, probs, buckets[[j]])
           if (is.null(in_bucket)) next
-          save_resid <<-in_bucket$resid_m
-          save_data <<- in_bucket$data_m
-          save_idx <<- in_bucket$idx_m
-          save_auditor <<-  self$auditor_fitter
-
           out = self$auditor_fitter$fit_to_resid(in_bucket$data_m, in_bucket$resid_m, in_bucket$idx_m)
           corrs[j] = out[[1]]
           models[[j]] = out[[2]]
