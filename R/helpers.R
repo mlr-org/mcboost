@@ -99,7 +99,7 @@ make_survival_curve = function(prediction) {
     x[is.na(x)] = 0
     cm = cummin(x)
     if (any(x != cm)) {
-      message("Resulting curve was corrected, as it was not monotonically decreasing.")
+      #message("Resulting curve was corrected, as it was not monotonically decreasing.")
       cm
     }else{
       x

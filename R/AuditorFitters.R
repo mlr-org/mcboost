@@ -16,8 +16,8 @@ AuditorFitter = R6::R6Class("AuditorFitter",
     #' @template return_fit
     fit_to_resid = function(data, resid, mask) { #
 
-      # Learners fail on constant residuals.
-      if (all(unique(resid) == resid[1])) {
+      #Learners fail on constant residuals. #FIXME -----------------------------------------------------
+      if (all(unlist(unique(resid)) == unlist(resid[1]))) {
         return(list(0, ConstantPredictor$new(0)))
       }
       self$fit(data, resid, mask)

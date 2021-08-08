@@ -302,7 +302,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
           eps = 1e-4)
 
         weighted_residuals = as.data.table(as.data.frame(weighted_residuals))
-        colnames(weighted_residuals) = as.character(self$time_points_eval)
+        colnames(weighted_residuals) = as.character(self$time_points)
 
         return(weighted_residuals)
       }
@@ -386,7 +386,6 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       if (length(diff) && length(num_colnames)) {
         self$time_points = sort(unique(num_colnames))
-        warning("Time points from the prediction are used.")
       }
 
       if (length(diff2)) warning(paste0("Your input time_points have more points than the predicted time_points.
@@ -401,7 +400,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       # There are no columnnames, but the length matches
       if (is.null(num_colnames) && length(num_colnames) == length(time_points)) {
-        colnames(probs) = as.character(time_points)
+        colnames(probs) = as.character(self$time_points)
       }
 
       self$time_points = assert_numeric(self$time_points,
@@ -544,7 +543,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         resid_m = rowMeans(resid_m)
       }
 
-      return(list(data_m = data_m, resid_m = resid_m, idx_m = idx_m))
+      return(list(data_m = data_m, resid_m = as.matrix(resid_m), idx_m = idx_m))
     },
 
     calculate_corr = function(auditor, data, resid, idx) {

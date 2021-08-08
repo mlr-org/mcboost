@@ -235,6 +235,10 @@ MCBoost = R6::R6Class("MCBoost",
         for (j in seq_along(buckets)) {
           in_bucket = private$get_masked(data, resid, idx, probs, buckets[[j]])
           if (is.null(in_bucket)) next
+          save_resid <<-in_bucket$resid_m
+          save_data <<- in_bucket$data_m
+          save_idx <<- in_bucket$idx_m
+          save_auditor <<-  self$auditor_fitter
 
           out = self$auditor_fitter$fit_to_resid(in_bucket$data_m, in_bucket$resid_m, in_bucket$idx_m)
           corrs[j] = out[[1]]
@@ -249,7 +253,9 @@ MCBoost = R6::R6Class("MCBoost",
           })
         }
 
+
         self$iter_corr = c(self$iter_corr, list(corrs))
+
         if (abs(max(corrs)) < self$alpha) {
           break
         } else {
@@ -407,11 +413,9 @@ MCBoost = R6::R6Class("MCBoost",
       assert_numeric(prob, len = nrow(data), finite = TRUE, lower = 0, upper = 1)
     },
 
-
-    # FIXME vielleicht doch lieber in den Auditor?
     get_masked = function(data, resid, idx, probs, bucket) {
       mask = bucket$in_range_mask(probs[idx])
-      # FIXME geht das?
+
       if (sum(mask) < 1L) {
         return(NULL)
       } # case no obs. are in the bucket. Are assigned corrs=0.
