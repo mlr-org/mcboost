@@ -547,12 +547,12 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       resid_m = resid[idx, ][mask$n, mask$time, with = FALSE]
       print("compl")
 
-      if (is.null(self$bucket_aggregation)) {
+      if (is.null(self$bucket_aggregation) && !is.null(nrow(mask$matrix))) {
         resid_m [!mask$matrix] = 0
       }
 
       # IBS
-      if (test_data_frame(resid_m, min.cols = 2) | testArray(resid_m, min.d = 2)) {
+      if (test_data_frame(resid_m, min.cols = 2) || testArray(resid_m, min.d = 2)) {
         resid_m = rowMeans(resid_m)
       }
 
