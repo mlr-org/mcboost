@@ -173,7 +173,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), cv_lrn = TRUE) {
   mlr3misc::require_namespaces("mlr3pipelines")
 
-  if(cv_lrn = TRUE){
+  if(cv_lrn){
     po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
   }else{
     po_lrn = mlr3pipelines::po("learner", learner = learner)
