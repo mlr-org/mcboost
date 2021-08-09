@@ -176,7 +176,7 @@ ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), cv_lrn = TRUE) {
   if(cv_lrn){
     po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
   }else{
-    po_lrn = mlr3pipelines::po("learner", learner = learner)
+    po_lrn = as_learner(learner)
   }
 
   gr = mlr3pipelines::`%>>%`(
