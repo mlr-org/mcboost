@@ -156,19 +156,29 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 #' For now this assumes training on the same dataset that is later used
 #' for multi-calibration.
 #' @param learner (mlr3)[`mlr3::Learner`]\cr
-#'   Initial learner. Internally wrapped into a `PipeOpLearnerCV`
-#'   with `resampling.method = "insample"` as a default.
-#'   All parameters can be adjusted through the resulting Graph's `param_set`.
+#'   Initial learner.
 #'   Defaults to `lrn("surv.kaplan")`.
 #'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
+#'
+#' @param cv_lrn [`logical`]\cr
+#'  If it set to `TRUE` (default), the learner is internally wrapped into a `PipeOpLearnerCV`
+#'   with `resampling.method = "insample"` as a default.
+#'   All parameters can be adjusted through the resulting Graph's `param_set`.
+#'  If it is set to `FALSE`, the learner is not resampled internally.
 #' @return (mlr3pipelines) [`Graph`]
 #' @examples
 #' library("mlr3pipelines")
 #' gr = ppl_mcboostsurv()
 #' @export
-ppl_mcboostsurv = function(learner = lrn("surv.kaplan")) {
+ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), cv_lrn = TRUE) {
   mlr3misc::require_namespaces("mlr3pipelines")
-  po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
+
+  if(cv_lrn = TRUE){
+    po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
+  }else{
+    po_lrn = mlr3pipelines::po("learner", learner = learner)
+  }
+
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
       "data" = mlr3pipelines::po("nop"),
