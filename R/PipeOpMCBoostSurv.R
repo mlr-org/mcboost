@@ -108,7 +108,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         init_predictor = function(data, prediction) {
 
           # FIXME
-          distr_col = prediction$feature_names[grepl("distr",prediction$feature_names)]
+          distr_col = prediction$feature_names[grepl(".distr",prediction$feature_names)]
           #distr_col = prediction$feature_names[substr(prediction$feature_names, nchar(prediction$feature_names) - 4, nchar(prediction$feature_names)) == "distr"]
 
           if (is.null(distr_col)) stop("No distr output in your predictions.")
