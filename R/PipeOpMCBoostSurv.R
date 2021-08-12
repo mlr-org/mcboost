@@ -106,15 +106,10 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
       if (is.null(args$init_predictor)) {
         # Construct an initial predictor from the input model if non is provided.
         init_predictor = function(data, prediction) {
-
-          # FIXME
           distr_col = prediction$feature_names[grepl("distr$",prediction$feature_names)]
-          #distr_col = prediction$feature_names[substr(prediction$feature_names, nchar(prediction$feature_names) - 4, nchar(prediction$feature_names)) == "distr"]
-
           if (is.null(distr_col)) stop("No distr output in your predictions.")
           if(length(distr_col)>1) stop("More than one distr columns in your prediction?")
           as.data.table(prediction)[[distr_col]][[1]][[1]]
-
         }
         args$init_predictor = init_predictor
       }
