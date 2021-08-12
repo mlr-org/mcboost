@@ -108,11 +108,11 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         init_predictor = function(data, prediction) {
 
           # FIXME
-          distr_col = prediction$feature_names[grepl(prediction$feature_names,"distr")]
+          distr_col = prediction$feature_names[grepl("distr",prediction$feature_names)]
           #distr_col = prediction$feature_names[substr(prediction$feature_names, nchar(prediction$feature_names) - 4, nchar(prediction$feature_names)) == "distr"]
 
           if (is.null(distr_col)) stop("No distr output in your predictions.")
-
+          if(length(distr_col)>1) stop("More than one distr columns in your prediction?")
           as.data.table(prediction)[[distr_col]][[1]][[1]]
 
         }
@@ -177,20 +177,12 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 #' library("mlr3pipelines")
 #' gr = ppl_mcboostsurv()
 #' @export
-ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), task = NULL) {
+ppl_mcboostsurv = function(learner = lrn("surv.kaplan")) {
   mlr3misc::require_namespaces("mlr3pipelines")
-
-  if(is.null(task)){
-    task = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
-  }else{
-    prediction = as.data.table(learner$predict(task))
-    .pred_to_task(prediction, task)
-  }
-
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
       "data" = mlr3pipelines::po("nop"),
-      "prediction" = task
+      "prediction" =  mlr3pipelines::po("learner_pred", learner = learner)
     )),
     PipeOpMCBoostSurv$new()
   )

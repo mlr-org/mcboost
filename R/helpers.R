@@ -119,21 +119,3 @@ make_survival_curve = function(prediction) {
 
   as.data.table(survival_curves)
 }
-
-
-
-
-
-.pred_to_task = function(prds, task) {
-  renaming = setdiff(colnames(prds), c("row_ids"))
-  setnames(prds, renaming, sprintf("%s.%s", self$id, renaming))
-  setnames(prds, old = "row_ids", new = task$backend$primary_key)
-  task$select(character(0))$cbind(prds)
-}
-
-
-
-
-
-
-
