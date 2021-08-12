@@ -6,10 +6,10 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
       private$.learner$param_set$set_id = ""
       id = id %??% private$.learner$id
       task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
-      super$initialize(id, alist(private$.learner$param_set), 
-                       param_vals = param_vals, 
-                       can_subset_cols = TRUE, 
-                       task_type = task_type, 
+      super$initialize(id, alist(private$.learner$param_set),
+                       param_vals = param_vals,
+                       can_subset_cols = TRUE,
+                       task_type = task_type,
                        tags = c("learner"))
     }
 
@@ -41,7 +41,13 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
       on.exit({private$.learner$state = NULL})
 
       # Train a learner for predicting
-      self$state = private$.learner$train(task)$state
+      state = private$.learner$state
+      if(is.null(state)){
+        self$state = private$.learner$train(task)$state
+      }else{
+        self$state = state
+      }
+
       prds = as.data.table(private$.learner$predict(task))
       private$pred_to_task(prds, task)
     },
