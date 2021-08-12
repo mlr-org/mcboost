@@ -1,3 +1,6 @@
+#mlr3 >= 0.11.0;
+
+
 #' @title Multi-Calibrate a Learner's Prediction (Survival Model)
 #'
 #' @usage NULL
@@ -105,7 +108,8 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         init_predictor = function(data, prediction) {
 
           # FIXME
-          distr_col = prediction$feature_names[substr(prediction$feature_names, nchar(prediction$feature_names) - 4, nchar(prediction$feature_names)) == "distr"]
+          distr_col = prediction$feature_names[grepl(prediction$feature_names,"distr")]
+          #distr_col = prediction$feature_names[substr(prediction$feature_names, nchar(prediction$feature_names) - 4, nchar(prediction$feature_names)) == "distr"]
 
           if (is.null(distr_col)) stop("No distr output in your predictions.")
 
@@ -125,13 +129,13 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
       d = inputs$data$data(cols = inputs$data$feature_names)
       probs = as.matrix(self$state$mc$predict_probs(d, predictor_args = inputs$prediction))
 
-      times = as.numeric(colnames(probs))
+      time = as.numeric(colnames(probs))
 
       list(PredictionSurv$new(
         truth = inputs$prediction$truth(),
         distr = probs,
         row_ids = inputs$prediction$row_ids,
-        crank = -apply(1 - probs, 1, function(.x) sum(c(.x[1], diff(.x)) * times))
+        crank = -apply(1 - probs, 1, function(.x) sum(c(.x[1], diff(.x)) * time))
       ))
 
     }
@@ -148,6 +152,9 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
     }
   )
 )
+
+
+
 
 
 #' Multi-calibration pipeline (for survival models)
@@ -170,19 +177,20 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 #' library("mlr3pipelines")
 #' gr = ppl_mcboostsurv()
 #' @export
-ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), cv_lrn = TRUE) {
+ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), task = NULL) {
   mlr3misc::require_namespaces("mlr3pipelines")
 
-  if(cv_lrn){
-    po_lrn = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
+  if(is.null(task)){
+    task = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
   }else{
-    po_lrn = as_learner(learner)
+    prediction = as.data.table(learner$predict(task))
+    .pred_to_task(prediction, task)
   }
 
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
       "data" = mlr3pipelines::po("nop"),
-      "prediction" = po_lrn
+      "prediction" = task
     )),
     PipeOpMCBoostSurv$new()
   )
