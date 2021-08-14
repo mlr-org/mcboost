@@ -1,6 +1,3 @@
-#mlr3 >= 0.11.0;
-
-
 #' @title Multi-Calibrate a Learner's Prediction (Survival Model)
 #'
 #' @usage NULL
@@ -161,12 +158,9 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 #'   Initial learner.
 #'   Defaults to `lrn("surv.kaplan")`.
 #'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
-#'
-#' @param cv_lrn [`logical`]\cr
-#'  If it set to `TRUE` (default), the learner is internally wrapped into a `PipeOpLearnerCV`
+#'   The learner is internally wrapped into a `PipeOpLearnerCV`
 #'   with `resampling.method = "insample"` as a default.
 #'   All parameters can be adjusted through the resulting Graph's `param_set`.
-#'  If it is set to `FALSE`, the learner is not resampled internally.
 #' @return (mlr3pipelines) [`Graph`]
 #' @examples
 #' library("mlr3pipelines")
@@ -177,8 +171,11 @@ ppl_mcboostsurv = function(learner = lrn("surv.kaplan")) {
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
       "data" = mlr3pipelines::po("nop"),
+      #"prediction" = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
       "prediction" =  mlr3pipelines::po("learner_pred", learner = learner)
     )),
     PipeOpMCBoostSurv$new()
   )
 }
+
+mlr3pipelines::mlr_pipeops$add("mcboostsurv", PipeOpMCBoostSurv)

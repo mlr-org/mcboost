@@ -68,3 +68,5 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
     .learner = NULL
   )
 )
+
+mlr3pipelines::mlr_pipeops$add("learner_pred", PipeOpLearnerPred)
