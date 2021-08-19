@@ -164,8 +164,8 @@ MCBoost = R6::R6Class("MCBoost",
       max_iter = 5,
       alpha = 1e-4,
       eta = 1,
-      partition = TRUE,
       num_buckets = 2,
+      partition = ifelse(num_buckets>1, TRUE, FALSE),
       bucket_strategy = "simple",
       rebucket = FALSE,
       eval_fulldata = FALSE,
@@ -181,7 +181,7 @@ MCBoost = R6::R6Class("MCBoost",
       self$eta = assert_number(eta)
       self$partition = assert_flag(partition)
       self$num_buckets = assert_int(num_buckets, lower = 1)
-      #if (self$num_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
+      if (self$num_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
       self$bucket_strategy = assert_choice(bucket_strategy, choices = self$bucket_strategies)
       self$rebucket = assert_flag(rebucket)
       self$eval_fulldata = assert_flag(eval_fulldata)

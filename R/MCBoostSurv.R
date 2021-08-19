@@ -202,8 +202,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       max_iter = 5,
       alpha = 1e-4,
       eta = 1,
-      partition = TRUE,
       num_buckets = 2, # probability_buckets
+      partition =  ifelse(num_buckets>1, TRUE, FALSE),
       time_buckets = 1L,
       time_eval = 1,
       bucket_strategy = "even_splits",
@@ -222,8 +222,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         max_iter,
         alpha,
         eta,
-        partition,
         num_buckets,
+        partition,
         bucket_strategy,
         rebucket,
         eval_fulldata,
@@ -237,8 +237,6 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       self$time_eval = assert_double(time_eval, lower = 0.1, upper = 1, finite = TRUE, len = 1)
       self$time_buckets = assert_int(time_buckets, lower = 1)
-      #FIXME
-      #if (self$time_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
       self$bucket_aggregation = assert_function(bucket_aggregation, null.ok = TRUE)
       self$loss = assert_choice(loss, choices = c("censored_brier", "brier", "censored_brier_proper"))
 
