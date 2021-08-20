@@ -71,18 +71,18 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         paradox::ParamInt$new("max_iter", lower = 0L, upper = Inf, default = 5L, tags = "train"),
         paradox::ParamDbl$new("alpha", lower = 0, upper = 1, default = 1e-4, tags = "train"),
         paradox::ParamDbl$new("eta", lower = 0, upper = 1, default = 1, tags = "train"),
-        # paradox::ParamLgl$new("partition", tags = "train", default = TRUE),
+        #paradox::ParamLgl$new("partition", tags = "train", default = TRUE),
         paradox::ParamInt$new("num_buckets", lower = 1, upper = Inf, default = 2L, tags = "train"),
         paradox::ParamInt$new("time_buckets", lower = 1, upper = Inf, default = 1L, tags = "train"),
         paradox::ParamDbl$new("time_eval", lower = 0, upper = 1, default = 1, tags = "train"),
-        # bucket_strategy
-        # bucket_aggragation
-        # eval_fulldata
+        paradox::ParamUty$new("bucket_strategy", default = "quantiles", tags = "train"),
+        paradox::ParamUty$new("bucket_aggregation", default = NULL, tags = "train"),
+        paradox::ParamLgl$new("eval_fulldata", default = FALSE, tags = "train"),
         paradox::ParamLgl$new("rebucket", default = FALSE, tags = "train"),
         paradox::ParamLgl$new("multiplicative", default = TRUE, tags = "train"),
         paradox::ParamUty$new("auditor_fitter", default = NULL, tags = "train"),
         paradox::ParamUty$new("subpops", default = NULL, tags = "train"),
-        # paradox::ParamUty$new("default_model_class", default = ConstantPredictor, tags = "train"),
+        paradox::ParamUty$new("default_model_class", default = LearnerSurvKaplan, tags = "train"),
         paradox::ParamUty$new("init_predictor", default = NULL, tags = "train")
       ))
       super$initialize(id,
