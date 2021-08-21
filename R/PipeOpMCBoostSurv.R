@@ -45,13 +45,13 @@
 #' \dontrun{
 #' gr = gunion(list(
 #'   "data" = po("nop"),
-#'   "prediction" = po("learner_cv", lrn("classif.rpart"))
+#'   "prediction" = po("learner_pred", lrn("surv.ranger"))
 #' )) %>>%
 #'   PipeOpMCBoostSurv$new()
-#' tsk = tsk("sonar")
-#' tid = sample(1:208, 108)
+#' tsk = tsk("rats")
+#' tid = sample(1:300, 100)
 #' gr$train(tsk$clone()$filter(tid))
-#' gr$predict(tsk$clone()$filter(setdiff(1:208, tid)))
+#' gr$predict(tsk$clone()$filter(setdiff(1:300, tid)))
 #' }
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
@@ -166,7 +166,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 #' library("mlr3pipelines")
 #' gr = ppl_mcboostsurv()
 #' @export
-ppl_mcboostsurv = function(learner = lrn("surv.kaplan")) {
+ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), param_vals = list()) {
   mlr3misc::require_namespaces("mlr3pipelines")
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
@@ -174,7 +174,7 @@ ppl_mcboostsurv = function(learner = lrn("surv.kaplan")) {
       #"prediction" = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
       "prediction" =  mlr3pipelines::po("learner_pred", learner = learner)
     )),
-    PipeOpMCBoostSurv$new()
+    PipeOpMCBoostSurv$new(param_vals = param_vals)
   )
 }
 
