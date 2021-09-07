@@ -293,7 +293,7 @@ MCBoost = R6::R6Class("MCBoost",
       new_preds = orig_preds
       for (i in seq_along(self$iter_models)) {
         if (i <= t) {
-          probs = private$get_probs(orig_preds, new_probs)
+          probs = private$get_probs(orig_preds, new_preds)
           mask = self$iter_partitions[[i]]$in_range_mask(probs)
           new_preds = private$update_probs(new_preds, self$iter_models[[i]], x,
             mask = mask, audit = audit, ...)

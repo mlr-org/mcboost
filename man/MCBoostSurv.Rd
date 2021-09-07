@@ -143,11 +143,11 @@ Initialize a multi-calibration instance.
   max_iter = 5,
   alpha = 1e-04,
   eta = 1,
-  partition = TRUE,
   num_buckets = 2,
+  partition = ifelse(num_buckets > 1, TRUE, FALSE),
   time_buckets = 1L,
   time_eval = 1,
-  bucket_strategy = "even_splits",
+  bucket_strategy = "quantiles",
   bucket_aggregation = NULL,
   rebucket = FALSE,
   eval_fulldata = FALSE,
@@ -174,13 +174,13 @@ Accuracy parameter that determines the stopping condition. Default \code{1e-4}.}
 \item{\code{eta}}{\code{\link{numeric}} \cr
 Parameter for multiplicative weight update (step size). Default \code{1.0}.}
 
+\item{\code{num_buckets}}{\code{\link{integer}} \cr
+The number of buckets to split into in addition to using the whole sample. Default \code{2L}.}
+
 \item{\code{partition}}{\code{\link{logical}} \cr
 True/False flag for whether to split up predictions by their "partition"
 (e.g., predictions less than 0.5 and predictions greater than 0.5).
 Defaults to \code{TRUE} (multi-accuracy boosting).}
-
-\item{\code{num_buckets}}{\code{\link{integer}} \cr
-The number of buckets to split into in addition to using the whole sample. Default \code{2L}.}
 
 \item{\code{time_buckets}}{\code{\link{integer}} \cr
 The number of buckets to split the time points (columns) of the prediction.}

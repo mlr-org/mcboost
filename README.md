@@ -4,6 +4,7 @@
 [![tic](https://github.com/mlr-org/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/mlr-org/mcboost/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN Status](https://www.r-pkg.org/badges/version-ago/mcboost)](https://cran.r-project.org/package=mcboost)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03453/status.svg)](https://doi.org/10.21105/joss.03453)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Mattermost](https://img.shields.io/badge/chat-mattermost-orange.svg)](https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/)
 <!-- badges: end -->
@@ -150,16 +151,23 @@ Please note that the mcboost project is released with a [Contributor Code of Con
 If you use `mcboost`, please cite our package as well as the two papers it is based on:
 
 ```
-  @Manual{mcboost_software,
-    title = {mcboost: Implements Multi-Accuracy Boosting (Kim et al., 2018).},
-    author = {Florian Pfisterer and Christoph Kern},
+  @article{pfisterer2021,
+    author = {Pfisterer, Florian and Kern, Christoph and Dandl, Susanne and Sun, Matthew and 
+    Kim, Michael P. and Bischl, Bernd},
+    title = {mcboost: Multi-Calibration Boosting for R},
+    journal = {Journal of Open Source Software},
+    doi = {10.21105/joss.03453},
+    url = {https://doi.org/10.21105/joss.03453},
     year = {2021},
-    note = {R package version 0.1.0},
+    publisher = {The Open Journal},
+    volume = {6},
+    number = {64},
+    pages = {3453}
   }
   # Multi-Calibration
-  @InProceedings{hebert-johnson2018,
+  @inproceedings{hebert-johnson2018,
     title = {Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses},
-    author = {Hebert-Johnson, Ursula and Kim, Michael and Reingold, Omer and Rothblum, Guy},
+    author = {Hebert-Johnson, Ursula and Kim, Michael P. and Reingold, Omer and Rothblum, Guy},
     booktitle = {Proceedings of the 35th International Conference on Machine Learning},
     pages = {1939--1948},
     year = {2018},

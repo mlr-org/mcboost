@@ -4,15 +4,16 @@
 \alias{ppl_mcboostsurv}
 \title{Multi-calibration pipeline (for survival models)}
 \usage{
-ppl_mcboostsurv(learner = lrn("surv.kaplan"))
+ppl_mcboostsurv(learner = lrn("surv.kaplan"), param_vals = list())
 }
 \arguments{
 \item{learner}{(mlr3)\code{\link[mlr3:Learner]{mlr3::Learner}}\cr
-Initial learner. Internally wrapped into a \code{PipeOpLearnerCV}
-with \code{resampling.method = "insample"} as a default.
-All parameters can be adjusted through the resulting Graph's \code{param_set}.
+Initial learner.
 Defaults to \code{lrn("surv.kaplan")}.
-Note: An initial predictor can also be supplied via the \code{init_predictor} parameter.}
+Note: An initial predictor can also be supplied via the \code{init_predictor} parameter.
+The learner is internally wrapped into a \code{PipeOpLearnerCV}
+with \code{resampling.method = "insample"} as a default.
+All parameters can be adjusted through the resulting Graph's \code{param_set}.}
 }
 \value{
 (mlr3pipelines) \code{\link{Graph}}
@@ -23,6 +24,6 @@ For now this assumes training on the same dataset that is later used
 for multi-calibration.
 }
 \examples{
-  library("mlr3pipelines")
-  gr = ppl_mcboostsurv()
+library("mlr3pipelines")
+gr = ppl_mcboostsurv()
 }

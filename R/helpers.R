@@ -2,7 +2,9 @@
 #' @param labels [`factor`]\cr
 #'   Factor to encode.
 #' @examples
-#' one_hot(factor(c("a", "b", "a")))
+#'  \dontrun{
+#'  one_hot(factor(c("a", "b", "a")))
+#'  }
 #' @return [`integer`]\cr
 #'   Integer vector of encoded labels.
 #' @export
@@ -53,9 +55,11 @@ xy_to_task = function(x, y) {
 #' @param learner [`mlr3::Learner`]
 #'   A trained learner used for initialization.
 #' @examples
-#' library("mlr3")
-#' l = lrn("classif.featureless")$train(tsk("sonar"))
-#' mlr3_init_predictor(l)
+#'  \dontrun{
+#'  library("mlr3")
+#'  l = lrn("classif.featureless")$train(tsk("sonar"))
+#'  mlr3_init_predictor(l)
+#'  }
 #' @return [`function`]
 #' @export
 mlr3_init_predictor = function(learner) {
@@ -68,7 +72,7 @@ mlr3_init_predictor = function(learner) {
     function(data, ...) {
       as.data.table(learner$predict_newdata(data))$distr[[1]][[1]]
     }
-  } else if(learner$predict_type == "response"){
+  } else if(learner$predict_type == "prob"){
     function(data, ...) {
       learner$predict_newdata(data)$prob[, 1L]
     }
@@ -76,6 +80,7 @@ mlr3_init_predictor = function(learner) {
     stop("Predict type of your learner is not implemented. (response, distr, prob)")
   }
 }
+
 
 
 #' Create even intervals
@@ -86,7 +91,7 @@ mlr3_init_predictor = function(learner) {
 #' @param max [`numeric`]
 #' minimum value
 #' @return [`numeric`]
-#' @export
+#' @noRd
 even_bucket = function(frac, min, max) {
   pos = c(0, seq_len(frac))
   min + pos / frac * (max - min)

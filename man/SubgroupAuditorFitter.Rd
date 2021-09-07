@@ -17,20 +17,22 @@ Used to assess multi-calibration based on a list of
 binary \code{subgroup_masks} passed during initialization.
 }
 \examples{
-library("data.table")
-data = data.table(
-  "AGE_0_10" =  c(1, 1, 0, 0, 0),
-  "AGE_11_20" = c(0, 0, 1, 0, 0),
-  "AGE_21_31" = c(0, 0, 0, 1, 1),
-  "X1" = runif(5),
-  "X2" = runif(5)
-)
-label = c(1, 0, 0, 1, 1)
-masks = list(
-  "M1" = c(1L, 0L, 1L, 1L, 0L),
-  "M2" = c(1L, 0L, 0L, 0L, 1L)
-)
-sg = SubgroupAuditorFitter$new(masks)
+ \dontrun{
+ library("data.table")
+ data = data.table(
+   "AGE_0_10" =  c(1, 1, 0, 0, 0),
+   "AGE_11_20" = c(0, 0, 1, 0, 0),
+   "AGE_21_31" = c(0, 0, 0, 1, 1),
+   "X1" = runif(5),
+   "X2" = runif(5)
+ )
+ label = c(1,0,0,1,1)
+ masks = list(
+   "M1" = c(1L, 0L, 1L, 1L, 0L),
+   "M2" = c(1L, 0L, 0L, 0L, 1L)
+ )
+ sg = SubgroupAuditorFitter$new(masks)
+ }
 }
 \seealso{
 Other AuditorFitter: 

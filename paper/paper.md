@@ -58,16 +58,11 @@ Post-processing with `mcboost` starts with an initial prediction model that is p
 Users may also specify a fixed set of subgroups, instead of a learner, on which predictions should be audited.
 Furthermore, `mcboost` includes utilities to guard against overfitting to the auditing dataset during post-processing.
 
-
-<p align="center">
-  <img src="MCBoost.png" />
-</p>
-<div align="center"> Fig 1. Conceptual illustration of Multi-Calibration Boosting with `mcboost`.</div>
-
+![Fig 1. Conceptual illustration of Multi-Calibration Boosting with `mcboost`.\label{fig:overview}](MCBoost.png)
 
 # Statement of need
 
-Given the ubiquitous use of machine learning models in crucial areas and growing concerns of biased predictions for minority subpopulations, Multi-Calibration Boosting should be widely accessible in form of a free and open-source software package.
+Given the ubiquitous use of machine learning models in crucial areas and growing concerns of biased predictions for minority subpopulations, Multi-Calibration Boosting should be widely accessible in the form of a free and open-source software package.
 Prior to the development of `mcboost`, Multi-Calibration Boosting has not been released as a software package for R.
 
 The results in @kim2019 highlight that MCBoost can improve classification accuracy for subpopulations in various settings, including gender detection with image data, income classification with survey data and disease prediction using biomedical data.
@@ -75,7 +70,7 @@ The results in @kim2019 highlight that MCBoost can improve classification accura
 @Barda2020covid demonstrate that Multi-Calibration can also be used to adjust an initial classifier for a new task. They re-calibrate a baseline model for predicting the risk of severe respiratory infection with data on COVID-19 fatality rates in subpopulations, resulting in an accurate and calibrated COVID-19 mortality prediction model.
 
 
-We hope that with `mcboost`, Multi-Calibration Boosting can be utilized by a wide community of developers and data scientists to audit and post-process prediction models and helps to promote fairness in machine learning and statistical estimation applications.
+We hope that `mcboost` lets Multi-Calibration Boosting be utilized by a wide community of developers and data scientists to audit and post-process prediction models, and helps to promote fairness in machine learning and statistical estimation applications.
 
 # Acknowledgements
 

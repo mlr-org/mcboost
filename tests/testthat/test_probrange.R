@@ -1,6 +1,7 @@
 context("ProbRange")
 
 test_that("ProbRange works", {
+  skip_on_cran()
   pr = ProbRange$new(0.1, 0.55)
   prs = list(
     pr2 = ProbRange$new(0.1, 0.55),

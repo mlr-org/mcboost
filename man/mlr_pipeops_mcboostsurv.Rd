@@ -60,15 +60,15 @@ library(mlr3)
 library(mlr3pipelines)
 # Attention: gunion inputs have to be in the correct order for now.
 \dontrun{
- gr = gunion(list(
-   "data" = po("nop"),
-   "prediction" = po("learner_cv", lrn("classif.rpart"))
-  )) \%>>\%
+gr = gunion(list(
+  "data" = po("nop"),
+  "prediction" = po("learner_pred", lrn("surv.ranger"))
+)) \%>>\%
   PipeOpMCBoostSurv$new()
-tsk = tsk("sonar")
-tid = sample(1:208, 108)
+tsk = tsk("rats")
+tid = sample(1:300, 100)
 gr$train(tsk$clone()$filter(tid))
-gr$predict(tsk$clone()$filter(setdiff(1:208, tid)))
+gr$predict(tsk$clone()$filter(setdiff(1:300, tid)))
 }
 }
 \seealso{
