@@ -199,19 +199,19 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     #'  `censored_brier_proper`: proper version of the censored version of the integrated brier score
     #'  For more details, we are referring to https://mlr3proba.mlr-org.com/reference/mlr_measures_surv.graf.html.
     initialize = function(
-      max_iter = 5,
+      max_iter = 25,
       alpha = 1e-4,
-      eta = 1,
-      num_buckets = 2, # probability_buckets
+      eta = 0.1,
+      num_buckets = 1, # probability_buckets
       partition =  ifelse(num_buckets>1, TRUE, FALSE),
-      time_buckets = 1L,
+      time_buckets = 2L,
       time_eval = 1,
-      bucket_strategy = "quantiles",
+      bucket_strategy = "even_splits",
       bucket_aggregation = NULL,
       rebucket = FALSE,
       eval_fulldata = FALSE,
       multiplicative = TRUE,
-      auditor_fitter = NULL,
+      auditor_fitter = "RidgeAuditorFitter",
       subpops = NULL,
       default_model_class = LearnerSurvKaplan,
       init_predictor = NULL,
@@ -244,6 +244,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
   ),
 
   private = list(
+    # update probabilities according to base learner "model" for every x and t in a bucket
     update_probs = function(orig_preds, model, x, mask = NULL, update_sign = 1, audit = FALSE, ...) {
 
       dim_probs = dim(orig_preds)
@@ -261,9 +262,12 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       if (self$multiplicative) {
 
         update_weights = exp(-self$eta * update_sign * deltas)
+
         # Add a small term to enable moving away from 0.
         new_preds = update_weights * pmax(orig_preds, 1e-4)
+
       } else {
+        # additive update
         update_weights = (self$eta * update_sign * deltas)
         new_preds = orig_preds - update_weights
       }
@@ -274,9 +278,11 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       # also correct for survival property: monotonically decreasing & between 0 and 1
       survival_curve = make_survival_curve(clip_prob(new_preds))
+
       return(survival_curve)
     },
 
+    # compute matrix of pseudo-residuals according to selected loss function
     compute_residuals = function(prediction, labels) {
       residuals = private$calc_residual_matrix(prediction, labels)
       if (self$loss == "brier") {
@@ -315,7 +321,11 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       as.matrix(igs)
     },
 
+
+    # check labels
     assert_labels = function(labels, ...) {
+
+      # check if labels are obejct of class Surv, if not create it
       if (!inherits(labels, "Surv")) {
         if (is.matrix(labels) || is.data.frame(labels)) {
           data = as.data.table(as.data.frame(labels))
@@ -335,7 +345,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       labels
     },
 
-
+    # create time points which are evaluated
     create_time_points = function(labels, ...) {
 
       dots = list(...)
@@ -360,6 +370,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
     },
 
+
+    # check input probabilities
     assert_prob = function(probs, data, ...) {
 
       if (inherits(probs, "PredictionSurv")) {
@@ -419,10 +431,12 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     },
 
 
-
-    # FIXME
+    # create buckets according to bucket strategy
+    # in every time bucket we create probability buckets based on minimal and maximal
+    # survival probabilities within the bucket
     create_buckets = function(pred_probs) {
 
+      # cut the times which are evaluated
       if (self$time_eval < 1) {
         max_time = max(self$time_points_eval)
       } else {
@@ -431,6 +445,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       min_time = min(self$time_points_eval[is.finite(self$time_points_eval)])
 
+      # create time buckets
       if (self$time_eval == 1L) {
         buckets = list(ProbRange2D$new())
       } else {
@@ -446,7 +461,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         if (self$bucket_strategy == "even_splits") {
           time_parts = even_bucket(
             self$time_buckets, min_time, max_time)
-        } else { # if (self$bucket_strategy == "quantiles") {
+        } else {
           time_parts = quantile(self$time_points_eval, seq(0, 1, length.out = self$time_buckets + 1))
         }
 
@@ -514,12 +529,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     },
 
 
-
-
+    # get values in bucket
     get_masked = function(data, resid, idx, probs, bucket) {
-      # fixme what happens with only one time point
-      # FIXME geht das?
-      # if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
 
       mask = bucket$in_range_mask(probs[idx, ])
 
@@ -543,6 +554,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       return(list(data_m = data_m, resid_m = as.matrix(resid_m), idx_m = idx_m))
     },
 
+
+    # calculate multicalibration definition / stopping criterion
     calculate_corr = function(auditor, data, resid, idx) {
       mean(auditor$predict(data[idx, ]) * rowMeans(resid[idx, ]))
     }
