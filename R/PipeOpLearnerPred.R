@@ -1,5 +1,31 @@
+#' @title Multi-Calibrate a Learner's Prediction
+#'
+#' @usage NULL
+#' @name mlr_pipeops_mcboost
+#' @format [`R6Class`] inheriting from [`mlr3pipelines::PipeOp`].
+#'
+#' @description
+
+#'
+#' @section Construction:
+
+#' @section Input and Output Channels:
+#'
+#' @section State:
+#
+#' @section Parameters:
+
+#' @section Fields:
+#' Only fields inherited from [`mlr3pipelines::PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`mlr3pipelines::PipeOp`].
+#'
+#' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @export
 PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
-  inherit = PipeOpTaskPreproc,
+  inherit = mlr3pipelines::PipeOpTaskPreproc,
   public = list(
     initialize = function(learner, id = NULL, param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)

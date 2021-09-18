@@ -16,6 +16,7 @@ one_hot = function(labels) {
   return(mat)
 }
 
+
 # clip numbers (probabilities) to [0;1]
 clip_prob = function(prob) {
   prob[prob > 1] = 1
@@ -110,7 +111,6 @@ make_survival_curve = function(prediction) {
     x[is.na(x)] = 0
     cm = cummin(x)
     if (any(x != cm)) {
-      #message("Resulting curve was corrected, as it was not monotonically decreasing.")
       cm
     }else{
       x
@@ -118,7 +118,7 @@ make_survival_curve = function(prediction) {
   })
   survival_curves = t(survival_curves)
 
-  #neeeded for PredictionSurv
+  #needed for PredictionSurv
   survival_curves[,1]=1
   survival_curves[,ncol(survival_curves)]=0
 
