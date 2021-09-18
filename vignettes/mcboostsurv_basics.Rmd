@@ -73,18 +73,7 @@ Based on this, we can now show multicalibration on a data set with two sensitive
 ```{r}
 
 data_pbc =  survival::pbc %>%
-    mutate(status = if_else(status == 2, 1, 0),
-           ascites = as.factor(as.character(ascites)),
-           hepato = as.factor(as.character(hepato)),
-           spiders = as.factor(as.character(spiders)),
-           edema = as.factor(as.character(edema)),
-           stage = as.factor(as.character(stage)),
-           trt = as.factor(as.character(trt)),
-           time = as.numeric(time),
-           chol = as.numeric(chol),
-           copper = as.numeric(copper),
-           trig = as.numeric(trig),
-           platelet = as.numeric(platelet)
+    mutate(status = if_else(status == 2, 1, 0)
     ) %>%
     select(-id) %>%
     drop_na()
@@ -94,18 +83,21 @@ task_pbc = TaskSurv$new("pbc", backend = as_data_backend(data_pbc),
 
 
 #Create data split
-split = c(0.6,0.2,0.2)
 
-train_g_ratio = split[[1]] + split[[2]]
-train_ratio = split[[1]] / (split[[1]] + split[[2]])
-
-train_test = rsmp("holdout", ratio = train_g_ratio)$instantiate(task_pbc)
+train_test = rsmp("holdout", ratio = 0.8)$instantiate(task_pbc)
 train_g = train_test$train_set(1)
 test_ids = train_test$test_set(1)
+train_val = rsmp("holdout", ratio = 0.75)$instantiate(task_pbc$clone()$filter(train_g))
+train_ids = train_val$train_set(1)
+val_ids = train_val$test_set(1)
 
+# Train distributional survival model 
 
-# Train survival model 
-baseline = lrn("surv.ranger")$train(task_pbc$clone()$filter())
+xgb_distr = as_learner(ppl("distrcompositor",
+               learner = as_learner(prep_pipe %>>% lrn("surv.xgboost"))))
+
+xgb_distr$train(task_pbc$clone()$filter(train_ids))
+
 
 
 ```
@@ -113,34 +105,34 @@ baseline = lrn("surv.ranger")$train(task_pbc$clone()$filter())
 ### Mutlicalibrate survival model with validation data
 
 ```{r}
-  # mcboost_learner = as_learner(dots$prep_pipe %>>% 
-  #                                ppl_mcboostsurv(learner = as_learner(dots$prep_pipe 
-  #                                                                     %>>% initial_model), 
-  #                                                param_vals = list(
-  #                                                  alpha = dots$alpha,
-  #                                                  eta = dots$eta,
-  #                                                  time_buckets = dots$time_buckets,
-  #                                                  num_buckets = dots$num_buckets, 
-  #                                                  auditor_fitter = dots$auditor_fitter, 
-  #                                                  max_iter = dots$max_iter, 
-  #                                                  time_eval = dots$time_eval,
-  #                                                  multiplicative = dots$multiplicative
-  #                                                )))
+# initialize mcboost
+ mcboost_learner = as_learner(prep_pipe %>>% 
+                                 ppl_mcboostsurv(learner = as_learner(prep_pipe 
+                                                                      %>>% xgb_distr), 
+                                                 param_vals = list(
+                                                   alpha = 0.000001,
+                                                   eta = 0.2,
+                                                   time_buckets = 2,
+                                                   num_buckets = 1 )))
 
 
 
+# multicalibrate model
+mcboost_learner$train(task_pbc$clone()$filter(val_ids))
 
-```
+# get new predictions
+test_task = task_pbc$clone()$filter(test_ids)
+pred_pbc_mc = mcboost_learner$predict(task_pbc$clone()$filter(test_ids))
 
-### Predict on new data
-```{r}
-
+pred_pbc_xgb = xgb_distr$predict(task_pbc$clone()$filter(test_ids))
 
 ```
+
 ### Development of IBS in the defined subgroups
 ```{r}
 
-
+pred_pbc_xgb$score(msr("surv.graf"))
+pred_pbc_mc$score(msr("surv.graf"))
 ```
 
 
