@@ -52,3 +52,4 @@ xgb = AutoTuner$new(learner = lrn,
                     tuner = tnr("random_search"),
                     search_space = ps_xgb)
 xgb$train(task)
+

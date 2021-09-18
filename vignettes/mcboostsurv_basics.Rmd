@@ -1,0 +1,147 @@
+---
+title: "MCBoostSurv - Basics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MCBoostSurv - Basics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  purl = NOT_CRAN,
+  eval = NOT_CRAN
+)
+```
+
+
+```{r setup}
+library("mcboost")
+library("mlr3")
+library("mlr3proba")
+library("mlr3pipelines")
+library("mlr3learners")
+library("tidyverse")
+set.seed(27099)
+```
+
+
+## Minimal Example: McBoostSurv
+
+To show the basic functionality of `MCBoostSurv`, we provide a minimal example on 
+the standard survival data set rats. After loading and pre-processing the data, we train
+a `mlr3learner` on the training data. We instantiate a `MCBoostSurv` instance
+with the default parameters. Then, we run the `$multicalibrate()` method on our data to start multi-calibration in survival analysis. With `$predict_probs()`, we can get
+multicalibrated predictions. 
+
+```{r}
+
+#prepare task 
+task = tsk("rats")
+prep_pipe = po("encode", param_vals = list(method="one-hot")) 
+prep = prep_pipe$train(list(task))[[1]]
+
+#split data
+train = prep$clone()$filter(1:199)
+val = prep$clone()$filter(200:250)
+test = prep$clone()$filter(256:300)
+
+# get trained survival model 
+baseline = lrn("surv.ranger")$train(train)
+
+# initialize mcboost
+mc_surv = MCBoostSurv$new(init_predictor = baseline)
+
+# multicalibrate model 
+mc_surv$multicalibrate(data = val$data(cols = val$feature_names), 
+                       labels = val$data(cols = val$target_names))
+
+# get new predictions
+mc_surv$predict_probs(test$data(cols = test$feature_names))
+
+```
+
+## Multicalibrate model trained on PBC data
+
+Based on this, we can now show multicalibration on a data set with two sensitive attributes
+(age and gender). Again, we load and pre-process the data.
+
+### Load Dataset
+```{r}
+
+data_pbc =  survival::pbc %>%
+    mutate(status = if_else(status == 2, 1, 0),
+           ascites = as.factor(as.character(ascites)),
+           hepato = as.factor(as.character(hepato)),
+           spiders = as.factor(as.character(spiders)),
+           edema = as.factor(as.character(edema)),
+           stage = as.factor(as.character(stage)),
+           trt = as.factor(as.character(trt)),
+           time = as.numeric(time),
+           chol = as.numeric(chol),
+           copper = as.numeric(copper),
+           trig = as.numeric(trig),
+           platelet = as.numeric(platelet)
+    ) %>%
+    select(-id) %>%
+    drop_na()
+
+task_pbc = TaskSurv$new("pbc", backend = as_data_backend(data_pbc), 
+                        time = "time", event = "status")
+
+
+#Create data split
+split = c(0.6,0.2,0.2)
+
+train_g_ratio = split[[1]] + split[[2]]
+train_ratio = split[[1]] / (split[[1]] + split[[2]])
+
+train_test = rsmp("holdout", ratio = train_g_ratio)$instantiate(task_pbc)
+train_g = train_test$train_set(1)
+test_ids = train_test$test_set(1)
+
+
+# Train survival model 
+baseline = lrn("surv.ranger")$train(task_pbc$clone()$filter())
+
+
+```
+
+### Mutlicalibrate survival model with validation data
+
+```{r}
+  # mcboost_learner = as_learner(dots$prep_pipe %>>% 
+  #                                ppl_mcboostsurv(learner = as_learner(dots$prep_pipe 
+  #                                                                     %>>% initial_model), 
+  #                                                param_vals = list(
+  #                                                  alpha = dots$alpha,
+  #                                                  eta = dots$eta,
+  #                                                  time_buckets = dots$time_buckets,
+  #                                                  num_buckets = dots$num_buckets, 
+  #                                                  auditor_fitter = dots$auditor_fitter, 
+  #                                                  max_iter = dots$max_iter, 
+  #                                                  time_eval = dots$time_eval,
+  #                                                  multiplicative = dots$multiplicative
+  #                                                )))
+
+
+
+
+```
+
+### Predict on new data
+```{r}
+
+
+```
+### Development of IBS in the defined subgroups
+```{r}
+
+
+```
+
+
+
