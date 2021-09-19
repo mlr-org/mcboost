@@ -8,21 +8,53 @@
 
 #'
 #' @section Construction:
-
+#' ```
+#'PipeOpLearnerPred$new(learner, id = NULL, param_vals = list())
+#'
+#' * `learner` :: [`Learner`][mlr3::Learner] \cr
+#'   [`Learner`][mlr3::Learner] to  prediction, or a string identifying a
+#'   [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
+#' * `id` :: `character(1)`
+#'   Identifier of the resulting object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
 #' @section Input and Output Channels:
+#' [`PipeOpLearnerPred`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
+#' type given to `learner` during construction; both during training and prediction.
+#'
+#' [`PipeOpLearnerPred`] has one output channel named `"output"`, producing a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
+#' type given to `learner` during construction; both during training and prediction.
 #'
 #' @section State:
 #
 #' @section Parameters:
-
+#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object, together with the `$state` elements inherited from the
+#' [`PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
+#' * `model` :: `any`\cr
+#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
+#' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#'   Errors logged during training.
+#' * `train_time` :: `numeric(1)`\cr
+#'   Training time, in seconds.
+#' * `predict_log` :: `NULL` | [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#'   Errors logged during prediction.
+#' * `predict_time` :: `NULL` | `numeric(1)`
+#'   Prediction time, in seconds.
+#'
 #' @section Fields:
-#' Only fields inherited from [`mlr3pipelines::PipeOp`].
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `learner` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
 #'
 #' @section Methods:
-#' Only methods inherited from [`mlr3pipelines::PipeOp`].
+#' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
   inherit = mlr3pipelines::PipeOpTaskPreproc,

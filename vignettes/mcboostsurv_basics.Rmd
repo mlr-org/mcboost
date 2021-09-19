@@ -63,11 +63,25 @@ mc_surv$multicalibrate(data = val$data(cols = val$feature_names),
 mc_surv$predict_probs(test$data(cols = test$feature_names))
 
 ```
+## What does mcboost do?
+
+Internally mcboostsurv runs the following procedure `max_iter` times (similar ro `mcboost`, just for distributions over time):
+
+1. Predict on X using the model from the previous iteration, `init_predictor` in the first iteration.
+1. Compute the residuals `res = y - y_hat` for all time points
+1. Split predictions into `num_buckets` according to `y_hat` and time.
+1. Fit the auditor (`auditor_fitter`) (here called`c(x)`) on the data in each bucket with target variable `r`.
+1. Compute `misscal = mean(c(x) * res(x))`
+1. if `misscal > alpha`:
+    For the bucket with highest `misscal`, update the model using the prediction `c(x)`.
+    else:
+    Stop the procedure
+
+
 
 ## Multicalibrate model trained on PBC data
 
-Based on this, we can now show multicalibration on a data set with two sensitive attributes
-(age and gender). Again, we load and pre-process the data.
+Based on this, we can now show multicalibration on a data set with two sensitive attributes (age and gender). Again, we load and pre-process the data.
 
 ### Load Dataset
 ```{r}
@@ -110,12 +124,10 @@ xgb_distr$train(task_pbc$clone()$filter(train_ids))
                                  ppl_mcboostsurv(learner = as_learner(prep_pipe 
                                                                       %>>% xgb_distr), 
                                                  param_vals = list(
-                                                   alpha = 0.000001,
+                                                   alpha = 1e-6,
                                                    eta = 0.2,
                                                    time_buckets = 2,
                                                    num_buckets = 1 )))
-
-
 
 # multicalibrate model
 mcboost_learner$train(task_pbc$clone()$filter(val_ids))

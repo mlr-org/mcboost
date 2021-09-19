@@ -8,23 +8,30 @@ test_that("MCBoostSurv class instantiation", {
 
 })
 
-#FIXME
+test_that("MCBoostSurv multicalibrate and predict_probs", {
+  library("mlr3learners")
+  rats = survival::rats
+  rats$sex = (as.character(rats$sex))=="f"
+  b = as_data_backend(rats)
+  tsk = TaskSurv$new("rats",
+                      backend = b, time = "time",
+                      event = "status")
+  data = tsk$data(cols = tsk$feature_names)
+  labels = tsk$data(cols = tsk$target_names)
+  l = lrn("surv.ranger")$train(tsk)
+
+  mc = MCBoostSurv$new(init_predictor = l,
+                       auditor_fitter = "TreeAuditorFitter",
+                       max_iter = 3)
+  mc$multicalibrate(data, labels)
+
+  expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
+  expect_list(mc$iter_partitions, types = "ProbRange2D", len = mc$max_iter)
+
+  prds = mc$predict_probs(data)
+  expect_data_frame(prds, nrows = nrow(data), ncol = 58)
+})
 
 
-# test_that("MCBoostSurv multicalibrate and predict_probs - ConstantPredictor", {
-#   # Sonar task
-#   tsk = tsk("rats")
-#   data = tsk$data(cols = tsk$feature_names)
-#   labels = tsk$data(cols = tsk$target_names)
-#
-#   mc = MCBoostSurv$new(auditor_fitter = "TreeAuditorFitter")
-#   mc$multicalibrate(data, labels)
-#
-#   expect_list(mc$iter_models, types = "LearnerPredictor", len = mc$max_iter)
-#   expect_list(mc$iter_partitions, types = "ProbRange2D", len = mc$max_iter)
-#
-#   prds = mc$predict_probs(data)
-#   expect_numeric(prds, lower = 0, upper = 1, len = nrow(data))
-# })
-#
-#
+
+

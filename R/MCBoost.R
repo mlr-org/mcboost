@@ -391,7 +391,6 @@ MCBoost = R6::R6Class("MCBoost",
       # not use pred_probs
       buckets = list(ProbRange$new())
 
-      # FIXME
       if (self$num_buckets > 1L) {
         # if (self$partition && self$num_buckets > 1L) {
         frac = 1 / self$num_buckets
@@ -470,7 +469,7 @@ MCBoost = R6::R6Class("MCBoost",
         }
       } else if (inherits(init_predictor, "Learner")) {
         if (!is.null(init_predictor$state)) {
-          # Fited learner
+          # Fitted learner
           init_predictor = mlr3_init_predictor(init_predictor)
         } else {
           # Not fitted

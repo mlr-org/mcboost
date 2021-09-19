@@ -80,6 +80,7 @@ ProbRange2D = R6::R6Class("ProbRange2D",
       }
 
 
+      # do we take the mean to decide in which bucket? (= one bucket per subject)
       if (!is.null(self$aggregation)) {
         x = x[, time_mask]
 

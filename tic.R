@@ -15,11 +15,11 @@ library(mlr3pipelines)
 library(mlr3)
 
 pipe =   po("imputemedian") %>>% po("removeconstants") %>>% po("encode", param_vals = list(method="one-hot"))
+
 task = tsk("rats")
 
 
 ## name can't be changed, distr is output
-
 lrn = as_learner(ppl("distrcompositor",
                learner = as_learner(pipe %>>% lrn("surv.xgboost", id = "xgb"))))
 lrn$id = "xgb"
@@ -35,8 +35,7 @@ xgb = AutoTuner$new(learner = lrn,
 xgb$train(task)
 
 
-#name can be changec, but distr is not the output?!
-
+#name can be change, but distr is not the output?!
 distr = po("compose_distr", param_vals = list(form = "aft", overwrite = TRUE))
 g = pipe %>>% lrn("surv.xgboost", id = "xgb") %>>% distr
 

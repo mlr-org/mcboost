@@ -452,16 +452,18 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         buckets = list(ProbRange2D$new(time = ProbRange$new(lower = -Inf, upper = max_time)))
       }
 
+      # no buckets
       if (self$time_buckets == 1 && self$num_buckets == 1) {
         return(buckets)
       }
 
+      # time buckets
       if (self$time_buckets > 1L) {
 
         if (self$bucket_strategy == "even_splits") {
           time_parts = even_bucket(
             self$time_buckets, min_time, max_time)
-        } else {
+        } else { #quantiles
           time_parts = quantile(self$time_points_eval, seq(0, 1, length.out = self$time_buckets + 1))
         }
 
@@ -472,6 +474,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         time_parts = list(-Inf, max_time)
       }
 
+      # create time buckets
       for (i in seq_len(self$time_buckets)) {
 
         time_range = ProbRange$new(lower = time_parts[[i]], upper = time_parts[[i + 1]])
@@ -488,6 +491,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         if (!any(in_time)) {
           next
         }
+
+        # create probability buckets with in the range of the time bucket
         prob_in_time = unlist(pred_probs[, in_time, with = FALSE])
 
 

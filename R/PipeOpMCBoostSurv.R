@@ -71,7 +71,6 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         paradox::ParamInt$new("max_iter", lower = 0L, upper = Inf, default = 5L, tags = "train"),
         paradox::ParamDbl$new("alpha", lower = 0, upper = 1, default = 1e-4, tags = "train"),
         paradox::ParamDbl$new("eta", lower = 0, upper = 1, default = 1, tags = "train"),
-        #paradox::ParamLgl$new("partition", tags = "train", default = TRUE),
         paradox::ParamInt$new("num_buckets", lower = 1, upper = Inf, default = 2L, tags = "train"),
         paradox::ParamInt$new("time_buckets", lower = 1, upper = Inf, default = 1L, tags = "train"),
         paradox::ParamDbl$new("time_eval", lower = 0, upper = 1, default = 1, tags = "train"),
@@ -110,8 +109,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         }
         args$init_predictor = init_predictor
       }
-
-      mc = invoke(MCBoostSurv$new, .args = args)
+      mc = mlr3misc::invoke(MCBoostSurv$new, .args = args)
       mc$multicalibrate(d, l, predictor_args = inputs$prediction)
       self$state = list("mc" = mc)
       list(NULL)
@@ -171,7 +169,6 @@ ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), param_vals = list()) {
   gr = mlr3pipelines::`%>>%`(
     mlr3pipelines::gunion(list(
       "data" = mlr3pipelines::po("nop"),
-      #"prediction" = mlr3pipelines::po("learner_cv", learner = learner, resampling.method = "insample")
       "prediction" =  mlr3pipelines::po("learner_pred", learner = learner)
     )),
     PipeOpMCBoostSurv$new(param_vals = param_vals)
