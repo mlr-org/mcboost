@@ -346,6 +346,18 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rpart"
     },
+        {
+      "@type": "SoftwareApplication",
+      "identifier": "mlr3proba",
+      "name": "mlr3proba",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mlr3proba"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "glmnet",
