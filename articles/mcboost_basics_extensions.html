@@ -722,8 +722,8 @@
 <span class="co"># And we fit it on a subset of the data in order to simulate a poorly performing model.</span>
 <span class="va">init_model</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">row_ids</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="fl">160</span><span class="op">:</span><span class="fl">170</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="va">init_model</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span><span class="op">$</span><span class="fu">score</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Multiple lambdas have been fit. Lambda will be set to 0.01 (see</span>
-<span class="co">#&gt; parameter 's').</span>
+<span class="co">#&gt; Warning: Multiple lambdas have been fit. Lambda will be set to 0.01 (see parameter 's').</span>
+<span class="co">#&gt; This happened PipeOp classif.glmnet's $predict()</span>
 <span class="co">#&gt; classif.ce </span>
 <span class="co">#&gt;  0.1594203</span>
 
@@ -732,8 +732,8 @@
 
 <span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">auditor</span>, init_predictor <span class="op">=</span> <span class="va">init_model</span><span class="op">)</span>
 <span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">X</span>, <span class="va">y</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Multiple lambdas have been fit. Lambda will be set to 0.01 (see</span>
-<span class="co">#&gt; parameter 's').</span></code></pre></div>
+<span class="co">#&gt; Warning: Multiple lambdas have been fit. Lambda will be set to 0.01 (see parameter 's').</span>
+<span class="co">#&gt; This happened PipeOp classif.glmnet's $predict()</span></code></pre></div>
 <p>and we can observe where it improved:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mc</span>
