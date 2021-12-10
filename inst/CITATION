@@ -1,0 +1,13 @@
+bibentry(
+  bibtype = "article", 
+  author = "Florian Pfisterer and Christoph Kern and Susanne Dandl and Matthew Sun and Michael P. Kim and Bernd Bischl",
+  title = "mcboost: Multi-Calibration Boosting for R",
+  journal = "Journal of Open Source Software", 
+  doi = "10.21105/joss.03453",
+  url = "https://doi.org/10.21105/joss.03453",
+  year = "2021",
+  publisher = "The Open Journal",
+  volume = "6",
+  number = "64",
+  pages = "3453"
+)
