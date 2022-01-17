@@ -21,6 +21,16 @@ test_that("MCBoost class instantiation", {
   expect_is(pr[[1]], "Prediction")
 })
 
+test_that("pipeop instantiation", {
+  skip_on_cran()
+  skip_on_os("solaris")
+  pop = po("mcboost")
+  expect_is(pop, "PipeOpMCBoost")
+  expect_is(pop, "PipeOp")
+  expect_list(pop$param_set$values, len = 0L)
+  expect_true(pop$predict_type == "prob")
+})
+
 test_that("MCBoost ppl", {
   skip_on_cran()
   skip_on_os("solaris")
@@ -35,4 +45,11 @@ test_that("MCBoost ppl", {
   expect_true(!is.null(pp$state))
   prd = pp$predict(tsk("sonar"))
   expect_is(prd[[1]], "PredictionClassif")
+})
+
+test_that("MCBoostSurv ppl", {
+  skip_on_cran()
+  skip_on_os("solaris")
+  gr = ppl_mcboost(lrn("classif.rpart"))
+  expect_is(gr, "Graph")
 })

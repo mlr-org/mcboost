@@ -7,15 +7,17 @@ AuditorFitter = R6::R6Class("AuditorFitter",
     #' @description
     #' Initialize a [`AuditorFitter`].
     #' This is an abstract base class.
-    initialize = function() {},
+    initialize = function() {
+    },
     #' @description
     #' Fit to residuals.
     #' @template params_data_resid
     #' @template params_mask
     #' @template return_fit
-    fit_to_resid = function(data, resid, mask) {
-      # Learners fail on constant residuals.
-      if (all(unique(resid) == resid[1])) {
+    fit_to_resid = function(data, resid, mask) { #
+
+      #Learners fail on constant residuals.
+      if (all(unlist(unique(resid)) == unlist(resid[1]))) {
         return(list(0, ConstantPredictor$new(0)))
       }
       self$fit(data, resid, mask)
@@ -61,7 +63,8 @@ LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
       l = self$learner$clone()
       l$fit(data, resid)
       h = l$predict(data)
-      corr = mean(h*resid)
+
+      corr = mean(h * resid)
       return(list(corr, l))
     }
   )
@@ -92,7 +95,7 @@ RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
     #' Define a AuditorFitter from a glmnet learner.
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
-      super$initialize(learner = lrn("regr.glmnet", alpha = 0))
+      super$initialize(learner = lrn("regr.glmnet", alpha = 0, lambda = 0.01))
     }
   )
 )
@@ -139,7 +142,9 @@ SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
       self$subpops = map(subpops, function(pop) {
         # Can be character (referring to a column)
         if (is.character(pop)) {
-          function(rw) {rw[[pop]]}
+          function(rw) {
+            rw[[pop]]
+          }
         } else {
           assert_function(pop)
         }
@@ -153,7 +158,9 @@ SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
     #' @template return_fit
     fit = function(data, resid, mask) {
       worstCorr = 0
-      worst_subpop = function(pt) {return(rep(0L, nrow(pt)))} # nocov
+      worst_subpop = function(pt) {
+        return(rep(0L, nrow(pt)))
+      } # nocov
       for (sfn in self$subpops) {
         sub = data[, sfn(.SD)]
         corr = mean(sub * resid)
@@ -208,12 +215,16 @@ SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
     #'   They allow defining subgroups of the data.
     #' @template return_auditor
     initialize = function(subgroup_masks) {
-      subgroup_masks = tryCatch({map(subgroup_masks, as.integer)},
-        warning = function(w) {
-          stop("subgroup_masks must be a list of integers.")
-        })
+      subgroup_masks = tryCatch({
+        map(subgroup_masks, as.integer)
+      },
+      warning = function(w) {
+        stop("subgroup_masks must be a list of integers.")
+      })
       self$subgroup_masks = assert_list(subgroup_masks, types = "integer")
-      if (!all(map_lgl(self$subgroup_masks, function(x) {test_numeric(x, lower = 0, upper = 1)}))) {
+      if (!all(map_lgl(self$subgroup_masks, function(x) {
+        test_numeric(x, lower = 0, upper = 1)
+      }))) {
         stop("subgroup_masks must be binary vectors")
       }
     },
@@ -225,13 +236,15 @@ SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
     #' @template return_fit
     fit = function(data, resid, mask) {
       sg = map(self$subgroup_masks, function(x) x[mask])
-      if (!all(map_lgl(sg, function(x) {nrow(data) == length(x)}))) {
+      if (!all(map_lgl(sg, function(x) {
+        nrow(data) == length(x)
+      }))) {
         stop("Length of subgroup masks must match length of data!")
       }
       m = SubgroupModel$new(sg)
       m$fit(data, resid)
       preds = m$predict(data)
-      corr = mean(preds*resid)
+      corr = mean(preds * resid)
       return(list(corr, m))
     }
   )
@@ -276,7 +289,7 @@ CVLearnerAuditorFitter = R6::R6Class("CVLearnerAuditorFitter",
     fit = function(data, resid, mask) {
       l = self$learner$clone()
       h = l$fit_transform(data, resid)
-      corr = mean(h*resid)
+      corr = mean(h * resid)
       return(list(corr, l))
     }
   )

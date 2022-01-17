@@ -10,11 +10,12 @@
 #' @export
 one_hot = function(labels) {
   con = contrasts(labels, contrasts = FALSE)
-  mat = con[as.integer(labels),]
+  mat = con[as.integer(labels), ]
   rownames(mat) = NULL
-  if (ncol(mat) == 2L) mat = mat[,1L]
+  if (ncol(mat) == 2L) mat = mat[, 1L]
   return(mat)
 }
+
 
 # clip numbers (probabilities) to [0;1]
 clip_prob = function(prob) {
@@ -27,18 +28,22 @@ clip_prob = function(prob) {
 # Convert a X,y pair to a task
 # Required for interacting with 'mlr3'
 xy_to_task = function(x, y) {
+
   x = data.table::data.table(x)
   yname = "ytmp"
 
   # Safe yname
   i = 0
-  while(yname %in% names(x)) {
+  while (yname %in% names(x)) {
     i = i + 1
     yname = paste0("ytmp", i)
   }
 
   x[, (yname) := y]
-  if (is.numeric(y)) {
+
+  if (inherits(y, "Surv")) {
+    ti = TaskSurv
+  } else if (is.numeric(y)) {
     ti = TaskRegr
   } else {
     ti = TaskClassif
@@ -64,9 +69,58 @@ mlr3_init_predictor = function(learner) {
     function(data, ...) {
       one_hot(learner$predict_newdata(data)$response)
     }
-  } else {
+  } else if ("distr" %in% learner$predict_types) {
     function(data, ...) {
-      learner$predict_newdata(data)$prob[,1L]
+      as.data.table(learner$predict_newdata(data))$distr[[1]][[1]]
     }
+  } else if(learner$predict_type == "prob") {
+    function(data, ...) {
+      learner$predict_newdata(data)$prob[, 1L]
+    }
+  } else{
+    stop("Predict type of your learner is not implemented. (response, distr, prob)")
   }
+}
+
+
+
+#' Create even intervals
+#' @param frac [`numeric`]
+#' number of buckets
+#' @param min [`numeric`]
+#' maximum value
+#' @param max [`numeric`]
+#' minimum value
+#' @return [`numeric`]
+#' @noRd
+even_bucket = function(frac, min, max) {
+  pos = c(0, seq_len(frac))
+  min + pos / frac * (max - min)
+}
+
+#' Make every row monotonically decreasing in order to obtain the survival property.
+#' Additionally, many predicitions need 1 as a first value and 0 as a last value.
+#' (e.g. `PredictionSurv` needs this attribute.)
+#' @param prediction [`data.table`]
+#' Data.table with predictions. Every row is survival probability for the corresponding time.
+#' Every column corresponds to  a specific time point.
+#' @return [`data.table`]
+#' @export
+make_survival_curve = function(prediction) {
+  survival_curves = apply(prediction, 1, function(x) {
+    x[is.na(x)] = 0
+    cm = cummin(x)
+    if (any(x != cm)) {
+      cm
+    }else{
+      x
+    }
+  })
+  survival_curves = t(survival_curves)
+
+  #needed for PredictionSurv
+  survival_curves[,1]=1
+  survival_curves[,ncol(survival_curves)]=0
+
+  as.data.table(survival_curves)
 }

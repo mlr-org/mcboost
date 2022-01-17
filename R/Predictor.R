@@ -52,7 +52,8 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
     #' Fit the constant predictor.
     #' Does nothing.
     #' @template params_data_label
-    fit = function(data, labels) {},
+    fit = function(data, labels) {
+    },
     #' @description
     #' Predict a dataset with constant predictions.
     #' @param data [`data.table`] \cr
@@ -60,7 +61,7 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
     #' @param ... [`any`] \cr
     #'   Not used, only for compatibility with other methods.
     predict = function(data, ...) {
-        rep(self$constant, nrow(data))
+      rep(self$constant, nrow(data))
     }
   )
 )
@@ -110,6 +111,8 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
           p = one_hot(prd$response)
         }
         return(p)
+      } else if (inherits(prd ,"PredictionSurv")) {
+        return(as.data.table(prd)$distr[[1]][[1]])
       }
     }
   ),
@@ -150,7 +153,9 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
     initialize = function(subpop, value) {
       # Can be character (referring to a column) or a function.
       if (is.character(subpop)) {
-        self$subpop = function(rw) {rw[[subpop]]} # nocov
+        self$subpop = function(rw) {
+          rw[[subpop]]
+        } # nocov
       } else {
         self$subpop = assert_function(subpop)
       }
@@ -160,7 +165,8 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
     #' @description
     #' Fit the predictor.
     #' @template params_data_label
-    fit = function(data, labels) {},
+    fit = function(data, labels) {
+    },
     #' @description
     #' Predict a dataset with sub-population predictions.
     #' @param data [`data.table`] \cr
@@ -216,7 +222,9 @@ SubgroupModel = R6::R6Class("SubgroupModel",
       if (is.null(subgroup_masks)) {
         subgroup_masks = self$subgroup_masks
       }
-      if (!all(map_lgl(subgroup_masks, function(x) {nrow(data) == length(x)}))) {
+      if (!all(map_lgl(subgroup_masks, function(x) {
+        nrow(data) == length(x)
+      }))) {
         stop("Length of subgroup masks must match length of data!\n
               Subgroups are currently not implemented for 'partition=TRUE'.")
       }
@@ -262,7 +270,7 @@ CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
     fit_transform = function(data, labels) {
       task = xy_to_task(data, labels)
       t = self$pipeop$train(list(task))$output
-      return(as.matrix(t$data(cols=t$feature_names)))
+      return(as.matrix(t$data(cols = t$feature_names)))
     },
     #' @description
     #' Predict a dataset with leaner predictions.
@@ -273,7 +281,7 @@ CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
     predict = function(data, ...) {
       task = xy_to_task(data, runif(NROW(data)))
       t = self$pipeop$predict(list(task))$output
-      return(as.matrix(t$data(cols=t$feature_names)))
+      return(as.matrix(t$data(cols = t$feature_names)))
     }
   ),
   active = list(

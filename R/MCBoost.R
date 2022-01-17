@@ -25,17 +25,17 @@
 #'  }
 #'
 #' @examples
-#'   # See vignette for more examples.
-#'   # Instantiate the object
-#'   \dontrun{
-#'   mc = MCBoost$new()
-#'   # Run multi-calibration on training dataset.
-#'   mc$multicalibrate(iris[1:100,1:4], factor(sample(c("A","B"), 100, TRUE)))
-#'   # Predict on test set
-#'   mc$predict_probs(iris[101:150,1:4])
-#'   # Get auditor effect
-#'   mc$auditor_effect(iris[101:150,1:4])
-#'   }
+#' # See vignette for more examples.
+#' # Instantiate the object
+#' \dontrun{
+#' mc = MCBoost$new()
+#' # Run multi-calibration on training dataset.
+#' mc$multicalibrate(iris[1:100, 1:4], factor(sample(c("A", "B"), 100, TRUE)))
+#' # Predict on test set
+#' mc$predict_probs(iris[101:150, 1:4])
+#' # Get auditor effect
+#' mc$auditor_effect(iris[101:150, 1:4])
+#' }
 #' @export
 MCBoost = R6::R6Class("MCBoost",
   public = list(
@@ -105,6 +105,10 @@ MCBoost = R6::R6Class("MCBoost",
     #'   Auditor effect in each iteration.
     auditor_effects = list(),
 
+    #' @field bucket_strategies [`character`] \cr
+    #'   Possible bucket_strategies in McBoostSurv.
+    bucket_strategies = c("simple"),
+
     #' @description
     #'   Initialize a multi-calibration instance.
     #'
@@ -157,74 +161,34 @@ MCBoost = R6::R6Class("MCBoost",
     #'   "none" uses the same dataset in each iteration.
 
     initialize = function(
-                 max_iter=5,
-                 alpha=1e-4,
-                 eta=1,
-                 partition=TRUE,
-                 num_buckets=2,
-                 bucket_strategy="simple",
-                 rebucket=FALSE,
-                 eval_fulldata=FALSE,
-                 multiplicative=TRUE,
-                 auditor_fitter=NULL,
-                 subpops=NULL,
-                 default_model_class=ConstantPredictor,
-                 init_predictor=NULL,
-                 iter_sampling="none") {
+      max_iter = 5,
+      alpha = 1e-4,
+      eta = 1,
+      num_buckets = 2,
+      partition = ifelse(num_buckets>1, TRUE, FALSE),
+      bucket_strategy = "simple",
+      rebucket = FALSE,
+      eval_fulldata = FALSE,
+      multiplicative = TRUE,
+      auditor_fitter = NULL,
+      subpops = NULL,
+      default_model_class = ConstantPredictor,
+      init_predictor = NULL,
+      iter_sampling = "none") {
 
-      self$max_iter = assert_int(max_iter)
-      self$alpha = assert_number(alpha)
+      self$max_iter = assert_int(max_iter, lower = 0)
+      self$alpha = assert_number(alpha, lower = 0)
       self$eta = assert_number(eta)
-      self$num_buckets = assert_int(num_buckets)
-      self$bucket_strategy = assert_choice(bucket_strategy, choices = c("simple"))
+      self$partition = assert_flag(partition)
+      self$num_buckets = assert_int(num_buckets, lower = 1)
+      if (self$num_buckets == 1L && self$partition) stop("If partition=TRUE, num_buckets musst be > 1!")
+      self$bucket_strategy = assert_choice(bucket_strategy, choices = self$bucket_strategies)
       self$rebucket = assert_flag(rebucket)
       self$eval_fulldata = assert_flag(eval_fulldata)
-      self$partition = assert_flag(partition)
       self$multiplicative = assert_flag(multiplicative)
+      self$auditor_fitter = private$get_auditor_fitter(subpops, auditor_fitter)
+      self$predictor = private$get_predictor(init_predictor, default_model_class)
       self$iter_sampling = assert_choice(iter_sampling, choices = c("none", "bootstrap", "split"))
-
-      # Subpopulation fitters.
-      if (!is.null(subpops)) {
-        self$auditor_fitter = SubpopAuditorFitter$new(subpops)
-      } else {
-        if (is.null(auditor_fitter)) {
-          self$auditor_fitter = RidgeAuditorFitter$new()
-        } else if (inherits(auditor_fitter, "Learner")) {
-          self$auditor_fitter = LearnerAuditorFitter$new(auditor_fitter)
-        } else if (inherits(auditor_fitter, "AuditorFitter")) {
-          self$auditor_fitter = auditor_fitter
-        } else if (inherits(auditor_fitter, "character")) {
-          self$auditor_fitter = switch(auditor_fitter,
-            "TreeAuditorFitter" = TreeAuditorFitter$new(),
-            "RidgeAuditorFitter" = RidgeAuditorFitter$new(),
-            "CVTreeAuditorFitter" = CVTreeAuditorFitter$new(),
-            "CVRidgeAuditorFitter" = CVRidgeAuditorFitter$new(),
-             stop(sprintf("auditor_fitter '%s' not found, must be '[CV]TreeAuditorFitter' or '[CV]RidgeAuditorFitter'", auditor_fitter))
-          )
-        } else {
-          stop(sprintf("auditor_fitter must be of type 'AuditorFitter' or character"))
-        }
-      }
-
-      # Initial Predictor
-      if (is.null(init_predictor)) {
-        # Can be a class-generator -> Instantiate
-        if (inherits(default_model_class, "R6ClassGenerator")) {
-          dm = default_model_class$new()
-        } else {
-          dm = assert_class(default_model_class, "Predictor")
-        }
-        init_predictor = function(data) {dm$predict(data)}
-      } else if (inherits(init_predictor, "Learner")) {
-        if (!is.null(init_predictor$state)) {
-          # Fited learner
-          init_predictor = mlr3_init_predictor(init_predictor)
-        } else {
-          # Not fitted
-          init_predictor = LearnerPredictor$new(init_predictor)
-        }
-      }
-      self$predictor = assert_function(init_predictor, args = "data")
       invisible(self)
     },
 
@@ -232,82 +196,64 @@ MCBoost = R6::R6Class("MCBoost",
     #' Run multi-calibration.
     #' @template params_data_label
     #' @param predictor_args [`any`] \cr
-    #'  Arguments passed on to `init_predictor`. Defaults to `NULL`.
+    #'   Arguments passed on to `init_predictor`. Defaults to `NULL`.
+    #' @param audit [`logical`] \cr
+    #'   Perform auditing? Initialized to `TRUE`.
     #' @param ... [`any`] \cr
     #'  Params passed on to other methods.
+    #'
     #' @return `NULL`
-    multicalibrate = function(data, labels, predictor_args = NULL, ...) {
+    multicalibrate = function(data, labels, predictor_args = NULL, audit = TRUE, ...) {
 
       if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
       assert_data_table(data)
-      # data.table to factor
-      if (is.data.table(labels) && ncol(labels) == 1L) {
-        labels = labels[[1]]
-      }
-      # factor to one-hot
-      if (is.factor(labels)) {
-        labels = one_hot(labels)
-        if (is.matrix(labels)) stop("MCBoost cannot handle multiclass classification")
-      }
-      assert_numeric(labels, lower = 0, upper = 1)
+      assert_flag(audit)
 
-      # Instantiate buckets
-      buckets = list(ProbRange$new())
-      if (self$partition && self$num_buckets > 1L) {
-        frac = 1 / self$num_buckets
-        buckets = c(buckets, mlr3misc::map(seq_len(self$num_buckets), function(b) {
-          ProbRange$new((b-1) * frac, b * frac)
-        }))
-        buckets[[2]]$lower = -Inf
-        buckets[[length(buckets)]]$upper = Inf
-      } else {
-        if (self$num_buckets == 1L) stop("If partition=TRUE, num_buckets must be > 1!")
-      }
-
-      pred_probs = assert_numeric(do.call(self$predictor, discard(list(data, predictor_args), is.null)), len = nrow(data), finite = TRUE)
+      labels = private$assert_labels(labels, ...)
+      pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data, ...)
+      buckets = private$create_buckets(pred_probs)
       resid = private$compute_residuals(pred_probs, labels)
       new_probs = pred_probs
-      if (self$iter_sampling == "split")  {
-        idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data)/self$max_iter))[seq_len(nrow(data))])
+
+      if (self$iter_sampling == "split") {
+        idxs = split(seq_len(nrow(data)), rep(seq_len(self$max_iter), ceiling(nrow(data) / self$max_iter))[seq_len(nrow(data))])
       }
+
       for (i in seq_len(self$max_iter)) {
         corrs = integer(length(buckets))
         models = vector(mode = "list", length = length(buckets))
 
         # Sampling strategies for the validation data in each iteration.
         if (self$iter_sampling == "bootstrap") {
-          idx = sample(nrow(data), nrow(data), replace=TRUE)
+          idx = sample(nrow(data), nrow(data), replace = TRUE)
         } else if (self$iter_sampling == "split") {
           idx = idxs[[i]]
         } else {
           idx = seq_len(nrow(data))
         }
 
-        if (self$rebucket) {
-          probs = new_probs
-        } else {
-          probs = pred_probs
-        }
+        probs = private$get_probs(pred_probs, new_probs)
 
         # Fit on partitions
         for (j in seq_along(buckets)) {
-          mask = buckets[[j]]$in_range_mask(probs[idx])
-          if (sum(mask) < 1L) next # case no obs. are in the bucket. Are assigned corrs=0.
-          data_m = data[idx,][mask,]
-          resid_m = resid[idx][mask]
-          out = self$auditor_fitter$fit_to_resid(data_m, resid_m, idx[mask])
+          in_bucket = private$get_masked(data, resid, idx, probs, buckets[[j]])
+          if (is.null(in_bucket)) next
+          out = self$auditor_fitter$fit_to_resid(in_bucket$data_m, in_bucket$resid_m, in_bucket$idx_m)
           corrs[j] = out[[1]]
           models[[j]] = out[[2]]
         }
-
         if (self$eval_fulldata) {
           corrs = map_dbl(models, function(m) {
-            if (is.null(m)) return(0)
-            mean(m$predict(data[idx,]) * resid[idx])
+            if (is.null(m)) {
+              return(0)
+            }
+            private$calculate_corr(auditor = m, data = data, resid = resid, idx = idx)
           })
         }
 
+
         self$iter_corr = c(self$iter_corr, list(corrs))
+
         if (abs(max(corrs)) < self$alpha) {
           break
         } else {
@@ -316,7 +262,7 @@ MCBoost = R6::R6Class("MCBoost",
           prob_mask = max_key$in_range_mask(probs)
           self$iter_models = c(self$iter_models, models[[bucket_id]])
           self$iter_partitions = c(self$iter_partitions, max_key)
-          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask, update_sign = sign(corrs[bucket_id]))
+          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask, update_sign = sign(corrs[bucket_id]), audit = audit)
           resid = private$compute_residuals(new_probs, labels)
         }
       }
@@ -346,17 +292,14 @@ MCBoost = R6::R6Class("MCBoost",
       # convert to data.table
       if (is.matrix(x) || is.data.frame(x)) x = as.data.table(as.data.frame(x))
       assert_data_table(x)
-      orig_preds = assert_numeric(do.call(self$predictor, discard(list(x, predictor_args), is.null)), len = nrow(x))
+      orig_preds = private$assert_prob(do.call(self$predictor, discard(list(x, predictor_args), is.null)), x, ...)
       new_preds = orig_preds
       for (i in seq_along(self$iter_models)) {
         if (i <= t) {
-          if (self$rebucket) {
-            probs = new_preds
-          } else {
-            probs = orig_preds
-          }
+          probs = private$get_probs(orig_preds, new_preds)
           mask = self$iter_partitions[[i]]$in_range_mask(probs)
-          new_preds = private$update_probs(new_preds, self$iter_models[[i]], x, mask=mask, audit=audit, ...)
+          new_preds = private$update_probs(new_preds, self$iter_models[[i]], x,
+            mask = mask, audit = audit, ...)
         }
       }
       return(new_preds)
@@ -380,7 +323,9 @@ MCBoost = R6::R6Class("MCBoost",
     auditor_effect = function(x, aggregate = TRUE, t = Inf, predictor_args = NULL, ...) {
       assert_flag(aggregate)
       # Reset the auditor effects after returning
-      on.exit({self$auditor_effects = list()})
+      on.exit({
+        self$auditor_effects = list()
+      })
       self$predict_probs(x, t, predictor_args, audit = TRUE, ...)
       if (aggregate) {
         Reduce("+", self$auditor_effects) / length(self$auditor_effects)
@@ -396,7 +341,9 @@ MCBoost = R6::R6Class("MCBoost",
       cat(format(self, ...), sep = "\n")
       if (length(self$iter_models)) {
         catf("Fitted Multi-calibration model (%s iters)", length(self$iter_models))
-        dt = rbindlist(map(self$iter_corr, function(x) setNames(as.data.frame(as.list(x)), paste0("Bucket_", seq_along(x)))), fill = TRUE)
+        dt = rbindlist(map(
+          self$iter_corr,
+          function(x) setNames(as.data.frame(as.list(x)), paste0("Bucket_", seq_along(x)))), fill = TRUE)
         dt = cbind("iter" = seq_len(nrow(dt)), dt)
         catf("Correlations per iteration:")
         print(dt)
@@ -405,25 +352,138 @@ MCBoost = R6::R6Class("MCBoost",
   ),
   private = list(
     update_probs = function(orig_preds, model, x, mask = NULL, audit = FALSE, update_sign = 1, ...) {
-
       deltas = numeric(length(orig_preds))
       deltas[mask] = model$predict(x, ...)[mask]
 
       if (self$multiplicative) {
-        update_weights = exp(- self$eta * update_sign * deltas)
+
+        update_weights = exp(-self$eta * update_sign * deltas)
         # Add a small term to enable moving away from 0.
         new_preds = update_weights * pmax(orig_preds, 1e-4)
       } else {
         update_weights = (self$eta * update_sign * deltas)
         new_preds = orig_preds - update_weights
       }
+
       if (audit) {
         self$auditor_effects = c(self$auditor_effects, list(abs(deltas)))
       }
       return(clip_prob(new_preds))
     },
+
     compute_residuals = function(prediction, labels) {
       prediction - labels
+    },
+
+    assert_labels = function(labels, ...) {
+      # data.table to factor
+      if (is.data.table(labels) && ncol(labels) == 1L) {
+        labels = labels[[1]]
+      }
+      # factor to one-hot
+      if (is.factor(labels)) {
+        labels = one_hot(labels)
+        if (is.matrix(labels)) stop("MCBoost cannot handle multiclass classification")
+      }
+      assert_numeric(labels, lower = 0, upper = 1)
+
+      labels
+    },
+
+    create_buckets = function(pred_probs) {
+      # not use pred_probs
+      buckets = list(ProbRange$new())
+
+      if (self$num_buckets > 1L) {
+        # if (self$partition && self$num_buckets > 1L) {
+        frac = 1 / self$num_buckets
+        buckets = c(buckets, mlr3misc::map(seq_len(self$num_buckets), function(b) {
+          ProbRange$new((b - 1) * frac, b * frac)
+        }))
+        buckets[[2]]$lower = -Inf
+        buckets[[length(buckets)]]$upper = Inf
+      }
+      buckets
+    },
+
+    assert_prob = function(prob, data, ...) {
+      assert_numeric(prob, len = nrow(data), finite = TRUE, lower = 0, upper = 1)
+    },
+
+    get_masked = function(data, resid, idx, probs, bucket) {
+      mask = bucket$in_range_mask(probs[idx])
+
+      if (sum(mask) < 1L) {
+        return(NULL)
+      } # case no obs. are in the bucket. Are assigned corrs=0.
+
+      data_m = data[idx, ][mask, ]
+      resid_m = resid[idx][mask]
+      idx_m = idx[mask]
+
+      return(list(data_m = data_m, resid_m = resid_m, idx_m = idx_m))
+    },
+
+    get_probs = function(pred_probs, new_probs) {
+      if (self$rebucket) {
+        probs = new_probs
+      } else {
+        probs = pred_probs
+      }
+    },
+
+    get_auditor_fitter = function(subpops, auditor_fitter) {
+      # Subpopulation fitters.
+      if (!is.null(subpops)) {
+        auditor_fitter = SubpopAuditorFitter$new(subpops)
+      } else {
+        if (is.null(auditor_fitter)) {
+          auditor_fitter = RidgeAuditorFitter$new()
+        } else if (inherits(auditor_fitter, "Learner")) {
+          auditor_fitter = LearnerAuditorFitter$new(auditor_fitter)
+        } else if (inherits(auditor_fitter, "AuditorFitter")) {
+          auditor_fitter = auditor_fitter
+        } else if (inherits(auditor_fitter, "character")) {
+          auditor_fitter = switch(auditor_fitter,
+            "TreeAuditorFitter" = TreeAuditorFitter$new(),
+            "RidgeAuditorFitter" = RidgeAuditorFitter$new(),
+            "CVTreeAuditorFitter" = CVTreeAuditorFitter$new(),
+            "CVRidgeAuditorFitter" = CVRidgeAuditorFitter$new(),
+            stop(sprintf("auditor_fitter '%s' not found, must be '[CV]TreeAuditorFitter' or '[CV]RidgeAuditorFitter'", auditor_fitter))
+          )
+        } else {
+          stop(sprintf("auditor_fitter must be of type 'AuditorFitter' or character"))
+        }
+      }
+      auditor_fitter
+    },
+
+    get_predictor = function(init_predictor, default_model_class) {
+      # Initial Predictor
+      if (is.null(init_predictor)) {
+        # Can be a class-generator -> Instantiate
+        if (inherits(default_model_class, "R6ClassGenerator")) {
+          dm = default_model_class$new()
+        } else {
+          dm = assert_class(default_model_class, "Predictor")
+        }
+        init_predictor = function(data) {
+          dm$predict(data)
+        }
+      } else if (inherits(init_predictor, "Learner")) {
+        if (!is.null(init_predictor$state)) {
+          # Fitted learner
+          init_predictor = mlr3_init_predictor(init_predictor)
+        } else {
+          # Not fitted
+          init_predictor = LearnerPredictor$new(init_predictor)
+        }
+      }
+      assert_function(init_predictor, args = "data")
+    },
+
+    calculate_corr = function(auditor, data, resid, idx) {
+      mean(auditor$predict(data[idx, ]) * resid[idx])
     }
   )
 )

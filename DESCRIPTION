@@ -18,6 +18,9 @@ Authors@R:
              role = "ctb",
              email = "c.kern@uni-mannheim.de",
              comment = c(ORCID = "0000-0001-7363-4299")),
+      person(given = "Carolin", 
+             family = "Becker",
+             role = "ctb"),
       person(given = "Bernd",
              family = "Bischl",
              role = "ctb",
@@ -53,6 +56,7 @@ Suggests:
     PracTools,
     mlr3learners,
     mlr3oml,
+    mlr3proba (>= 0.4.0),
     neuralnet,
     paradox,
     testthat,
@@ -61,5 +65,18 @@ Suggests:
     rmarkdown,
     covr
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
+Collate: 
+    'AuditorFitters.R'
+    'MCBoost.R'
+    'MCBoostSurv.R'
+    'PipelineMCBoost.R'
+    'PipeOpLearnerPred.R'
+    'PipeOpMCBoost.R'
+    'PipeOpMCBoostSurv.R'
+    'Predictor.R'
+    'ProbRange.R'
+    'ProbRange2D.R'
+    'helpers.R'
+    'zzz.R'
