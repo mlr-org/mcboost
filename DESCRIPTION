@@ -52,6 +52,7 @@ Imports:
     glmnet
 Suggests:
     curl,
+    lgr,
     formattable,
     tidyverse,
     PracTools,
