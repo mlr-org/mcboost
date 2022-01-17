@@ -2,7 +2,7 @@ test_that("PipeOp Learner Pred", {
   skip_on_cran()
   skip_on_os("solaris")
 
-  pop = po("learner_pred", learner = lrn("surv.kaplan"))
+  pop = mlr3pipelines::po("learner_pred", learner = lrn("surv.kaplan"))
   expect_is(pop, "PipeOp")
 
   out = pop$train(list(tsk("rats")))[[1]]

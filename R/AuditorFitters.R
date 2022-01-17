@@ -63,7 +63,6 @@ LearnerAuditorFitter = R6::R6Class("LearnerAuditorFitter",
       l = self$learner$clone()
       l$fit(data, resid)
       h = l$predict(data)
-
       corr = mean(h * resid)
       return(list(corr, l))
     }

@@ -100,7 +100,7 @@ but by time/individual. Individuals are selected by aggregated value per
 individual (e.g. mean).
 Only relevant for \code{time_buckets} > 1.}
 
-\item{\code{time_eval}}{\code{\link{double}} \cr
+\item{\code{max_time_quantile}}{\code{\link{double}} \cr
 Time quantile which should be evaluated and multicalibrated.
 Similar to a 75\%-Integrated Brier Score.}
 
@@ -146,7 +146,7 @@ Initialize a multi-calibration instance.
   num_buckets = 1,
   partition = ifelse(num_buckets > 1, TRUE, FALSE),
   time_buckets = 2L,
-  time_eval = 1,
+  max_time_quantile = 1,
   bucket_strategy = "even_splits",
   bucket_aggregation = NULL,
   rebucket = FALSE,
@@ -185,9 +185,10 @@ Defaults to \code{TRUE} (multi-accuracy boosting).}
 \item{\code{time_buckets}}{\code{\link{integer}} \cr
 The number of buckets to split the time points (columns) of the prediction.}
 
-\item{\code{time_eval}}{\code{\link{double}} \cr
+\item{\code{max_time_quantile}}{\code{\link{double}} \cr
 Time quantile which should be evaluated and multicalibrated.
-Similar to a 75\%-Integrated Brier Score.}
+Can be used to perform multi-calibration only up to the \code{max_time_quantile} percent of timepoints.
+Initialized to \code{1}.}
 
 \item{\code{bucket_strategy}}{\code{\link{character}} \cr
 Bucketstragy for bucketing.

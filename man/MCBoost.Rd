@@ -209,7 +209,7 @@ Can be \code{bootstrap}, \code{split} or \code{none}.\cr
 \subsection{Method \code{multicalibrate()}}{
 Run multi-calibration.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels, predictor_args = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels, predictor_args = NULL, audit = TRUE, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -223,6 +223,9 @@ One-hot encoded labels (of same length as data).}
 
 \item{\code{predictor_args}}{\code{\link{any}} \cr
 Arguments passed on to \code{init_predictor}. Defaults to \code{NULL}.}
+
+\item{\code{audit}}{\code{\link{logical}} \cr
+Perform auditing? Initialized to \code{TRUE}.}
 
 \item{\code{...}}{\code{\link{any}} \cr
 Params passed on to other methods.}
