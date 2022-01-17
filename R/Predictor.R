@@ -111,7 +111,7 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
           p = one_hot(prd$response)
         }
         return(p)
-      } else if (inherits(prd,"PredictionSurv")){
+      } else if (inherits(prd ,"PredictionSurv")) {
         return(as.data.table(prd)$distr[[1]][[1]])
       }
     }

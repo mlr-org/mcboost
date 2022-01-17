@@ -13,7 +13,7 @@ Kim et al., 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Class
 Hebert-Johnson et al., 2018: Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses.
 Pfisterer F, Kern C, Dandl S, Sun M, Kim M, Bischl B (2021).
 \dQuote{mcboost: Multi-Calibration Boosting for R.}
-\emph{Journal of Open Source Software}.
+\emph{Journal of Open Source Software}, \bold{6}(64), 3453.
 \doi{10.21105/joss.03453}, \url{https://joss.theoj.org/papers/10.21105/joss.03453}.
 }
 \seealso{
@@ -31,6 +31,7 @@ Other contributors:
 \itemize{
   \item Susanne Dandl \email{susanne.dandl@stat.uni-muenchen.de} (\href{https://orcid.org/0000-0003-4324-4163}{ORCID}) [contributor]
   \item Christoph Kern \email{c.kern@uni-mannheim.de} (\href{https://orcid.org/0000-0001-7363-4299}{ORCID}) [contributor]
+  \item Carolin Becker [contributor]
   \item Bernd Bischl \email{bernd_bischl@gmx.net} (\href{https://orcid.org/0000-0001-6002-6980}{ORCID}) [contributor]
 }
 

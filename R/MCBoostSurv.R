@@ -115,10 +115,10 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     #'   Only relevant for `time_buckets` > 1.
     bucket_aggregation = NULL,
 
-    #' @field time_eval [`double`] \cr
+    #' @field max_time_quantile [`double`] \cr
     #' Time quantile which should be evaluated and multicalibrated.
     #' Similar to a 75%-Integrated Brier Score.
-    time_eval = NULL,
+    max_time_quantile = NULL,
 
     #' @field time_points_eval [`integer`] \cr
     #' Vector of time_points that should be evaluated.
@@ -184,9 +184,10 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     #' Bucketstragy for bucketing.
     #'   `even_splits`: split buckets evenly
     #'   `quantiles`: split buckets by quantiles
-    #' @param time_eval [`double`] \cr
-    #' Time quantile which should be evaluated and multicalibrated.
-    #' Similar to a 75%-Integrated Brier Score.
+    #' @param max_time_quantile [`double`] \cr
+    #'   Time quantile which should be evaluated and multicalibrated.
+    #'   Can be used to perform multi-calibration only up to the `max_time_quantile` percent of timepoints.
+    #'   Initialized to `1`.
     #' @param bucket_aggregation [`function`] \cr
     #'   If not NULL, predictions are not selected by time/probability,
     #'   but by time/individual. Individuals are selected by aggregated value per
@@ -205,7 +206,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       num_buckets = 1, # probability_buckets
       partition =  ifelse(num_buckets>1, TRUE, FALSE),
       time_buckets = 2L,
-      time_eval = 1,
+      max_time_quantile = 1,
       bucket_strategy = "even_splits",
       bucket_aggregation = NULL,
       rebucket = FALSE,
@@ -218,6 +219,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       loss = "censored_brier",
       iter_sampling = "none") {
 
+      mlr3misc::require_namespaces("mlr3proba")
       super$initialize(
         max_iter,
         alpha,
@@ -234,12 +236,10 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         init_predictor,
         iter_sampling
       )
-
-      self$time_eval = assert_double(time_eval, lower = 0.1, upper = 1, finite = TRUE, len = 1)
+      self$max_time_quantile = assert_double(max_time_quantile, lower = 0.1, upper = 1, finite = TRUE, len = 1)
       self$time_buckets = assert_int(time_buckets, lower = 1)
       self$bucket_aggregation = assert_function(bucket_aggregation, null.ok = TRUE)
       self$loss = assert_choice(loss, choices = c("censored_brier", "brier", "censored_brier_proper"))
-
     }
   ),
 
@@ -273,7 +273,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       }
 
       if (audit) {
-        auditor_effects = c(auditor_effects, list(abs(deltas)))
+        self$auditor_effects = c(self$auditor_effects, list(abs(deltas)))
       }
 
       # also correct for survival property: monotonically decreasing & between 0 and 1
@@ -333,7 +333,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
         if (is.data.table(labels)) {
           labels = assert_data_table(labels, col.names = "named")
-          if (sum(colnames(labels) %in% c("status", "time")) < 2) stop("labels must have the names status and time")
+          if (sum(colnames(labels) %in% c("status", "time")) < 2) stop("labels must have the names status and time") # nocov
           labels = survival::Surv(unlist(labels[, "time"]), unlist(labels[, "status"]))
         }
       }
@@ -379,7 +379,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       }
 
       if (inherits(probs, "Distribution")) {
-        probs = t(as.matrix(probs$survival(self$time_points)))
+        distr6::decorate(probs, "ExoticStatistics")
+        probs = t(as.matrix(probs$survival( self$time_points)))
       }
 
       probs = assert_numeric(as.matrix(probs), lower = 0, upper = 1, null.ok = FALSE, any.missing = FALSE, finite = TRUE)
@@ -420,8 +421,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
 
       # set time_points_eval
-      if (self$time_eval < 1) {
-        q = quantile(self$time_points[is.finite(self$time_points)], self$time_eval)
+      if (self$max_time_quantile < 1) {
+        q = quantile(self$time_points[is.finite(self$time_points)], self$max_time_quantile)
         self$time_points_eval = unique(self$time_points[self$time_points < q])
       } else {
         self$time_points_eval = self$time_points
@@ -437,7 +438,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     create_buckets = function(pred_probs) {
 
       # cut the times which are evaluated
-      if (self$time_eval < 1) {
+      if (self$max_time_quantile < 1) {
         max_time = max(self$time_points_eval)
       } else {
         max_time = Inf
@@ -446,7 +447,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       min_time = min(self$time_points_eval[is.finite(self$time_points_eval)])
 
       # create time buckets
-      if (self$time_eval == 1L) {
+      if (self$max_time_quantile == 1L) {
         buckets = list(ProbRange2D$new())
       } else {
         buckets = list(ProbRange2D$new(time = ProbRange$new(lower = -Inf, upper = max_time)))

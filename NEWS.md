@@ -1,6 +1,8 @@
 # mcboost (development version)
 
-# mcboost 0.3.4
+# mcboost 0.4.0
+* [Experimental] mcboost now has experimental support for *survival* tasks.
+  See `MCBoostSurv` and the corresponding vignette "MCBoostSurv - Basics" for more information.
 * We have published an article about mcboost in the Journal of Open Source Software: "https://joss.theoj.org/papers/10.21105/joss.03453". See citation("mcboost") for the citation info.
 
 

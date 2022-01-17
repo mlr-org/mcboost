@@ -85,8 +85,12 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         paradox::ParamUty$new("init_predictor", default = NULL, tags = "train")
       ))
       super$initialize(id,
-        param_set = param_set, param_vals = param_vals, packages = character(0),
-        input = data.table(name = c("data", "prediction"), train = c("TaskSurv", "TaskSurv"), predict = c("TaskSurv", "TaskSurv")),
+        param_set = param_set, param_vals = param_vals, packages = "mlr3proba",
+        input = data.table(
+          name = c("data", "prediction"), 
+          train = c("TaskSurv", "TaskSurv"),
+          predict = c("TaskSurv", "TaskSurv")
+        ),
         output = data.table(name = "output", train = "NULL", predict = "PredictionSurv"),
         tags = "target transform")
     }
@@ -100,11 +104,11 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
       args = self$param_set$get_values(tags = "train")
 
       if (is.null(args$init_predictor)) {
-        # Construct an initial predictor from the input model if non is provided.
+        # Construct an initial predictor from the input model if none is provided.
         init_predictor = function(data, prediction) {
           distr_col = prediction$feature_names[grepl("distr$",prediction$feature_names)]
-          if (is.null(distr_col)) stop("No distr output in your predictions.")
-          if(length(distr_col)>1) stop("More than one distr columns in your prediction?")
+          if (is.null(distr_col)) stop("No distr output in the predictions.")
+          if (length(distr_col) > 1) stop("More than one distr columns in the prediction?")
           as.data.table(prediction)[[distr_col]][[1]][[1]]
         }
         args$init_predictor = init_predictor
@@ -142,37 +146,3 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
     }
   )
 )
-
-
-
-
-
-#' Multi-calibration pipeline (for survival models)
-#'
-#' Wraps MCBoostSurv in a Pipeline to be used with `mlr3pipelines`.
-#' For now this assumes training on the same dataset that is later used
-#' for multi-calibration.
-#' @param learner (mlr3)[`mlr3::Learner`]\cr
-#'   Initial learner.
-#'   Defaults to `lrn("surv.kaplan")`.
-#'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
-#'   The learner is internally wrapped into a `PipeOpLearnerCV`
-#'   with `resampling.method = "insample"` as a default.
-#'   All parameters can be adjusted through the resulting Graph's `param_set`.
-#' @return (mlr3pipelines) [`Graph`]
-#' @examples
-#' library("mlr3pipelines")
-#' gr = ppl_mcboostsurv()
-#' @export
-ppl_mcboostsurv = function(learner = lrn("surv.kaplan"), param_vals = list()) {
-  mlr3misc::require_namespaces("mlr3pipelines")
-  gr = mlr3pipelines::`%>>%`(
-    mlr3pipelines::gunion(list(
-      "data" = mlr3pipelines::po("nop"),
-      "prediction" =  mlr3pipelines::po("learner_pred", learner = learner)
-    )),
-    PipeOpMCBoostSurv$new(param_vals = param_vals)
-  )
-}
-
-mlr3pipelines::mlr_pipeops$add("mcboostsurv", PipeOpMCBoostSurv)

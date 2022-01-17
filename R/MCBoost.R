@@ -196,15 +196,18 @@ MCBoost = R6::R6Class("MCBoost",
     #' Run multi-calibration.
     #' @template params_data_label
     #' @param predictor_args [`any`] \cr
-    #'  Arguments passed on to `init_predictor`. Defaults to `NULL`.
+    #'   Arguments passed on to `init_predictor`. Defaults to `NULL`.
+    #' @param audit [`logical`] \cr
+    #'   Perform auditing? Initialized to `TRUE`.
     #' @param ... [`any`] \cr
     #'  Params passed on to other methods.
     #'
     #' @return `NULL`
-    multicalibrate = function(data, labels, predictor_args = NULL, ...) {
+    multicalibrate = function(data, labels, predictor_args = NULL, audit = TRUE, ...) {
 
       if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
       assert_data_table(data)
+      assert_flag(audit)
 
       labels = private$assert_labels(labels, ...)
       pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data, ...)
@@ -259,7 +262,7 @@ MCBoost = R6::R6Class("MCBoost",
           prob_mask = max_key$in_range_mask(probs)
           self$iter_models = c(self$iter_models, models[[bucket_id]])
           self$iter_partitions = c(self$iter_partitions, max_key)
-          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask, update_sign = sign(corrs[bucket_id]))
+          new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask, update_sign = sign(corrs[bucket_id]), audit = audit)
           resid = private$compute_residuals(new_probs, labels)
         }
       }

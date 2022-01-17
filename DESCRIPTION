@@ -18,6 +18,9 @@ Authors@R:
              role = "ctb",
              email = "c.kern@uni-mannheim.de",
              comment = c(ORCID = "0000-0001-7363-4299")),
+      person(given = "Carolin", 
+             family = "Becker",
+             role = "ctb"),
       person(given = "Bernd",
              family = "Bischl",
              role = "ctb",
@@ -44,7 +47,6 @@ Imports:
     mlr3misc (>= 0.8.0),
     mlr3pipelines (>= 0.3.0),
     R6 (>= 2.4.1),
-    mlr3proba (>= 0.4.0),
     rpart,
     glmnet
 Suggests:
@@ -54,6 +56,7 @@ Suggests:
     PracTools,
     mlr3learners,
     mlr3oml,
+    mlr3proba (>= 0.4.0),
     neuralnet,
     paradox,
     testthat,
@@ -68,6 +71,7 @@ Collate:
     'AuditorFitters.R'
     'MCBoost.R'
     'MCBoostSurv.R'
+    'PipelineMCBoost.R'
     'PipeOpLearnerPred.R'
     'PipeOpMCBoost.R'
     'PipeOpMCBoostSurv.R'

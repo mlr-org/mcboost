@@ -144,6 +144,15 @@ Other PipeOps:
 \section{Super classes}{
 \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}} -> \code{\link[mlr3pipelines:PipeOpTaskPreproc]{mlr3pipelines::PipeOpTaskPreproc}} -> \code{PipeOpLearnerPred}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{learner}}{The wrapped learner.}
+
+\item{\code{learner_model}}{The wrapped learner's model(s).}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -164,10 +173,26 @@ Other PipeOps:
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Initialize a Learner Predictor PipeOp. Can be used to wrap trained or untrainted
+mlr3 learners.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PipeOpLearnerPred$new(learner, id = NULL, param_vals = list())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{learner}}{\code{\link{Learner}}\cr
+The learner that should be wrapped.}
+
+\item{\code{id}}{\code{\link{character}} \cr
+The \code{PipeOp}'s id. Defaults to "mcboost".}
+
+\item{\code{param_vals}}{\code{\link{list}} \cr
+List of hyperparameters for the \code{PipeOp}.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

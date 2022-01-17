@@ -58,20 +58,31 @@
 PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
   inherit = mlr3pipelines::PipeOpTaskPreproc,
   public = list(
+    #' @description
+    #'   Initialize a Learner Predictor PipeOp. Can be used to wrap trained or untrainted 
+    #'   mlr3 learners.
+    #' @param learner [`Learner`]\cr
+    #'   The learner that should be wrapped.  
+    #' @param id [`character`] \cr
+    #'   The `PipeOp`'s id. Defaults to "mcboost".
+    #' @param param_vals [`list`] \cr
+    #'   List of hyperparameters for the `PipeOp`.
     initialize = function(learner, id = NULL, param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
       private$.learner$param_set$set_id = ""
       id = id %??% private$.learner$id
       task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
       super$initialize(id, alist(private$.learner$param_set),
-                       param_vals = param_vals,
-                       can_subset_cols = TRUE,
-                       task_type = task_type,
-                       tags = c("learner"))
+        param_vals = param_vals,
+        can_subset_cols = TRUE,
+        task_type = task_type,
+        tags = c("learner")
+      )
     }
 
   ),
   active = list(
+    #' @field learner The wrapped learner.
     learner = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
@@ -80,6 +91,7 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
       }
       private$.learner
     },
+    #' @field learner_model The wrapped learner's model(s).
     learner_model = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
@@ -99,9 +111,9 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
 
       # Train a learner for predicting
       state = private$.learner$state
-      if(is.null(state)){
+      if (is.null(state)) {
         self$state = private$.learner$train(task)$state
-      }else{
+      } else {
         self$state = state
       }
 
@@ -125,5 +137,3 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
     .learner = NULL
   )
 )
-
-mlr3pipelines::mlr_pipeops$add("learner_pred", PipeOpLearnerPred)

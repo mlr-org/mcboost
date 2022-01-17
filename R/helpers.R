@@ -69,11 +69,11 @@ mlr3_init_predictor = function(learner) {
     function(data, ...) {
       one_hot(learner$predict_newdata(data)$response)
     }
-  } else if ("distr" %in% learner$predict_types){
+  } else if ("distr" %in% learner$predict_types) {
     function(data, ...) {
       as.data.table(learner$predict_newdata(data))$distr[[1]][[1]]
     }
-  } else if(learner$predict_type == "prob"){
+  } else if(learner$predict_type == "prob") {
     function(data, ...) {
       learner$predict_newdata(data)$prob[, 1L]
     }
