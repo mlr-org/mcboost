@@ -231,7 +231,7 @@ In order to get more insights, we compute quantiles of the
 less and more effected population (median as cut-point) and analyze differences.
 
 ```{r}
-effect = apply(test_data[ae >= median(ae[ae>0]),], 2, quantile)
+effect = apply(test_data[ae >= median(ae[ae > 0]),], 2, quantile)
 no_effect  = apply(test_data[ae < median(ae[ae>0]),], 2, quantile)
 difference = apply((effect-no_effect), 2, mean)
 difference[difference > 0.1]

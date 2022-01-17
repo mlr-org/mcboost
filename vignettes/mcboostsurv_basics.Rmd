@@ -120,14 +120,16 @@ xgb_distr$train(task_pbc$clone()$filter(train_ids))
 
 ```{r}
 # initialize mcboost
- mcboost_learner = as_learner(prep_pipe %>>% 
-                                 ppl_mcboostsurv(learner = as_learner(prep_pipe 
-                                                                      %>>% xgb_distr), 
-                                                 param_vals = list(
-                                                   alpha = 1e-6,
-                                                   eta = 0.2,
-                                                   time_buckets = 2,
-                                                   num_buckets = 1 )))
+ mcboost_learner = as_learner(
+   prep_pipe %>>% ppl_mcboostsurv(
+     learner = as_learner(prep_pipe %>>% xgb_distr), 
+     param_vals = list(
+       alpha = 1e-6,
+       eta = 0.2,
+       time_buckets = 2,
+       num_buckets = 1 )
+  )
+)
 
 # multicalibrate model
 mcboost_learner$train(task_pbc$clone()$filter(val_ids))

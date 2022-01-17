@@ -6,7 +6,6 @@ test_that("AuditorFitters work", {
   expect_error(rf$fit(1, 1), "Not implemented")
 })
 
-
 test_that("LearnerAuditorFitters work", {
   skip_on_cran()
   rf = LearnerAuditorFitter$new(lrn("regr.featureless"))

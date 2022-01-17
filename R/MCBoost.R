@@ -407,7 +407,7 @@ MCBoost = R6::R6Class("MCBoost",
     },
 
     assert_prob = function(prob, data, ...) {
-      assert_numeric(prob, len = nrow(data), finite = TRUE, lower = 0, upper = 1)
+      assert_numeric(prob, len = nrow(data), finite = TRUE)
     },
 
     get_masked = function(data, resid, idx, probs, bucket) {
