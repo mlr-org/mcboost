@@ -3,6 +3,7 @@ context("MCBoostSurv PipeOp")
 test_that("MCBoostSurv class instantiation", {
   skip_on_cran()
   skip_on_os("solaris")
+  library("mlr3pipelines")
   gr = gunion(list(
     "data" = po("encode") %>>% po("nop"),
     "prediction" = po("learner_pred", lrn("surv.ranger"))
@@ -22,6 +23,7 @@ test_that("MCBoostSurv class instantiation", {
 test_that("pipeop instantiation", {
   skip_on_cran()
   skip_on_os("solaris")
+  library("mlr3pipelines")
   pop = po("mcboostsurv")
   expect_is(pop, "PipeOpMCBoostSurv")
   expect_is(pop, "PipeOp")
@@ -32,7 +34,7 @@ test_that("pipeop instantiation", {
 test_that("MCBoostSurv ppl", {
   skip_on_cran()
   skip_on_os("solaris")
-  rats = survival::rats
+  library("survival")
   rats$sex = (as.character(rats$sex)) == "f"
   task = TaskSurv$new("rats",
     backend = as_data_backend(rats),

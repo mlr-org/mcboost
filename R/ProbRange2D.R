@@ -2,7 +2,6 @@
 #' @description
 #' Range of format list(prob = [lower_prob; upper_prob), time = [lower_time; upper_time).
 #' @noRd
-#' @export
 ProbRange2D = R6::R6Class("ProbRange2D",
   public = list(
     #' @field prob [`ProbRange`] \cr

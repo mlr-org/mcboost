@@ -220,6 +220,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       iter_sampling = "none") {
 
       mlr3misc::require_namespaces("mlr3proba")
+      mlr3misc::require_namespaces("survival")
+      
       super$initialize(
         max_iter,
         alpha,
@@ -293,7 +295,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
         proper = ifelse(self$loss == "censored_brier", FALSE, TRUE)
 
-        cens_distr = survival::survfit(survival::Surv(unlist(labels[, "time"]), (1 - unlist(labels[, "status"]))) ~ 1)
+        surv = invoke(survival::Surv, unlist(labels[, "time"]), (1 - unlist(labels[, "status"])))
+        cens_distr = invoke(survival::survfit, surv ~ 1)
         cens_matrix = matrix(c(cens_distr$time, cens_distr$surv), ncol = 2)
 
         # weight the residual matrix according to Graf et.al(1999)
@@ -334,7 +337,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
         if (is.data.table(labels)) {
           labels = assert_data_table(labels, col.names = "named")
           if (sum(colnames(labels) %in% c("status", "time")) < 2) stop("labels must have the names status and time") # nocov
-          labels = survival::Surv(unlist(labels[, "time"]), unlist(labels[, "status"]))
+          labels = invoke(survival::Surv, unlist(labels[, "time"]), unlist(labels[, "status"]))
         }
       }
 
@@ -379,8 +382,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       }
 
       if (inherits(probs, "Distribution")) {
-        distr6::decorate(probs, "ExoticStatistics")
-        probs = t(as.matrix(probs$survival( self$time_points)))
+        probs = t(as.matrix(probs$survival(self$time_points)))
       }
 
       probs = assert_numeric(as.matrix(probs), lower = 0, upper = 1, null.ok = FALSE, any.missing = FALSE, finite = TRUE)
@@ -404,13 +406,13 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
       # There are different time_points in the predicted probabilities
       # & the columns of predicted probabilities not have names
-      if (is.null(num_colnames) && (!length(diff) || length(num_colnames) != length(time_points))) {
+      if (is.null(num_colnames) && (!length(diff) || length(num_colnames) != length(self$time_points))) {
         stop("Predicted values do not have columnnames and do not match the time_points (input) or labels")
       }
 
 
       # There are no columnnames, but the length matches
-      if (is.null(num_colnames) && length(num_colnames) == length(time_points)) {
+      if (is.null(num_colnames) && length(num_colnames) == length(self$time_points)) {
         colnames(probs) = as.character(self$time_points)
       }
 

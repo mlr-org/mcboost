@@ -46,6 +46,7 @@ Imports:
     mlr3 (>= 0.10),
     mlr3misc (>= 0.8.0),
     mlr3pipelines (>= 0.3.0),
+    mlr3proba (>= 0.4.0),
     R6 (>= 2.4.1),
     rpart,
     glmnet
@@ -56,13 +57,13 @@ Suggests:
     PracTools,
     mlr3learners,
     mlr3oml,
-    mlr3proba (>= 0.4.0),
     neuralnet,
     paradox,
     testthat,
     knitr,
     ranger,
     rmarkdown,
+    survival,
     covr
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 RoxygenNote: 7.1.2

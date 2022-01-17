@@ -10,7 +10,7 @@ test_that("MCBoostSurv class instantiation", {
 test_that("MCBoostSurv multicalibrate and predict_probs", {
   library("mlr3learners")
   library("mlr3proba")
-  rats = survival::rats
+  library("survival")
   rats$sex = (as.character(rats$sex))=="f"
   b = as_data_backend(rats)
   tsk = TaskSurv$new("rats",

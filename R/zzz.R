@@ -5,9 +5,10 @@
 #' @import glmnet
 #' @import rpart
 #' @import mlr3proba
+#' @import mlr3pipelines
 #' @importFrom R6 R6Class is.R6
 #' @importFrom utils head
-#' @importFrom stats contrasts runif rnorm  setNames
+#' @importFrom stats contrasts runif rnorm  setNames quantile
 #' @references
 #'   Kim et al., 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
 #'   Hebert-Johnson et al., 2018: Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses.

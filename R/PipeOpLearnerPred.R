@@ -98,7 +98,7 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
           stop("$learner is read-only.")
         }
       }
-      if (is.null(self$state) || is_noop(self$state)) {
+      if (is.null(self$state) || mlr3pipelines::is_noop(self$state)) {
         private$.learner
       } else {
         multiplicity_recurse(self$state, clone_with_state, learner = private$.learner)
@@ -137,3 +137,17 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
     .learner = NULL
   )
 )
+
+clone_with_state = function(learner, state) {
+  lrn = learner$clone(deep = TRUE)
+  lrn$state = state
+  lrn
+}
+
+multiplicity_recurse = function(.multip, .fun, ...) {
+  if (mlr3pipelines::is.Multiplicity(.multip)) {
+    mlr3pipelines::as.Multiplicity(lapply(.multip, function(m) multiplicity_recurse(.multip = m, .fun = .fun, ...)))
+  } else {
+    .fun(.multip, ...)
+  }
+}

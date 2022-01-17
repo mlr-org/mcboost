@@ -85,8 +85,8 @@ Based on this, we can now show multicalibration on a data set with two sensitive
 
 ### Load Dataset
 ```{r}
-
-data_pbc =  survival::pbc %>%
+library(survival)
+data_pbc = pbc %>%
     mutate(status = if_else(status == 2, 1, 0)
     ) %>%
     select(-id) %>%

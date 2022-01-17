@@ -85,7 +85,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         paradox::ParamUty$new("init_predictor", default = NULL, tags = "train")
       ))
       super$initialize(id,
-        param_set = param_set, param_vals = param_vals, packages = "mlr3proba",
+        param_set = param_set, param_vals = param_vals, packages = c("mlr3proba", "survival"),
         input = data.table(
           name = c("data", "prediction"), 
           train = c("TaskSurv", "TaskSurv"),
