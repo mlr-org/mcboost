@@ -29,8 +29,8 @@
 #' @section State:
 #
 #' @section Parameters:
-#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object, together with the `$state` elements inherited from the
-#' [`PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
+#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object, together with the `$state` elements inherited from
+#' [`mlr3pipelines::PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
 #' * `model` :: `any`\cr
 #'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
 #' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
@@ -50,11 +50,10 @@
 #'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
 #'
 #' @section Methods:
-#' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Methods inherited from [`mlr3pipelines::PipeOpTaskPreproc`]/[`mlr3pipelines::PipeOp`].
 #'
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
-#' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
   inherit = mlr3pipelines::PipeOpTaskPreproc,

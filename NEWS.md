@@ -1,5 +1,9 @@
 # mcboost (development version)
 
+# mcboost 0.3.4
+* We have published an article about mcboost in the Journal of Open Source Software: "https://joss.theoj.org/papers/10.21105/joss.03453". See citation("mcboost") for the citation info.
+
+
 # mcboost 0.3.3
 * Auditors can now also update weights if correlations are negative by switching the sign of the update direction as intended in the paper.
 * Minor adaptions to improve stability of unit tests

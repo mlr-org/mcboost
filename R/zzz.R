@@ -11,6 +11,7 @@
 #' @references
 #'   Kim et al., 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
 #'   Hebert-Johnson et al., 2018: Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses.
+#'   `r tools::toRd(citation("mcboost"))`
 "_PACKAGE"
 
 

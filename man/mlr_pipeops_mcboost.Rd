@@ -20,7 +20,24 @@ If no \code{init_predictor} is provided, the preceding learner's predictions
 corresponding to the \code{prediction} slot are used as an initial predictor for \code{MCBoost}.
 }
 \section{Construction}{
+\preformatted{PipeOpLearnerPred$new(learner, id = NULL, param_vals = list())
 
+* `learner` :: [`Learner`][mlr3::Learner] \\cr
+  [`Learner`][mlr3::Learner] to  prediction, or a string identifying a
+  [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
+* `id` :: `character(1)`
+  Identifier of the resulting object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+* `param_vals` :: named `list`\\cr
+  List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+
+
+[mlr3::Learner]: R:mlr3::Learner
+[mlr3::Learner]: R:mlr3::Learner
+[mlr3::Learner]: R:mlr3::Learner
+[`mlr3::mlr_learners`]: R:\%60mlr3::mlr_learners\%60
+[mlr3misc::Dictionary]: R:mlr3misc::Dictionary
+[mlr3::Learner]: R:mlr3::Learner
+}
 
 \preformatted{PipeOpMCBoost$new(id = "mcboost", param_vals = list())
 }
@@ -35,6 +52,11 @@ See \code{MCBoost} for a comprehensive description of all hyperparameters.
 
 \section{Input and Output Channels}{
 
+\code{\link{PipeOpLearnerPred}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+type given to \code{learner} during construction; both during training and prediction.
+
+\code{\link{PipeOpLearnerPred}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+type given to \code{learner} during construction; both during training and prediction.
 
 
 During training, the input and output are \code{"data"} and \code{"prediction"}, two \code{\link[mlr3:TaskClassif]{TaskClassif}}.
@@ -50,6 +72,20 @@ The \verb{$state} is a \code{MCBoost} Object as obtained from \code{MCBoost$new(
 
 \section{Parameters}{
 
+The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object, together with the \verb{$state} elements inherited from
+\code{\link[mlr3pipelines:PipeOpTaskPreproc]{mlr3pipelines::PipeOpTaskPreproc}}. It is a named \code{list} with the inherited members, as well as:
+\itemize{
+\item \code{model} :: \code{any}\cr
+Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
+\item \code{train_log} :: \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
+Errors logged during training.
+\item \code{train_time} :: \code{numeric(1)}\cr
+Training time, in seconds.
+\item \code{predict_log} :: \code{NULL} | \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
+Errors logged during prediction.
+\item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
+Prediction time, in seconds.
+}
 
 
 \itemize{
@@ -60,7 +96,13 @@ A integer specifying the number of multi-calibration rounds. Defaults to 5.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
+Fields inherited from \code{\link{PipeOp}}, as well as:
+\itemize{
+\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
+\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped. This learner contains the model if the \code{PipeOp} is trained. Read-only.
+}
 
 
 Only fields inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
@@ -68,7 +110,7 @@ Only fields inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::Pipe
 
 \section{Methods}{
 
-Only methods inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
+Methods inherited from \code{\link[mlr3pipelines:PipeOpTaskPreproc]{mlr3pipelines::PipeOpTaskPreproc}}/\code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
 
 
 Only methods inherited from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.

@@ -6,15 +6,15 @@
 \alias{mcboost-package}
 \title{mcboost: Multi-Calibration Boosting}
 \description{
-Implements 'Multi-Calibration Boosting' (2018) <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and
-    'Multi-Accuracy Boosting' (2019) <arXiv:1805.12317> for the multi-calibration of a machine learning model's prediction.
-    'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups.
-    Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are.
-    This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
+Implements 'Multi-Calibration Boosting' (2018) <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and 'Multi-Accuracy Boosting' (2019) <arXiv:1805.12317> for the multi-calibration of a machine learning model's prediction. 'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 }
 \references{
 Kim et al., 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
 Hebert-Johnson et al., 2018: Multicalibration: Calibration for the ({C}omputationally-Identifiable) Masses.
+Pfisterer F, Kern C, Dandl S, Sun M, Kim M, Bischl B (2021).
+\dQuote{mcboost: Multi-Calibration Boosting for R.}
+\emph{Journal of Open Source Software}.
+\doi{10.21105/joss.03453}, \url{https://joss.theoj.org/papers/10.21105/joss.03453}.
 }
 \seealso{
 Useful links:
