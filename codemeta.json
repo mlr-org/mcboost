@@ -1,6 +1,25 @@
 {
-  "@context": ["https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld", "http://schema.org"],
-  "@type": "Code",
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "mcboost",
+  "description": "Implements 'Multi-Calibration Boosting' (2018) <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and 'Multi-Accuracy Boosting' (2019) <arXiv:1805.12317> for the multi-calibration of a machine learning model's prediction. 'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.",
+  "name": "mcboost: Multi-Calibration Boosting",
+  "codeRepository": "https://github.com/mlr-org/mcboost",
+  "issueTracker": "https://github.com/mlr-org/mcboost/issues",
+  "license": "https://spdx.org/licenses/LGPL-3.0",
+  "version": "0.4.0",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.1.2 (2021-11-01)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -10,29 +29,6 @@
       "@id": "https://orcid.org/0000-0001-8867-762X"
     }
   ],
-  "identifier": "mcboost",
-  "codeRepository": "https://github.com/mlr-org/mcboost",
-  "dateModified": "2021-06-09",
-  "dateCreated": "2021-06-09",
-  "description": "Implements 'Multi-Calibration Boosting' (2018) <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and\n    'Multi-Accuracy Boosting' (2019) <arXiv:1805.12317> for the multi-calibration of a machine learning model's prediction.\n    'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups.\n    Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are.\n    This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.",
-  "keywords": "Fair ML, Boosting, Calibration, Multi-Calibration",
-  "license": "https://spdx.org/licenses/LGPL-3.0",
-  "title": "mcboost",
-  "version": "0.3.0.9000",
-  "name": "mcboost: Multi-Calibration Boosting",
-  "issueTracker": "https://github.com/mlr-org/mcboost/issues",
-  "programmingLanguage": {
-    "@type": "ComputerLanguage",
-    "name": "R",
-    "url": "https://r-project.org"
-  },
-  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
-  "provider": {
-    "@id": "https://cran.r-project.org",
-    "@type": "Organization",
-    "name": "Comprehensive R Archive Network (CRAN)",
-    "url": "https://cran.r-project.org"
-  },
   "contributor": [
     {
       "@type": "Person",
@@ -50,14 +46,17 @@
     },
     {
       "@type": "Person",
+      "givenName": "Carolin",
+      "familyName": "Becker"
+    },
+    {
+      "@type": "Person",
       "givenName": "Bernd",
       "familyName": "Bischl",
       "email": "bernd_bischl@gmx.net",
       "@id": "https://orcid.org/0000-0001-6002-6980"
     }
   ],
-  "copyrightHolder": {},
-  "funder": {},
   "maintainer": [
     {
       "@type": "Person",
@@ -79,6 +78,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=curl"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "lgr",
+      "name": "lgr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lgr"
     },
     {
       "@type": "SoftwareApplication",
@@ -214,6 +225,30 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "survival",
+      "name": "survival",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=survival"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "xgboost",
+      "name": "xgboost",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=xgboost"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "covr",
       "name": "covr",
       "provider": {
@@ -225,14 +260,14 @@
       "sameAs": "https://CRAN.R-project.org/package=covr"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.1.0"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "backports",
       "name": "backports",
@@ -244,7 +279,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=backports"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "checkmate",
       "name": "checkmate",
@@ -257,19 +292,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=checkmate"
     },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "lifecycle",
-      "name": "lifecycle",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=lifecycle"
-    },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "data.table",
       "name": "data.table",
@@ -282,7 +305,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=data.table"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "mlr3",
       "name": "mlr3",
@@ -295,7 +318,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=mlr3"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "mlr3misc",
       "name": "mlr3misc",
@@ -308,7 +331,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=mlr3misc"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "mlr3pipelines",
       "name": "mlr3pipelines",
@@ -321,7 +344,20 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=mlr3pipelines"
     },
-    {
+    "8": {
+      "@type": "SoftwareApplication",
+      "identifier": "mlr3proba",
+      "name": "mlr3proba",
+      "version": ">= 0.4.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mlr3proba"
+    },
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "R6",
       "name": "R6",
@@ -334,7 +370,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=R6"
     },
-    {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "rpart",
       "name": "rpart",
@@ -346,19 +382,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rpart"
     },
-        {
-      "@type": "SoftwareApplication",
-      "identifier": "mlr3proba",
-      "name": "mlr3proba",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=mlr3proba"
-    },
-    {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "glmnet",
       "name": "glmnet",
@@ -369,11 +393,68 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=glmnet"
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "272.663KB",
+  "citation": [
+    {
+      "@type": "ScholarlyArticle",
+      "datePublished": "2021",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Florian",
+          "familyName": "Pfisterer"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Christoph",
+          "familyName": "Kern"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Susanne",
+          "familyName": "Dandl"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Matthew",
+          "familyName": "Sun"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Michael P.",
+          "familyName": "Kim"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Bernd",
+          "familyName": "Bischl"
+        }
+      ],
+      "name": "mcboost: Multi-Calibration Boosting for R",
+      "identifier": "10.21105/joss.03453",
+      "url": "https://joss.theoj.org/papers/10.21105/joss.03453",
+      "pagination": "3453",
+      "@id": "https://doi.org/10.21105/joss.03453",
+      "sameAs": "https://doi.org/10.21105/joss.03453",
+      "isPartOf": {
+        "@type": "PublicationIssue",
+        "issueNumber": "64",
+        "datePublished": "2021",
+        "isPartOf": {
+          "@type": ["PublicationVolume", "Periodical"],
+          "volumeNumber": "6",
+          "name": "Journal of Open Source Software"
+        }
+      }
     }
   ],
   "releaseNotes": "https://github.com/mlr-org/mcboost/blob/master/NEWS.md",
   "readme": "https://github.com/mlr-org/mcboost/blob/main/README.md",
-  "fileSize": "254.139KB",
+  "contIntegration": "https://github.com/mlr-org/mcboost/actions",
   "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#experimental",
+  "keywords": ["machine-learning", "classification", "fairness", "fairness-ml", "fairness-ai", "responsible-ai", "bias-correction", "bias-detection", "post-processing", "ethics"],
   "relatedLink": "https://CRAN.R-project.org/package=mcboost"
 }

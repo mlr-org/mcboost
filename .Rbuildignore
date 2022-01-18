@@ -20,3 +20,4 @@ test/testthat/_snaps
 ^mcboost-manual.tex$
 ^CRAN-RELEASE$
 ^codemeta\.json$
+^lastMiKTeXException$
