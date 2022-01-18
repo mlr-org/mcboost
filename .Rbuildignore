@@ -21,3 +21,4 @@ test/testthat/_snaps
 ^CRAN-RELEASE$
 ^codemeta\.json$
 ^lastMiKTeXException$
+^CRAN-SUBMISSION$
