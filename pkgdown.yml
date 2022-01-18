@@ -1,8 +1,9 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   mcboost_basics_extensions: mcboost_basics_extensions.html
   mcboost_example: mcboost_example.html
-last_built: 2021-11-29T04:27Z
+  mcboostsurv_basics: mcboostsurv_basics.html
+last_built: 2022-01-18T12:10Z
 
