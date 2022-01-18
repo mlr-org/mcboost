@@ -65,6 +65,7 @@ Suggests:
     ranger,
     rmarkdown,
     survival,
+    xgboost,
     covr
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 RoxygenNote: 7.1.2
