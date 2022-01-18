@@ -203,7 +203,7 @@ MCBoost = R6::R6Class("MCBoost",
     #'  Params passed on to other methods.
     #'
     #' @return `NULL`
-    multicalibrate = function(data, labels, predictor_args = NULL, audit = TRUE, ...) {
+    multicalibrate = function(data, labels, predictor_args = NULL, audit = FALSE, ...) {
 
       if (is.matrix(data) || is.data.frame(data)) data = as.data.table(as.data.frame(data))
       assert_data_table(data)
@@ -251,10 +251,9 @@ MCBoost = R6::R6Class("MCBoost",
           })
         }
 
-
         self$iter_corr = c(self$iter_corr, list(corrs))
 
-        if (abs(max(corrs)) < self$alpha) {
+        if (max(abs(corrs)) < self$alpha) {
           break
         } else {
           bucket_id = which.max(abs(corrs))

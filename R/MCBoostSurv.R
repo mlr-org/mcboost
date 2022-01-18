@@ -389,18 +389,14 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       probs = assert_data_table(as.data.table(as.data.frame(probs)), types = c("numeric"), col.names = "named", min.cols = 1, min.rows = 1, any.missing = FALSE, null.ok = FALSE)
 
       num_colnames = as.numeric(colnames(probs))
-
       diff = setdiff(num_colnames, self$time_points)
-      diff2 = setdiff(self$time_points, num_colnames)
-
       # There are different time_points in the predicted probabilities
       # & the columns of predicted probabilities have names
       # Time points might not have first time_point (0) and "Inf" (or last time_point)
-
       if (length(diff) && length(num_colnames)) {
         self$time_points = sort(unique(num_colnames))
       }
-
+      diff2 = setdiff(self$time_points, num_colnames)
       if (length(diff2)) warning(paste0("Your input time_points have more points than the predicted time_points.
                                          The input time_points or extracted frome the labels are not used."))
 

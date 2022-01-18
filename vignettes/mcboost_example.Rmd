@@ -35,10 +35,15 @@ This vignette presents two typical use cases of MCBoost with data from a health 
 
 We use data derived from the National Health Interview Survey (NHIS 2003), which includes demographic and health-related variables for 21,588 individuals. This data can directly be included from the `PracTools` package.
 
-```{r}
+```{r, eval = TRUE}
 data(nhis.large)
+```
+We can obtain more information using: 
+
+```{r, eval = FALSE}
 ?nhis.large
 ```
+
 
 In the following, our outcome of interest is whether an individual is covered by any type of health insurance (`notcov`, 1 = not covered, 0 = covered). We additionally prepare two sets of variables:
 

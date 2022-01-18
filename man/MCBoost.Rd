@@ -209,7 +209,7 @@ Can be \code{bootstrap}, \code{split} or \code{none}.\cr
 \subsection{Method \code{multicalibrate()}}{
 Run multi-calibration.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels, predictor_args = NULL, audit = TRUE, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MCBoost$multicalibrate(data, labels, predictor_args = NULL, audit = FALSE, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

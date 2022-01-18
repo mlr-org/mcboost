@@ -94,7 +94,7 @@ RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
     #' Define a AuditorFitter from a glmnet learner.
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
-      super$initialize(learner = lrn("regr.glmnet", alpha = 0, lambda = 0.01))
+      super$initialize(learner = lrn("regr.glmnet", alpha = 0, s = 0.01))
     }
   )
 )
@@ -323,7 +323,7 @@ CVRidgeAuditorFitter = R6::R6Class("CVRidgeAuditorFitter",
     #' cross-validated learners.
     initialize = function() {
       mlr3misc::require_namespaces(c("mlr3learners", "glmnet"))
-      super$initialize(learner = lrn("regr.glmnet", alpha = 0))
+      super$initialize(learner = lrn("regr.glmnet", alpha = 0, lambda = .01))
     }
   )
 )
