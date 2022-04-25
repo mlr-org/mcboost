@@ -14,7 +14,7 @@ test_that("PipeOp Learner Pred", {
   ))
   dist = out$data()[["surv.kaplan.distr"]]
   expect_list(dist, types = "list", len = 300L)
-  out = map(dist[[1]], function(x) expect_matrix(as.matrix(x), nrows = 300, ncols = 58))
+  out = map(dist[[1]], function(x) expect_matrix(as.matrix(x), nrows = 300, ncols = length(tsk("rats")$unique_times())))
   
   out = pop$predict(list(tsk("rats")))[[1]]
   expect_is(out, "Task")
@@ -24,5 +24,5 @@ test_that("PipeOp Learner Pred", {
   ))  
   dist = out$data()[["surv.kaplan.distr"]]
   expect_list(dist, types = "list", len = 300L)
-  out = map(dist[[1]], function(x) expect_matrix(as.matrix(x), nrows = 300, ncols = 58))
+  out = map(dist[[1]], function(x) expect_matrix(as.matrix(x), nrows = 300, ncols = length(tsk("rats")$unique_times())))
 })

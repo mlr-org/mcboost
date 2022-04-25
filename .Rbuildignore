@@ -22,3 +22,4 @@ test/testthat/_snaps
 ^codemeta\.json$
 ^lastMiKTeXException$
 ^CRAN-SUBMISSION$
+^lastMiKTeXException$
