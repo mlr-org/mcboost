@@ -1,5 +1,8 @@
 # mcboost (development version)
 
+# mcboost 0.4.1
+* Fixed unit error in unit tests that led to non-passing unit tests with new mlr3proba version.
+
 # mcboost 0.4.0
 * [Experimental] mcboost now has experimental support for *survival* tasks.
   See `MCBoostSurv` and the corresponding vignette "MCBoostSurv - Basics" for more information.

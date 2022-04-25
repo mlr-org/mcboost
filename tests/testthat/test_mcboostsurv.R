@@ -1,6 +1,9 @@
 context("MCBoostSurv Class")
 
 test_that("MCBoostSurv class instantiation", {
+  skip_on_cran()
+  skip_on_os("solaris")
+  skip_if_not_installed("mlr3proba")
   mc = MCBoostSurv$new(auditor_fitter = "TreeAuditorFitter")
   expect_class(mc, "MCBoostSurv")
   expect_class(mc$auditor_fitter, "AuditorFitter")
@@ -8,6 +11,11 @@ test_that("MCBoostSurv class instantiation", {
 })
 
 test_that("MCBoostSurv multicalibrate and predict_probs", {
+  skip_on_cran()
+  skip_on_os("solaris")
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("mlr3proba")
+  skip_if_not_installed("survival")
   library("mlr3learners")
   library("mlr3proba")
   library("survival")
@@ -30,7 +38,7 @@ test_that("MCBoostSurv multicalibrate and predict_probs", {
   expect_list(mc$iter_partitions, types = "ProbRange2D", len = mc$max_iter)
 
   prds = mc$predict_probs(data)
-  expect_data_frame(prds, nrows = nrow(data), ncol = 58)
+  expect_data_frame(prds, nrows = nrow(data), ncol = length(tsk$unique_times()))
 
 
   mc = MCBoostSurv$new(
@@ -44,6 +52,6 @@ test_that("MCBoostSurv multicalibrate and predict_probs", {
   )
   mc$multicalibrate(data, labels)
   ae = mc$auditor_effect(data)
-  expect_matrix(ae, nrows = 300, ncols = 58)
+  expect_matrix(ae, nrows = 300, ncols = length(tsk$unique_times()))
   expect_true(mc$loss == "brier")
 })

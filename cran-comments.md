@@ -1,8 +1,6 @@
 ## Reason for resubmission
 
-- Update citation file
-- Minor bug fixes and refactoring
-- New functionality: mcboost for survival
+- Adapt unit tests to work with new releases of upstream packages. 
 
 ## R CMD check
 
