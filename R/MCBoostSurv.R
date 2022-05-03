@@ -222,7 +222,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       mlr3misc::require_namespaces("survival")
 
       if (is.null(default_model_class)) {
-        default_model_class = LearnerSurvKaplan
+        default_model_class = mlr3proba::LearnerSurvKaplan
       }
       
       super$initialize(

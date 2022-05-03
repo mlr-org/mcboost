@@ -42,11 +42,11 @@ xy_to_task = function(x, y) {
   x[, (yname) := y]
 
   if (inherits(y, "Surv")) {
-    ti = TaskSurv
+    ti = mlr3proba::TaskSurv
   } else if (is.numeric(y)) {
-    ti = TaskRegr
+    ti = mlr3::TaskRegr
   } else {
-    ti = TaskClassif
+    ti = mlr3::TaskClassif
   }
   ti$new(id = "tmptsk", backend = x, target = yname)
 }

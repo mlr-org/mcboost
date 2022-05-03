@@ -81,7 +81,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
         paradox::ParamLgl$new("multiplicative", default = TRUE, tags = "train"),
         paradox::ParamUty$new("auditor_fitter", default = NULL, tags = "train"),
         paradox::ParamUty$new("subpops", default = NULL, tags = "train"),
-        paradox::ParamUty$new("default_model_class", default = LearnerSurvKaplan, tags = "train"),
+        paradox::ParamUty$new("default_model_class", default = NULL, tags = "train"),
         paradox::ParamUty$new("init_predictor", default = NULL, tags = "train")
       ))
       super$initialize(id,
@@ -125,7 +125,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 
       time = as.numeric(colnames(probs))
 
-      list(PredictionSurv$new(
+      list(mlr3proba::PredictionSurv$new(
         truth = inputs$prediction$truth(),
         distr = probs,
         row_ids = inputs$prediction$row_ids,
