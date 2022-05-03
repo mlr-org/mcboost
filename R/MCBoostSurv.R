@@ -166,8 +166,7 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
     #' @template params_subpops
     #' @param default_model_class `Predictor` \cr
     #'   The class of the model that should be used as the init predictor model if
-    #'   `init_predictor` is not specified. Defaults to `ConstantPredictor` which
-    #'   predicts a constant value.
+    #'   `init_predictor` is not specified. Defaults to `mlr3proba::LearnerSurvKaplan`.
     #' @param init_predictor [`function`]|[`mlr3::Learner`] \cr
     #'   The initial predictor function to use (i.e., if the user has a pretrained model).
     #'   If a `mlr3` `Learner` is passed, it will be autoconverted using `mlr3_init_predictor`.
@@ -214,13 +213,17 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
       multiplicative = TRUE,
       auditor_fitter = "RidgeAuditorFitter",
       subpops = NULL,
-      default_model_class = LearnerSurvKaplan,
+      default_model_class = NULL,
       init_predictor = NULL,
       loss = "censored_brier",
       iter_sampling = "none") {
 
       mlr3misc::require_namespaces("mlr3proba")
       mlr3misc::require_namespaces("survival")
+
+      if (is.null(default_model_class)) {
+        default_model_class = LearnerSurvKaplan
+      }
       
       super$initialize(
         max_iter,

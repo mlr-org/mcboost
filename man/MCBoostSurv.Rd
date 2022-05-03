@@ -154,7 +154,7 @@ Initialize a multi-calibration instance.
   multiplicative = TRUE,
   auditor_fitter = "RidgeAuditorFitter",
   subpops = NULL,
-  default_model_class = LearnerSurvKaplan,
+  default_model_class = NULL,
   init_predictor = NULL,
   loss = "censored_brier",
   iter_sampling = "none"
@@ -228,8 +228,7 @@ e.g. list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 
 \item{\code{default_model_class}}{\code{Predictor} \cr
 The class of the model that should be used as the init predictor model if
-\code{init_predictor} is not specified. Defaults to \code{ConstantPredictor} which
-predicts a constant value.}
+\code{init_predictor} is not specified. Defaults to \code{mlr3proba::LearnerSurvKaplan}.}
 
 \item{\code{init_predictor}}{\code{\link{function}}|\code{\link[mlr3:Learner]{mlr3::Learner}} \cr
 The initial predictor function to use (i.e., if the user has a pretrained model).
