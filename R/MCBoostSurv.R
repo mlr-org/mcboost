@@ -563,8 +563,8 @@ MCBoostSurv = R6::R6Class("MCBoostSurv",
 
 
     # calculate multicalibration definition / stopping criterion
-    calculate_corr = function(auditor, data, resid, idx) {
-      mean(auditor$predict(data[idx, ]) * rowMeans(resid[idx, ]))
+    calculate_corr = function(auditor, data, resid, idx, weights) {
+      mean(auditor$predict(data[idx, ]) * weights * rowMeans(resid[idx, ]))
     }
 
   )

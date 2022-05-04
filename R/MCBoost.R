@@ -107,7 +107,11 @@ MCBoost = R6::R6Class("MCBoost",
 
     #' @field bucket_strategies [`character`] \cr
     #'   Possible bucket_strategies in McBoostSurv.
-    bucket_strategies = c("simple"),
+    bucket_strategies = "simple",
+
+    #' @field weighting_scheme [`character`] \cr
+    #'   Weighting scheme for low-degree multi-calibration.
+    weighting_scheme = "constant",
 
     #' @description
     #'   Initialize a multi-calibration instance.
@@ -159,7 +163,8 @@ MCBoost = R6::R6Class("MCBoost",
     #'   "split" splits the data into `max_iter` parts and validates on each sample in each iteration.\cr
     #'   "bootstrap" uses a new bootstrap sample in each iteration.\cr
     #'   "none" uses the same dataset in each iteration.
-
+    #' @param weighting_scheme [`character`] \cr
+    #'   Weighting scheme for low-degree multi-calibration. Initialized to `constant`, which applies constant weighting with 1.
     initialize = function(
       max_iter = 5,
       alpha = 1e-4,
@@ -174,7 +179,8 @@ MCBoost = R6::R6Class("MCBoost",
       subpops = NULL,
       default_model_class = ConstantPredictor,
       init_predictor = NULL,
-      iter_sampling = "none") {
+      iter_sampling = "none",
+      weighting_scheme = "constant") {
 
       self$max_iter = assert_int(max_iter, lower = 0)
       self$alpha = assert_number(alpha, lower = 0)
@@ -189,6 +195,7 @@ MCBoost = R6::R6Class("MCBoost",
       self$auditor_fitter = private$get_auditor_fitter(subpops, auditor_fitter)
       self$predictor = private$get_predictor(init_predictor, default_model_class)
       self$iter_sampling = assert_choice(iter_sampling, choices = c("none", "bootstrap", "split"))
+      self$weighting_scheme = assert_choice(weighting_scheme, choices = c("constant"))
       invisible(self)
     },
 
@@ -213,6 +220,7 @@ MCBoost = R6::R6Class("MCBoost",
       pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data, ...)
       buckets = private$create_buckets(pred_probs)
       resid = private$compute_residuals(pred_probs, labels)
+      weighted_preds = private$compute_weighted_preds(pred_probs)
       new_probs = pred_probs
 
       if (self$iter_sampling == "split") {
@@ -247,7 +255,7 @@ MCBoost = R6::R6Class("MCBoost",
             if (is.null(m)) {
               return(0)
             }
-            private$calculate_corr(auditor = m, data = data, resid = resid, idx = idx)
+            private$calculate_corr(auditor = m, data = data, resid = resid, idx = idx, weights = weighted_preds)
           })
         }
 
@@ -263,6 +271,7 @@ MCBoost = R6::R6Class("MCBoost",
           self$iter_partitions = c(self$iter_partitions, max_key)
           new_probs = private$update_probs(new_probs, self$iter_models[[length(self$iter_models)]], data, prob_mask, update_sign = sign(corrs[bucket_id]), audit = audit)
           resid = private$compute_residuals(new_probs, labels)
+          weighted_preds = private$compute_weighted_preds(new_probs)
         }
       }
       if (!length(self$iter_models)) {
@@ -374,6 +383,13 @@ MCBoost = R6::R6Class("MCBoost",
       prediction - labels
     },
 
+    compute_weighted_preds = function(prediction) {
+      len = ifelse(is.null(dim(prediction)), length(prediction), nrow(prediction))
+      if (self$weighting_scheme == "constant") {
+        rep(1, len)
+      }
+    },
+
     assert_labels = function(labels, ...) {
       # data.table to factor
       if (is.data.table(labels) && ncol(labels) == 1L) {
@@ -481,8 +497,8 @@ MCBoost = R6::R6Class("MCBoost",
       assert_function(init_predictor, args = "data")
     },
 
-    calculate_corr = function(auditor, data, resid, idx) {
-      mean(auditor$predict(data[idx, ]) * resid[idx])
+    calculate_corr = function(auditor, data, resid, idx, weights) {
+      mean(auditor$predict(data[idx, ]) * weights * resid[idx])
     }
   )
 )
