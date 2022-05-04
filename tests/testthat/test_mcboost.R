@@ -133,9 +133,9 @@ test_that("MCBoost multicalibrate with subpops", {
 })
 
 
-## FIXME Re-enable this test
+# FIXME Re-enable this test
 # test_that("MCBoost multicalibrate with Subgroups", {
-#   skip_on_cran()
+#   skip_on_can()
 #   skip_on_os("solaris")
 #   # Sonar task
 #   tsk = tsk("sonar")
@@ -145,10 +145,11 @@ test_that("MCBoost multicalibrate with subpops", {
 #   # Fit  initial model
 #   lp = LearnerPredictor$new(lrn("classif.rpart"))
 #   lp$fit(data, labels)
+#   ll = length(labels)
 
 #   masks =  list(
-#     rep(c(1,0), 104),
-#     rep(c(1,1,1,0), 52)
+#     rep(c(1,0), ll/2),
+#     rep(c(1,1,1,0), ll/4)
 #   )
 #   sf = SubgroupAuditorFitter$new(masks)
 
@@ -156,9 +157,7 @@ test_that("MCBoost multicalibrate with subpops", {
 #   mc$multicalibrate(data, labels)
 #   expect_list(mc$iter_models, types = "SubgroupModel", len = mc$max_iter)
 #   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
-
 #   expect_numeric(mc$predict_probs(data), lower = 0, upper = 1, len = nrow(data))
-
 # })
 
 test_that("MCBoost various settings", {
