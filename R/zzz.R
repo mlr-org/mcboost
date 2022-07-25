@@ -17,10 +17,8 @@
 
 register_pipeops = function() { # nocov start
   mlr3pipelines::mlr_pipeops$add("mcboost", PipeOpMCBoost)
-  mlr3pipelines::mlr_pipeops$add("mcboostsurv", PipeOpMCBoostSurv)
   mlr3pipelines::mlr_pipeops$add("learner_pred", PipeOpLearnerPred)
   mlr3pipelines::mlr_graphs$add("ppl_mcboost", ppl_mcboost)
-  mlr3pipelines::mlr_graphs$add("ppl_mcboostsurv", ppl_mcboostsurv)
 } # nocov end
 
 .onLoad = function(libname, pkgname) {  # nocov start

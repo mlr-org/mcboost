@@ -57,14 +57,12 @@ Suggests:
     PracTools,
     mlr3learners,
     mlr3oml,
-    mlr3proba (>= 0.4.0),
     neuralnet,
     paradox,
     testthat,
     knitr,
     ranger,
     rmarkdown,
-    survival,
     xgboost,
     covr
 Roxygen: list(markdown = TRUE, r6 = TRUE)
@@ -73,13 +71,10 @@ VignetteBuilder: knitr
 Collate: 
     'AuditorFitters.R'
     'MCBoost.R'
-    'MCBoostSurv.R'
     'PipelineMCBoost.R'
     'PipeOpLearnerPred.R'
     'PipeOpMCBoost.R'
-    'PipeOpMCBoostSurv.R'
     'Predictor.R'
     'ProbRange.R'
-    'ProbRange2D.R'
     'helpers.R'
     'zzz.R'

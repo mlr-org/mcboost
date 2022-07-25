@@ -95,6 +95,9 @@ Auditor effect in each iteration.}
 
 \item{\code{bucket_strategies}}{\code{\link{character}} \cr
 Possible bucket_strategies in McBoostSurv.}
+
+\item{\code{weight_degree}}{\code{\link{integer}} \cr
+Weighting degree for low-degree multi-calibration.}
 }
 \if{html}{\out{</div>}}
 }
@@ -129,7 +132,8 @@ Initialize a multi-calibration instance.
   subpops = NULL,
   default_model_class = ConstantPredictor,
   init_predictor = NULL,
-  iter_sampling = "none"
+  iter_sampling = "none",
+  weight_degree = 1L
 )}\if{html}{\out{</div>}}
 }
 
@@ -199,6 +203,9 @@ Can be \code{bootstrap}, \code{split} or \code{none}.\cr
 "split" splits the data into \code{max_iter} parts and validates on each sample in each iteration.\cr
 "bootstrap" uses a new bootstrap sample in each iteration.\cr
 "none" uses the same dataset in each iteration.}
+
+\item{\code{weight_degree}}{\code{\link{character}} \cr
+Weighting degree for low-degree multi-calibration. Initialized to 1, which applies constant weighting with 1.}
 }
 \if{html}{\out{</div>}}
 }
