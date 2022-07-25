@@ -106,7 +106,7 @@ MCBoost = R6::R6Class("MCBoost",
     auditor_effects = list(),
 
     #' @field bucket_strategies [`character`] \cr
-    #'   Possible bucket_strategies in McBoostSurv.
+    #'   Possible bucket_strategies.
     bucket_strategies = "simple",
 
     #' @field weight_degree [`integer`] \cr

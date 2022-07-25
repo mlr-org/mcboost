@@ -94,7 +94,7 @@ Auditor correlation in each iteration.}
 Auditor effect in each iteration.}
 
 \item{\code{bucket_strategies}}{\code{\link{character}} \cr
-Possible bucket_strategies in McBoostSurv.}
+Possible bucket_strategies.}
 
 \item{\code{weight_degree}}{\code{\link{integer}} \cr
 Weighting degree for low-degree multi-calibration.}
