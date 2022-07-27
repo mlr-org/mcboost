@@ -13,4 +13,3 @@ test_that("TreeAuditorFitters work", {
   out = mc$predict_probs(d[201:208,])
   expect_numeric(out)
 })
-s
