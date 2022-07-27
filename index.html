@@ -59,9 +59,6 @@
     <li>
       <a href="articles/mcboost_example.html">MCBoost - Health Survey Example</a>
     </li>
-    <li>
-      <a href="articles/mcboostsurv_basics.html">MCBoostSurv - Basics</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -103,10 +100,10 @@
 </h2>
 <p>The current version can be downloaded from CRAN using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mcboost"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mcboost"</span><span class="op">)</span></span></code></pre></div>
 <p>You can install the development version of mcboost from <strong>Github</strong> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"mlr-org/mcboost"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"mlr-org/mcboost"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -119,48 +116,48 @@
 </h2>
 <p>In this simple example, our goal is to improve calibration for an <code>initial predictor</code>, e.g. a ML algorithm trained on an initial task. Internally, <code>mcboost</code> often makes use of <code>mlr3</code> and learners that come with <code>mlr3learners</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlr-org/mcboost" class="external-link">mcboost</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlr-org/mcboost" class="external-link">mcboost</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></span></code></pre></div>
 <p>First we set up an example dataset.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="co">#  Example Data: Sonar Task</span>
-  <span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span>
-  <span class="va">tid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="va">row_ids</span>, <span class="fl">100</span><span class="op">)</span> <span class="co"># 100 rows for training</span>
-  <span class="va">train_data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span>, rows <span class="op">=</span> <span class="va">tid</span><span class="op">)</span>
-  <span class="va">train_labels</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span>, rows <span class="op">=</span> <span class="va">tid</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="co">#  Example Data: Sonar Task</span></span>
+<span>  <span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span>
+<span>  <span class="va">tid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="va">row_ids</span>, <span class="fl">100</span><span class="op">)</span> <span class="co"># 100 rows for training</span></span>
+<span>  <span class="va">train_data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span>, rows <span class="op">=</span> <span class="va">tid</span><span class="op">)</span></span>
+<span>  <span class="va">train_labels</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span>, rows <span class="op">=</span> <span class="va">tid</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p>To provide an example, we assume that we have already a learner <code>l</code> which we train below. We can now wrap this initial learner’s predict function for use with <code>mcboost</code>, since <code>mcboost</code> expects the initial model to be specified as a <code>function</code> with <code>data</code> as input.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="va">l</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span>
-  <span class="va">l</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">tid</span><span class="op">)</span><span class="op">)</span>
-
-  <span class="va">init_predictor</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-    <span class="co"># Get response prediction from Learner</span>
-    <span class="va">p</span> <span class="op">=</span> <span class="va">l</span><span class="op">$</span><span class="fu">predict_newdata</span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">$</span><span class="va">response</span>
-    <span class="co"># One-hot encode and take first column</span>
-    <span class="fu"><a href="reference/one_hot.html">one_hot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
-  <span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="va">l</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span></span>
+<span>  <span class="va">l</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">tid</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">init_predictor</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># Get response prediction from Learner</span></span>
+<span>    <span class="va">p</span> <span class="op">=</span> <span class="va">l</span><span class="op">$</span><span class="fu">predict_newdata</span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">$</span><span class="va">response</span></span>
+<span>    <span class="co"># One-hot encode and take first column</span></span>
+<span>    <span class="fu"><a href="reference/one_hot.html">one_hot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span></code></pre></div>
 <p>We can now run Multi-Calibration Boosting by instantiating the object and calling the <code>multicalibrate</code> method. Note, that typically, we would use Multi-Calibration on a separate validation set! We furthermore select the auditor model, a <code>SubpopAuditorFitter</code>, in our case a <code>Decision Tree</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-    init_predictor <span class="op">=</span> <span class="va">init_predictor</span>,
-    auditor_fitter <span class="op">=</span> <span class="st">"TreeAuditorFitter"</span><span class="op">)</span>
-  <span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">train_data</span>, <span class="va">train_labels</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>    init_predictor <span class="op">=</span> <span class="va">init_predictor</span>,</span>
+<span>    auditor_fitter <span class="op">=</span> <span class="st">"TreeAuditorFitter"</span><span class="op">)</span></span>
+<span>  <span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">train_data</span>, <span class="va">train_labels</span><span class="op">)</span></span></code></pre></div>
 <p>Lastly, we predict on new data.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tstid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="va">row_ids</span>, <span class="va">tid</span><span class="op">)</span> <span class="co"># held-out data</span>
-<span class="va">test_data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span>, rows <span class="op">=</span> <span class="va">tstid</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tstid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="va">row_ids</span>, <span class="va">tid</span><span class="op">)</span> <span class="co"># held-out data</span></span>
+<span><span class="va">test_data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span>, rows <span class="op">=</span> <span class="va">tstid</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="multi-calibration">Multi-Calibration<a class="anchor" aria-label="anchor" href="#multi-calibration"></a>
 </h3>
 <p>While <code>mcboost</code> in its defaults implements Multi-Accuracy (<a href="https://arxiv.org/pdf/1805.12317.pdf" class="external-link">Kim et al., 2019</a>), it can also multi-calibrate predictors (<a href="http://proceedings.mlr.press/v80/hebert-johnson18a.html" class="external-link">Hebert-Johnson et al., 2018</a>). In order to achieve this, we have to set the following hyperparameters:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-    init_predictor <span class="op">=</span> <span class="va">init_predictor</span>,
-    auditor_fitter <span class="op">=</span> <span class="st">"TreeAuditorFitter"</span>,
-    num_buckets <span class="op">=</span> <span class="fl">10</span>,
-    multiplicative <span class="op">=</span> <span class="cn">FALSE</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>    init_predictor <span class="op">=</span> <span class="va">init_predictor</span>,</span>
+<span>    auditor_fitter <span class="op">=</span> <span class="st">"TreeAuditorFitter"</span>,</span>
+<span>    num_buckets <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    multiplicative <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -168,13 +165,13 @@
 </h2>
 <p><code>mcboost</code> can also be used within a <code>mlr3pipeline</code> in order to use at the full end-to-end pipeline (in the form of a <code>GraphLearner</code>).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3pipelines.mlr-org.com" class="external-link">mlr3pipelines</a></span><span class="op">)</span>
-  <span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="reference/ppl_mcboost.html">ppl_mcboost</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span>
-  <span class="va">tid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">208</span>, <span class="fl">108</span><span class="op">)</span>
-  <span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">tid</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">gr</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">208</span>, <span class="va">tid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3pipelines.mlr-org.com" class="external-link">mlr3pipelines</a></span><span class="op">)</span></span>
+<span>  <span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="reference/ppl_mcboost.html">ppl_mcboost</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span>
+<span>  <span class="va">tid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">208</span>, <span class="fl">108</span><span class="op">)</span></span>
+<span>  <span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">tid</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">gr</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">208</span>, <span class="va">tid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="further-examples">Further Examples<a class="anchor" aria-label="anchor" href="#further-examples"></a>
@@ -304,7 +301,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

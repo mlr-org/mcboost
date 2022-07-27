@@ -19,9 +19,6 @@
     <loc>/articles/mcboost_example.html</loc>
   </url>
   <url>
-    <loc>/articles/mcboostsurv_basics.html</loc>
-  </url>
-  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -46,9 +43,6 @@
     <loc>/reference/MCBoost.html</loc>
   </url>
   <url>
-    <loc>/reference/MCBoostSurv.html</loc>
-  </url>
-  <url>
     <loc>/reference/SubgroupAuditorFitter.html</loc>
   </url>
   <url>
@@ -56,9 +50,6 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/make_survival_curve.html</loc>
   </url>
   <url>
     <loc>/reference/mcboost-package.html</loc>
@@ -70,15 +61,9 @@
     <loc>/reference/mlr_pipeops_mcboost.html</loc>
   </url>
   <url>
-    <loc>/reference/mlr_pipeops_mcboostsurv.html</loc>
-  </url>
-  <url>
     <loc>/reference/one_hot.html</loc>
   </url>
   <url>
     <loc>/reference/ppl_mcboost.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ppl_mcboostsurv.html</loc>
   </url>
 </urlset>

@@ -38,9 +38,6 @@ on the data."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
     <li>
       <a href="../articles/mcboost_example.html">MCBoost - Health Survey Example</a>
     </li>
-    <li>
-      <a href="../articles/mcboostsurv_basics.html">MCBoostSurv - Basics</a>
-    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -73,7 +70,16 @@ on the data.</p>
 
     <div id="value">
     <h2>Value</h2>
-    <p><code><a href="AuditorFitter.html">AuditorFitter</a></code><br><code>list</code> with items<br></p><ul><li><p><code>corr</code>: pseudo-correlation between residuals and learner prediction.</p></li>
+    
+
+<p><code><a href="AuditorFitter.html">AuditorFitter</a></code><br></p>
+
+
+
+<p><code>list</code> with items<br></p>
+
+
+<ul><li><p><code>corr</code>: pseudo-correlation between residuals and learner prediction.</p></li>
 <li><p><code>l</code>: the trained learner.</p></li>
 </ul></div>
     <div id="functions">
@@ -126,7 +132,7 @@ Learner used for fitting residuals.</p></dd>
 Available instantiations:<br><code>TreeAuditorFitter</code> (rpart) and
 <code>RidgeAuditorFitter</code> (glmnet).</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/LearnerAuditorFitter.html">LearnerAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">learner</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/LearnerAuditorFitter.html">LearnerAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">learner</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -143,7 +149,7 @@ Regression learner to use.</p></dd>
 <h3 id="method-fit-">Method <code>fit()</code><a class="anchor" aria-label="anchor" href="#method-fit-"></a></h3>
 <p>Fit the learner and compute correlation</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">LearnerAuditorFitter</span><span class="op">$</span><span class="fu">fit</span><span class="op">(</span><span class="va">data</span>, <span class="va">resid</span>, <span class="va">mask</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">LearnerAuditorFitter</span><span class="op">$</span><span class="fu">fit</span><span class="op">(</span><span class="va">data</span>, <span class="va">resid</span>, <span class="va">mask</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -170,7 +176,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">LearnerAuditorFitter</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">LearnerAuditorFitter</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -203,7 +209,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <h3 id="method-new--1">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new--1"></a></h3>
 <p>Define a AuditorFitter from a rpart learner.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/LearnerAuditorFitter.html">TreeAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/LearnerAuditorFitter.html">TreeAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -211,7 +217,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <h3 id="method-clone--1">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone--1"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">TreeAuditorFitter</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TreeAuditorFitter</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -244,7 +250,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <h3 id="method-new--2">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new--2"></a></h3>
 <p>Define a AuditorFitter from a glmnet learner.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/LearnerAuditorFitter.html">RidgeAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/LearnerAuditorFitter.html">RidgeAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -252,7 +258,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <h3 id="method-clone--2">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone--2"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">RidgeAuditorFitter</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">RidgeAuditorFitter</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -280,7 +286,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

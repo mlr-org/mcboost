@@ -55,9 +55,6 @@
     <li>
       <a href="../articles/mcboost_example.html">MCBoost - Health Survey Example</a>
     </li>
-    <li>
-      <a href="../articles/mcboostsurv_basics.html">MCBoostSurv - Basics</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -95,24 +92,24 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/mlr-org/mcboost" class="external-link">"mcboost"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">83007</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/mlr-org/mcboost" class="external-link">"mcboost"</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">83007</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="example-0-multi-accuracy-in-6-lines-of-code">Example 0: Multi-Accuracy in 6 lines of code<a class="anchor" aria-label="anchor" href="#example-0-multi-accuracy-in-6-lines-of-code"></a>
 </h2>
 <p>As a brief introduction we show how to use <strong>mcboost</strong> in only 6 lines of code. For our example, we use the data from the <em>sonar</em> binary classification task. We instantiate a <code>MCBoost</code> instance by specifying a <code>auditor_fitter</code>. This <code>auditor_fitter</code> defines the splits into groups in each boosting iteration based on the obtained residuals. In this example, we choose a <code>Tree</code> based model. Afterwards, we run the <code>$multicalibrate()</code> method on our data to start multi-calibration. We only use the first 200 samples of the <em>sonar</em> data set to train our multi-calibrated model.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span>
-<span class="va">d</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span>
-<span class="va">l</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="st">"TreeAuditorFitter"</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span></span>
+<span><span class="va">l</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="st">"TreeAuditorFitter"</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>After the calibration, we use the model to predict on the left-out data (8 observations).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">208</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.9077953 0.9077953 1.0000000 1.0000000 0.3387929 1.0000000 0.3387929</span>
-<span class="co">#&gt; [8] 0.2116734</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">208</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.9077953 0.9077953 1.0000000 1.0000000 0.3387929 1.0000000 0.3387929</span></span>
+<span><span class="co">#&gt; [8] 0.2116734</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="what-does-mcboost-do">What does mcboost do?<a class="anchor" aria-label="anchor" href="#what-does-mcboost-do"></a>
@@ -135,14 +132,14 @@
 </h2>
 <p>First we download the data and create an <code>mlr3</code> classification task:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span>
-<span class="va">adult_train</span> <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html" class="external-link">fread</a></span><span class="op">(</span>
-  <span class="st">"https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv"</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-<span class="va">adult_train</span><span class="op">$</span><span class="va">Country</span> <span class="op">=</span> <span class="cn">NULL</span>
-<span class="va">adult_train</span><span class="op">$</span><span class="va">fnlwgt</span> <span class="op">=</span> <span class="cn">NULL</span>
-<span class="va">train_tsk</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"adult_train"</span>, <span class="va">adult_train</span>, target <span class="op">=</span> <span class="st">"Target"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="va">adult_train</span> <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html" class="external-link">fread</a></span><span class="op">(</span></span>
+<span>  <span class="st">"https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv"</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">adult_train</span><span class="op">$</span><span class="va">Country</span> <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="va">adult_train</span><span class="op">$</span><span class="va">fnlwgt</span> <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="va">train_tsk</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"adult_train"</span>, <span class="va">adult_train</span>, target <span class="op">=</span> <span class="st">"Target"</span><span class="op">)</span></span></code></pre></div>
 <p>We removed the features <code>Country</code> and <code>fnlwgt</code> since we expect them to have no predictive power. <code>fnlwgt</code> means final weight and aims to allocate similar weights to people with similar demographic characteristics, while <code>Country</code> has 42 distinct levels but 89 % of the observations are from the United States.</p>
 <div class="section level3">
 <h3 id="preprocessing">1.1 Preprocessing<a class="anchor" aria-label="anchor" href="#preprocessing"></a>
@@ -155,214 +152,214 @@
 <li>Impute NA’s using a histogram approach</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3pipelines.mlr-org.com" class="external-link">mlr3pipelines</a></span><span class="op">)</span>
-<span class="va">pipe</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"collapsefactors"</span>, no_collapse_above_prevalence <span class="op">=</span> <span class="fl">0.0006</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com//reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span>
-  <span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"fixfactors"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com//reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span>
-  <span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"encode"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com//reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span>
-  <span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span>
-<span class="va">prep_task</span> <span class="op">=</span> <span class="va">pipe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">train_tsk</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3pipelines.mlr-org.com" class="external-link">mlr3pipelines</a></span><span class="op">)</span></span>
+<span><span class="va">pipe</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"collapsefactors"</span>, no_collapse_above_prevalence <span class="op">=</span> <span class="fl">0.0006</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"fixfactors"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"encode"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span></span>
+<span><span class="va">prep_task</span> <span class="op">=</span> <span class="va">pipe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">train_tsk</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p>In order to simulate settings where a sensitive feature is not available, we remove the (dummy encoded) feature <code>Race</code> from the training task.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">prep_task</span><span class="op">$</span><span class="fu">set_col_roles</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Race.Amer.Indian.Eskimo"</span>, <span class="st">"Race.Asian.Pac.Islander"</span>, <span class="st">"Race.Black"</span>, <span class="st">"Race.Other"</span>, <span class="st">"Race.White"</span><span class="op">)</span>, remove_from <span class="op">=</span> <span class="st">"feature"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">prep_task</span><span class="op">$</span><span class="fu">set_col_roles</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Race.Amer.Indian.Eskimo"</span>, <span class="st">"Race.Asian.Pac.Islander"</span>, <span class="st">"Race.Black"</span>, <span class="st">"Race.Other"</span>, <span class="st">"Race.White"</span><span class="op">)</span>, remove_from <span class="op">=</span> <span class="st">"feature"</span><span class="op">)</span></span></code></pre></div>
 <p>Now we fit a <code>random forest</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3learners.mlr-org.com" class="external-link">mlr3learners</a></span><span class="op">)</span>
-<span class="va">l</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.ranger"</span>, num.trees <span class="op">=</span> <span class="fl">10L</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span>
-<span class="va">l</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">prep_task</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3learners.mlr-org.com" class="external-link">mlr3learners</a></span><span class="op">)</span></span>
+<span><span class="va">l</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.ranger"</span>, num.trees <span class="op">=</span> <span class="fl">10L</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></span>
+<span><span class="va">l</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">prep_task</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mcboost">1.2 MCBoost<a class="anchor" aria-label="anchor" href="#mcboost"></a>
 </h3>
 <p>A simple way to use the predictions from any <code>model</code> in <strong>mcboost</strong> is to wrap the predict function and provide it as an initial predictor. This can be done from any model / any library. Note, that we have to make sure, that our <code>init_predictor</code> returns a numeric vector of predictions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">init_predictor</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">l</span><span class="op">$</span><span class="fu">predict_newdata</span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">init_predictor</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">l</span><span class="op">$</span><span class="fu">predict_newdata</span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>As <strong>mcboost</strong> requires the data to be provided in <code>X, y</code> format (a <code>data.table</code> or <code>data.frame</code> of features and a vector of labels), we create those two objects.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span>
-<span class="va">labels</span> <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="../reference/one_hot.html">one_hot</a></span><span class="op">(</span><span class="va">prep_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span></span>
+<span><span class="va">labels</span> <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="../reference/one_hot.html">one_hot</a></span><span class="op">(</span><span class="va">prep_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>We use a ridge regularized linear regression model as the auditor.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="st">"RidgeAuditorFitter"</span>, init_predictor <span class="op">=</span> <span class="va">init_predictor</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="st">"RidgeAuditorFitter"</span>, init_predictor <span class="op">=</span> <span class="va">init_predictor</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>print</code> method additionally lists the average auditor values in the different buckets in each iteration:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span>
-<span class="co">#&gt; &lt;MCBoost&gt;</span>
-<span class="co">#&gt;   Public:</span>
-<span class="co">#&gt;     alpha: 1e-04</span>
-<span class="co">#&gt;     auditor_effect: function (x, aggregate = TRUE, t = Inf, predictor_args = NULL, </span>
-<span class="co">#&gt;     auditor_effects: list</span>
-<span class="co">#&gt;     auditor_fitter: RidgeAuditorFitter, LearnerAuditorFitter, AuditorFitter, R6</span>
-<span class="co">#&gt;     bucket_strategies: simple</span>
-<span class="co">#&gt;     bucket_strategy: simple</span>
-<span class="co">#&gt;     clone: function (deep = FALSE) </span>
-<span class="co">#&gt;     eta: 1</span>
-<span class="co">#&gt;     eval_fulldata: FALSE</span>
-<span class="co">#&gt;     initialize: function (max_iter = 5, alpha = 1e-04, eta = 1, num_buckets = 2, </span>
-<span class="co">#&gt;     iter_corr: list</span>
-<span class="co">#&gt;     iter_models: list</span>
-<span class="co">#&gt;     iter_partitions: list</span>
-<span class="co">#&gt;     iter_sampling: none</span>
-<span class="co">#&gt;     max_iter: 5</span>
-<span class="co">#&gt;     multicalibrate: function (data, labels, predictor_args = NULL, audit = FALSE, </span>
-<span class="co">#&gt;     multiplicative: TRUE</span>
-<span class="co">#&gt;     num_buckets: 2</span>
-<span class="co">#&gt;     partition: TRUE</span>
-<span class="co">#&gt;     predict_probs: function (x, t = Inf, predictor_args = NULL, audit = FALSE, ...) </span>
-<span class="co">#&gt;     predictor: function (data) </span>
-<span class="co">#&gt;     print: function (...) </span>
-<span class="co">#&gt;     rebucket: FALSE</span>
-<span class="co">#&gt;     weighting_scheme: constant</span>
-<span class="co">#&gt;   Private:</span>
-<span class="co">#&gt;     assert_labels: function (labels, ...) </span>
-<span class="co">#&gt;     assert_prob: function (prob, data, ...) </span>
-<span class="co">#&gt;     calculate_corr: function (auditor, data, resid, idx, weights) </span>
-<span class="co">#&gt;     compute_residuals: function (prediction, labels) </span>
-<span class="co">#&gt;     compute_weighted_preds: function (prediction) </span>
-<span class="co">#&gt;     create_buckets: function (pred_probs) </span>
-<span class="co">#&gt;     get_auditor_fitter: function (subpops, auditor_fitter) </span>
-<span class="co">#&gt;     get_masked: function (data, resid, idx, probs, bucket) </span>
-<span class="co">#&gt;     get_predictor: function (init_predictor, default_model_class) </span>
-<span class="co">#&gt;     get_probs: function (pred_probs, new_probs) </span>
-<span class="co">#&gt;     update_probs: function (orig_preds, model, x, mask = NULL, audit = FALSE, update_sign = 1, </span>
-<span class="co">#&gt; Fitted Multi-calibration model (5 iters)</span>
-<span class="co">#&gt; Correlations per iteration:</span>
-<span class="co">#&gt;    iter     Bucket_1    Bucket_2     Bucket_3</span>
-<span class="co">#&gt; 1:    1 0.0002345878 0.001607495 0.0111570208</span>
-<span class="co">#&gt; 2:    2 0.0003028562 0.001607421 0.0018036510</span>
-<span class="co">#&gt; 3:    3 0.0004304191 0.001607421 0.0005702663</span>
-<span class="co">#&gt; 4:    4 0.0005746641 0.002004285 0.0005702663</span>
-<span class="co">#&gt; 5:    5 0.0007652389 0.002490407 0.0005702663</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span></span>
+<span><span class="co">#&gt; &lt;MCBoost&gt;</span></span>
+<span><span class="co">#&gt;   Public:</span></span>
+<span><span class="co">#&gt;     alpha: 1e-04</span></span>
+<span><span class="co">#&gt;     auditor_effect: function (x, aggregate = TRUE, t = Inf, predictor_args = NULL, </span></span>
+<span><span class="co">#&gt;     auditor_effects: list</span></span>
+<span><span class="co">#&gt;     auditor_fitter: RidgeAuditorFitter, LearnerAuditorFitter, AuditorFitter, R6</span></span>
+<span><span class="co">#&gt;     bucket_strategies: simple</span></span>
+<span><span class="co">#&gt;     bucket_strategy: simple</span></span>
+<span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span><span class="co">#&gt;     eta: 1</span></span>
+<span><span class="co">#&gt;     eval_fulldata: FALSE</span></span>
+<span><span class="co">#&gt;     initialize: function (max_iter = 5, alpha = 1e-04, eta = 1, num_buckets = 2, </span></span>
+<span><span class="co">#&gt;     iter_corr: list</span></span>
+<span><span class="co">#&gt;     iter_models: list</span></span>
+<span><span class="co">#&gt;     iter_partitions: list</span></span>
+<span><span class="co">#&gt;     iter_sampling: none</span></span>
+<span><span class="co">#&gt;     max_iter: 5</span></span>
+<span><span class="co">#&gt;     multicalibrate: function (data, labels, predictor_args = NULL, audit = FALSE, </span></span>
+<span><span class="co">#&gt;     multiplicative: TRUE</span></span>
+<span><span class="co">#&gt;     num_buckets: 2</span></span>
+<span><span class="co">#&gt;     partition: TRUE</span></span>
+<span><span class="co">#&gt;     predict_probs: function (x, t = Inf, predictor_args = NULL, audit = FALSE, ...) </span></span>
+<span><span class="co">#&gt;     predictor: function (data) </span></span>
+<span><span class="co">#&gt;     print: function (...) </span></span>
+<span><span class="co">#&gt;     rebucket: FALSE</span></span>
+<span><span class="co">#&gt;     weight_degree: 1</span></span>
+<span><span class="co">#&gt;   Private:</span></span>
+<span><span class="co">#&gt;     assert_labels: function (labels, ...) </span></span>
+<span><span class="co">#&gt;     assert_prob: function (prob, data, ...) </span></span>
+<span><span class="co">#&gt;     calculate_corr: function (auditor, data, resid, idx) </span></span>
+<span><span class="co">#&gt;     compute_residuals: function (prediction, labels) </span></span>
+<span><span class="co">#&gt;     compute_weighted_preds: function (prediction) </span></span>
+<span><span class="co">#&gt;     create_buckets: function (pred_probs) </span></span>
+<span><span class="co">#&gt;     get_auditor_fitter: function (subpops, auditor_fitter) </span></span>
+<span><span class="co">#&gt;     get_masked: function (data, resid, idx, probs, bucket) </span></span>
+<span><span class="co">#&gt;     get_predictor: function (init_predictor, default_model_class) </span></span>
+<span><span class="co">#&gt;     get_probs: function (pred_probs, new_probs) </span></span>
+<span><span class="co">#&gt;     update_probs: function (orig_preds, model, x, mask = NULL, audit = FALSE, update_sign = 1, </span></span>
+<span><span class="co">#&gt; Fitted Multi-calibration model (5 iters)</span></span>
+<span><span class="co">#&gt; Correlations per iteration:</span></span>
+<span><span class="co">#&gt;    iter     Bucket_1    Bucket_2     Bucket_3</span></span>
+<span><span class="co">#&gt; 1:    1 0.0002345878 0.001607495 0.0111570208</span></span>
+<span><span class="co">#&gt; 2:    2 0.0003028562 0.001607421 0.0018036510</span></span>
+<span><span class="co">#&gt; 3:    3 0.0004304191 0.001607421 0.0005702663</span></span>
+<span><span class="co">#&gt; 4:    4 0.0005746641 0.002004285 0.0005702663</span></span>
+<span><span class="co">#&gt; 5:    5 0.0007652389 0.002490407 0.0005702663</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="evaluation-on-test-data">1.3 Evaluation on Test Data<a class="anchor" aria-label="anchor" href="#evaluation-on-test-data"></a>
 </h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adult_test</span> <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html" class="external-link">fread</a></span><span class="op">(</span>
-  <span class="st">"https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv"</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-<span class="va">adult_test</span><span class="op">$</span><span class="va">Country</span> <span class="op">=</span> <span class="cn">NULL</span>
-<span class="va">adult_test</span><span class="op">$</span><span class="va">fnlwgt</span> <span class="op">=</span> <span class="cn">NULL</span>
-
-<span class="co"># The first row seems to have an error</span>
-<span class="va">adult_test</span> <span class="op">=</span> <span class="va">adult_test</span><span class="op">[</span><span class="va">Target</span> <span class="op">!=</span> <span class="st">""</span>,<span class="op">]</span>
-<span class="va">adult_test</span><span class="op">$</span><span class="va">Target</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">adult_test</span><span class="op">$</span><span class="va">Target</span><span class="op">)</span>
-
-<span class="co"># Note, that we have to convert columns from numeric to integer here:</span>
-<span class="va">sdc</span> <span class="op">=</span> <span class="va">train_tsk</span><span class="op">$</span><span class="va">feature_types</span><span class="op">[</span><span class="va">type</span> <span class="op">==</span> <span class="st">"integer"</span>, <span class="va">id</span><span class="op">]</span>
-<span class="va">adult_test</span><span class="op">[</span>, <span class="op">(</span><span class="va">sdc</span><span class="op">)</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">.SD</span>, <span class="va">as.integer</span><span class="op">)</span>, .SDcols <span class="op">=</span> <span class="va">sdc</span><span class="op">]</span>
-
-<span class="va">test_tsk</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"adult_test"</span>, <span class="va">adult_test</span>, target <span class="op">=</span> <span class="st">"Target"</span><span class="op">)</span>
-<span class="va">prep_test</span> <span class="op">=</span> <span class="va">pipe</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">test_tsk</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">adult_test</span> <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html" class="external-link">fread</a></span><span class="op">(</span></span>
+<span>  <span class="st">"https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv"</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">adult_test</span><span class="op">$</span><span class="va">Country</span> <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="va">adult_test</span><span class="op">$</span><span class="va">fnlwgt</span> <span class="op">=</span> <span class="cn">NULL</span></span>
+<span></span>
+<span><span class="co"># The first row seems to have an error</span></span>
+<span><span class="va">adult_test</span> <span class="op">=</span> <span class="va">adult_test</span><span class="op">[</span><span class="va">Target</span> <span class="op">!=</span> <span class="st">""</span>,<span class="op">]</span></span>
+<span><span class="va">adult_test</span><span class="op">$</span><span class="va">Target</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">adult_test</span><span class="op">$</span><span class="va">Target</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Note, that we have to convert columns from numeric to integer here:</span></span>
+<span><span class="va">sdc</span> <span class="op">=</span> <span class="va">train_tsk</span><span class="op">$</span><span class="va">feature_types</span><span class="op">[</span><span class="va">type</span> <span class="op">==</span> <span class="st">"integer"</span>, <span class="va">id</span><span class="op">]</span></span>
+<span><span class="va">adult_test</span><span class="op">[</span>, <span class="op">(</span><span class="va">sdc</span><span class="op">)</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">.SD</span>, <span class="va">as.integer</span><span class="op">)</span>, .SDcols <span class="op">=</span> <span class="va">sdc</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">test_tsk</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"adult_test"</span>, <span class="va">adult_test</span>, target <span class="op">=</span> <span class="st">"Target"</span><span class="op">)</span></span>
+<span><span class="va">prep_test</span> <span class="op">=</span> <span class="va">pipe</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">test_tsk</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p>Now, we can again extract <code>X, y</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_data</span> <span class="op">=</span> <span class="va">prep_test</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_test</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span>
-<span class="va">test_labels</span> <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="../reference/one_hot.html">one_hot</a></span><span class="op">(</span><span class="va">prep_test</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_test</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_data</span> <span class="op">=</span> <span class="va">prep_test</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_test</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span></span>
+<span><span class="va">test_labels</span> <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="../reference/one_hot.html">one_hot</a></span><span class="op">(</span><span class="va">prep_test</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_test</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>and <strong>predict</strong>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">prs</span> <span class="op">=</span> <span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">prs</span> <span class="op">=</span> <span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span></code></pre></div>
 <p>The accuracy of the multi-calibrated model</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">prs</span><span class="op">)</span> <span class="op">==</span> <span class="va">test_labels</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.8396904</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">prs</span><span class="op">)</span> <span class="op">==</span> <span class="va">test_labels</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.8396904</span></span></code></pre></div>
 <p>is similar to the non-calibrated model.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">init_predictor</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span> <span class="va">test_labels</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.8379706</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">init_predictor</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span> <span class="va">test_labels</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.8379706</span></span></code></pre></div>
 <p>But if we have a look at the bias for the different subpopulations of feature <code>Race</code>, we can see that the predictions got more calibrated. Note that we did not explicitly give neither the initial model nor the auditor access to the feature <code>Race</code>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get bias per subgroup for multi-calibrated predictor</span>
-<span class="va">adult_test</span><span class="op">$</span><span class="va">biasmc</span> <span class="op">=</span> <span class="op">(</span><span class="va">prs</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span>
-<span class="va">adult_test</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">biasmc</span><span class="op">)</span><span class="op">)</span>, <span class="va">.N</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Race</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt;                  Race          V1     N</span>
-<span class="co">#&gt; 1:              Black 0.008414768  1561</span>
-<span class="co">#&gt; 2:              White 0.053498900 13946</span>
-<span class="co">#&gt; 3: Asian-Pac-Islander 0.064492304   480</span>
-<span class="co">#&gt; 4:              Other 0.068950996   135</span>
-<span class="co">#&gt; 5: Amer-Indian-Eskimo 0.002438774   159</span>
-<span class="co"># Get bias per subgroup for initial predictor</span>
-<span class="va">adult_test</span><span class="op">$</span><span class="va">biasinit</span> <span class="op">=</span> <span class="op">(</span><span class="fu">init_predictor</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span>
-<span class="va">adult_test</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">biasinit</span><span class="op">)</span><span class="op">)</span>, <span class="va">.N</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Race</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt;                  Race          V1     N</span>
-<span class="co">#&gt; 1:              Black 0.017961316  1561</span>
-<span class="co">#&gt; 2:              White 0.066077755 13946</span>
-<span class="co">#&gt; 3: Asian-Pac-Islander 0.074912961   480</span>
-<span class="co">#&gt; 4:              Other 0.077236911   135</span>
-<span class="co">#&gt; 5: Amer-Indian-Eskimo 0.009339302   159</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Get bias per subgroup for multi-calibrated predictor</span></span>
+<span><span class="va">adult_test</span><span class="op">$</span><span class="va">biasmc</span> <span class="op">=</span> <span class="op">(</span><span class="va">prs</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span></span>
+<span><span class="va">adult_test</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">biasmc</span><span class="op">)</span><span class="op">)</span>, <span class="va">.N</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Race</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;                  Race          V1     N</span></span>
+<span><span class="co">#&gt; 1:              Black 0.008414768  1561</span></span>
+<span><span class="co">#&gt; 2:              White 0.053498900 13946</span></span>
+<span><span class="co">#&gt; 3: Asian-Pac-Islander 0.064492304   480</span></span>
+<span><span class="co">#&gt; 4:              Other 0.068950996   135</span></span>
+<span><span class="co">#&gt; 5: Amer-Indian-Eskimo 0.002438774   159</span></span>
+<span><span class="co"># Get bias per subgroup for initial predictor</span></span>
+<span><span class="va">adult_test</span><span class="op">$</span><span class="va">biasinit</span> <span class="op">=</span> <span class="op">(</span><span class="fu">init_predictor</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span></span>
+<span><span class="va">adult_test</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">biasinit</span><span class="op">)</span><span class="op">)</span>, <span class="va">.N</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Race</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;                  Race          V1     N</span></span>
+<span><span class="co">#&gt; 1:              Black 0.017961316  1561</span></span>
+<span><span class="co">#&gt; 2:              White 0.066077755 13946</span></span>
+<span><span class="co">#&gt; 3: Asian-Pac-Islander 0.074912961   480</span></span>
+<span><span class="co">#&gt; 4:              Other 0.077236911   135</span></span>
+<span><span class="co">#&gt; 5: Amer-Indian-Eskimo 0.009339302   159</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-auditor-effect">1.4 The Auditor Effect<a class="anchor" aria-label="anchor" href="#the-auditor-effect"></a>
 </h3>
 <p>We can also obtain the auditor effect after multicalibration. This indicates “how much” each observation has been affected by multi-calibration (on average across iterations).</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ae</span> <span class="op">=</span> <span class="va">mc</span><span class="op">$</span><span class="fu">auditor_effect</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">ae</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ae</span> <span class="op">=</span> <span class="va">mc</span><span class="op">$</span><span class="fu">auditor_effect</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">ae</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mcboost_basics_extensions_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>We can see that there are a few instances with more pronounced effects, while most have actually only a low effect.</p>
 <p>In order to get more insights, we compute quantiles of the less and more effected population (median as cut-point) and analyze differences.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">effect</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">[</span><span class="va">ae</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">ae</span><span class="op">[</span><span class="va">ae</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">2</span>, <span class="va">quantile</span><span class="op">)</span>
-<span class="va">no_effect</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">[</span><span class="va">ae</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">ae</span><span class="op">[</span><span class="va">ae</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">]</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">2</span>, <span class="va">quantile</span><span class="op">)</span>
-<span class="va">difference</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="op">(</span><span class="va">effect</span><span class="op">-</span><span class="va">no_effect</span><span class="op">)</span>, <span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span>
-<span class="va">difference</span><span class="op">[</span><span class="va">difference</span> <span class="op">&gt;</span> <span class="fl">0.1</span><span class="op">]</span>
-<span class="co">#&gt;       Education.Some.college Martial_Status.Never.married </span>
-<span class="co">#&gt;                    0.2000000                    0.4000000 </span>
-<span class="co">#&gt;   Relationship.Not.in.family       Relationship.Own.child </span>
-<span class="co">#&gt;                    0.2000000                    0.2000000 </span>
-<span class="co">#&gt;                   Sex.Female   Occupation.Priv.house.serv </span>
-<span class="co">#&gt;                    0.4000000                    0.1900148 </span>
-<span class="co">#&gt;            Workclass.Private </span>
-<span class="co">#&gt;                    0.1991271</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">effect</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">[</span><span class="va">ae</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">ae</span><span class="op">[</span><span class="va">ae</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">2</span>, <span class="va">quantile</span><span class="op">)</span></span>
+<span><span class="va">no_effect</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">[</span><span class="va">ae</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">ae</span><span class="op">[</span><span class="va">ae</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">]</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">2</span>, <span class="va">quantile</span><span class="op">)</span></span>
+<span><span class="va">difference</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="op">(</span><span class="va">effect</span><span class="op">-</span><span class="va">no_effect</span><span class="op">)</span>, <span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="va">difference</span><span class="op">[</span><span class="va">difference</span> <span class="op">&gt;</span> <span class="fl">0.1</span><span class="op">]</span></span>
+<span><span class="co">#&gt;       Education.Some.college Martial_Status.Never.married </span></span>
+<span><span class="co">#&gt;                    0.2000000                    0.4000000 </span></span>
+<span><span class="co">#&gt;   Relationship.Not.in.family       Relationship.Own.child </span></span>
+<span><span class="co">#&gt;                    0.2000000                    0.2000000 </span></span>
+<span><span class="co">#&gt;                   Sex.Female   Occupation.Priv.house.serv </span></span>
+<span><span class="co">#&gt;                    0.4000000                    0.1900148 </span></span>
+<span><span class="co">#&gt;            Workclass.Private </span></span>
+<span><span class="co">#&gt;                    0.1991271</span></span></code></pre></div>
 <p>There seems to be a difference in some variables like <code>Education</code> and <code>Marital_Status</code>.</p>
 <p>We can further analyze the individuals:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_data</span><span class="op">[</span><span class="va">ae</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">ae</span><span class="op">[</span><span class="va">ae</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">difference</span> <span class="op">&gt;</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span>, with <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>
-<span class="co">#&gt;       Education.Some.college Martial_Status.Never.married</span>
-<span class="co">#&gt;    1:                      0                            1</span>
-<span class="co">#&gt;    2:                      1                            1</span>
-<span class="co">#&gt;    3:                      0                            1</span>
-<span class="co">#&gt;    4:                      0                            1</span>
-<span class="co">#&gt;    5:                      1                            1</span>
-<span class="co">#&gt;   ---                                                    </span>
-<span class="co">#&gt; 8137:                      0                            1</span>
-<span class="co">#&gt; 8138:                      0                            0</span>
-<span class="co">#&gt; 8139:                      0                            0</span>
-<span class="co">#&gt; 8140:                      0                            0</span>
-<span class="co">#&gt; 8141:                      0                            0</span>
-<span class="co">#&gt;       Relationship.Not.in.family Relationship.Own.child Sex.Female</span>
-<span class="co">#&gt;    1:                          0                      1          0</span>
-<span class="co">#&gt;    2:                          0                      1          1</span>
-<span class="co">#&gt;    3:                          1                      0          0</span>
-<span class="co">#&gt;    4:                          0                      0          0</span>
-<span class="co">#&gt;    5:                          0                      0          1</span>
-<span class="co">#&gt;   ---                                                             </span>
-<span class="co">#&gt; 8137:                          0                      1          1</span>
-<span class="co">#&gt; 8138:                          1                      0          0</span>
-<span class="co">#&gt; 8139:                          1                      0          1</span>
-<span class="co">#&gt; 8140:                          0                      0          0</span>
-<span class="co">#&gt; 8141:                          0                      1          0</span>
-<span class="co">#&gt;       Occupation.Priv.house.serv Workclass.Private</span>
-<span class="co">#&gt;    1:                0.000000000        1.00000000</span>
-<span class="co">#&gt;    2:                0.030938947        0.02914113</span>
-<span class="co">#&gt;    3:                0.000000000        1.00000000</span>
-<span class="co">#&gt;    4:                0.004082771        0.98113465</span>
-<span class="co">#&gt;    5:                0.000000000        1.00000000</span>
-<span class="co">#&gt;   ---                                             </span>
-<span class="co">#&gt; 8137:                0.000000000        1.00000000</span>
-<span class="co">#&gt; 8138:                0.000000000        0.00000000</span>
-<span class="co">#&gt; 8139:                0.000000000        1.00000000</span>
-<span class="co">#&gt; 8140:                0.037192541        0.95817537</span>
-<span class="co">#&gt; 8141:                0.000000000        1.00000000</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_data</span><span class="op">[</span><span class="va">ae</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">ae</span><span class="op">[</span><span class="va">ae</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">difference</span> <span class="op">&gt;</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span>, with <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
+<span><span class="co">#&gt;       Education.Some.college Martial_Status.Never.married</span></span>
+<span><span class="co">#&gt;    1:                      0                            1</span></span>
+<span><span class="co">#&gt;    2:                      1                            1</span></span>
+<span><span class="co">#&gt;    3:                      0                            1</span></span>
+<span><span class="co">#&gt;    4:                      0                            1</span></span>
+<span><span class="co">#&gt;    5:                      1                            1</span></span>
+<span><span class="co">#&gt;   ---                                                    </span></span>
+<span><span class="co">#&gt; 8137:                      0                            1</span></span>
+<span><span class="co">#&gt; 8138:                      0                            0</span></span>
+<span><span class="co">#&gt; 8139:                      0                            0</span></span>
+<span><span class="co">#&gt; 8140:                      0                            0</span></span>
+<span><span class="co">#&gt; 8141:                      0                            0</span></span>
+<span><span class="co">#&gt;       Relationship.Not.in.family Relationship.Own.child Sex.Female</span></span>
+<span><span class="co">#&gt;    1:                          0                      1          0</span></span>
+<span><span class="co">#&gt;    2:                          0                      1          1</span></span>
+<span><span class="co">#&gt;    3:                          1                      0          0</span></span>
+<span><span class="co">#&gt;    4:                          0                      0          0</span></span>
+<span><span class="co">#&gt;    5:                          0                      0          1</span></span>
+<span><span class="co">#&gt;   ---                                                             </span></span>
+<span><span class="co">#&gt; 8137:                          0                      1          1</span></span>
+<span><span class="co">#&gt; 8138:                          1                      0          0</span></span>
+<span><span class="co">#&gt; 8139:                          1                      0          1</span></span>
+<span><span class="co">#&gt; 8140:                          0                      0          0</span></span>
+<span><span class="co">#&gt; 8141:                          0                      1          0</span></span>
+<span><span class="co">#&gt;       Occupation.Priv.house.serv Workclass.Private</span></span>
+<span><span class="co">#&gt;    1:                0.000000000        1.00000000</span></span>
+<span><span class="co">#&gt;    2:                0.030938947        0.02914113</span></span>
+<span><span class="co">#&gt;    3:                0.000000000        1.00000000</span></span>
+<span><span class="co">#&gt;    4:                0.004082771        0.98113465</span></span>
+<span><span class="co">#&gt;    5:                0.000000000        1.00000000</span></span>
+<span><span class="co">#&gt;   ---                                             </span></span>
+<span><span class="co">#&gt; 8137:                0.000000000        1.00000000</span></span>
+<span><span class="co">#&gt; 8138:                0.000000000        0.00000000</span></span>
+<span><span class="co">#&gt; 8139:                0.000000000        1.00000000</span></span>
+<span><span class="co">#&gt; 8140:                0.037192541        0.95817537</span></span>
+<span><span class="co">#&gt; 8141:                0.000000000        1.00000000</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="predicting-using-only-the-first-n-iterations">Predicting using only the first ‘n’ iterations<a class="anchor" aria-label="anchor" href="#predicting-using-only-the-first-n-iterations"></a>
 </h3>
 <p>Multi-calibration is an iterative procedure. The <code>t</code> parameter can be used to predict using only the first <code>t</code> iterations. This then predicts using only the first <code>t</code> iterations of the multi-calibration procedure.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">prs</span> <span class="op">=</span> <span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span>, t <span class="op">=</span> <span class="fl">3L</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">prs</span> <span class="op">=</span> <span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span>, t <span class="op">=</span> <span class="fl">3L</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -370,25 +367,25 @@
 </h2>
 <p><code>mcboost</code> does not require your model to be a <code>mlr3</code> model. As an input, <code>mcboost</code> expects a function <code>init_predictor</code> that takes as input <code>data</code> and returns a prediction.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span>
-<span class="va">data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="va">Class</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">Class</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">]</span>
-<span class="va">mod</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, formula <span class="op">=</span> <span class="va">Class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="va">Class</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">Class</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">]</span></span>
+<span><span class="va">mod</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, formula <span class="op">=</span> <span class="va">Class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>init_predictor</code> could then use the <code>glm</code> model:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">init_predictor</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">data</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">init_predictor</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">data</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>… and we can calibrate this predictor.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">d</span> <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span>
-<span class="va">l</span> <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Class</span>
-<span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>init_predictor <span class="op">=</span> <span class="va">init_predictor</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">208</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 0.0001870999 0.0178598234 0.4486733199 0.0001331085 0.1418422155 0.2885341698 </span>
-<span class="co">#&gt;            7            8 </span>
-<span class="co">#&gt; 0.2571026429 0.7356629651</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">l</span> <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Class</span></span>
+<span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>init_predictor <span class="op">=</span> <span class="va">init_predictor</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">208</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;            1            2            3            4            5            6 </span></span>
+<span><span class="co">#&gt; 0.0001870999 0.0178598234 0.4486733199 0.0001331085 0.1418422155 0.2885341698 </span></span>
+<span><span class="co">#&gt;            7            8 </span></span>
+<span><span class="co">#&gt; 0.2571026429 0.7356629651</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example-3-avoiding-overfitting-in-mcboost">Example 3: Avoiding Overfitting in MCBoost<a class="anchor" aria-label="anchor" href="#example-3-avoiding-overfitting-in-mcboost"></a>
@@ -399,46 +396,46 @@
 </h3>
 <p>In this section we use a <code>Cross-Validated</code> learner that predicts on held-out data during the training phase. This idea is based on Wolpert (1992)’s Stacked Generalization. Other, simpler methods include choosing a smaller step size <code>eta</code> or reducing the number of <code>iters</code>.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span></code></pre></div>
 <p>As an <code>init_predictor</code> we again use a <code>ranger</code> model from mlr3 and construct an init predictor using the convenience function provided by <code>mcboost</code>.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.ranger"</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span>
-<span class="va">learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span>
-<span class="va">init_predictor</span> <span class="op">=</span> <span class="fu"><a href="../reference/mlr3_init_predictor.html">mlr3_init_predictor</a></span><span class="op">(</span><span class="va">learner</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.ranger"</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></span>
+<span><span class="va">learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span></span>
+<span><span class="va">init_predictor</span> <span class="op">=</span> <span class="fu"><a href="../reference/mlr3_init_predictor.html">mlr3_init_predictor</a></span><span class="op">(</span><span class="va">learner</span><span class="op">)</span></span></code></pre></div>
 <p>… and we can calibrate this predictor. This time, we use a <code>CVTreeAuditorFitter</code> instead of a <code>TreeAuditorFitter</code>. This allows us to avoid overfitting similar to a technique coined <code>stacked generalization</code> first described by Wolpert in 1992. Note, that this can sometimes take a little longer since each learner is cross-validated using <code>3</code> folds (default).</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">d</span> <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span>
-<span class="va">l</span> <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Class</span>
-<span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>init_predictor <span class="op">=</span> <span class="va">init_predictor</span>, auditor_fitter<span class="op">=</span><span class="va"><a href="../reference/CVLearnerAuditorFitter.html">CVTreeAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>, max_iter <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">208</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.6506734 0.6605665 0.6303917 0.6480143 0.6037770 0.6019906 0.5845569</span>
-<span class="co">#&gt; [8] 0.5364872</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">l</span> <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Class</span></span>
+<span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>init_predictor <span class="op">=</span> <span class="va">init_predictor</span>, auditor_fitter<span class="op">=</span><span class="va"><a href="../reference/CVLearnerAuditorFitter.html">CVTreeAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>, max_iter <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">208</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.6506734 0.6605665 0.6303917 0.6480143 0.6037770 0.6019906 0.5845569</span></span>
+<span><span class="co">#&gt; [8] 0.5364872</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="data-splitting">3.2 Data Splitting<a class="anchor" aria-label="anchor" href="#data-splitting"></a>
 </h3>
 <p>We can also use a fresh chunk of the validation data in each iteration. <code>mcboost</code> implements two strategies, <code>"bootstrap"</code> and <code>"split"</code>. While <code>"split"</code> simply splits up the data, <code>"bootstrap"</code> draws a new bootstrap sample of the data in each iteration.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span></code></pre></div>
 <p>Again, we use a <code>ranger</code> mlr3 model as our initial predictor:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.ranger"</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span>
-<span class="va">learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span>
-<span class="va">init_predictor</span> <span class="op">=</span> <span class="fu"><a href="../reference/mlr3_init_predictor.html">mlr3_init_predictor</a></span><span class="op">(</span><span class="va">learner</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.ranger"</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></span>
+<span><span class="va">learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span></span>
+<span><span class="va">init_predictor</span> <span class="op">=</span> <span class="fu"><a href="../reference/mlr3_init_predictor.html">mlr3_init_predictor</a></span><span class="op">(</span><span class="va">learner</span><span class="op">)</span></span></code></pre></div>
 <p>and we can now calibrate:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">d</span> <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span>
-<span class="va">l</span> <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Class</span>
-<span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  init_predictor <span class="op">=</span> <span class="va">init_predictor</span>,
-  auditor_fitter<span class="op">=</span> <span class="va"><a href="../reference/LearnerAuditorFitter.html">TreeAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,
-  iter_sampling <span class="op">=</span> <span class="st">"bootstrap"</span>
-<span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">208</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.6458064 0.6708513 0.6471905 0.6676154 0.5803027 0.6248506 0.5799262</span>
-<span class="co">#&gt; [8] 0.5749539</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">l</span> <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Class</span></span>
+<span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  init_predictor <span class="op">=</span> <span class="va">init_predictor</span>,</span>
+<span>  auditor_fitter<span class="op">=</span> <span class="va"><a href="../reference/LearnerAuditorFitter.html">TreeAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  iter_sampling <span class="op">=</span> <span class="st">"bootstrap"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">d</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">208</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.6458064 0.6708513 0.6471905 0.6676154 0.5803027 0.6248506 0.5799262</span></span>
+<span><span class="co">#&gt; [8] 0.5749539</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -446,17 +443,17 @@
 </h2>
 <p>For this example, we use the <em>sonar</em> dataset once again:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span>
-<span class="va">data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span>
-<span class="va">labels</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span></span>
+<span><span class="va">labels</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="learnerauditorfitter">4.1 LearnerAuditorFitter<a class="anchor" aria-label="anchor" href="#learnerauditorfitter"></a>
 </h3>
 <p>The Subpop-fitter can be easily adjusted by constructing it from a <code>LearnerAuditorFitter</code>. This allows for using any <strong>mlr3</strong> learner. See <a href="https://mlr3extralearners.mlr-org.com/articles/learners/list_learners.html" class="external-link">here</a> for a list of available learners.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rf</span> <span class="op">=</span> <span class="va"><a href="../reference/LearnerAuditorFitter.html">LearnerAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span>, minsplit <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">rf</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rf</span> <span class="op">=</span> <span class="va"><a href="../reference/LearnerAuditorFitter.html">LearnerAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span>, minsplit <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">rf</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>TreeAuditorFitter</code> and <code>RidgeAuditorFitter</code> are two instantiations of this Fitter with pre-defined learners. By providing their character strings the fitter could be automatically constructed.</p>
 </div>
 <div class="section level3">
@@ -467,78 +464,78 @@
 <p>In order to split the data into groups according to a set of columns, we use a <code>SubpopAuditorFitter</code> together with a list of <code>subpops</code>. Those define the group splits to multi-calibrate on. These splits can be either a <code>character</code> string, referencing a binary variable in the data or a <code>function</code> that, when evaluated on the data, returns a binary vector.</p>
 <p>In order to showcase both options, we add a binary variable to our <code>data</code>:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span><span class="op">[</span>, <span class="va">Bin</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span><span class="op">[</span>, <span class="va">Bin</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rf</span> <span class="op">=</span> <span class="va"><a href="../reference/SubpopAuditorFitter.html">SubpopAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="st">"Bin"</span>,
-  <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span><span class="va">data</span><span class="op">[[</span><span class="st">"V1"</span><span class="op">]</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0.2</span><span class="op">}</span>,
-  <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span><span class="va">data</span><span class="op">[[</span><span class="st">"V1"</span><span class="op">]</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0.2</span> <span class="op">|</span> <span class="va">data</span><span class="op">[[</span><span class="st">"V3"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;</span> <span class="fl">0.29</span><span class="op">}</span>
-<span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rf</span> <span class="op">=</span> <span class="va"><a href="../reference/SubpopAuditorFitter.html">SubpopAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Bin"</span>,</span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span><span class="va">data</span><span class="op">[[</span><span class="st">"V1"</span><span class="op">]</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0.2</span><span class="op">}</span>,</span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span><span class="va">data</span><span class="op">[[</span><span class="st">"V1"</span><span class="op">]</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0.2</span> <span class="op">|</span> <span class="va">data</span><span class="op">[[</span><span class="st">"V3"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;</span> <span class="fl">0.29</span><span class="op">}</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">rf</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">rf</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></span></code></pre></div>
 <p>And we can again apply it to predict on new data:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
-<span class="co">#&gt;   [1] 0.500000 0.500000 0.850072 0.500000 0.500000 0.500000 0.500000 0.500000</span>
-<span class="co">#&gt;   [9] 0.500000 0.500000 0.850072 0.850072 0.500000 0.850072 0.500000 0.500000</span>
-<span class="co">#&gt;  [17] 0.500000 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000</span>
-<span class="co">#&gt;  [25] 0.850072 0.850072 0.850072 0.500000 0.500000 0.850072 0.500000 0.850072</span>
-<span class="co">#&gt;  [33] 0.850072 0.850072 0.500000 0.500000 0.500000 0.500000 0.850072 0.500000</span>
-<span class="co">#&gt;  [41] 0.850072 0.850072 0.850072 0.850072 0.500000 0.850072 0.850072 0.850072</span>
-<span class="co">#&gt;  [49] 0.850072 0.500000 0.500000 0.500000 0.850072 0.500000 0.500000 0.500000</span>
-<span class="co">#&gt;  [57] 0.500000 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000</span>
-<span class="co">#&gt;  [65] 0.500000 0.500000 0.850072 0.500000 0.850072 0.850072 0.850072 0.500000</span>
-<span class="co">#&gt;  [73] 0.850072 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000 0.500000</span>
-<span class="co">#&gt;  [81] 0.500000 0.850072 0.500000 0.850072 0.850072 0.850072 0.850072 0.500000</span>
-<span class="co">#&gt;  [89] 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000 0.500000</span>
-<span class="co">#&gt;  [97] 0.850072 0.500000 0.500000 0.850072 0.850072 0.850072 0.850072 0.500000</span>
-<span class="co">#&gt; [105] 0.850072 0.850072 0.850072 0.850072 0.850072 0.500000 0.850072 0.850072</span>
-<span class="co">#&gt; [113] 0.850072 0.850072 0.850072 0.850072 0.500000 0.850072 0.850072 0.850072</span>
-<span class="co">#&gt; [121] 0.850072 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000</span>
-<span class="co">#&gt; [129] 0.850072 0.850072 0.500000 0.850072 0.500000 0.500000 0.500000 0.850072</span>
-<span class="co">#&gt; [137] 0.850072 0.850072 0.850072 0.850072 0.850072 0.850072 0.500000 0.850072</span>
-<span class="co">#&gt; [145] 0.500000 0.500000 0.850072 0.850072 0.850072 0.850072 0.850072 0.850072</span>
-<span class="co">#&gt; [153] 0.500000 0.850072 0.500000 0.850072 0.500000 0.500000 0.850072 0.500000</span>
-<span class="co">#&gt; [161] 0.850072 0.850072 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000</span>
-<span class="co">#&gt; [169] 0.500000 0.850072 0.850072 0.850072 0.500000 0.850072 0.850072 0.850072</span>
-<span class="co">#&gt; [177] 0.500000 0.850072 0.500000 0.850072 0.500000 0.850072 0.850072 0.500000</span>
-<span class="co">#&gt; [185] 0.850072 0.850072 0.500000 0.850072 0.850072 0.500000 0.850072 0.500000</span>
-<span class="co">#&gt; [193] 0.850072 0.500000 0.500000 0.500000 0.500000 0.850072 0.850072 0.850072</span>
-<span class="co">#&gt; [201] 0.850072 0.850072 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   [1] 0.500000 0.500000 0.850072 0.500000 0.500000 0.500000 0.500000 0.500000</span></span>
+<span><span class="co">#&gt;   [9] 0.500000 0.500000 0.850072 0.850072 0.500000 0.850072 0.500000 0.500000</span></span>
+<span><span class="co">#&gt;  [17] 0.500000 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000</span></span>
+<span><span class="co">#&gt;  [25] 0.850072 0.850072 0.850072 0.500000 0.500000 0.850072 0.500000 0.850072</span></span>
+<span><span class="co">#&gt;  [33] 0.850072 0.850072 0.500000 0.500000 0.500000 0.500000 0.850072 0.500000</span></span>
+<span><span class="co">#&gt;  [41] 0.850072 0.850072 0.850072 0.850072 0.500000 0.850072 0.850072 0.850072</span></span>
+<span><span class="co">#&gt;  [49] 0.850072 0.500000 0.500000 0.500000 0.850072 0.500000 0.500000 0.500000</span></span>
+<span><span class="co">#&gt;  [57] 0.500000 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000</span></span>
+<span><span class="co">#&gt;  [65] 0.500000 0.500000 0.850072 0.500000 0.850072 0.850072 0.850072 0.500000</span></span>
+<span><span class="co">#&gt;  [73] 0.850072 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000 0.500000</span></span>
+<span><span class="co">#&gt;  [81] 0.500000 0.850072 0.500000 0.850072 0.850072 0.850072 0.850072 0.500000</span></span>
+<span><span class="co">#&gt;  [89] 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000 0.500000</span></span>
+<span><span class="co">#&gt;  [97] 0.850072 0.500000 0.500000 0.850072 0.850072 0.850072 0.850072 0.500000</span></span>
+<span><span class="co">#&gt; [105] 0.850072 0.850072 0.850072 0.850072 0.850072 0.500000 0.850072 0.850072</span></span>
+<span><span class="co">#&gt; [113] 0.850072 0.850072 0.850072 0.850072 0.500000 0.850072 0.850072 0.850072</span></span>
+<span><span class="co">#&gt; [121] 0.850072 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000</span></span>
+<span><span class="co">#&gt; [129] 0.850072 0.850072 0.500000 0.850072 0.500000 0.500000 0.500000 0.850072</span></span>
+<span><span class="co">#&gt; [137] 0.850072 0.850072 0.850072 0.850072 0.850072 0.850072 0.500000 0.850072</span></span>
+<span><span class="co">#&gt; [145] 0.500000 0.500000 0.850072 0.850072 0.850072 0.850072 0.850072 0.850072</span></span>
+<span><span class="co">#&gt; [153] 0.500000 0.850072 0.500000 0.850072 0.500000 0.500000 0.850072 0.500000</span></span>
+<span><span class="co">#&gt; [161] 0.850072 0.850072 0.500000 0.500000 0.850072 0.850072 0.500000 0.500000</span></span>
+<span><span class="co">#&gt; [169] 0.500000 0.850072 0.850072 0.850072 0.500000 0.850072 0.850072 0.850072</span></span>
+<span><span class="co">#&gt; [177] 0.500000 0.850072 0.500000 0.850072 0.500000 0.850072 0.850072 0.500000</span></span>
+<span><span class="co">#&gt; [185] 0.850072 0.850072 0.500000 0.850072 0.850072 0.500000 0.850072 0.500000</span></span>
+<span><span class="co">#&gt; [193] 0.850072 0.500000 0.500000 0.500000 0.500000 0.850072 0.850072 0.850072</span></span>
+<span><span class="co">#&gt; [201] 0.850072 0.850072 0.500000 0.500000 0.500000 0.850072 0.850072 0.500000</span></span></code></pre></div>
 <p><strong>Manually defined masks</strong></p>
 <p>If we want to add the splitting from the outside, by supplying binary masks for the rows of the data, we can provide manually defined masks. Note, that the masks have to correspond with the number of rows in the dataset.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rf</span> <span class="op">=</span> <span class="va"><a href="../reference/SubgroupAuditorFitter.html">SubgroupAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">104</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fl">52</span><span class="op">)</span>
-<span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rf</span> <span class="op">=</span> <span class="va"><a href="../reference/SubgroupAuditorFitter.html">SubgroupAuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">104</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fl">52</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">rf</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">rf</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></span></code></pre></div>
 <p>During prediction, we now have to supply a set of masks for the prediction data.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">predict_masks</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">52</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fl">26</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">predict_masks</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">52</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fl">26</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">104</span>,<span class="op">]</span>, subgroup_masks <span class="op">=</span> <span class="va">predict_masks</span><span class="op">)</span>
-<span class="co">#&gt;   [1] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span>
-<span class="co">#&gt;   [8] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span>
-<span class="co">#&gt;  [15] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span>
-<span class="co">#&gt;  [22] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span>
-<span class="co">#&gt;  [29] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span>
-<span class="co">#&gt;  [36] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span>
-<span class="co">#&gt;  [43] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span>
-<span class="co">#&gt;  [50] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span>
-<span class="co">#&gt;  [57] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span>
-<span class="co">#&gt;  [64] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span>
-<span class="co">#&gt;  [71] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span>
-<span class="co">#&gt;  [78] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span>
-<span class="co">#&gt;  [85] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span>
-<span class="co">#&gt;  [92] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span>
-<span class="co">#&gt;  [99] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">104</span>,<span class="op">]</span>, subgroup_masks <span class="op">=</span> <span class="va">predict_masks</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   [1] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span></span>
+<span><span class="co">#&gt;   [8] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span></span>
+<span><span class="co">#&gt;  [15] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span></span>
+<span><span class="co">#&gt;  [22] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></span>
+<span><span class="co">#&gt;  [29] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span></span>
+<span><span class="co">#&gt;  [36] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span></span>
+<span><span class="co">#&gt;  [43] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span></span>
+<span><span class="co">#&gt;  [50] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></span>
+<span><span class="co">#&gt;  [57] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span></span>
+<span><span class="co">#&gt;  [64] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span></span>
+<span><span class="co">#&gt;  [71] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span></span>
+<span><span class="co">#&gt;  [78] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></span>
+<span><span class="co">#&gt;  [85] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span></span>
+<span><span class="co">#&gt;  [92] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span></span>
+<span><span class="co">#&gt;  [99] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -546,93 +543,93 @@
 </h2>
 <p>When data has missing values or other non-standard columns, we often have to pre-process data in order to be able to fit models. Those preprocessing steps can be embedded into the <code>SubPopFitter</code> by using a <strong>mlr3pipelines</strong> Pipeline. The following code shows a brief example:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"penguins"</span><span class="op">)</span>
-<span class="co"># first we convert to a binary task</span>
-<span class="va">row_ids</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"..row_id"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Adelie"</span>, <span class="st">"Gentoo"</span><span class="op">)</span><span class="op">]</span><span class="op">[[</span><span class="st">"..row_id"</span><span class="op">]</span><span class="op">]</span>
-<span class="va">tsk</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">row_ids</span><span class="op">)</span><span class="op">$</span><span class="fu">droplevels</span><span class="op">(</span><span class="op">)</span>
-<span class="va">tsk</span>
-<span class="co">#&gt; &lt;TaskClassif:penguins&gt; (276 x 8): Palmer Penguins</span>
-<span class="co">#&gt; * Target: species</span>
-<span class="co">#&gt; * Properties: twoclass</span>
-<span class="co">#&gt; * Features (7):</span>
-<span class="co">#&gt;   - int (3): body_mass, flipper_length, year</span>
-<span class="co">#&gt;   - dbl (2): bill_depth, bill_length</span>
-<span class="co">#&gt;   - fct (2): island, sex</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"penguins"</span><span class="op">)</span></span>
+<span><span class="co"># first we convert to a binary task</span></span>
+<span><span class="va">row_ids</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"..row_id"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Adelie"</span>, <span class="st">"Gentoo"</span><span class="op">)</span><span class="op">]</span><span class="op">[[</span><span class="st">"..row_id"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">tsk</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">row_ids</span><span class="op">)</span><span class="op">$</span><span class="fu">droplevels</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">tsk</span></span>
+<span><span class="co">#&gt; &lt;TaskClassif:penguins&gt; (276 x 8): Palmer Penguins</span></span>
+<span><span class="co">#&gt; * Target: species</span></span>
+<span><span class="co">#&gt; * Properties: twoclass</span></span>
+<span><span class="co">#&gt; * Features (7):</span></span>
+<span><span class="co">#&gt;   - int (3): body_mass, flipper_length, year</span></span>
+<span><span class="co">#&gt;   - dbl (2): bill_depth, bill_length</span></span>
+<span><span class="co">#&gt;   - fct (2): island, sex</span></span></code></pre></div>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3pipelines.mlr-org.com" class="external-link">"mlr3pipelines"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3learners.mlr-org.com" class="external-link">"mlr3learners"</a></span><span class="op">)</span>
-
-<span class="co"># Convert task to X,y</span>
-<span class="va">X</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span>
-<span class="va">y</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span>
-
-<span class="co"># Our inital model is a pipeline that imputes missings and encodes categoricals</span>
-<span class="va">init_model</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"encode"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com//reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com//reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span>
-  <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.glmnet"</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># And we fit it on a subset of the data in order to simulate a poorly performing model.</span>
-<span class="va">init_model</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">row_ids</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="fl">160</span><span class="op">:</span><span class="fl">170</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="va">init_model</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span><span class="op">$</span><span class="fu">score</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Multiple lambdas have been fit. Lambda will be set to 0.01 (see parameter 's').</span>
-<span class="co">#&gt; This happened PipeOp classif.glmnet's $predict()</span>
-<span class="co">#&gt; classif.ce </span>
-<span class="co">#&gt;  0.1594203</span>
-
-<span class="co"># We define a pipeline that imputes missings and encodes categoricals</span>
-<span class="va">auditor</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"encode"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com//reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com//reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">auditor</span>, init_predictor <span class="op">=</span> <span class="va">init_model</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">X</span>, <span class="va">y</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Multiple lambdas have been fit. Lambda will be set to 0.01 (see parameter 's').</span>
-<span class="co">#&gt; This happened PipeOp classif.glmnet's $predict()</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3pipelines.mlr-org.com" class="external-link">"mlr3pipelines"</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3learners.mlr-org.com" class="external-link">"mlr3learners"</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Convert task to X,y</span></span>
+<span><span class="va">X</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Our inital model is a pipeline that imputes missings and encodes categoricals</span></span>
+<span><span class="va">init_model</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"encode"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.glmnet"</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># And we fit it on a subset of the data in order to simulate a poorly performing model.</span></span>
+<span><span class="va">init_model</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">row_ids</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="fl">160</span><span class="op">:</span><span class="fl">170</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">init_model</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span><span class="op">$</span><span class="fu">score</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Multiple lambdas have been fit. Lambda will be set to 0.01 (see parameter 's').</span></span>
+<span><span class="co">#&gt; This happened PipeOp classif.glmnet's $predict()</span></span>
+<span><span class="co">#&gt; classif.ce </span></span>
+<span><span class="co">#&gt;  0.1594203</span></span>
+<span></span>
+<span><span class="co"># We define a pipeline that imputes missings and encodes categoricals</span></span>
+<span><span class="va">auditor</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"encode"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="va">auditor</span>, init_predictor <span class="op">=</span> <span class="va">init_model</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">X</span>, <span class="va">y</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Multiple lambdas have been fit. Lambda will be set to 0.01 (see parameter 's').</span></span>
+<span><span class="co">#&gt; This happened PipeOp classif.glmnet's $predict()</span></span></code></pre></div>
 <p>and we can observe where it improved:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span>
-<span class="co">#&gt; &lt;MCBoost&gt;</span>
-<span class="co">#&gt;   Public:</span>
-<span class="co">#&gt;     alpha: 1e-04</span>
-<span class="co">#&gt;     auditor_effect: function (x, aggregate = TRUE, t = Inf, predictor_args = NULL, </span>
-<span class="co">#&gt;     auditor_effects: list</span>
-<span class="co">#&gt;     auditor_fitter: LearnerAuditorFitter, AuditorFitter, R6</span>
-<span class="co">#&gt;     bucket_strategies: simple</span>
-<span class="co">#&gt;     bucket_strategy: simple</span>
-<span class="co">#&gt;     clone: function (deep = FALSE) </span>
-<span class="co">#&gt;     eta: 1</span>
-<span class="co">#&gt;     eval_fulldata: FALSE</span>
-<span class="co">#&gt;     initialize: function (max_iter = 5, alpha = 1e-04, eta = 1, num_buckets = 2, </span>
-<span class="co">#&gt;     iter_corr: list</span>
-<span class="co">#&gt;     iter_models: list</span>
-<span class="co">#&gt;     iter_partitions: list</span>
-<span class="co">#&gt;     iter_sampling: none</span>
-<span class="co">#&gt;     max_iter: 5</span>
-<span class="co">#&gt;     multicalibrate: function (data, labels, predictor_args = NULL, audit = FALSE, </span>
-<span class="co">#&gt;     multiplicative: TRUE</span>
-<span class="co">#&gt;     num_buckets: 2</span>
-<span class="co">#&gt;     partition: TRUE</span>
-<span class="co">#&gt;     predict_probs: function (x, t = Inf, predictor_args = NULL, audit = FALSE, ...) </span>
-<span class="co">#&gt;     predictor: function (data, ...) </span>
-<span class="co">#&gt;     print: function (...) </span>
-<span class="co">#&gt;     rebucket: FALSE</span>
-<span class="co">#&gt;     weighting_scheme: constant</span>
-<span class="co">#&gt;   Private:</span>
-<span class="co">#&gt;     assert_labels: function (labels, ...) </span>
-<span class="co">#&gt;     assert_prob: function (prob, data, ...) </span>
-<span class="co">#&gt;     calculate_corr: function (auditor, data, resid, idx, weights) </span>
-<span class="co">#&gt;     compute_residuals: function (prediction, labels) </span>
-<span class="co">#&gt;     compute_weighted_preds: function (prediction) </span>
-<span class="co">#&gt;     create_buckets: function (pred_probs) </span>
-<span class="co">#&gt;     get_auditor_fitter: function (subpops, auditor_fitter) </span>
-<span class="co">#&gt;     get_masked: function (data, resid, idx, probs, bucket) </span>
-<span class="co">#&gt;     get_predictor: function (init_predictor, default_model_class) </span>
-<span class="co">#&gt;     get_probs: function (pred_probs, new_probs) </span>
-<span class="co">#&gt;     update_probs: function (orig_preds, model, x, mask = NULL, audit = FALSE, update_sign = 1, </span>
-<span class="co">#&gt; Fitted Multi-calibration model (5 iters)</span>
-<span class="co">#&gt; Correlations per iteration:</span>
-<span class="co">#&gt;    iter   Bucket_1  Bucket_2 Bucket_3</span>
-<span class="co">#&gt; 1:    1 0.15308560 0.2487837        0</span>
-<span class="co">#&gt; 2:    2 0.14699794 0.2414251        0</span>
-<span class="co">#&gt; 3:    3 0.13422070 0.2204713        0</span>
-<span class="co">#&gt; 4:    4 0.11225541 0.1844612        0</span>
-<span class="co">#&gt; 5:    5 0.06501729 0.1092000        0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span></span>
+<span><span class="co">#&gt; &lt;MCBoost&gt;</span></span>
+<span><span class="co">#&gt;   Public:</span></span>
+<span><span class="co">#&gt;     alpha: 1e-04</span></span>
+<span><span class="co">#&gt;     auditor_effect: function (x, aggregate = TRUE, t = Inf, predictor_args = NULL, </span></span>
+<span><span class="co">#&gt;     auditor_effects: list</span></span>
+<span><span class="co">#&gt;     auditor_fitter: LearnerAuditorFitter, AuditorFitter, R6</span></span>
+<span><span class="co">#&gt;     bucket_strategies: simple</span></span>
+<span><span class="co">#&gt;     bucket_strategy: simple</span></span>
+<span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span><span class="co">#&gt;     eta: 1</span></span>
+<span><span class="co">#&gt;     eval_fulldata: FALSE</span></span>
+<span><span class="co">#&gt;     initialize: function (max_iter = 5, alpha = 1e-04, eta = 1, num_buckets = 2, </span></span>
+<span><span class="co">#&gt;     iter_corr: list</span></span>
+<span><span class="co">#&gt;     iter_models: list</span></span>
+<span><span class="co">#&gt;     iter_partitions: list</span></span>
+<span><span class="co">#&gt;     iter_sampling: none</span></span>
+<span><span class="co">#&gt;     max_iter: 5</span></span>
+<span><span class="co">#&gt;     multicalibrate: function (data, labels, predictor_args = NULL, audit = FALSE, </span></span>
+<span><span class="co">#&gt;     multiplicative: TRUE</span></span>
+<span><span class="co">#&gt;     num_buckets: 2</span></span>
+<span><span class="co">#&gt;     partition: TRUE</span></span>
+<span><span class="co">#&gt;     predict_probs: function (x, t = Inf, predictor_args = NULL, audit = FALSE, ...) </span></span>
+<span><span class="co">#&gt;     predictor: function (data, ...) </span></span>
+<span><span class="co">#&gt;     print: function (...) </span></span>
+<span><span class="co">#&gt;     rebucket: FALSE</span></span>
+<span><span class="co">#&gt;     weight_degree: 1</span></span>
+<span><span class="co">#&gt;   Private:</span></span>
+<span><span class="co">#&gt;     assert_labels: function (labels, ...) </span></span>
+<span><span class="co">#&gt;     assert_prob: function (prob, data, ...) </span></span>
+<span><span class="co">#&gt;     calculate_corr: function (auditor, data, resid, idx) </span></span>
+<span><span class="co">#&gt;     compute_residuals: function (prediction, labels) </span></span>
+<span><span class="co">#&gt;     compute_weighted_preds: function (prediction) </span></span>
+<span><span class="co">#&gt;     create_buckets: function (pred_probs) </span></span>
+<span><span class="co">#&gt;     get_auditor_fitter: function (subpops, auditor_fitter) </span></span>
+<span><span class="co">#&gt;     get_masked: function (data, resid, idx, probs, bucket) </span></span>
+<span><span class="co">#&gt;     get_predictor: function (init_predictor, default_model_class) </span></span>
+<span><span class="co">#&gt;     get_probs: function (pred_probs, new_probs) </span></span>
+<span><span class="co">#&gt;     update_probs: function (orig_preds, model, x, mask = NULL, audit = FALSE, update_sign = 1, </span></span>
+<span><span class="co">#&gt; Fitted Multi-calibration model (5 iters)</span></span>
+<span><span class="co">#&gt; Correlations per iteration:</span></span>
+<span><span class="co">#&gt;    iter   Bucket_1  Bucket_2 Bucket_3</span></span>
+<span><span class="co">#&gt; 1:    1 0.15308560 0.2487837        0</span></span>
+<span><span class="co">#&gt; 2:    2 0.14699794 0.2414251        0</span></span>
+<span><span class="co">#&gt; 3:    3 0.13422070 0.2204713        0</span></span>
+<span><span class="co">#&gt; 4:    4 0.11225541 0.1844612        0</span></span>
+<span><span class="co">#&gt; 5:    5 0.06501729 0.1092000        0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example-6-multi-calibration-regression">Example 6: Multi-Calibration Regression<a class="anchor" aria-label="anchor" href="#example-6-multi-calibration-regression"></a>
@@ -640,82 +637,82 @@
 <p>We abuse the <code>Communities &amp; Crime</code> dataset in order to showcase how <code>mcboost</code> can be used in a regression setting.</p>
 <p>First we download the data and create an <code>mlr3</code> regression task:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3oml.mlr-org.com" class="external-link">mlr3oml</a></span><span class="op">)</span>
-<span class="va">oml</span> <span class="op">=</span> <span class="va"><a href="https://mlr3oml.mlr-org.com/reference/OMLData.html" class="external-link">OMLData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fl">42730</span><span class="op">)</span>
-<span class="va">data</span> <span class="op">=</span> <span class="va">oml</span><span class="op">$</span><span class="va">data</span>
-
-<span class="va">tsk</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskRegr.html" class="external-link">TaskRegr</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"communities_crime"</span>, <span class="va">data</span>, target <span class="op">=</span> <span class="st">"ViolentCrimesPerPop"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3oml.mlr-org.com" class="external-link">mlr3oml</a></span><span class="op">)</span></span>
+<span><span class="va">oml</span> <span class="op">=</span> <span class="va"><a href="https://mlr3oml.mlr-org.com/reference/OMLData.html" class="external-link">OMLData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fl">42730</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">=</span> <span class="va">oml</span><span class="op">$</span><span class="va">data</span></span>
+<span></span>
+<span><span class="va">tsk</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskRegr.html" class="external-link">TaskRegr</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"communities_crime"</span>, <span class="va">data</span>, target <span class="op">=</span> <span class="st">"ViolentCrimesPerPop"</span><span class="op">)</span></span></code></pre></div>
 <p>Currently, <strong>mcboost</strong> only allows to work with targets between 0 and 1. Luckily, our target variable’s values are already in that range, but if they were not, we could simply scale them to [0;1] before our analysis.</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">ViolentCrimesPerPop</span><span class="op">)</span>
-<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;   0.000   0.070   0.150   0.238   0.330   1.000</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">ViolentCrimesPerPop</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span><span class="co">#&gt;   0.000   0.070   0.150   0.238   0.330   1.000</span></span></code></pre></div>
 <p>We again split our task into <strong>train</strong> and <strong>test</strong>. We do this in <code>mlr3</code> by simply setting some (here 500) row roles to <code>"holdout"</code>.</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tsk</span><span class="op">$</span><span class="fu">set_row_roles</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="va">row_roles</span><span class="op">$</span><span class="va">use</span>, <span class="fl">500</span><span class="op">)</span>, <span class="st">"holdout"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tsk</span><span class="op">$</span><span class="fu">set_row_roles</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="va">row_roles</span><span class="op">$</span><span class="va">use</span>, <span class="fl">500</span><span class="op">)</span>, <span class="st">"holdout"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="preprocessing-1">6.1 Preprocessing<a class="anchor" aria-label="anchor" href="#preprocessing-1"></a>
 </h3>
 <p>Then we do basic preprocessing, since we do not have any categorical variables, we only impute NA’s using a histogram approach.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3pipelines.mlr-org.com" class="external-link">mlr3pipelines</a></span><span class="op">)</span>
-<span class="va">pipe</span> <span class="op">=</span>  <span class="fu"><a href="https://mlr3pipelines.mlr-org.com//reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span>
-<span class="va">prep_task</span> <span class="op">=</span> <span class="va">pipe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-
-<span class="va">prep_task</span><span class="op">$</span><span class="fu">set_col_roles</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"racepctblack"</span>, <span class="st">"racePctWhite"</span>, <span class="st">"racePctAsian"</span>, <span class="st">"racePctHisp"</span>, <span class="st">"community"</span><span class="op">)</span>, remove_from <span class="op">=</span> <span class="st">"feature"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3pipelines.mlr-org.com" class="external-link">mlr3pipelines</a></span><span class="op">)</span></span>
+<span><span class="va">pipe</span> <span class="op">=</span>  <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span></span>
+<span><span class="va">prep_task</span> <span class="op">=</span> <span class="va">pipe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tsk</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">prep_task</span><span class="op">$</span><span class="fu">set_col_roles</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"racepctblack"</span>, <span class="st">"racePctWhite"</span>, <span class="st">"racePctAsian"</span>, <span class="st">"racePctHisp"</span>, <span class="st">"community"</span><span class="op">)</span>, remove_from <span class="op">=</span> <span class="st">"feature"</span><span class="op">)</span></span></code></pre></div>
 <p>Now we fit our first <code>Learner</code>: A <code>random forest</code>.</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3learners.mlr-org.com" class="external-link">mlr3learners</a></span><span class="op">)</span>
-<span class="va">l</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.ranger"</span>, num.trees <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span>
-<span class="va">l</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">prep_task</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3learners.mlr-org.com" class="external-link">mlr3learners</a></span><span class="op">)</span></span>
+<span><span class="va">l</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.ranger"</span>, num.trees <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
+<span><span class="va">l</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">prep_task</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mcboost-1">6.2 MCBoost<a class="anchor" aria-label="anchor" href="#mcboost-1"></a>
 </h3>
 <p>A simple way to use the predictions from any <code>Model</code> in <strong>mcboost</strong> is to wrap the predict function and provide it as an initial predictor. This can be done from any model / any library. Note, that we have to make sure, that our <code>init_predictor</code> returns a numeric vector of predictions.</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">init_predictor</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">l</span><span class="op">$</span><span class="fu">predict_newdata</span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">$</span><span class="va">response</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">init_predictor</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">l</span><span class="op">$</span><span class="fu">predict_newdata</span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">$</span><span class="va">response</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>As <strong>mcboost</strong> requires the data to be provided in <code>X, y</code> format (a <code>data.table</code> or <code>data.frame</code> of features and a vector of labels), we create those two objects.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span>
-<span class="va">labels</span> <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span></span>
+<span><span class="va">labels</span> <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">prep_task</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="st">"RidgeAuditorFitter"</span>, init_predictor <span class="op">=</span> <span class="va">init_predictor</span>, eta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
-<span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mc</span> <span class="op">=</span> <span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>auditor_fitter <span class="op">=</span> <span class="st">"RidgeAuditorFitter"</span>, init_predictor <span class="op">=</span> <span class="va">init_predictor</span>, eta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="evaluation-on-test-data-1">6.3 Evaluation on Test Data<a class="anchor" aria-label="anchor" href="#evaluation-on-test-data-1"></a>
 </h3>
 <p>We first create the test task by setting the <code>holdout</code> rows to <code>use</code>, and then use our preprocessing <code>pipe's</code> predict function to also impute missing values for the validation data. Then we again extract features <code>X</code> and target <code>y</code>.</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_task</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span>
-<span class="va">test_task</span><span class="op">$</span><span class="va">row_roles</span><span class="op">$</span><span class="va">use</span> <span class="op">=</span> <span class="va">test_task</span><span class="op">$</span><span class="va">row_roles</span><span class="op">$</span><span class="va">holdout</span>
-<span class="va">test_task</span> <span class="op">=</span> <span class="va">pipe</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">test_task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">test_data</span> <span class="op">=</span> <span class="va">test_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span>
-<span class="va">test_labels</span> <span class="op">=</span> <span class="va">test_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_task</span> <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">test_task</span><span class="op">$</span><span class="va">row_roles</span><span class="op">$</span><span class="va">use</span> <span class="op">=</span> <span class="va">test_task</span><span class="op">$</span><span class="va">row_roles</span><span class="op">$</span><span class="va">holdout</span></span>
+<span><span class="va">test_task</span> <span class="op">=</span> <span class="va">pipe</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">test_task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">test_data</span> <span class="op">=</span> <span class="va">test_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span></span>
+<span><span class="va">test_labels</span> <span class="op">=</span> <span class="va">test_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">tsk</span><span class="op">$</span><span class="va">target_names</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p>and <strong>predict</strong>.</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">prs</span> <span class="op">=</span> <span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">prs</span> <span class="op">=</span> <span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span></code></pre></div>
 <p>Now we can compute the MSE of the multi-calibrated model</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">prs</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.01909034</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">prs</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.01909034</span></span></code></pre></div>
 <p>and compare to the non-calibrated version:</p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="fu">init_predictor</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.01880431</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="fu">init_predictor</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.01880431</span></span></code></pre></div>
 <p>But looking at sub-populations we can see that the predictions got more calibrated. Since we cannot show all subpopulations we only show the MSE for the feature <code>racepctblack</code>.</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_data</span><span class="op">$</span><span class="va">se_mcboost</span> <span class="op">=</span> <span class="op">(</span><span class="va">prs</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
-<span class="va">test_data</span><span class="op">$</span><span class="va">se_init</span> <span class="op">=</span> <span class="op">(</span><span class="fu">init_predictor</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
-
-<span class="va">test_data</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>mcboost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">se_mcboost</span><span class="op">)</span>, initial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">se_init</span><span class="op">)</span>, <span class="va">.N</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">racepctblack</span> <span class="op">&gt;</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt;    racepctblack    mcboost    initial   N</span>
-<span class="co">#&gt; 1:        FALSE 0.01530715 0.01522334 447</span>
-<span class="co">#&gt; 2:         TRUE 0.05099764 0.04900611  53</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_data</span><span class="op">$</span><span class="va">se_mcboost</span> <span class="op">=</span> <span class="op">(</span><span class="va">prs</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span>
+<span><span class="va">test_data</span><span class="op">$</span><span class="va">se_init</span> <span class="op">=</span> <span class="op">(</span><span class="fu">init_predictor</span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span> <span class="op">-</span> <span class="va">test_labels</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span>
+<span></span>
+<span><span class="va">test_data</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>mcboost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">se_mcboost</span><span class="op">)</span>, initial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">se_init</span><span class="op">)</span>, <span class="va">.N</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">racepctblack</span> <span class="op">&gt;</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;    racepctblack    mcboost    initial   N</span></span>
+<span><span class="co">#&gt; 1:        FALSE 0.01530715 0.01522334 447</span></span>
+<span><span class="co">#&gt; 2:         TRUE 0.05099764 0.04900611  53</span></span></code></pre></div>
 </div>
 </div>
   </div>
@@ -737,7 +734,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

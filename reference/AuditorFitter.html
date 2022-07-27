@@ -37,9 +37,6 @@
     <li>
       <a href="../articles/mcboost_example.html">MCBoost - Health Survey Example</a>
     </li>
-    <li>
-      <a href="../articles/mcboostsurv_basics.html">MCBoostSurv - Basics</a>
-    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -71,7 +68,12 @@
 
     <div id="value">
     <h2>Value</h2>
-    <p><code>list</code> with items<br></p><ul><li><p><code>corr</code>: pseudo-correlation between residuals and learner prediction.</p></li>
+    
+
+<p><code>list</code> with items<br></p>
+
+
+<ul><li><p><code>corr</code>: pseudo-correlation between residuals and learner prediction.</p></li>
 <li><p><code>l</code>: the trained learner.</p></li>
 </ul></div>
     <div id="methods">
@@ -89,7 +91,7 @@
 <p>Initialize a <code>AuditorFitter</code>.
 This is an abstract base class.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/AuditorFitter.html">AuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/AuditorFitter.html">AuditorFitter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -97,7 +99,7 @@ This is an abstract base class.</p><div class="section">
 <h3 id="method-fit-to-resid-">Method <code>fit_to_resid()</code><a class="anchor" aria-label="anchor" href="#method-fit-to-resid-"></a></h3>
 <p>Fit to residuals.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuditorFitter</span><span class="op">$</span><span class="fu">fit_to_resid</span><span class="op">(</span><span class="va">data</span>, <span class="va">resid</span>, <span class="va">mask</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuditorFitter</span><span class="op">$</span><span class="fu">fit_to_resid</span><span class="op">(</span><span class="va">data</span>, <span class="va">resid</span>, <span class="va">mask</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -124,7 +126,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <h3 id="method-fit-">Method <code>fit()</code><a class="anchor" aria-label="anchor" href="#method-fit-"></a></h3>
 <p>Fit (mostly used internally, use <code>fit_to_resid</code>).</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuditorFitter</span><span class="op">$</span><span class="fu">fit</span><span class="op">(</span><span class="va">data</span>, <span class="va">resid</span>, <span class="va">mask</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuditorFitter</span><span class="op">$</span><span class="fu">fit</span><span class="op">(</span><span class="va">data</span>, <span class="va">resid</span>, <span class="va">mask</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -151,7 +153,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuditorFitter</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuditorFitter</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -179,7 +181,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

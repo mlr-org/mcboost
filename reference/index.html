@@ -37,9 +37,6 @@
     <li>
       <a href="../articles/mcboost_example.html">MCBoost - Health Survey Example</a>
     </li>
-    <li>
-      <a href="../articles/mcboostsurv_basics.html">MCBoostSurv - Basics</a>
-    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -71,19 +68,15 @@
         </td>
         <td><p>AuditorFitter Abstract Base Class</p></td>
       </tr><tr><td>
-          <p><code><a href="CVLearnerAuditorFitter.html">CVLearnerAuditorFitter</a></code> </p>
+          <p><code><a href="CVLearnerAuditorFitter.html">CVLearnerAuditorFitter</a></code> <code><a href="CVLearnerAuditorFitter.html">CVTreeAuditorFitter</a></code> <code><a href="CVLearnerAuditorFitter.html">CVRidgeAuditorFitter</a></code> </p>
         </td>
         <td><p>Cross-validated AuditorFitter from a Learner</p></td>
       </tr><tr><td>
-          <p><code><a href="LearnerAuditorFitter.html">LearnerAuditorFitter</a></code> </p>
+          <p><code><a href="LearnerAuditorFitter.html">LearnerAuditorFitter</a></code> <code><a href="LearnerAuditorFitter.html">TreeAuditorFitter</a></code> <code><a href="LearnerAuditorFitter.html">RidgeAuditorFitter</a></code> </p>
         </td>
         <td><p>Create an AuditorFitter from a Learner</p></td>
       </tr><tr><td>
           <p><code><a href="MCBoost.html">MCBoost</a></code> </p>
-        </td>
-        <td><p>Multi-Calibration Boosting</p></td>
-      </tr><tr><td>
-          <p><code><a href="MCBoostSurv.html">MCBoostSurv</a></code> </p>
         </td>
         <td><p>Multi-Calibration Boosting</p></td>
       </tr><tr><td>
@@ -95,13 +88,7 @@
         </td>
         <td><p>Static AuditorFitter based on Subpopulations</p></td>
       </tr><tr><td>
-          <p><code><a href="make_survival_curve.html">make_survival_curve()</a></code> </p>
-        </td>
-        <td><p>Make every row monotonically decreasing in order to obtain the survival property.
-Additionally, many predicitions need 1 as a first value and 0 as a last value.
-(e.g. <code>PredictionSurv</code> needs this attribute.)</p></td>
-      </tr><tr><td>
-          <p><code><a href="mcboost-package.html">mcboost-package</a></code> </p>
+          <p><code><a href="mcboost-package.html">mcboost</a></code> <code><a href="mcboost-package.html">mcboost-package</a></code> </p>
         </td>
         <td><p>mcboost: Multi-Calibration Boosting</p></td>
       </tr><tr><td>
@@ -109,13 +96,9 @@ Additionally, many predicitions need 1 as a first value and 0 as a last value.
         </td>
         <td><p>Create an initial predictor function from a trained mlr3 learner</p></td>
       </tr><tr><td>
-          <p><code><a href="mlr_pipeops_mcboost.html">mlr_pipeops_mcboost</a></code> </p>
+          <p><code><a href="mlr_pipeops_mcboost.html">mlr_pipeops_mcboost</a></code> <code><a href="mlr_pipeops_mcboost.html">PipeOpLearnerPred</a></code> <code><a href="mlr_pipeops_mcboost.html">PipeOpMCBoost</a></code> </p>
         </td>
         <td><p>Multi-Calibrate a Learner's Prediction</p></td>
-      </tr><tr><td>
-          <p><code><a href="mlr_pipeops_mcboostsurv.html">mlr_pipeops_mcboostsurv</a></code> </p>
-        </td>
-        <td><p>Multi-Calibrate a Learner's Prediction (Survival Model)</p></td>
       </tr><tr><td>
           <p><code><a href="one_hot.html">one_hot()</a></code> </p>
         </td>
@@ -124,10 +107,6 @@ Additionally, many predicitions need 1 as a first value and 0 as a last value.
           <p><code><a href="ppl_mcboost.html">ppl_mcboost()</a></code> </p>
         </td>
         <td><p>Multi-calibration pipeline</p></td>
-      </tr><tr><td>
-          <p><code><a href="ppl_mcboostsurv.html">ppl_mcboostsurv()</a></code> </p>
-        </td>
-        <td><p>Multi-calibration pipeline (for survival models)</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -141,7 +120,7 @@ Additionally, many predicitions need 1 as a first value and 0 as a last value.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

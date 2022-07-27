@@ -57,9 +57,6 @@ https://dl.acm.org/doi/10.1145/3306618.3314287
     <li>
       <a href="../articles/mcboost_example.html">MCBoost - Health Survey Example</a>
     </li>
-    <li>
-      <a href="../articles/mcboostsurv_basics.html">MCBoostSurv - Basics</a>
-    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -192,7 +189,12 @@ Auditor effect in each iteration.</p></dd>
 
 <dt><code>bucket_strategies</code></dt>
 <dd><p><code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> <br>
-Possible bucket_strategies in McBoostSurv.</p></dd>
+Possible bucket_strategies.</p></dd>
+
+
+<dt><code>weight_degree</code></dt>
+<dd><p><code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> <br>
+Weighting degree for low-degree multi-calibration.</p></dd>
 
 
 </dl><p></p></div>
@@ -213,22 +215,23 @@ Possible bucket_strategies in McBoostSurv.</p></dd>
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Initialize a multi-calibration instance.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  max_iter <span class="op">=</span> <span class="fl">5</span>,
-  alpha <span class="op">=</span> <span class="fl">1e-04</span>,
-  eta <span class="op">=</span> <span class="fl">1</span>,
-  num_buckets <span class="op">=</span> <span class="fl">2</span>,
-  partition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">num_buckets</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,
-  bucket_strategy <span class="op">=</span> <span class="st">"simple"</span>,
-  rebucket <span class="op">=</span> <span class="cn">FALSE</span>,
-  eval_fulldata <span class="op">=</span> <span class="cn">FALSE</span>,
-  multiplicative <span class="op">=</span> <span class="cn">TRUE</span>,
-  auditor_fitter <span class="op">=</span> <span class="cn">NULL</span>,
-  subpops <span class="op">=</span> <span class="cn">NULL</span>,
-  default_model_class <span class="op">=</span> <span class="va">ConstantPredictor</span>,
-  init_predictor <span class="op">=</span> <span class="cn">NULL</span>,
-  iter_sampling <span class="op">=</span> <span class="st">"none"</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/MCBoost.html">MCBoost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  max_iter <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  eta <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  num_buckets <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  partition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">num_buckets</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  bucket_strategy <span class="op">=</span> <span class="st">"simple"</span>,</span>
+<span>  rebucket <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  eval_fulldata <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  multiplicative <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  auditor_fitter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  subpops <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  default_model_class <span class="op">=</span> <span class="va">ConstantPredictor</span>,</span>
+<span>  init_predictor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iter_sampling <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  weight_degree <span class="op">=</span> <span class="fl">1L</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -325,6 +328,11 @@ Can be <code>bootstrap</code>, <code>split</code> or <code>none</code>.<br>
 "none" uses the same dataset in each iteration.</p></dd>
 
 
+<dt><code>weight_degree</code></dt>
+<dd><p><code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> <br>
+Weighting degree for low-degree multi-calibration. Initialized to 1, which applies constant weighting with 1.</p></dd>
+
+
 </dl><p></p></div>
 </div>
 
@@ -332,7 +340,7 @@ Can be <code>bootstrap</code>, <code>split</code> or <code>none</code>.<br>
 <h3 id="method-multicalibrate-">Method <code>multicalibrate()</code><a class="anchor" aria-label="anchor" href="#method-multicalibrate-"></a></h3>
 <p>Run multi-calibration.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MCBoost</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span>, predictor_args <span class="op">=</span> <span class="cn">NULL</span>, audit <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MCBoost</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">data</span>, <span class="va">labels</span>, predictor_args <span class="op">=</span> <span class="cn">NULL</span>, audit <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -373,7 +381,7 @@ Params passed on to other methods.</p></dd>
 <h3 id="method-predict-probs-">Method <code>predict_probs()</code><a class="anchor" aria-label="anchor" href="#method-predict-probs-"></a></h3>
 <p>Predict a dataset with multi-calibrated predictions</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MCBoost</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">x</span>, t <span class="op">=</span> <span class="cn">Inf</span>, predictor_args <span class="op">=</span> <span class="cn">NULL</span>, audit <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MCBoost</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">x</span>, t <span class="op">=</span> <span class="cn">Inf</span>, predictor_args <span class="op">=</span> <span class="cn">NULL</span>, audit <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -417,13 +425,13 @@ Numeric vector of multi-calibrated predictions.</p>
 absolute predictions of the auditor. It indicates "how much"
 each observation was affected by multi-calibration on average across iterations.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MCBoost</span><span class="op">$</span><span class="fu">auditor_effect</span><span class="op">(</span>
-  <span class="va">x</span>,
-  aggregate <span class="op">=</span> <span class="cn">TRUE</span>,
-  t <span class="op">=</span> <span class="cn">Inf</span>,
-  predictor_args <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MCBoost</span><span class="op">$</span><span class="fu">auditor_effect</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  aggregate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  t <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>  predictor_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -465,7 +473,7 @@ Numeric vector of auditor effects for each row in <code>x</code>.</p>
 <h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
 <p>Prints information about multi-calibration.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MCBoost</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MCBoost</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -482,7 +490,7 @@ Not used.</p></dd>
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MCBoost</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MCBoost</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -500,17 +508,17 @@ Not used.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># See vignette for more examples.</span></span>
-<span class="r-in"><span class="co"># Instantiate the object</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">mc</span> <span class="op">=</span> <span class="va">MCBoost</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Run multi-calibration on training dataset.</span></span>
-<span class="r-in"><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, <span class="fl">100</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Predict on test set</span></span>
-<span class="r-in"><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Get auditor effect</span></span>
-<span class="r-in"><span class="va">mc</span><span class="op">$</span><span class="fu">auditor_effect</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># See vignette for more examples.</span></span></span>
+<span class="r-in"><span><span class="co"># Instantiate the object</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">mc</span> <span class="op">=</span> <span class="va">MCBoost</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Run multi-calibration on training dataset.</span></span></span>
+<span class="r-in"><span><span class="va">mc</span><span class="op">$</span><span class="fu">multicalibrate</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, <span class="fl">100</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Predict on test set</span></span></span>
+<span class="r-in"><span><span class="va">mc</span><span class="op">$</span><span class="fu">predict_probs</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Get auditor effect</span></span></span>
+<span class="r-in"><span><span class="va">mc</span><span class="op">$</span><span class="fu">auditor_effect</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -525,7 +533,7 @@ Not used.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
