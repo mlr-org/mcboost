@@ -1,6 +1,7 @@
 ## Reason for resubmission
 
-- Removed dependency on package mlr3proba that was removed from CRAN.
+Removed dependency on package mlr3proba that was removed from CRAN.
+Apologies for not being able to upload a new version in time.
 
 ## R CMD check
 
