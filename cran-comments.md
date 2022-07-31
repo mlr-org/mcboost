@@ -1,6 +1,6 @@
 ## Reason for resubmission
 
-- Adapt unit tests to work with new releases of upstream packages. 
+- Removed dependency on package mlr3proba that was removed from CRAN.
 
 ## R CMD check
 
@@ -17,4 +17,5 @@ As noted in R-hub issue #503, this could be due to a bug/crash in MiKTeX and can
 - WARNINGs or ERRORs
 
 ## R-HUB
+
 All checks show "Status: success"
