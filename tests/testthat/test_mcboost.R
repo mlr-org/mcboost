@@ -1,4 +1,4 @@
-context("MCBoost Class")
+skip_if_not_installed("mlr3")
 
 test_that("MCBoost class instantiation", {
   mc = MCBoost$new(auditor_fitter = "TreeAuditorFitter")

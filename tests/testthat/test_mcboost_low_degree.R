@@ -1,3 +1,5 @@
+skip_if_not_installed("mlr3")
+
 test_that("MCBoost multicalibrate with subpops d = 2", {
   skip_on_os("solaris")
   skip_on_cran()

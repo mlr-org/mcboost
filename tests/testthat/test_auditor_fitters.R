@@ -1,4 +1,4 @@
-context("AuditorFitters")
+skip_if_not_installed("mlr3")
 
 test_that("AuditorFitters work", {
   rf = AuditorFitter$new()

@@ -1,4 +1,4 @@
-context("Predictor")
+skip_if_not_installed("mlr3")
 
 test_that("Predictor class instantiation", {
   skip_on_cran()

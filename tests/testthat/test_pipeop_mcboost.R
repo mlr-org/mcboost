@@ -1,4 +1,4 @@
-context("MCBoost PipeOp")
+skip_if_not_installed("mlr3")
 
 test_that("MCBoost class instantiation", {
   skip_on_cran()
