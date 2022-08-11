@@ -5,7 +5,7 @@
 #' @format [`R6Class`] inheriting from [`mlr3pipelines::PipeOp`].
 #'
 #' @description
-
+#'   [`mlr3pipelines::PipeOp`] that trains a [`Learner`][mlr3::Learner] and passes its predictions forward during training and prediction.
 #'
 #' @section Construction:
 #' ```

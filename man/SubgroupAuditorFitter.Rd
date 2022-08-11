@@ -56,21 +56,21 @@ Initialize a SubgroupAuditorFitter}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SubgroupAuditorFitter$new()}}
-\item \href{#method-fit}{\code{SubgroupAuditorFitter$fit()}}
-\item \href{#method-clone}{\code{SubgroupAuditorFitter$clone()}}
+\item \href{#method-SubgroupAuditorFitter-new}{\code{SubgroupAuditorFitter$new()}}
+\item \href{#method-SubgroupAuditorFitter-fit}{\code{SubgroupAuditorFitter$fit()}}
+\item \href{#method-SubgroupAuditorFitter-clone}{\code{SubgroupAuditorFitter$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid">}\href{../../mcboost/html/AuditorFitter.html#method-fit_to_resid}{\code{mcboost::AuditorFitter$fit_to_resid()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href='../../mcboost/html/AuditorFitter.html#method-AuditorFitter-fit_to_resid'><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SubgroupAuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SubgroupAuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Initializes a \code{\link{SubgroupAuditorFitter}} that
 assesses multi-calibration within each group defined
@@ -91,8 +91,8 @@ They allow defining subgroups of the data.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-fit"></a>}}
-\if{latex}{\out{\hypertarget{method-fit}{}}}
+\if{html}{\out{<a id="method-SubgroupAuditorFitter-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-SubgroupAuditorFitter-fit}{}}}
 \subsection{Method \code{fit()}}{
 Fit the learner and compute correlation
 \subsection{Usage}{
@@ -115,8 +115,8 @@ Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SubgroupAuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SubgroupAuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

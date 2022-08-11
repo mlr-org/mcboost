@@ -6,7 +6,7 @@
 \alias{mcboost-package}
 \title{mcboost: Multi-Calibration Boosting}
 \description{
-Implements 'Multi-Calibration Boosting' (2018) <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and 'Multi-Accuracy Boosting' (2019) <arXiv:1805.12317> for the multi-calibration of a machine learning model's prediction. 'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
+Implements 'Multi-Calibration Boosting' (2018) \url{https://proceedings.mlr.press/v80/hebert-johnson18a.html} and 'Multi-Accuracy Boosting' (2019) \href{https://arxiv.org/abs/1805.12317}{arXiv:1805.12317} for the multi-calibration of a machine learning model's prediction. 'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 }
 \references{
 Kim et al., 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.

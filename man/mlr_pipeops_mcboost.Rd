@@ -11,7 +11,7 @@
 \code{\link{R6Class}} inheriting from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
 }
 \description{
-
+\code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}} that trains a \code{\link[mlr3:Learner]{Learner}} and passes its predictions forward during training and prediction.
 
 Post-process a learner prediction using multi-calibration.
 For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
@@ -20,7 +20,9 @@ If no \code{init_predictor} is provided, the preceding learner's predictions
 corresponding to the \code{prediction} slot are used as an initial predictor for \code{MCBoost}.
 }
 \section{Construction}{
-\preformatted{PipeOpLearnerPred$new(learner, id = NULL, param_vals = list())
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearnerPred$new(learner, id = NULL, param_vals = list())
 
 * `learner` :: [`Learner`][mlr3::Learner] \\cr
   [`Learner`][mlr3::Learner] to  prediction, or a string identifying a
@@ -37,10 +39,12 @@ corresponding to the \code{prediction} slot are used as an initial predictor for
 [`mlr3::mlr_learners`]: R:\%60mlr3::mlr_learners\%60
 [mlr3misc::Dictionary]: R:mlr3misc::Dictionary
 [mlr3::Learner]: R:mlr3::Learner
-}
+}\if{html}{\out{</div>}}
 
-\preformatted{PipeOpMCBoost$new(id = "mcboost", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpMCBoost$new(id = "mcboost", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"threshold"}.
@@ -150,23 +154,23 @@ https://mlr3book.mlr-org.com/list-pipeops.html
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PipeOpLearnerPred$new()}}
-\item \href{#method-clone}{\code{PipeOpLearnerPred$clone()}}
+\item \href{#method-PipeOpLearnerPred-new}{\code{PipeOpLearnerPred$new()}}
+\item \href{#method-PipeOpLearnerPred-clone}{\code{PipeOpLearnerPred$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help">}\href{../../mlr3pipelines/html/PipeOp.html#method-help}{\code{mlr3pipelines::PipeOp$help()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict">}\href{../../mlr3pipelines/html/PipeOp.html#method-predict}{\code{mlr3pipelines::PipeOp$predict()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print">}\href{../../mlr3pipelines/html/PipeOp.html#method-print}{\code{mlr3pipelines::PipeOp$print()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train">}\href{../../mlr3pipelines/html/PipeOp.html#method-train}{\code{mlr3pipelines::PipeOp$train()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-help'><code>mlr3pipelines::PipeOp$help()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-predict'><code>mlr3pipelines::PipeOp$predict()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-print'><code>mlr3pipelines::PipeOp$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-train'><code>mlr3pipelines::PipeOp$train()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PipeOpLearnerPred-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PipeOpLearnerPred-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize a Learner Predictor PipeOp. Can be used to wrap trained or untrainted
 mlr3 learners.
@@ -190,8 +194,8 @@ List of hyperparameters for the \code{PipeOp}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PipeOpLearnerPred-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PipeOpLearnerPred-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
@@ -220,23 +224,23 @@ The objects of this class are cloneable with this method.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PipeOpMCBoost$new()}}
-\item \href{#method-clone}{\code{PipeOpMCBoost$clone()}}
+\item \href{#method-PipeOpMCBoost-new}{\code{PipeOpMCBoost$new()}}
+\item \href{#method-PipeOpMCBoost-clone}{\code{PipeOpMCBoost$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help">}\href{../../mlr3pipelines/html/PipeOp.html#method-help}{\code{mlr3pipelines::PipeOp$help()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict">}\href{../../mlr3pipelines/html/PipeOp.html#method-predict}{\code{mlr3pipelines::PipeOp$predict()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print">}\href{../../mlr3pipelines/html/PipeOp.html#method-print}{\code{mlr3pipelines::PipeOp$print()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train">}\href{../../mlr3pipelines/html/PipeOp.html#method-train}{\code{mlr3pipelines::PipeOp$train()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-help'><code>mlr3pipelines::PipeOp$help()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-predict'><code>mlr3pipelines::PipeOp$predict()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-print'><code>mlr3pipelines::PipeOp$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-train'><code>mlr3pipelines::PipeOp$train()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PipeOpMCBoost-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PipeOpMCBoost-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize a Multi-Calibration PipeOp.
 \subsection{Usage}{
@@ -256,8 +260,8 @@ List of hyperparameters for the \code{PipeOp}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PipeOpMCBoost-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PipeOpMCBoost-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

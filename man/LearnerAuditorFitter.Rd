@@ -23,8 +23,8 @@ on the data.
 \item \code{TreeAuditorFitter}: Learner auditor based on rpart
 
 \item \code{RidgeAuditorFitter}: Learner auditor based on glmnet
-}}
 
+}}
 \seealso{
 Other AuditorFitter: 
 \code{\link{CVLearnerAuditorFitter}},
@@ -56,21 +56,21 @@ Learner used for fitting residuals.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{LearnerAuditorFitter$new()}}
-\item \href{#method-fit}{\code{LearnerAuditorFitter$fit()}}
-\item \href{#method-clone}{\code{LearnerAuditorFitter$clone()}}
+\item \href{#method-LearnerAuditorFitter-new}{\code{LearnerAuditorFitter$new()}}
+\item \href{#method-LearnerAuditorFitter-fit}{\code{LearnerAuditorFitter$fit()}}
+\item \href{#method-LearnerAuditorFitter-clone}{\code{LearnerAuditorFitter$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid">}\href{../../mcboost/html/AuditorFitter.html#method-fit_to_resid}{\code{mcboost::AuditorFitter$fit_to_resid()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href='../../mcboost/html/AuditorFitter.html#method-AuditorFitter-fit_to_resid'><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-LearnerAuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-LearnerAuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Define an \code{AuditorFitter} from a Learner.
 Available instantiations:\cr \code{\link{TreeAuditorFitter}} (rpart) and
@@ -89,8 +89,8 @@ Regression learner to use.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-fit"></a>}}
-\if{latex}{\out{\hypertarget{method-fit}{}}}
+\if{html}{\out{<a id="method-LearnerAuditorFitter-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-LearnerAuditorFitter-fit}{}}}
 \subsection{Method \code{fit()}}{
 Fit the learner and compute correlation
 \subsection{Usage}{
@@ -113,8 +113,8 @@ Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-LearnerAuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-LearnerAuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
@@ -136,21 +136,21 @@ The objects of this class are cloneable with this method.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TreeAuditorFitter$new()}}
-\item \href{#method-clone}{\code{TreeAuditorFitter$clone()}}
+\item \href{#method-TreeAuditorFitter-new}{\code{TreeAuditorFitter$new()}}
+\item \href{#method-TreeAuditorFitter-clone}{\code{TreeAuditorFitter$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid">}\href{../../mcboost/html/AuditorFitter.html#method-fit_to_resid}{\code{mcboost::AuditorFitter$fit_to_resid()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="LearnerAuditorFitter" data-id="fit">}\href{../../mcboost/html/LearnerAuditorFitter.html#method-fit}{\code{mcboost::LearnerAuditorFitter$fit()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href='../../mcboost/html/AuditorFitter.html#method-AuditorFitter-fit_to_resid'><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="LearnerAuditorFitter" data-id="fit"><a href='../../mcboost/html/LearnerAuditorFitter.html#method-LearnerAuditorFitter-fit'><code>mcboost::LearnerAuditorFitter$fit()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TreeAuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TreeAuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Define a AuditorFitter from a rpart learner.
 \subsection{Usage}{
@@ -159,8 +159,8 @@ Define a AuditorFitter from a rpart learner.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TreeAuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TreeAuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
@@ -182,21 +182,21 @@ The objects of this class are cloneable with this method.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RidgeAuditorFitter$new()}}
-\item \href{#method-clone}{\code{RidgeAuditorFitter$clone()}}
+\item \href{#method-RidgeAuditorFitter-new}{\code{RidgeAuditorFitter$new()}}
+\item \href{#method-RidgeAuditorFitter-clone}{\code{RidgeAuditorFitter$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid">}\href{../../mcboost/html/AuditorFitter.html#method-fit_to_resid}{\code{mcboost::AuditorFitter$fit_to_resid()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="LearnerAuditorFitter" data-id="fit">}\href{../../mcboost/html/LearnerAuditorFitter.html#method-fit}{\code{mcboost::LearnerAuditorFitter$fit()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href='../../mcboost/html/AuditorFitter.html#method-AuditorFitter-fit_to_resid'><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="LearnerAuditorFitter" data-id="fit"><a href='../../mcboost/html/LearnerAuditorFitter.html#method-LearnerAuditorFitter-fit'><code>mcboost::LearnerAuditorFitter$fit()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RidgeAuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RidgeAuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Define a AuditorFitter from a glmnet learner.
 \subsection{Usage}{
@@ -205,8 +205,8 @@ Define a AuditorFitter from a glmnet learner.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RidgeAuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RidgeAuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

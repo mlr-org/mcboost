@@ -104,17 +104,17 @@ Weighting degree for low-degree multi-calibration.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{MCBoost$new()}}
-\item \href{#method-multicalibrate}{\code{MCBoost$multicalibrate()}}
-\item \href{#method-predict_probs}{\code{MCBoost$predict_probs()}}
-\item \href{#method-auditor_effect}{\code{MCBoost$auditor_effect()}}
-\item \href{#method-print}{\code{MCBoost$print()}}
-\item \href{#method-clone}{\code{MCBoost$clone()}}
+\item \href{#method-MCBoost-new}{\code{MCBoost$new()}}
+\item \href{#method-MCBoost-multicalibrate}{\code{MCBoost$multicalibrate()}}
+\item \href{#method-MCBoost-predict_probs}{\code{MCBoost$predict_probs()}}
+\item \href{#method-MCBoost-auditor_effect}{\code{MCBoost$auditor_effect()}}
+\item \href{#method-MCBoost-print}{\code{MCBoost$print()}}
+\item \href{#method-MCBoost-clone}{\code{MCBoost$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-MCBoost-new"></a>}}
+\if{latex}{\out{\hypertarget{method-MCBoost-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize a multi-calibration instance.
 \subsection{Usage}{
@@ -211,8 +211,8 @@ Weighting degree for low-degree multi-calibration. Initialized to 1, which appli
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-multicalibrate"></a>}}
-\if{latex}{\out{\hypertarget{method-multicalibrate}{}}}
+\if{html}{\out{<a id="method-MCBoost-multicalibrate"></a>}}
+\if{latex}{\out{\hypertarget{method-MCBoost-multicalibrate}{}}}
 \subsection{Method \code{multicalibrate()}}{
 Run multi-calibration.
 \subsection{Usage}{
@@ -244,8 +244,8 @@ Params passed on to other methods.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-predict_probs"></a>}}
-\if{latex}{\out{\hypertarget{method-predict_probs}{}}}
+\if{html}{\out{<a id="method-MCBoost-predict_probs"></a>}}
+\if{latex}{\out{\hypertarget{method-MCBoost-predict_probs}{}}}
 \subsection{Method \code{predict_probs()}}{
 Predict a dataset with multi-calibrated predictions
 \subsection{Usage}{
@@ -278,8 +278,8 @@ Numeric vector of multi-calibrated predictions.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-auditor_effect"></a>}}
-\if{latex}{\out{\hypertarget{method-auditor_effect}{}}}
+\if{html}{\out{<a id="method-MCBoost-auditor_effect"></a>}}
+\if{latex}{\out{\hypertarget{method-MCBoost-auditor_effect}{}}}
 \subsection{Method \code{auditor_effect()}}{
 Compute the auditor effect for each instance which are the cumulative
 absolute predictions of the auditor. It indicates "how much"
@@ -320,8 +320,8 @@ Numeric vector of auditor effects for each row in \code{x}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-MCBoost-print"></a>}}
+\if{latex}{\out{\hypertarget{method-MCBoost-print}{}}}
 \subsection{Method \code{print()}}{
 Prints information about multi-calibration.
 \subsection{Usage}{
@@ -338,8 +338,8 @@ Not used.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-MCBoost-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-MCBoost-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -16,15 +16,15 @@ Defines an \code{AuditorFitter} abstract base class.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{AuditorFitter$new()}}
-\item \href{#method-fit_to_resid}{\code{AuditorFitter$fit_to_resid()}}
-\item \href{#method-fit}{\code{AuditorFitter$fit()}}
-\item \href{#method-clone}{\code{AuditorFitter$clone()}}
+\item \href{#method-AuditorFitter-new}{\code{AuditorFitter$new()}}
+\item \href{#method-AuditorFitter-fit_to_resid}{\code{AuditorFitter$fit_to_resid()}}
+\item \href{#method-AuditorFitter-fit}{\code{AuditorFitter$fit()}}
+\item \href{#method-AuditorFitter-clone}{\code{AuditorFitter$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-AuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-AuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize a \code{\link{AuditorFitter}}.
 This is an abstract base class.
@@ -34,8 +34,8 @@ This is an abstract base class.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-fit_to_resid"></a>}}
-\if{latex}{\out{\hypertarget{method-fit_to_resid}{}}}
+\if{html}{\out{<a id="method-AuditorFitter-fit_to_resid"></a>}}
+\if{latex}{\out{\hypertarget{method-AuditorFitter-fit_to_resid}{}}}
 \subsection{Method \code{fit_to_resid()}}{
 Fit to residuals.
 \subsection{Usage}{
@@ -58,8 +58,8 @@ Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-fit"></a>}}
-\if{latex}{\out{\hypertarget{method-fit}{}}}
+\if{html}{\out{<a id="method-AuditorFitter-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-AuditorFitter-fit}{}}}
 \subsection{Method \code{fit()}}{
 Fit (mostly used internally, use \code{fit_to_resid}).
 \subsection{Usage}{
@@ -82,8 +82,8 @@ Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-AuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-AuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

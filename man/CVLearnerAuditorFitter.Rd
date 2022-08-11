@@ -27,8 +27,8 @@ on all other subsets and predicting afterwards on the left-out subset.
 \item \code{CVTreeAuditorFitter}: Cross-Validated auditor based on rpart
 
 \item \code{CVRidgeAuditorFitter}: Cross-Validated auditor based on glmnet
-}}
 
+}}
 \seealso{
 Other AuditorFitter: 
 \code{\link{LearnerAuditorFitter}},
@@ -60,21 +60,21 @@ Learner used for fitting residuals.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{CVLearnerAuditorFitter$new()}}
-\item \href{#method-fit}{\code{CVLearnerAuditorFitter$fit()}}
-\item \href{#method-clone}{\code{CVLearnerAuditorFitter$clone()}}
+\item \href{#method-CVLearnerAuditorFitter-new}{\code{CVLearnerAuditorFitter$new()}}
+\item \href{#method-CVLearnerAuditorFitter-fit}{\code{CVLearnerAuditorFitter$fit()}}
+\item \href{#method-CVLearnerAuditorFitter-clone}{\code{CVLearnerAuditorFitter$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid">}\href{../../mcboost/html/AuditorFitter.html#method-fit_to_resid}{\code{mcboost::AuditorFitter$fit_to_resid()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href='../../mcboost/html/AuditorFitter.html#method-AuditorFitter-fit_to_resid'><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-CVLearnerAuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-CVLearnerAuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Define a \code{CVAuditorFitter} from a learner.
 Available instantiations:\cr \code{\link{CVTreeAuditorFitter}} (rpart) and
@@ -98,8 +98,8 @@ Number of folds to use for PipeOpLearnerCV. Defaults to 3.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-fit"></a>}}
-\if{latex}{\out{\hypertarget{method-fit}{}}}
+\if{html}{\out{<a id="method-CVLearnerAuditorFitter-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-CVLearnerAuditorFitter-fit}{}}}
 \subsection{Method \code{fit()}}{
 Fit the cross-validated learner and compute correlation
 \subsection{Usage}{
@@ -122,8 +122,8 @@ Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-CVLearnerAuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-CVLearnerAuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
@@ -145,21 +145,21 @@ The objects of this class are cloneable with this method.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{CVTreeAuditorFitter$new()}}
-\item \href{#method-clone}{\code{CVTreeAuditorFitter$clone()}}
+\item \href{#method-CVTreeAuditorFitter-new}{\code{CVTreeAuditorFitter$new()}}
+\item \href{#method-CVTreeAuditorFitter-clone}{\code{CVTreeAuditorFitter$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid">}\href{../../mcboost/html/AuditorFitter.html#method-fit_to_resid}{\code{mcboost::AuditorFitter$fit_to_resid()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerAuditorFitter" data-id="fit">}\href{../../mcboost/html/CVLearnerAuditorFitter.html#method-fit}{\code{mcboost::CVLearnerAuditorFitter$fit()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href='../../mcboost/html/AuditorFitter.html#method-AuditorFitter-fit_to_resid'><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerAuditorFitter" data-id="fit"><a href='../../mcboost/html/CVLearnerAuditorFitter.html#method-CVLearnerAuditorFitter-fit'><code>mcboost::CVLearnerAuditorFitter$fit()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-CVTreeAuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-CVTreeAuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Define a cross-validated AuditorFitter from a rpart learner
 See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information on
@@ -170,8 +170,8 @@ cross-validated learners.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-CVTreeAuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-CVTreeAuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
@@ -193,21 +193,21 @@ The objects of this class are cloneable with this method.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{CVRidgeAuditorFitter$new()}}
-\item \href{#method-clone}{\code{CVRidgeAuditorFitter$clone()}}
+\item \href{#method-CVRidgeAuditorFitter-new}{\code{CVRidgeAuditorFitter$new()}}
+\item \href{#method-CVRidgeAuditorFitter-clone}{\code{CVRidgeAuditorFitter$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid">}\href{../../mcboost/html/AuditorFitter.html#method-fit_to_resid}{\code{mcboost::AuditorFitter$fit_to_resid()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerAuditorFitter" data-id="fit">}\href{../../mcboost/html/CVLearnerAuditorFitter.html#method-fit}{\code{mcboost::CVLearnerAuditorFitter$fit()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href='../../mcboost/html/AuditorFitter.html#method-AuditorFitter-fit_to_resid'><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerAuditorFitter" data-id="fit"><a href='../../mcboost/html/CVLearnerAuditorFitter.html#method-CVLearnerAuditorFitter-fit'><code>mcboost::CVLearnerAuditorFitter$fit()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-CVRidgeAuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-CVRidgeAuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Define a cross-validated AuditorFitter from a glmnet learner.
 See \code{\link[mlr3pipelines:mlr_pipeops_learner_cv]{mlr3pipelines::PipeOpLearnerCV}} for more information on
@@ -218,8 +218,8 @@ cross-validated learners.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-CVRidgeAuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-CVRidgeAuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
