@@ -205,13 +205,13 @@ Weighting degree for low-degree multi-calibration.</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>MCBoost$new()</code></a></p></li>
-<li><p><a href="#method-multicalibrate"><code>MCBoost$multicalibrate()</code></a></p></li>
-<li><p><a href="#method-predict_probs"><code>MCBoost$predict_probs()</code></a></p></li>
-<li><p><a href="#method-auditor_effect"><code>MCBoost$auditor_effect()</code></a></p></li>
-<li><p><a href="#method-print"><code>MCBoost$print()</code></a></p></li>
-<li><p><a href="#method-clone"><code>MCBoost$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-MCBoost-new"><code>MCBoost$new()</code></a></p></li>
+<li><p><a href="#method-MCBoost-multicalibrate"><code>MCBoost$multicalibrate()</code></a></p></li>
+<li><p><a href="#method-MCBoost-predict_probs"><code>MCBoost$predict_probs()</code></a></p></li>
+<li><p><a href="#method-MCBoost-auditor_effect"><code>MCBoost$auditor_effect()</code></a></p></li>
+<li><p><a href="#method-MCBoost-print"><code>MCBoost$print()</code></a></p></li>
+<li><p><a href="#method-MCBoost-clone"><code>MCBoost$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-MCBoost-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Initialize a multi-calibration instance.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -336,7 +336,7 @@ Weighting degree for low-degree multi-calibration. Initialized to 1, which appli
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-multicalibrate"></a><div class="section">
+</div><p></p><hr><a id="method-MCBoost-multicalibrate"></a><div class="section">
 <h3 id="method-multicalibrate-">Method <code>multicalibrate()</code><a class="anchor" aria-label="anchor" href="#method-multicalibrate-"></a></h3>
 <p>Run multi-calibration.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
@@ -377,7 +377,7 @@ Params passed on to other methods.</p></dd>
 <p><code>NULL</code></p>
 </div>
 
-</div><p></p><hr><a id="method-predict_probs"></a><div class="section">
+</div><p></p><hr><a id="method-MCBoost-predict_probs"></a><div class="section">
 <h3 id="method-predict-probs-">Method <code>predict_probs()</code><a class="anchor" aria-label="anchor" href="#method-predict-probs-"></a></h3>
 <p>Predict a dataset with multi-calibrated predictions</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -419,7 +419,7 @@ Params passed on to the residual prediction model's predict method.</p></dd>
 Numeric vector of multi-calibrated predictions.</p>
 </div>
 
-</div><p></p><hr><a id="method-auditor_effect"></a><div class="section">
+</div><p></p><hr><a id="method-MCBoost-auditor_effect"></a><div class="section">
 <h3 id="method-auditor-effect-">Method <code>auditor_effect()</code><a class="anchor" aria-label="anchor" href="#method-auditor-effect-"></a></h3>
 <p>Compute the auditor effect for each instance which are the cumulative
 absolute predictions of the auditor. It indicates "how much"
@@ -469,7 +469,7 @@ Params passed on to the residual prediction model's predict method.</p></dd>
 Numeric vector of auditor effects for each row in <code>x</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-print"></a><div class="section">
+</div><p></p><hr><a id="method-MCBoost-print"></a><div class="section">
 <h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
 <p>Prints information about multi-calibration.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
@@ -486,7 +486,7 @@ Not used.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-MCBoost-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>

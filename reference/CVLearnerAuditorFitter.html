@@ -128,11 +128,11 @@ Learner used for fitting residuals.</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>CVLearnerAuditorFitter$new()</code></a></p></li>
-<li><p><a href="#method-fit"><code>CVLearnerAuditorFitter$fit()</code></a></p></li>
-<li><p><a href="#method-clone"><code>CVLearnerAuditorFitter$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-CVLearnerAuditorFitter-new"><code>CVLearnerAuditorFitter$new()</code></a></p></li>
+<li><p><a href="#method-CVLearnerAuditorFitter-fit"><code>CVLearnerAuditorFitter$fit()</code></a></p></li>
+<li><p><a href="#method-CVLearnerAuditorFitter-clone"><code>CVLearnerAuditorFitter$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+</ul></details></p><hr><a id="method-CVLearnerAuditorFitter-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Define a <code>CVAuditorFitter</code> from a learner.
 Available instantiations:<br><code>CVTreeAuditorFitter</code> (rpart) and
@@ -158,7 +158,7 @@ Number of folds to use for PipeOpLearnerCV. Defaults to 3.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-fit"></a><div class="section">
+</div><p></p><hr><a id="method-CVLearnerAuditorFitter-fit"></a><div class="section">
 <h3 id="method-fit-">Method <code>fit()</code><a class="anchor" aria-label="anchor" href="#method-fit-"></a></h3>
 <p>Fit the cross-validated learner and compute correlation</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
@@ -185,7 +185,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-CVLearnerAuditorFitter-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -214,11 +214,11 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <div class="section">
 <h3 id="public-methods-1">Public methods<a class="anchor" aria-label="anchor" href="#public-methods-1"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>CVTreeAuditorFitter$new()</code></a></p></li>
-<li><p><a href="#method-clone"><code>CVTreeAuditorFitter$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerAuditorFitter" data-id="fit"><a href="CVLearnerAuditorFitter.html#method-fit"><code>mcboost::CVLearnerAuditorFitter$fit()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-CVTreeAuditorFitter-new"><code>CVTreeAuditorFitter$new()</code></a></p></li>
+<li><p><a href="#method-CVTreeAuditorFitter-clone"><code>CVTreeAuditorFitter$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerAuditorFitter" data-id="fit"><a href="CVLearnerAuditorFitter.html#method-fit"><code>mcboost::CVLearnerAuditorFitter$fit()</code></a></span></li>
+</ul></details></p><hr><a id="method-CVTreeAuditorFitter-new"></a><div class="section">
 <h3 id="method-new--1">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new--1"></a></h3>
 <p>Define a cross-validated AuditorFitter from a rpart learner
 See <code><a href="https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_cv.html" class="external-link">mlr3pipelines::PipeOpLearnerCV</a></code> for more information on
@@ -228,7 +228,7 @@ cross-validated learners.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-CVTreeAuditorFitter-clone"></a><div class="section">
 <h3 id="method-clone--1">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone--1"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
@@ -257,11 +257,11 @@ cross-validated learners.</p><div class="section">
 <div class="section">
 <h3 id="public-methods-2">Public methods<a class="anchor" aria-label="anchor" href="#public-methods-2"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>CVRidgeAuditorFitter$new()</code></a></p></li>
-<li><p><a href="#method-clone"><code>CVRidgeAuditorFitter$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerAuditorFitter" data-id="fit"><a href="CVLearnerAuditorFitter.html#method-fit"><code>mcboost::CVLearnerAuditorFitter$fit()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-CVRidgeAuditorFitter-new"><code>CVRidgeAuditorFitter$new()</code></a></p></li>
+<li><p><a href="#method-CVRidgeAuditorFitter-clone"><code>CVRidgeAuditorFitter$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="CVLearnerAuditorFitter" data-id="fit"><a href="CVLearnerAuditorFitter.html#method-fit"><code>mcboost::CVLearnerAuditorFitter$fit()</code></a></span></li>
+</ul></details></p><hr><a id="method-CVRidgeAuditorFitter-new"></a><div class="section">
 <h3 id="method-new--2">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new--2"></a></h3>
 <p>Define a cross-validated AuditorFitter from a glmnet learner.
 See <code><a href="https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_cv.html" class="external-link">mlr3pipelines::PipeOpLearnerCV</a></code> for more information on
@@ -271,7 +271,7 @@ cross-validated learners.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-CVRidgeAuditorFitter-clone"></a><div class="section">
 <h3 id="method-clone--2">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone--2"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>

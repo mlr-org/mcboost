@@ -122,11 +122,11 @@ Learner used for fitting residuals.</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>LearnerAuditorFitter$new()</code></a></p></li>
-<li><p><a href="#method-fit"><code>LearnerAuditorFitter$fit()</code></a></p></li>
-<li><p><a href="#method-clone"><code>LearnerAuditorFitter$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-LearnerAuditorFitter-new"><code>LearnerAuditorFitter$new()</code></a></p></li>
+<li><p><a href="#method-LearnerAuditorFitter-fit"><code>LearnerAuditorFitter$fit()</code></a></p></li>
+<li><p><a href="#method-LearnerAuditorFitter-clone"><code>LearnerAuditorFitter$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+</ul></details></p><hr><a id="method-LearnerAuditorFitter-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Define an <code>AuditorFitter</code> from a Learner.
 Available instantiations:<br><code>TreeAuditorFitter</code> (rpart) and
@@ -145,7 +145,7 @@ Regression learner to use.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-fit"></a><div class="section">
+</div><p></p><hr><a id="method-LearnerAuditorFitter-fit"></a><div class="section">
 <h3 id="method-fit-">Method <code>fit()</code><a class="anchor" aria-label="anchor" href="#method-fit-"></a></h3>
 <p>Fit the learner and compute correlation</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
@@ -172,7 +172,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-LearnerAuditorFitter-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -201,11 +201,11 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <div class="section">
 <h3 id="public-methods-1">Public methods<a class="anchor" aria-label="anchor" href="#public-methods-1"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>TreeAuditorFitter$new()</code></a></p></li>
-<li><p><a href="#method-clone"><code>TreeAuditorFitter$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="mcboost" data-topic="LearnerAuditorFitter" data-id="fit"><a href="LearnerAuditorFitter.html#method-fit"><code>mcboost::LearnerAuditorFitter$fit()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-TreeAuditorFitter-new"><code>TreeAuditorFitter$new()</code></a></p></li>
+<li><p><a href="#method-TreeAuditorFitter-clone"><code>TreeAuditorFitter$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="LearnerAuditorFitter" data-id="fit"><a href="LearnerAuditorFitter.html#method-fit"><code>mcboost::LearnerAuditorFitter$fit()</code></a></span></li>
+</ul></details></p><hr><a id="method-TreeAuditorFitter-new"></a><div class="section">
 <h3 id="method-new--1">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new--1"></a></h3>
 <p>Define a AuditorFitter from a rpart learner.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
@@ -213,7 +213,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-TreeAuditorFitter-clone"></a><div class="section">
 <h3 id="method-clone--1">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone--1"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
@@ -242,11 +242,11 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 <div class="section">
 <h3 id="public-methods-2">Public methods<a class="anchor" aria-label="anchor" href="#public-methods-2"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>RidgeAuditorFitter$new()</code></a></p></li>
-<li><p><a href="#method-clone"><code>RidgeAuditorFitter$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="mcboost" data-topic="LearnerAuditorFitter" data-id="fit"><a href="LearnerAuditorFitter.html#method-fit"><code>mcboost::LearnerAuditorFitter$fit()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-RidgeAuditorFitter-new"><code>RidgeAuditorFitter$new()</code></a></p></li>
+<li><p><a href="#method-RidgeAuditorFitter-clone"><code>RidgeAuditorFitter$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href="AuditorFitter.html#method-fit_to_resid"><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="LearnerAuditorFitter" data-id="fit"><a href="LearnerAuditorFitter.html#method-fit"><code>mcboost::LearnerAuditorFitter$fit()</code></a></span></li>
+</ul></details></p><hr><a id="method-RidgeAuditorFitter-new"></a><div class="section">
 <h3 id="method-new--2">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new--2"></a></h3>
 <p>Define a AuditorFitter from a glmnet learner.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
@@ -254,7 +254,7 @@ Mask applied to the data. Only used for <code>SubgroupAuditorFitter</code>.</p><
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-RidgeAuditorFitter-clone"></a><div class="section">
 <h3 id="method-clone--2">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone--2"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
