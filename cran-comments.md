@@ -5,6 +5,14 @@ Apologies for not being able to upload a new version in time.
 
 ## R CMD check
 
+Results in one NOTE:
+
+  CRAN repository db overrides:
+    X-CRAN-Comment: Archived on 2022-05-16 as requires archived package 'mlr3proba'.
+
+  The dependency on 'mlr3proba' has been removed in the updated version.
+
+
 There is one NOTE that is only found on Windows (Server 2022, R-devel 64-bit):
 
 ```
