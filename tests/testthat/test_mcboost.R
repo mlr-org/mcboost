@@ -1,13 +1,13 @@
 skip_if_not_installed("mlr3")
 
 test_that("MCBoost class instantiation", {
+  skip_on_cran()
   mc = MCBoost$new(auditor_fitter = "TreeAuditorFitter")
   expect_class(mc, "MCBoost")
   expect_class(mc$auditor_fitter, "AuditorFitter")
   expect_function(mc$predictor, args = "data")
 
 })
-
 
 test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
   skip_on_cran()
@@ -25,7 +25,6 @@ test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
   prds = mc$predict_probs(data)
   expect_numeric(prds, lower = 0, upper = 1, len = nrow(data))
 })
-
 
 test_that("MCBoost multicalibrate and predict_probs - init_predictor function", {
   skip_on_cran()
@@ -63,7 +62,6 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
 
 })
 
-
 test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredictor - response", {
   skip_on_cran()
   # Sonar task
@@ -84,7 +82,6 @@ test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredic
   expect_numeric(prds, lower = 0, upper = 1, len = nrow(data))
 })
 
-
 test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredictor - prob", {
   skip_on_cran()
   # Breast Cancer task
@@ -104,7 +101,6 @@ test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredic
   prds = mc$predict_probs(data)
   expect_numeric(prds, lower = 0, upper = 1, len = nrow(data))
 })
-
 
 test_that("MCBoost multicalibrate with subpops", {
   skip_on_os("solaris")
@@ -163,6 +159,8 @@ test_that("MCBoost multicalibrate with subpops", {
 test_that("MCBoost various settings", {
   skip_on_cran()
   skip_on_os("solaris")
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("rpart")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -199,7 +197,6 @@ test_that("MCBoost various settings", {
   expect_numeric(prd, lower = 0, upper = 1, len = nrow(data))
 })
 
-
 test_that("MCBoost Edge Cases", {
   skip_on_cran()
   # Sonar task
@@ -231,6 +228,8 @@ test_that("MCBoost Edge Cases", {
 
 test_that("MCBoost args for self-defined init predictor", {
   skip_on_os("solaris")
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("ranger")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -293,6 +292,9 @@ test_that("MCBoost throws error if wrong auditor_fitter", {
 
 test_that("init predictor wrapper works", {
   skip_on_cran()
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("ranger")
+
   # sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names, rows = c(1:10, 200:208))
@@ -328,8 +330,11 @@ test_that("init predictor wrapper works", {
 })
 
 test_that("mcboost on training data sanity checks", {
-  skip_on_os("solaris")
   skip_on_cran()
+  skip_on_os("solaris")
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("rpart")
+
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names)
   l = tsk$data(cols = tsk$target_names)[[1]]

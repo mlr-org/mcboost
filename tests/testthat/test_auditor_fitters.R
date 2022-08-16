@@ -16,6 +16,7 @@ test_that("LearnerAuditorFitters work", {
 })
 
 test_that("TreeAuditorFitters work", {
+  skip_if_not_installed("mlr3learners")
   skip_if_not_installed("rpart")
   rf = TreeAuditorFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))

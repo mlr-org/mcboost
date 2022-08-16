@@ -3,8 +3,9 @@ skip_if_not_installed("mlr3")
 test_that("MCBoost class instantiation", {
   skip_on_cran()
   skip_on_os("solaris")
-  skip_if_not(require("mlr3"))
-  skip_if_not(require("mlr3pipelines"))
+  skip_if_not_installed("mlr3")
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("mlr3pipelines")
   gr = gunion(list(
     "data" = po("nop"),
     "prediction" = po("learner_cv", lrn("classif.rpart"))
@@ -24,6 +25,8 @@ test_that("MCBoost class instantiation", {
 test_that("pipeop instantiation", {
   skip_on_cran()
   skip_on_os("solaris")
+  skip_if_not_installed("mlr3")
+  skip_if_not_installed("mlr3pipelines")
   pop = po("mcboost")
   expect_is(pop, "PipeOpMCBoost")
   expect_is(pop, "PipeOp")
@@ -34,8 +37,9 @@ test_that("pipeop instantiation", {
 test_that("MCBoost ppl", {
   skip_on_cran()
   skip_on_os("solaris")
-  skip_if_not(require("mlr3"))
-  skip_if_not(require("mlr3pipelines"))
+  skip_if_not_installed("mlr3")
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("mlr3pipelines")
 
   l = lrn("classif.featureless")$train(tsk("sonar"))
   pp = ppl_mcboost()
@@ -49,6 +53,10 @@ test_that("MCBoost ppl", {
 
 test_that("MCBoostSurv ppl", {
   skip_on_cran()
+  skip_on_os("solaris")
+  skip_if_not_installed("mlr3")
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("mlr3pipelines")
   skip_on_os("solaris")
   gr = ppl_mcboost(lrn("classif.rpart"))
   expect_is(gr, "Graph")

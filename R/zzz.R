@@ -5,6 +5,7 @@
 #' @import glmnet
 #' @import rpart
 #' @import mlr3pipelines
+#' @import rmarkdown
 #' @importFrom R6 R6Class is.R6
 #' @importFrom utils head
 #' @importFrom stats contrasts runif rnorm  setNames quantile

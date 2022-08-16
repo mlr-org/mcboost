@@ -2,6 +2,7 @@ skip_if_not_installed("mlr3")
 
 test_that("TreeAuditorFitters work", {
   skip_on_cran()
+  skip_if_not_installed("mlr3learners") 
   skip_if_not_installed("rpart")
   tsk = tsk("sonar")
   data = tsk$data()[, Class := as.integer(Class) - 1L]

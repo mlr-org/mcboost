@@ -1,5 +1,3 @@
-skip_if_not_installed("mlr3")
-
 test_that("ProbRange works", {
   skip_on_cran()
   pr = ProbRange$new(0.1, 0.55)

@@ -47,6 +47,7 @@ Imports:
     mlr3misc (>= 0.8.0),
     mlr3pipelines (>= 0.3.0),
     R6 (>= 2.4.1),
+    rmarkdown,
     rpart,
     glmnet
 Suggests:
@@ -61,7 +62,6 @@ Suggests:
     paradox,
     knitr,
     ranger,
-    rmarkdown,
     xgboost,
     covr,
     testthat (>= 3.1.0)

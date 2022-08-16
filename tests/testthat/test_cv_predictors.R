@@ -2,6 +2,7 @@ skip_if_not_installed("mlr3")
 
 test_that("TreeAuditorFitters work", {
   skip_on_cran()
+  skip_if_not_installed("mlr3learners")
   skip_if_not_installed("rpart")
   rf = CVTreeAuditorFitter$new()
   out = rf$fit(iris[, 1:4], runif(150))
@@ -14,6 +15,8 @@ test_that("TreeAuditorFitters work", {
 
 test_that("MCBoost multicalibrate and predict_probs - CV Predictor", {
   skip_on_cran()
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("rpart")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -31,6 +34,8 @@ test_that("MCBoost multicalibrate and predict_probs - CV Predictor", {
 
 test_that("Creating own CV Predictor works with different folds", {
   skip_on_cran()
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("rpart")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
