@@ -17,7 +17,6 @@ Used to assess multi-calibration based on a list of
 binary \code{subgroup_masks} passed during initialization.
 }
 \examples{
- \dontrun{
  library("data.table")
  data = data.table(
    "AGE_0_10" =  c(1, 1, 0, 0, 0),
@@ -32,7 +31,6 @@ binary \code{subgroup_masks} passed during initialization.
    "M2" = c(1L, 0L, 0L, 0L, 1L)
  )
  sg = SubgroupAuditorFitter$new(masks)
- }
 }
 \seealso{
 Other AuditorFitter: 

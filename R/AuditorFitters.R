@@ -105,7 +105,6 @@ RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
 #'   binary valued columns: `subpops` passed during initialization.
 #' @family AuditorFitter
 #' @examples
-#'   \dontrun{
 #'   library("data.table")
 #'   data = data.table(
 #'     "AGE_NA" = c(0, 0, 0, 0, 0),
@@ -119,7 +118,6 @@ RidgeAuditorFitter = R6::R6Class("RidgeAuditorFitter",
 #'   pops = list("AGE_NA", "AGE_0_10", "AGE_11_20", "AGE_21_31", function(x) {x[["X1" > 0.5]]})
 #'   sf = SubpopAuditorFitter$new(subpops = pops)
 #'   sf$fit(data, label - 0.5)
-#'   }
 #' @export
 SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
   inherit = AuditorFitter,
@@ -179,7 +177,6 @@ SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
 #'   binary `subgroup_masks` passed during initialization.
 #' @family AuditorFitter
 #' @examples
-#'  \dontrun{
 #'  library("data.table")
 #'  data = data.table(
 #'    "AGE_0_10" =  c(1, 1, 0, 0, 0),
@@ -194,7 +191,6 @@ SubpopAuditorFitter = R6::R6Class("SubpopAuditorFitter",
 #'    "M2" = c(1L, 0L, 0L, 0L, 1L)
 #'  )
 #'  sg = SubgroupAuditorFitter$new(masks)
-#'  }
 #' @export
 SubgroupAuditorFitter = R6::R6Class("SubgroupAuditorFitter",
   inherit = AuditorFitter,

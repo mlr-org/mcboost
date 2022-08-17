@@ -17,7 +17,6 @@ Used to assess multi-calibration based on a list of
 binary valued columns: \code{subpops} passed during initialization.
 }
 \examples{
-  \dontrun{
   library("data.table")
   data = data.table(
     "AGE_NA" = c(0, 0, 0, 0, 0),
@@ -31,7 +30,6 @@ binary valued columns: \code{subpops} passed during initialization.
   pops = list("AGE_NA", "AGE_0_10", "AGE_11_20", "AGE_21_31", function(x) {x[["X1" > 0.5]]})
   sf = SubpopAuditorFitter$new(subpops = pops)
   sf$fit(data, label - 0.5)
-  }
 }
 \seealso{
 Other AuditorFitter: 
