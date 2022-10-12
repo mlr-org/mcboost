@@ -67,7 +67,7 @@ corresponding to the prediction slot are used as an initial predictor for MCBoos
     </div>
 
     <div class="ref-description">
-    <p><code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code> that trains a <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> and passes its predictions forward during training and prediction.</p>
+    <p><code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code> that trains a <code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code> and passes its predictions forward during training and prediction.</p>
 <p>Post-process a learner prediction using multi-calibration.
 For more details, please refer to <a href="https://arxiv.org/pdf/1805.12317.pdf" class="external-link">https://arxiv.org/pdf/1805.12317.pdf</a> (Kim et al. 2018)
 or the help for <code><a href="MCBoost.html">MCBoost</a></code>.
@@ -78,8 +78,8 @@ corresponding to the <code>prediction</code> slot are used as an initial predict
 
     <div id="format">
     <h2>Format</h2>
-    <p><code>R6Class</code> inheriting from <code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
-<p><code>R6Class</code> inheriting from <code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
+    <p><code>R6Class</code> inheriting from <code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
+<p><code>R6Class</code> inheriting from <code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
     </div>
     <div id="construction">
     <h2>Construction</h2>
@@ -115,13 +115,13 @@ See <code>MCBoost</code> for a comprehensive description of all hyperparameters.
     <h2>Input and Output Channels</h2>
     
 
-<p><code>PipeOpLearnerPred</code> has one input channel named <code>"input"</code>, taking a <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> specific to the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>
+<p><code>PipeOpLearnerPred</code> has one input channel named <code>"input"</code>, taking a <code><a href="https://rdrr.io/pkg/mlr3/man/Task.html" class="external-link">Task</a></code> specific to the <code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code>
 type given to <code>learner</code> during construction; both during training and prediction.</p>
-<p><code>PipeOpLearnerPred</code> has one output channel named <code>"output"</code>, producing a <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> specific to the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>
+<p><code>PipeOpLearnerPred</code> has one output channel named <code>"output"</code>, producing a <code><a href="https://rdrr.io/pkg/mlr3/man/Task.html" class="external-link">Task</a></code> specific to the <code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code>
 type given to <code>learner</code> during construction; both during training and prediction.</p>
 
-<p>During training, the input and output are <code>"data"</code> and <code>"prediction"</code>, two <code><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></code>.
-A <code><a href="https://mlr3.mlr-org.com/reference/PredictionClassif.html" class="external-link">PredictionClassif</a></code> is required as input and returned as output during prediction.</p>
+<p>During training, the input and output are <code>"data"</code> and <code>"prediction"</code>, two <code><a href="https://rdrr.io/pkg/mlr3/man/TaskClassif.html" class="external-link">TaskClassif</a></code>.
+A <code><a href="https://rdrr.io/pkg/mlr3/man/PredictionClassif.html" class="external-link">PredictionClassif</a></code> is required as input and returned as output during prediction.</p>
     </div>
     <div id="state">
     <h2>State</h2>
@@ -135,9 +135,9 @@ A <code><a href="https://mlr3.mlr-org.com/reference/PredictionClassif.html" clas
     <h2>Parameters</h2>
     
 
-<p>The <code>$state</code> is set to the <code>$state</code> slot of the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> object, together with the <code>$state</code> elements inherited from
-<code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.html" class="external-link">mlr3pipelines::PipeOpTaskPreproc</a></code>. It is a named <code>list</code> with the inherited members, as well as:</p><ul><li><p><code>model</code> :: <code>any</code><br>
-Model created by the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>'s <code>$.train()</code> function.</p></li>
+<p>The <code>$state</code> is set to the <code>$state</code> slot of the <code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code> object, together with the <code>$state</code> elements inherited from
+<code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOpTaskPreproc.html" class="external-link">mlr3pipelines::PipeOpTaskPreproc</a></code>. It is a named <code>list</code> with the inherited members, as well as:</p><ul><li><p><code>model</code> :: <code>any</code><br>
+Model created by the <code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code>'s <code>$.train()</code> function.</p></li>
 <li><p><code>train_log</code> :: <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
 Errors logged during training.</p></li>
 <li><p><code>train_time</code> :: <code>numeric(1)</code><br>
@@ -153,17 +153,17 @@ A integer specifying the number of multi-calibration rounds. Defaults to 5.</p><
     <h2>Fields</h2>
     
 
-<p>Fields inherited from <code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">PipeOp</a></code>, as well as:</p><ul><li><p><code>learner</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> that is being wrapped. Read-only.</p></li>
-<li><p><code>learner_model</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> that is being wrapped. This learner contains the model if the <code>PipeOp</code> is trained. Read-only.</p></li>
-</ul><p>Only fields inherited from <code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
+<p>Fields inherited from <code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">PipeOp</a></code>, as well as:</p><ul><li><p><code>learner</code> :: <code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code><br><code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code> that is being wrapped. Read-only.</p></li>
+<li><p><code>learner_model</code> :: <code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code><br><code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code> that is being wrapped. This learner contains the model if the <code>PipeOp</code> is trained. Read-only.</p></li>
+</ul><p>Only fields inherited from <code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
     </div>
     <div id="methods">
     <h2>Methods</h2>
     
 
-<p>Methods inherited from <code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.html" class="external-link">mlr3pipelines::PipeOpTaskPreproc</a></code>/<code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
+<p>Methods inherited from <code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOpTaskPreproc.html" class="external-link">mlr3pipelines::PipeOpTaskPreproc</a></code>/<code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
 
-<p>Only methods inherited from <code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -172,7 +172,7 @@ A integer specifying the number of multi-calibration rounds. Defaults to 5.</p><
     </div>
     <div id="super-classes">
     <h2>Super classes</h2>
-    <p><code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code> -&gt; <code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.html" class="external-link">mlr3pipelines::PipeOpTaskPreproc</a></code> -&gt; <code>PipeOpLearnerPred</code></p>
+    <p><code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code> -&gt; <code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOpTaskPreproc.html" class="external-link">mlr3pipelines::PipeOpTaskPreproc</a></code> -&gt; <code>PipeOpLearnerPred</code></p>
     </div>
     <div id="active-bindings">
     <h2>Active bindings</h2>
@@ -194,10 +194,10 @@ A integer specifying the number of multi-calibration rounds. Defaults to 5.</p><
 
 <ul><li><p><a href="#method-PipeOpLearnerPred-new"><code>PipeOpLearnerPred$new()</code></a></p></li>
 <li><p><a href="#method-PipeOpLearnerPred-clone"><code>PipeOpLearnerPred$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help"><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html#method-help"><code>mlr3pipelines::PipeOp$help()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict"><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html#method-predict"><code>mlr3pipelines::PipeOp$predict()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print"><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html#method-print"><code>mlr3pipelines::PipeOp$print()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train"><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html#method-train"><code>mlr3pipelines::PipeOp$train()</code></a></span></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help"><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html#method-help"><code>mlr3pipelines::PipeOp$help()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict"><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html#method-predict"><code>mlr3pipelines::PipeOp$predict()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print"><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html#method-print"><code>mlr3pipelines::PipeOp$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train"><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html#method-train"><code>mlr3pipelines::PipeOp$train()</code></a></span></li>
 </ul></details></p><hr><a id="method-PipeOpLearnerPred-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Initialize a Learner Predictor PipeOp. Can be used to wrap trained or untrainted
@@ -209,7 +209,7 @@ mlr3 learners.</p><div class="section">
 <div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>learner</code></dt>
-<dd><p><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br>
+<dd><p><code><a href="https://rdrr.io/pkg/mlr3/man/Learner.html" class="external-link">Learner</a></code><br>
 The learner that should be wrapped.</p></dd>
 
 
@@ -247,7 +247,7 @@ List of hyperparameters for the <code>PipeOp</code>.</p></dd>
     </div>
     <div id="super-class">
     <h2>Super class</h2>
-    <p><code><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code> -&gt; <code>PipeOpMCBoost</code></p>
+    <p><code><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html" class="external-link">mlr3pipelines::PipeOp</a></code> -&gt; <code>PipeOpMCBoost</code></p>
     </div>
     <div id="active-bindings">
     <h2>Active bindings</h2>
@@ -265,10 +265,10 @@ List of hyperparameters for the <code>PipeOp</code>.</p></dd>
 
 <ul><li><p><a href="#method-PipeOpMCBoost-new"><code>PipeOpMCBoost$new()</code></a></p></li>
 <li><p><a href="#method-PipeOpMCBoost-clone"><code>PipeOpMCBoost$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help"><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html#method-help"><code>mlr3pipelines::PipeOp$help()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict"><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html#method-predict"><code>mlr3pipelines::PipeOp$predict()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print"><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html#method-print"><code>mlr3pipelines::PipeOp$print()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train"><a href="https://mlr3pipelines.mlr-org.com/reference/PipeOp.html#method-train"><code>mlr3pipelines::PipeOp$train()</code></a></span></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help"><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html#method-help"><code>mlr3pipelines::PipeOp$help()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict"><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html#method-predict"><code>mlr3pipelines::PipeOp$predict()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print"><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html#method-print"><code>mlr3pipelines::PipeOp$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train"><a href="https://rdrr.io/pkg/mlr3pipelines/man/PipeOp.html#method-train"><code>mlr3pipelines::PipeOp$train()</code></a></span></li>
 </ul></details></p><hr><a id="method-PipeOpMCBoost-new"></a><div class="section">
 <h3 id="method-new--1">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new--1"></a></h3>
 <p>Initialize a Multi-Calibration PipeOp.</p><div class="section">
@@ -314,12 +314,12 @@ List of hyperparameters for the <code>PipeOp</code>.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/gunion.html" class="external-link">gunion</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="st">"data"</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"nop"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"prediction"</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3pipelines.mlr-org.com/reference/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"learner_cv"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/mlr3pipelines/man/gunion.html" class="external-link">gunion</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"data"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/mlr3pipelines/man/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"nop"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"prediction"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/mlr3pipelines/man/po.html" class="external-link">po</a></span><span class="op">(</span><span class="st">"learner_cv"</span>, <span class="fu"><a href="https://rdrr.io/pkg/mlr3/man/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/mlr3pipelines/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%&gt;&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="va">PipeOpMCBoost</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tsk</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/mlr3/man/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">208</span>, <span class="fl">108</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">tid</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">tsk</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">208</span>, <span class="va">tid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
