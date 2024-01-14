@@ -66,17 +66,17 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
     #'   List of hyperparameters for the `PipeOp`.
     initialize = function(id = "mcboost", param_vals = list()) {
       param_set = paradox::ps(
-        max_iter = p_int(lower = 0L, upper = Inf, default = 5L, tags = "train"),
-        alpha = p_dbl(lower = 0, upper = 1, default = 1e-4, tags = "train"),
-        eta = p_dbl(lower = 0, upper = 1, default = 1, tags = "train"),
-        partition = p_lgl(tags = "train", default = TRUE),
-        num_buckets = p_int(lower = 1, upper = Inf, default = 2L, tags = "train"),
-        rebucket = p_lgl(default = FALSE, tags = "train"),
-        multiplicative = p_lgl(default = TRUE, tags = "train"),
-        auditor_fitter = p_uty(default = NULL, tags = "train"),
-        subpops = p_uty(default = NULL, tags = "train"),
-        default_model_class = p_uty(default = ConstantPredictor, tags = "train"),
-        init_predictor = p_uty(default = NULL, tags = "train")
+        max_iter = paradox::p_int(lower = 0L, upper = Inf, default = 5L, tags = "train"),
+        alpha = paradox::p_dbl(lower = 0, upper = 1, default = 1e-4, tags = "train"),
+        eta = paradox::p_dbl(lower = 0, upper = 1, default = 1, tags = "train"),
+        partition = paradox::p_lgl(tags = "train", default = TRUE),
+        num_buckets = paradox::p_int(lower = 1, upper = Inf, default = 2L, tags = "train"),
+        rebucket = paradox::p_lgl(default = FALSE, tags = "train"),
+        multiplicative = paradox::p_lgl(default = TRUE, tags = "train"),
+        auditor_fitter = paradox::p_uty(default = NULL, tags = "train"),
+        subpops = paradox::p_uty(default = NULL, tags = "train"),
+        default_model_class = paradox::p_uty(default = ConstantPredictor, tags = "train"),
+        init_predictor = paradox::p_uty(default = NULL, tags = "train")
       )
       super$initialize(id,
         param_set = param_set, param_vals = param_vals, packages = character(0),
