@@ -65,19 +65,19 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
     #' @param param_vals [`list`] \cr
     #'   List of hyperparameters for the `PipeOp`.
     initialize = function(id = "mcboost", param_vals = list()) {
-      param_set = paradox::ParamSet$new(list(
-        paradox::ParamInt$new("max_iter", lower = 0L, upper = Inf, default = 5L, tags = "train"),
-        paradox::ParamDbl$new("alpha", lower = 0, upper = 1, default = 1e-4, tags = "train"),
-        paradox::ParamDbl$new("eta", lower = 0, upper = 1, default = 1, tags = "train"),
-        paradox::ParamLgl$new("partition", tags = "train", default = TRUE),
-        paradox::ParamInt$new("num_buckets", lower = 1, upper = Inf, default = 2L, tags = "train"),
-        paradox::ParamLgl$new("rebucket", default = FALSE, tags = "train"),
-        paradox::ParamLgl$new("multiplicative", default = TRUE, tags = "train"),
-        paradox::ParamUty$new("auditor_fitter", default = NULL, tags = "train"),
-        paradox::ParamUty$new("subpops", default = NULL, tags = "train"),
-        paradox::ParamUty$new("default_model_class", default = ConstantPredictor, tags = "train"),
-        paradox::ParamUty$new("init_predictor", default = NULL, tags = "train")
-      ))
+      param_set = paradox::ps(
+        max_iter = paradox::p_int(lower = 0L, upper = Inf, default = 5L, tags = "train"),
+        alpha = paradox::p_dbl(lower = 0, upper = 1, default = 1e-4, tags = "train"),
+        eta = paradox::p_dbl(lower = 0, upper = 1, default = 1, tags = "train"),
+        partition = paradox::p_lgl(tags = "train", default = TRUE),
+        num_buckets = paradox::p_int(lower = 1, upper = Inf, default = 2L, tags = "train"),
+        rebucket = paradox::p_lgl(default = FALSE, tags = "train"),
+        multiplicative = paradox::p_lgl(default = TRUE, tags = "train"),
+        auditor_fitter = paradox::p_uty(default = NULL, tags = "train"),
+        subpops = paradox::p_uty(default = NULL, tags = "train"),
+        default_model_class = paradox::p_uty(default = ConstantPredictor, tags = "train"),
+        init_predictor = paradox::p_uty(default = NULL, tags = "train")
+      )
       super$initialize(id,
         param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = c("data", "prediction"), train = c("TaskClassif", "TaskClassif"), predict = c("TaskClassif", "TaskClassif")),
