@@ -517,10 +517,11 @@ summary(data$ViolentCrimesPerPop)
 ```
 
 We again split our task into **train** and **test**.
-We do this in `mlr3` by simply setting some (here 500) row roles to `"holdout"`.
+We do this in `mlr3` by creating a 2/3 - 1/3 split using `mlr3::partition()` and assigning the train ids to the row role `"use"`.
 
 ```{r}
-tsk$set_row_roles(sample(tsk$row_roles$use, 500), "holdout")
+split = partition(tsk)
+tsk$set_row_roles(split$train, "use")
 ```
 
 ### 6.1 Preprocessing
@@ -571,13 +572,13 @@ mc$multicalibrate(data, labels)
 
 ### 6.3 Evaluation on Test Data
 
-We first create the test task by setting the `holdout` rows to `use`, and then
+We first create the test task by assigning the test ids to the row role `"use"`, and then
 use our preprocessing `pipe's`  predict function to also impute missing values
 for the validation data. Then we again extract features `X` and target `y`.
 
 ```{r}
 test_task = tsk$clone()
-test_task$row_roles$use = test_task$row_roles$holdout
+test_task$row_roles$use = split$test
 test_task = pipe$predict(list(test_task))[[1]]
 test_data = test_task$data(cols = tsk$feature_names)
 test_labels = test_task$data(cols = tsk$target_names)[[1]]
