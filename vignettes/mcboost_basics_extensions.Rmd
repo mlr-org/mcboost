@@ -572,7 +572,7 @@ mc$multicalibrate(data, labels)
 
 ### 6.3 Evaluation on Test Data
 
-We first create the test task by assining the test ids to the row role `"use"`, and then
+We first create the test task by assigning the test ids to the row role `"use"`, and then
 use our preprocessing `pipe's`  predict function to also impute missing values
 for the validation data. Then we again extract features `X` and target `y`.
 
