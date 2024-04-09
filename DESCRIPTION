@@ -5,7 +5,7 @@ Version: 0.4.3
 Authors@R:
     c(person(given = "Florian",
              family = "Pfisterer",
-             role = c("aut", "cre"),
+             role = "aut",
              email = "pfistererf@googlemail.com",
              comment = c(ORCID = "0000-0001-8867-762X")),
       person(given = "Susanne",
@@ -28,10 +28,9 @@ Authors@R:
              comment = c(ORCID = "0000-0001-6002-6980")),
       person(given = "Sebastian",
              family = "Fischer",
-             role = "ctb",
+             role = c("ctb", "cre"),
              email = "sebf.fischer@gmail.com")
     )
-Maintainer: Florian Pfisterer <pfistererf@googlemail.com>
 Description: Implements 'Multi-Calibration Boosting' (2018) <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and
     'Multi-Accuracy Boosting' (2019) <arXiv:1805.12317> for the multi-calibration of a machine learning model's prediction.
     'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups.
