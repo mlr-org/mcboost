@@ -1,11 +1,11 @@
 Package: mcboost
 Type: Package
 Title: Multi-Calibration Boosting
-Version: 0.4.2
+Version: 0.4.3
 Authors@R:
     c(person(given = "Florian",
              family = "Pfisterer",
-             role = c("cre", "aut"),
+             role = c("aut", "cre"),
              email = "pfistererf@googlemail.com",
              comment = c(ORCID = "0000-0001-8867-762X")),
       person(given = "Susanne",
@@ -18,14 +18,18 @@ Authors@R:
              role = "ctb",
              email = "c.kern@uni-mannheim.de",
              comment = c(ORCID = "0000-0001-7363-4299")),
-      person(given = "Carolin", 
+      person(given = "Carolin",
              family = "Becker",
              role = "ctb"),
       person(given = "Bernd",
              family = "Bischl",
              role = "ctb",
              email = "bernd_bischl@gmx.net",
-             comment = c(ORCID = "0000-0001-6002-6980"))
+             comment = c(ORCID = "0000-0001-6002-6980")),
+      person(given = "Sebastian",
+             family = "Fischer",
+             role = "ctb",
+             email = "sebf.fischer@gmail.com")
     )
 Maintainer: Florian Pfisterer <pfistererf@googlemail.com>
 Description: Implements 'Multi-Calibration Boosting' (2018) <https://proceedings.mlr.press/v80/hebert-johnson18a.html> and
@@ -66,9 +70,9 @@ Suggests:
     covr,
     testthat (>= 3.1.0)
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1
 VignetteBuilder: knitr
-Collate: 
+Collate:
     'AuditorFitters.R'
     'MCBoost.R'
     'PipelineMCBoost.R'

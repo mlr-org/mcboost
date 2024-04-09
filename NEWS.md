@@ -1,9 +1,9 @@
-# mcboost (development version)
+# mcboost 0.4.3
 
 * Compatibility with upcoming 'paradox' release.
 
 # mcboost 0.4.2
-* Removed new functionality for survival tasks added in `0.4.0`. 
+* Removed new functionality for survival tasks added in `0.4.0`.
   A dependency, `mlr3proba` was removed from CRAN for now.
   The functionality will be added back when `mlr3proba` is re-introduced to CRAN.
   Users who wish to use `mcboost` for `survival` are adviced to use version `0.4.1` usetogether with the GitHub version of `mlr3proba`.
