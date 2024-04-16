@@ -6,7 +6,7 @@
 \alias{mcboost-package}
 \title{mcboost: Multi-Calibration Boosting}
 \description{
-Implements 'Multi-Calibration Boosting' (2018) \url{https://proceedings.mlr.press/v80/hebert-johnson18a.html} and 'Multi-Accuracy Boosting' (2019) \href{https://arxiv.org/abs/1805.12317}{arXiv:1805.12317} for the multi-calibration of a machine learning model's prediction. 'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
+Implements 'Multi-Calibration Boosting' (2018) \url{https://proceedings.mlr.press/v80/hebert-johnson18a.html} and 'Multi-Accuracy Boosting' (2019) \doi{10.48550/arXiv.1805.12317} for the multi-calibration of a machine learning model's prediction. 'MCBoost' updates predictions for sub-groups in an iterative fashion in order to mitigate biases like poor calibration or large accuracy differences across subgroups. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased, but resulting models are. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 }
 \references{
 Kim et al., 2019: Multiaccuracy: Black-Box Post-Processing for Fairness in Classification.
@@ -25,7 +25,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Florian Pfisterer \email{pfistererf@googlemail.com} (\href{https://orcid.org/0000-0001-8867-762X}{ORCID})
+\strong{Maintainer}: Sebastian Fischer \email{sebf.fischer@gmail.com} [contributor]
+
+Authors:
+\itemize{
+  \item Florian Pfisterer \email{pfistererf@googlemail.com} (\href{https://orcid.org/0000-0001-8867-762X}{ORCID})
+}
 
 Other contributors:
 \itemize{

@@ -1,6 +1,7 @@
 # mcboost 0.4.3
 
 * Compatibility with upcoming 'paradox' release.
+* Change the vignette to not use the holdout task.
 
 # mcboost 0.4.2
 * Removed new functionality for survival tasks added in `0.4.0`.
