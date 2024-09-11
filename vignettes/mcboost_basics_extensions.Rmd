@@ -521,7 +521,7 @@ We do this in `mlr3` by creating a 2/3 - 1/3 split using `mlr3::partition()` and
 
 ```{r}
 split = partition(tsk)
-tsk$set_row_roles(split$train, "use")
+tsk$row_roles$use = split$train
 ```
 
 ### 6.1 Preprocessing
