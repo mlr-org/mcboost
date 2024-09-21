@@ -1,7 +1,7 @@
 Package: mcboost
 Type: Package
 Title: Multi-Calibration Boosting
-Version: 0.4.3-9000
+Version: 0.4.4
 Authors@R:
     c(person(given = "Florian",
              family = "Pfisterer",
@@ -69,7 +69,7 @@ Suggests:
     covr,
     testthat (>= 3.1.0)
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Collate:
     'AuditorFitters.R'

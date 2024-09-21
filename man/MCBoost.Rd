@@ -222,7 +222,7 @@ Run multi-calibration.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{\code{\link{data.table}}\cr
+\item{\code{data}}{\code{\link[data.table:data.table]{data.table}}\cr
 Features.}
 
 \item{\code{labels}}{\code{\link{numeric}}\cr

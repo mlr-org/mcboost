@@ -6,15 +6,15 @@
 \alias{PipeOpMCBoost}
 \title{Multi-Calibrate a Learner's Prediction}
 \format{
-\code{\link{R6Class}} inheriting from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
 
-\code{\link{R6Class}} inheriting from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}}.
 }
 \description{
 \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}} that trains a \code{\link[mlr3:Learner]{Learner}} and passes its predictions forward during training and prediction.
 
 Post-process a learner prediction using multi-calibration.
-For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
+For more details, please refer to \url{http://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
 or the help for \code{\link{MCBoost}}.
 If no \code{init_predictor} is provided, the preceding learner's predictions
 corresponding to the \code{prediction} slot are used as an initial predictor for \code{MCBoost}.
@@ -100,7 +100,7 @@ A integer specifying the number of multi-calibration rounds. Defaults to 5.
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOp}}, as well as:
+Fields inherited from \code{\link[mlr3pipelines:PipeOp]{PipeOp}}, as well as:
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
@@ -181,7 +181,7 @@ mlr3 learners.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{learner}}{\code{\link{Learner}}\cr
+\item{\code{learner}}{\code{\link[mlr3:Learner]{Learner}}\cr
 The learner that should be wrapped.}
 
 \item{\code{id}}{\code{\link{character}} \cr

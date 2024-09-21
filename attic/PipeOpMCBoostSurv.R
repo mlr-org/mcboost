@@ -162,7 +162,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 #'   All parameters can be adjusted through the resulting Graph's `param_set`.
 #' @param param_vals `list` \cr
 #'   List of parameter values passed on to `MCBoostSurv$new`
-#' @return (mlr3pipelines) [`Graph`]
+#' @return (mlr3pipelines) [`Graph`][mlr3pipelines::Graph]
 #' @examples
 #' library("mlr3pipelines")
 #' gr = ppl_mcboostsurv()

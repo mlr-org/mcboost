@@ -99,7 +99,7 @@ mc$predict_probs(test_data)
 
 ### Multi-Calibration
 
-While `mcboost` in its defaults implements Multi-Accuracy ([Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)),
+While `mcboost` in its defaults implements Multi-Accuracy ([Kim et al., 2019](http://arxiv.org/pdf/1805.12317.pdf)),
 it can also multi-calibrate predictors ([Hebert-Johnson et al., 2018](http://proceedings.mlr.press/v80/hebert-johnson18a.html)).
 In order to achieve this, we have to set the following hyperparameters:
 

@@ -1,5 +1,9 @@
 # dev
 
+# mcboost 0.4.4
+
+* Fixed vignette in anticipation of new mlr3 release
+
 # mcboost 0.4.3
 
 * Compatibility with upcoming 'paradox' release.
