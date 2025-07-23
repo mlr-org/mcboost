@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_mcboostsurv
-#' @format [`R6Class`] inheriting from [`mlr3pipelines::PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOp`][mlr3pipelines::PipeOp].
 #'
 #' @description
 #' Post-process a survival learner prediction using multi-calibration.
@@ -87,7 +87,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
       super$initialize(id,
         param_set = param_set, param_vals = param_vals, packages = c("mlr3proba", "survival"),
         input = data.table(
-          name = c("data", "prediction"), 
+          name = c("data", "prediction"),
           train = c("TaskSurv", "TaskSurv"),
           predict = c("TaskSurv", "TaskSurv")
         ),

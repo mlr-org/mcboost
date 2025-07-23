@@ -2,7 +2,7 @@
 
 # mcboost 0.4.4
 
-* Fixed vignette in anticipation of new mlr3 release
+* Fix link anchors
 
 # mcboost 0.4.3
 

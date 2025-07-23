@@ -7,4 +7,5 @@ test/testthat/snaps
 docs/
 docs
 /doc/
+.DS_Store
 /Meta/

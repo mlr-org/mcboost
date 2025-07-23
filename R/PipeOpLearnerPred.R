@@ -33,11 +33,11 @@
 #' [`mlr3pipelines::PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
 #' * `model` :: `any`\cr
 #'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#' * `train_log` :: [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
 #'   Training time, in seconds.
-#' * `predict_log` :: `NULL` | [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#' * `predict_log` :: `NULL` | [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during prediction.
 #' * `predict_time` :: `NULL` | `numeric(1)`
 #'   Prediction time, in seconds.

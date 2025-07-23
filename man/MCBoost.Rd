@@ -255,7 +255,7 @@ Predict a dataset with multi-calibrated predictions
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{\code{\link{data.table}} \cr
+\item{\code{x}}{\code{\link[data.table:data.table]{data.table}} \cr
 Prediction data.}
 
 \item{\code{t}}{\code{\link{integer}} \cr
@@ -297,7 +297,7 @@ each observation was affected by multi-calibration on average across iterations.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{\code{\link{data.table}} \cr
+\item{\code{x}}{\code{\link[data.table:data.table]{data.table}} \cr
 Prediction data.}
 
 \item{\code{aggregate}}{\code{\link{logical}} \cr

@@ -219,7 +219,6 @@ MCBoost = R6::R6Class("MCBoost",
       labels = private$assert_labels(labels, ...)
       pred_probs = private$assert_prob(do.call(self$predictor, discard(list(data, predictor_args), is.null)), data, ...)
       buckets = private$create_buckets(pred_probs)
-      
       # Compute residuals and multiply with weighting for low-degree MC.
       resid = private$compute_residuals(pred_probs, labels)
       weighted_preds = private$compute_weighted_preds(pred_probs)
@@ -285,7 +284,7 @@ MCBoost = R6::R6Class("MCBoost",
     },
     #' @description
     #' Predict a dataset with multi-calibrated predictions
-    #' @param x [`data.table`] \cr
+    #' @param x [`data.table`][data.table::data.table] \cr
     #'   Prediction data.
     #' @param t [`integer`] \cr
     #'   Number of multi-calibration steps to predict. Default: `Inf` (all).
@@ -320,7 +319,7 @@ MCBoost = R6::R6Class("MCBoost",
     #' Compute the auditor effect for each instance which are the cumulative
     #' absolute predictions of the auditor. It indicates "how much"
     #' each observation was affected by multi-calibration on average across iterations.
-    #' @param x [`data.table`] \cr
+    #' @param x [`data.table`][data.table::data.table] \cr
     #'   Prediction data.
     #' @param aggregate [`logical`] \cr
     #'   Should the auditor effect be aggregated across iterations? Defaults to `TRUE`.
