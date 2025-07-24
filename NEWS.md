@@ -1,4 +1,4 @@
-# dev
+# mcboost (development version)
 
 # mcboost 0.4.4
 
