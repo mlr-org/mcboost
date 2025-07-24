@@ -14,7 +14,7 @@
 \code{\link[mlr3pipelines:PipeOp]{mlr3pipelines::PipeOp}} that trains a \code{\link[mlr3:Learner]{Learner}} and passes its predictions forward during training and prediction.
 
 Post-process a learner prediction using multi-calibration.
-For more details, please refer to \url{http://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
+For more details, please refer to \url{http://arxiv.org/pdf/1805.12317} (Kim et al. 2018)
 or the help for \code{\link{MCBoost}}.
 If no \code{init_predictor} is provided, the preceding learner's predictions
 corresponding to the \code{prediction} slot are used as an initial predictor for \code{MCBoost}.

@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Post-process a learner prediction using multi-calibration.
-#' For more details, please refer to \url{http://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
+#' For more details, please refer to \url{http://arxiv.org/pdf/1805.12317} (Kim et al. 2018)
 #' or the help for [`MCBoost`].
 #' If no `init_predictor` is provided, the preceding learner's predictions
 #' corresponding to the `prediction` slot are used as an initial predictor for `MCBoost`.
