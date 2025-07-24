@@ -16,8 +16,8 @@ Predictor = R6::R6Class("Predictor",
     },
     #' @description
     #' Predict a dataset with constant predictions.
-    #' @param data [`data.table`] \cr
-    #'   Prediction data.
+    #' @param data [`data.table`][data.table::data.table] \cr
+    #r   Prediction data.
     #' @param ... [`any`] \cr
     #'   Not used, only for compatibility with other methods.
     predict = function(data, ...) {
@@ -56,7 +56,7 @@ ConstantPredictor = R6::R6Class("ConstantPredictor",
     },
     #' @description
     #' Predict a dataset with constant predictions.
-    #' @param data [`data.table`] \cr
+    #' @param data [`data.table`][data.table::data.table] \cr
     #'   Prediction data.
     #' @param ... [`any`] \cr
     #'   Not used, only for compatibility with other methods.
@@ -95,7 +95,7 @@ LearnerPredictor = R6::R6Class("LearnerPredictor",
     },
     #' @description
     #' Predict a dataset with leaner predictions.
-    #' @param data [`data.table`] \cr
+    #' @param data [`data.table`][data.table::data.table] \cr
     #'   Prediction data.
     #' @param ... [`any`] \cr
     #'   Not used, only for compatibility with other methods.
@@ -169,7 +169,7 @@ SubpopPredictor = R6::R6Class("SubpopPredictor",
     },
     #' @description
     #' Predict a dataset with sub-population predictions.
-    #' @param data [`data.table`] \cr
+    #' @param data [`data.table`][data.table::data.table] \cr
     #'   Prediction data.
     #' @param ... [`any`] \cr
     #'   Not used, only for compatibility with other methods.
@@ -211,7 +211,7 @@ SubgroupModel = R6::R6Class("SubgroupModel",
     },
     #' @description
     #' Predict a dataset with sub-population predictions.
-    #' @param data [`data.table`] \cr
+    #' @param data [`data.table`][data.table::data.table] \cr
     #'   Prediction data.
     #' @param subgroup_masks [`list`] \cr
     #'   List of subgroup masks for the data.
@@ -274,7 +274,7 @@ CVLearnerPredictor = R6::R6Class("CVLearnerPredictor",
     },
     #' @description
     #' Predict a dataset with leaner predictions.
-    #' @param data [`data.table`] \cr
+    #' @param data [`data.table`][data.table::data.table] \cr
     #'   Prediction data.
     #' @param ... [`any`] \cr
     #'   Not used, only for compatibility with other methods.

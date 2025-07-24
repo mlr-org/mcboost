@@ -2,11 +2,11 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_mcboostsurv
-#' @format [`R6Class`] inheriting from [`mlr3pipelines::PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOp`][mlr3pipelines::PipeOp].
 #'
 #' @description
 #' Post-process a survival learner prediction using multi-calibration.
-#' For more details, please refer to \url{https://arxiv.org/pdf/1805.12317.pdf} (Kim et al. 2018)
+#' For more details, please refer to \url{https://arxiv.org/pdf/1805.12317} (Kim et al. 2018)
 #' or the help for [`MCBoostSurv`].
 #' If no `init_predictor` is provided, the preceding learner's predictions
 #' corresponding to the `prediction` slot are used as an initial predictor for `MCBoostSurv`.
@@ -87,7 +87,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
       super$initialize(id,
         param_set = param_set, param_vals = param_vals, packages = c("mlr3proba", "survival"),
         input = data.table(
-          name = c("data", "prediction"), 
+          name = c("data", "prediction"),
           train = c("TaskSurv", "TaskSurv"),
           predict = c("TaskSurv", "TaskSurv")
         ),
@@ -162,7 +162,7 @@ PipeOpMCBoostSurv = R6Class("PipeOpMCBoostSurv",
 #'   All parameters can be adjusted through the resulting Graph's `param_set`.
 #' @param param_vals `list` \cr
 #'   List of parameter values passed on to `MCBoostSurv$new`
-#' @return (mlr3pipelines) [`Graph`]
+#' @return (mlr3pipelines) [`Graph`][mlr3pipelines::Graph]
 #' @examples
 #' library("mlr3pipelines")
 #' gr = ppl_mcboostsurv()

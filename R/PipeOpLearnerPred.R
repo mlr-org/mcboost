@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_mcboost
-#' @format [`R6Class`] inheriting from [`mlr3pipelines::PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`mlr3pipelines::PipeOp`].
 #'
 #' @description
 #'   [`mlr3pipelines::PipeOp`] that trains a [`Learner`][mlr3::Learner] and passes its predictions forward during training and prediction.
@@ -33,17 +33,17 @@
 #' [`mlr3pipelines::PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
 #' * `model` :: `any`\cr
 #'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#' * `train_log` :: [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
 #'   Training time, in seconds.
-#' * `predict_log` :: `NULL` | [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#' * `predict_log` :: `NULL` | [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during prediction.
 #' * `predict_time` :: `NULL` | `numeric(1)`
 #'   Prediction time, in seconds.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOp`], as well as:
+#' Fields inherited from [`PipeOp`][mlr3pipelines::PipeOp], as well as:
 #' * `learner` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
 #' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
@@ -61,7 +61,7 @@ PipeOpLearnerPred = R6Class("PipeOpLearnerPred",
     #' @description
     #'   Initialize a Learner Predictor PipeOp. Can be used to wrap trained or untrainted 
     #'   mlr3 learners.
-    #' @param learner [`Learner`]\cr
+    #' @param learner [`Learner`][mlr3::Learner]\cr
     #'   The learner that should be wrapped.  
     #' @param id [`character`] \cr
     #'   The `PipeOp`'s id. Defaults to "mcboost".

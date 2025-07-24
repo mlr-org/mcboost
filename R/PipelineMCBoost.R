@@ -11,7 +11,7 @@
 #'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
 #' @param param_vals `list` \cr
 #'   List of parameter values passed on to `MCBoost$new`.
-#' @return (mlr3pipelines) [`Graph`]
+#' @return (mlr3pipelines) [`Graph`][mlr3pipelines::Graph]
 #' @examples
 #'   \dontrun{
 #'   library("mlr3pipelines")

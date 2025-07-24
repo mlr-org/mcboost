@@ -11,7 +11,7 @@
 
 ## What does it do?
 
-**mcboost** implements Multi-Calibration Boosting ([Hebert-Johnson et al., 2018](https://proceedings.mlr.press/v80/hebert-johnson18a.html); [Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)) for the multi-calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased but a bias is introduced within the algorithm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
+**mcboost** implements Multi-Calibration Boosting ([Hebert-Johnson et al., 2018](https://proceedings.mlr.press/v80/hebert-johnson18a.html); [Kim et al., 2019](https://arxiv.org/pdf/1805.12317)) for the multi-calibration of a machine learning model's prediction. Multi-Calibration works best in scenarios where the underlying data & labels are unbiased but a bias is introduced within the algorithm's fitting procedure. This is often the case, e.g. when an algorithm fits a majority population while ignoring or under-fitting minority populations.
 
 For more information and example, see the package's [website](https://mlr-org.github.io/mcboost/).
 
@@ -99,7 +99,7 @@ mc$predict_probs(test_data)
 
 ### Multi-Calibration
 
-While `mcboost` in its defaults implements Multi-Accuracy ([Kim et al., 2019](https://arxiv.org/pdf/1805.12317.pdf)),
+While `mcboost` in its defaults implements Multi-Accuracy ([Kim et al., 2019](http://arxiv.org/pdf/1805.12317)),
 it can also multi-calibrate predictors ([Hebert-Johnson et al., 2018](http://proceedings.mlr.press/v80/hebert-johnson18a.html)).
 In order to achieve this, we have to set the following hyperparameters:
 
@@ -152,7 +152,7 @@ If you use `mcboost`, please cite our package as well as the two papers it is ba
 
 ```
   @article{pfisterer2021,
-    author = {Pfisterer, Florian and Kern, Christoph and Dandl, Susanne and Sun, Matthew and 
+    author = {Pfisterer, Florian and Kern, Christoph and Dandl, Susanne and Sun, Matthew and
     Kim, Michael P. and Bischl, Bernd},
     title = {mcboost: Multi-Calibration Boosting for R},
     journal = {Journal of Open Source Software},

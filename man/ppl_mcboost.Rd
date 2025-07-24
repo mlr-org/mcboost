@@ -18,7 +18,7 @@ Note: An initial predictor can also be supplied via the \code{init_predictor} pa
 List of parameter values passed on to \code{MCBoost$new}.}
 }
 \value{
-(mlr3pipelines) \code{\link{Graph}}
+(mlr3pipelines) \code{\link[mlr3pipelines:Graph]{Graph}}
 }
 \description{
 Wraps MCBoost in a Pipeline to be used with \code{mlr3pipelines}.

@@ -1,6 +1,2 @@
-## R CMD check
+# R CMD CHECK Results
 
-0 errors | 0 warnings | 1 note
-
-New maintainer:
-  Sebastian Fischer <sebf.fischer@gmail.com>

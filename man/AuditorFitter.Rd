@@ -45,7 +45,7 @@ Fit to residuals.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{\code{\link{data.table}}\cr
+\item{\code{data}}{\code{\link[data.table:data.table]{data.table}}\cr
 Features.}
 
 \item{\code{resid}}{\code{\link{numeric}}\cr
@@ -69,7 +69,7 @@ Fit (mostly used internally, use \code{fit_to_resid}).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{\code{\link{data.table}}\cr
+\item{\code{data}}{\code{\link[data.table:data.table]{data.table}}\cr
 Features.}
 
 \item{\code{resid}}{\code{\link{numeric}}\cr

@@ -1,5 +1,9 @@
 # dev
 
+# mcboost 0.4.4
+
+* Fix link anchors
+
 # mcboost 0.4.3
 
 * Compatibility with upcoming 'paradox' release.
